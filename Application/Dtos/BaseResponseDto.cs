@@ -1,4 +1,4 @@
-﻿namespace Dto
+﻿namespace Application.Dtos
 {
 	public class BaseResponseDto
 	{

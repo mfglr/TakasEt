@@ -1,9 +1,8 @@
-﻿using Application.Dtos;
-using MediatR;
+﻿using MediatR;
 
-namespace Dto.SignUp
+namespace Application.Dtos.SignUp
 {
-	public class SignUpCommandRequestDto : IRequest<CustomResponseDto<SignUpCommandResponseDto>>
+	public class SignUpCommandRequestDto : IRequest<SignUpCommandResponseDto>
 	{
 		public string UserName { get; private set; }
 		public string Password { get; private set; }

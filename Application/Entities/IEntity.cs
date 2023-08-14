@@ -1,4 +1,4 @@
-﻿namespace Model.Entities
+﻿namespace Application.Entities
 {
 	public interface IEntity
 	{
