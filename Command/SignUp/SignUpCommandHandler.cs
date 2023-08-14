@@ -1,40 +1,37 @@
-﻿using Application.Dtos;
+﻿using Application.DomainEvents;
+using Application.Dtos.SignUp;
+using Application.Entities;
+using Application.Interfaces;
 using AutoMapper;
-using Dto.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Model.Entities;
 
 namespace Command.SignUp
 {
 	public class SignUpCommandHandler : 
 		IRequestHandler<
 			SignUpCommandRequestDto,
-			CustomResponseDto<SignUpCommandResponseDto>
+			SignUpCommandResponseDto
 		>
 	{
 
 		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
-
-		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper)
+		private readonly IUnitOfWork _unitOfWork;
+		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper, IUnitOfWork unitOfWork)
 		{
 			_userManager = userManager;
 			_mapper = mapper;
+			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<CustomResponseDto<SignUpCommandResponseDto>> Handle(SignUpCommandRequestDto request, CancellationToken cancellationToken)
+		public async Task<SignUpCommandResponseDto> Handle(SignUpCommandRequestDto request, CancellationToken cancellationToken)
 		{
 			User user = _mapper.Map<User>(request);
-			var result = await _userManager.CreateAsync(user);
-			if (result.Succeeded)
-			{
-				return CustomResponseDto<SignUpCommandResponseDto>.Success(_mapper.Map<SignUpCommandResponseDto>(user));
-			}
-			CustomResponseDto< >
-			foreach (var item in result.Errors) {
-				
-			}
+			await _userManager.CreateAsync(user);
+			user.AddDomainEvent(new UserCreatedDomainEvent(user));
+			await _unitOfWork.CommitAsync();
+			return _mapper.Map<SignUpCommandResponseDto>(user);
 		}
 	}
 }

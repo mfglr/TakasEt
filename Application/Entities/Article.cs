@@ -1,4 +1,4 @@
-﻿namespace Model.Entities
+﻿namespace Application.Entities
 {
     public class Article : Entity
     {

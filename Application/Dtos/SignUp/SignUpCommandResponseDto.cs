@@ -1,4 +1,4 @@
-﻿namespace Dto.SignUp
+﻿namespace Application.Dtos.SignUp
 {
 	public class SignUpCommandResponseDto : BaseResponseDto
 	{

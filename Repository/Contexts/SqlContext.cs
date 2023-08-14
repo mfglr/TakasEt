@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Application.DomainEvents;
+using Application.Entities;
+using MediatR;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
-using Model.Entities;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Repository.Contexts
 {
     public class SqlContext : IdentityDbContext<User,Role,Guid>
 	{
+		private readonly IPublisher publisher;
 
 		private IEnumerable<IEntity> GetEntitiesByState(EntityState state)
 		{
@@ -19,8 +20,21 @@ namespace Repository.Contexts
 				.Select(entityEntry => entityEntry.Entity);
 		}
 
+		private IEnumerable<IEntityDomainEvent> GetEntitiesThatHaveDomainEvents()
+		{
+			return ChangeTracker
+				.Entries<IEntityDomainEvent>()
+				.Where(x => x.Entity.AnyDomainEvents())
+				.Select(entityEntry => entityEntry.Entity);
+		}
+
 		public SqlContext(DbContextOptions<SqlContext> options) : base(options)
 		{
+		}
+
+		public SqlContext(DbContextOptions<SqlContext> options, IPublisher publisher) : base(options)
+		{
+			this.publisher = publisher;
 		}
 
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -31,7 +45,14 @@ namespace Repository.Contexts
 
 			var updatedEntity = GetEntitiesByState(EntityState.Modified);
 			foreach (var entity in updatedEntity) entity.SetUpdatedDate();
-			
+
+			var entitiesThatHaveDomainEvents = GetEntitiesThatHaveDomainEvents();
+			foreach (var entity in entitiesThatHaveDomainEvents)
+			{
+				entity.PublishAllDomainEvents(publisher);
+				entity.ClearAllDomainEvents();
+			}
+
 			return base.SaveChangesAsync(cancellationToken);
 		}
 	}

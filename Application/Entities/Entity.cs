@@ -1,7 +1,7 @@
+using Application.DomainEvents;
 using MediatR;
-using Model.DomainEvents;
 
-namespace Model.Entities
+namespace Application.Entities
 {
     public abstract class Entity : IEntity, IEntityDomainEvent
 	{
@@ -46,6 +46,9 @@ namespace Model.Entities
 			_domainEvents.Clear();
 		}
 
-		
+		public bool AnyDomainEvents()
+		{
+			return _domainEvents.Any();
+		}
 	}
 }

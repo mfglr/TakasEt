@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using Dto.SignUp;
-using Model.Entities;
+﻿using Application.Dtos.SignUp;
+using Application.Entities;
+using AutoMapper;
 
 namespace Application.Mappers
 {
@@ -9,7 +9,7 @@ namespace Application.Mappers
         public SingUpMapper()
         {
             CreateMap<SignUpCommandRequestDto, User>();
-            CreateMap<User,SignUpCommandResponseDto>();
+			CreateMap<User, SignUpCommandResponseDto>();
         }
     }
 }
