@@ -13,18 +13,25 @@ namespace Application.Entities
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; set; }
 		public IReadOnlyCollection<Article> Articles => _articles;
+        public string ConfirmationEmailToken { get; private set; }
 
-		public readonly List<Article> _articles = new List<Article>();
+
+        public readonly List<Article> _articles = new List<Article>();
         
 		private List<INotification> _domainEvents = new List<INotification>();
 		public DateTime CreatedDate { get; private set; }
         public DateTime? UpdatedDate { get; private set; }
 
 
+        public User()
+        {
+			ConfirmationEmailToken = Guid.NewGuid().ToString();
+		}
 
         public User(string email,string username)
         {
-            UserName = username;
+			ConfirmationEmailToken = Guid.NewGuid().ToString();
+			UserName = username;
 			Email = email;
         }
 

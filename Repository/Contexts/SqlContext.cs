@@ -62,7 +62,7 @@ namespace Repository.Contexts
 		public SqlContext CreateDbContext(string[] args)
 		{
 			var optionsBuilder = new DbContextOptionsBuilder<SqlContext>();
-			optionsBuilder.UseSqlServer("Data Source=DESKTOP-PK4OTJR\\SQLEXPRESS01;Initial Catalog=MyBlogDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+			optionsBuilder.UseSqlServer("Data Source=DESKTOP-8JFIPPP\\SQLSERVICE;Initial Catalog=MyBlog;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
 			return new SqlContext(optionsBuilder.Options);
 		}
 	}

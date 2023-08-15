@@ -1,4 +1,5 @@
 ﻿using Application.Entities;
+using Service.Extentions;
 using System.Net.Mail;
 
 namespace Service.CustomMailMessages
@@ -7,17 +8,15 @@ namespace Service.CustomMailMessages
 	{
         public UserAccountCreatedInformationMailMessage(User user)
         {
-            Subject = "Your Account Has Been Created Succesfully.";
-            Body =
-                $@"
-                    <p>
-                        Hello {user.UserName},
-                        <br/>
-                        <br/>
-                        We are very pleased to have you among us. Please click the button to confirm your account!
-                        <a href='www.google.com'>Confirm</a>
-                    </p>
-                ";
+
+            Dictionary<string,string> replacedValues = new Dictionary<string,string>();
+			replacedValues.Add("{{UserName}}", user.UserName);
+            replacedValues.Add("{{ConfirmationToken}}",user.ConfirmationEmailToken);
+
+            this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessage.html", replacedValues);
+
+		    Subject = "Your Account Has Been Created Succesfully.";
+            
             IsBodyHtml = true;
             To.Add(user.Email);
         }
