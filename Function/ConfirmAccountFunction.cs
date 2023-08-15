@@ -3,6 +3,7 @@ using Application.Dtos.SignUp;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Function
 {
@@ -11,9 +12,9 @@ namespace Function
         private readonly IMediator _mediator;
 
 		public ConfirmAccountFunction(IMediator mediator)
-		{
+        {
 			_mediator = mediator;
-		}
+        }
 
 		[Function("{userName}/ConfirmAccountFunction/{token}")]
         public async Task<NoContentResponseDto> Run(

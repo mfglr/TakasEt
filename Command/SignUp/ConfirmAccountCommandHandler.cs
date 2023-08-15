@@ -18,7 +18,7 @@ namespace Command.SignUp
 			_userManager = userManager;
 			_unitOfWork = unitOfWork;
 		}
-
+			
 		public async Task<NoContentResponseDto> Handle(ConfirmAccountCommandRequestDto request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.Users.FirstOrDefaultAsync<User>(x => x.UserName == request.UserName);

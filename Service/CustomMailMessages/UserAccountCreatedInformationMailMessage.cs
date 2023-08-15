@@ -15,7 +15,7 @@ namespace Service.CustomMailMessages
 
             this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessage.html", replacedValues);
 
-		    Subject = "Your Account Has Been Created Succesfully.";
+            Subject = "Your Account Has Been Created Succesfully.";
             
             IsBodyHtml = true;
             To.Add(user.Email);

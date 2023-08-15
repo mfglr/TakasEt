@@ -12,5 +12,5 @@ namespace Application.Dtos.SignUp
 			UserName = userName;
 			ConfimationToken = confimationToken;
 		}
-	}
+    }
 }
