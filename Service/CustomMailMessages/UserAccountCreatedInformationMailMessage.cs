@@ -10,8 +10,8 @@ namespace Service.CustomMailMessages
         {
 
             Dictionary<string,string> replacedValues = new Dictionary<string,string>();
-			replacedValues.Add("{{UserName}}", user.UserName);
-            replacedValues.Add("{{ConfirmationToken}}",user.ConfirmationEmailToken);
+			replacedValues.Add("{{username}}", user.UserName);
+            replacedValues.Add("{{token}}", user.ConfirmationEmailToken);
 
             this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessage.html", replacedValues);
 

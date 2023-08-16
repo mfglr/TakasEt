@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Application
@@ -6,10 +7,11 @@ namespace Application
 	public static class DependencyInjection
 	{
 
-		public static void AddApplication(this IServiceCollection collection)
+		public static void AddApplication(this IServiceCollection serviceCollection)
 		{
-			collection.AddAutoMapper(Assembly.GetExecutingAssembly());
-			collection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+			serviceCollection.AddAutoMapper(Assembly.GetExecutingAssembly());
+			serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+			serviceCollection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(),ServiceLifetime.Scoped);
 		}
 	}
 }

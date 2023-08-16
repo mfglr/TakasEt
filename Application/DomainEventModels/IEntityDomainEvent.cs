@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.DomainEvents
+namespace Application.DomainEventModels
 {
 	public interface IEntityDomainEvent
 	{

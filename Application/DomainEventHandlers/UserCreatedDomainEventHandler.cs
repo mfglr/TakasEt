@@ -1,9 +1,8 @@
-﻿using Application.DomainEvents;
+﻿using Application.DomainEventModels;
 using Application.Interfaces.Services;
 using MediatR;
-using System.Security.Principal;
 
-namespace Command.DomainEvents
+namespace Application.DomainEventHandlers
 {
 	public class UserCreatedDomainEventHandler : INotificationHandler<UserCreatedDomainEvent>
 	{

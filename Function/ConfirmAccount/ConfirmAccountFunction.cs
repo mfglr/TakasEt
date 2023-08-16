@@ -1,28 +1,28 @@
 using Application.Dtos;
+using Application.Dtos.ConfirmEmail;
 using Application.Dtos.SignUp;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Logging;
 
-namespace Function
+namespace Function.ConfirmAccount
 {
     public class ConfirmAccountFunction
     {
         private readonly IMediator _mediator;
 
-		public ConfirmAccountFunction(IMediator mediator)
+        public ConfirmAccountFunction(IMediator mediator)
         {
-			_mediator = mediator;
+            _mediator = mediator;
         }
 
-		[Function("{userName}/ConfirmAccountFunction/{token}")]
+        [Function("ConfirmAccountFunction/{userName}/{token}")]
         public async Task<NoContentResponseDto> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
             string userName,
             string token)
         {
-            return await _mediator.Send(new ConfirmAccountCommandRequestDto(userName,token));
+            return await _mediator.Send(new ConfirmEmailCommandRequestDto(userName, token));
         }
     }
 }

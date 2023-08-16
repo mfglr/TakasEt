@@ -1,4 +1,4 @@
-﻿using Application.DomainEvents;
+﻿using Application.DomainEventModels;
 using Application.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,10 +22,11 @@ namespace Repository.Contexts
 
 		private IEnumerable<IEntityDomainEvent> GetEntitiesThatHaveDomainEvents()
 		{
-			return ChangeTracker
+			var data = ChangeTracker
 				.Entries<IEntityDomainEvent>()
 				.Where(x => x.Entity.AnyDomainEvents())
 				.Select(entityEntry => entityEntry.Entity);
+			return data;
 		}
 
 		public SqlContext(DbContextOptions<SqlContext> options) : base(options)

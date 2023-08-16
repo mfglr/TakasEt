@@ -1,7 +1,7 @@
 ﻿using Application.Entities;
 using MediatR;
 
-namespace Application.DomainEvents
+namespace Application.DomainEventModels
 {
 	public class UserCreatedDomainEvent : INotification
 	{

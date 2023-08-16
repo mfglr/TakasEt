@@ -1,9 +1,4 @@
 
+Environment.SetEnvironmentVariable("name", "furkan");
 
-//using Application.Entities;
-//using Service;
-
-//await new SmtpService().SendEmailToUserThatAccountHasBeenCreated(new User("muhammet.furkan.guler@alphastellar.io", "thenqlv"));
-
-
-Console.WriteLine(Guid.NewGuid());
+Console.WriteLine(Environment.GetEnvironmentVariable("name"));

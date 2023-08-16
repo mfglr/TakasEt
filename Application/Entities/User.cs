@@ -1,4 +1,4 @@
-﻿using Application.DomainEvents;
+﻿using Application.DomainEventModels;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -86,7 +86,9 @@ namespace Application.Entities
 
 		public bool AnyDomainEvents()
 		{
-			return _domainEvents.Any();
+			var events = _domainEvents;
+			var data =  _domainEvents.Any();
+			return data;
 		}
 	}
 }

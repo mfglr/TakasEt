@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Function", "Function\Functi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{D04D3E7D-199C-45D8-BAF5-A355ED86A6D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Command", "Command\Command.csproj", "{10EB0110-19CF-46DD-84F2-2E98AEDBB482}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{88FBADA4-D27A-4EF2-BA2B-5197531F0AED}"
 EndProject
 Global
@@ -37,10 +35,6 @@ Global
 		{D04D3E7D-199C-45D8-BAF5-A355ED86A6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04D3E7D-199C-45D8-BAF5-A355ED86A6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04D3E7D-199C-45D8-BAF5-A355ED86A6D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10EB0110-19CF-46DD-84F2-2E98AEDBB482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10EB0110-19CF-46DD-84F2-2E98AEDBB482}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10EB0110-19CF-46DD-84F2-2E98AEDBB482}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10EB0110-19CF-46DD-84F2-2E98AEDBB482}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88FBADA4-D27A-4EF2-BA2B-5197531F0AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88FBADA4-D27A-4EF2-BA2B-5197531F0AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88FBADA4-D27A-4EF2-BA2B-5197531F0AED}.Release|Any CPU.ActiveCfg = Release|Any CPU

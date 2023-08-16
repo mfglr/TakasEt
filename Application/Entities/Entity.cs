@@ -1,4 +1,4 @@
-using Application.DomainEvents;
+using Application.DomainEventModels;
 using MediatR;
 
 namespace Application.Entities
