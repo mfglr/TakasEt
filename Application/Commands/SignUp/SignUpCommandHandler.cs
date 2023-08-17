@@ -40,7 +40,6 @@ namespace Application.Commands.SignUp
 
 			var domainEvent = new UserCreatedDomainEvent(user);
 			user.AddDomainEvent(domainEvent);
-			await _unitOfWork.CommitAsync();
 			return _mapper.Map<SignUpCommandResponseDto>(user);
 		}
 	}

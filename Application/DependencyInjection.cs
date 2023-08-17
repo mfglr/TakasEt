@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Pipelines;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,6 +13,7 @@ namespace Application
 		{
 			serviceCollection.AddAutoMapper(Assembly.GetExecutingAssembly());
 			serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+			serviceCollection.AddScoped(typeof(IPipelineBehavior<,>), typeof(CustomPipeline<,>));
 			serviceCollection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(),ServiceLifetime.Scoped);
 		}
 	}

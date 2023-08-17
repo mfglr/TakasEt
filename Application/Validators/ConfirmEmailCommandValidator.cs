@@ -17,18 +17,9 @@ namespace Application.Validators
                 .MustAsync(async (root,command,context,cancellationToken) =>
                 {
                     var user = await userManager.Users.AsNoTracking().SingleOrDefaultAsync(user => user.UserName == command.UserName);
-                    if(user == null)
-                    {
-                        context.MessageFormatter.AppendArgument("messages", $"{command.UserName} is not found!");
-                        return false;
-                    }
-                    if(user.ConfirmationEmailToken != command.EmailConfirmationToken)
-                    {
-                        context.MessageFormatter.AppendArgument("messages", "Email confirmation token does not match!");
-                        return false;
-                    }
-                    return true;
-                });
+                    return user != null && user.ConfirmationEmailToken == command.EmailConfirmationToken && !user.EmailConfirmed;
+                
+                }).WithMessage("Invalid url!");
         }
     }
 }

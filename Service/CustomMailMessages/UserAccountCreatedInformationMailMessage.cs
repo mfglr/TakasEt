@@ -13,7 +13,7 @@ namespace Service.CustomMailMessages
 			replacedValues.Add("{{username}}", user.UserName);
             replacedValues.Add("{{token}}", user.ConfirmationEmailToken);
 
-            this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessage.html", replacedValues);
+            this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessageTemplate.html", replacedValues);
 
             Subject = "Your Account Has Been Created Succesfully.";
             
