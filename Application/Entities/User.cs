@@ -12,10 +12,11 @@ namespace Application.Entities
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; set; }
-		public IReadOnlyCollection<Article> Articles => _articles;
         public string ConfirmationEmailToken { get; private set; }
+		public IReadOnlyCollection<Credit> Credits => _credits;
+		public IReadOnlyCollection<Article> Articles => _articles;
 
-
+		public readonly List<Credit> _credits = new List<Credit>();
         public readonly List<Article> _articles = new List<Article>();
         
 		private List<INotification> _domainEvents = new List<INotification>();
@@ -25,7 +26,6 @@ namespace Application.Entities
 
         public User()
         {
-			ConfirmationEmailToken = Guid.NewGuid().ToString();
 		}
 
         public User(string email,string username)
@@ -33,9 +33,11 @@ namespace Application.Entities
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = username;
 			Email = email;
+			AddCredit(Credit.CreatCreditForNewUser());
+			AddDomainEvent(new UserDomainEvent(this));
         }
-
-        public void ConfirmAccount() { 
+        
+		public void ConfirmAccount() { 
 			EmailConfirmed = true;
 		}
 
@@ -43,32 +45,46 @@ namespace Application.Entities
 		{
 			_articles.Add(article);
 		}
-		
 		public void RemoveArticle(Article article)
 		{
 			_articles.Remove(article);
 		}
 
+		public void AddCredit(Credit credit)
+		{
+			_credits.Add(credit);
+		}
+		public void RemoveCredit(Credit credit)
+		{
+			_credits.Remove(credit);
+		}
+
+		public decimal CalculateTotalCredit()
+		{
+			decimal totalCredit = 0;
+			_credits.ForEach(creadit => totalCredit += creadit.VAmount);
+			return totalCredit;
+		}
+
+		//IEntity
 		public void SetId()
 		{
 			Id = Guid.NewGuid();
 		}
-
 		public void SetCreatedDate()
 		{
 			CreatedDate = DateTime.UtcNow;
 		}
-
 		public void SetUpdatedDate()
 		{
 			UpdatedDate = DateTime.UtcNow;
 		}
 
+		//IEntityDomainEvents
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);
 		}
-
 		public void PublishAllDomainEvents(IPublisher publisher)
 		{
 			_domainEvents.ForEach(
@@ -78,12 +94,10 @@ namespace Application.Entities
 				}
 			);
 		}
-
 		public void ClearAllDomainEvents()
 		{
 			_domainEvents.Clear();
 		}
-
 		public bool AnyDomainEvents()
 		{
 			var events = _domainEvents;

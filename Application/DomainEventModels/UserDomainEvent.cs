@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Application.DomainEventModels
 {
-	public class UserCreatedDomainEvent : INotification
+	public class UserDomainEvent : INotification
 	{
         public User User { get; private set; }
         
-        public UserCreatedDomainEvent(User user)
+        public UserDomainEvent(User user)
         {
             User = user;
         }

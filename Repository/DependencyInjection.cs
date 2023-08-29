@@ -13,7 +13,7 @@ namespace Repository
 		{
 			serviceCollection.AddDbContext<SqlContext>(optionsAction =>
 			{
-				optionsAction.UseSqlServer("Data Source=DESKTOP-8JFIPPP\\SQLSERVICE;Initial Catalog=MyBlog;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+				optionsAction.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString"));
 			});
 			serviceCollection.AddIdentityCore<User>().AddEntityFrameworkStores<SqlContext>();
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
