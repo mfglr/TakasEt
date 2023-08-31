@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="HtmlTemplates\AfterEmailConfirmationPageTemplate.html">
+    <None Update="HtmlTemplates\CreatingCreditMailTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="HtmlTemplates\UserAccountCreatedInformationMailMessageTemplate.html">
+    <None Update="HtmlTemplates\UserEmailConfirmaionMailTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

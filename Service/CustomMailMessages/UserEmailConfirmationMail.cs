@@ -4,16 +4,16 @@ using System.Net.Mail;
 
 namespace Service.CustomMailMessages
 {
-	public class UserAccountCreatedInformationMailMessage : MailMessage
+	public class UserEmailConfirmationMail : MailMessage
 	{
-        public UserAccountCreatedInformationMailMessage(User user)
+        public UserEmailConfirmationMail(User user)
         {
 
             Dictionary<string,string> replacedValues = new Dictionary<string,string>();
 			replacedValues.Add("{{username}}", user.UserName);
             replacedValues.Add("{{token}}", user.ConfirmationEmailToken);
 
-            this.SetBodyFromHtmlTemplate("HtmlTemplates/UserAccountCreatedInformationMailMessageTemplate.html", replacedValues);
+            this.SetBodyFromHtmlTemplate("HtmlTemplates/UserEmailConfirmaionMailTemplate.html", replacedValues);
 
             Subject = "Your Account Has Been Created Succesfully.";
             

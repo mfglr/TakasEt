@@ -1,10 +1,10 @@
-﻿
-using Application.Entities;
+﻿using Application.Entities;
 
 namespace Application.Interfaces.Services
 {
 	public interface ISmtpService
 	{
-		Task SendEmailToUserThatAccountHasBeenCreated(User user); 
+		Task SendEmailConfirmationMailToUser(User user);
+		Task SendMailtoUserThatCreditHasBeenCreated(User user);
 	}
 }
