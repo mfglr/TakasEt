@@ -33,6 +33,7 @@ namespace Application.Entities
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = username;
 			Email = email;
+			AddDomainEvent(new UserDomainEvent(this));
         }
 
         public void ConfirmAccount() { 

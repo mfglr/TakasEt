@@ -1,15 +1,12 @@
-﻿using Application.Dtos;
-using Application.Dtos.ConfirmEmail;
+﻿using Application.Dtos.ConfirmEmail;
 using Application.Entities;
-using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ConfirmEmail
 {
-    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommandRequestDto, string>
+	public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommandRequestDto, string>
 	{
 		private readonly UserManager<User> _userManager;
 

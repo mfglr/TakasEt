@@ -28,18 +28,7 @@ namespace Application.Commands.SignUp
 		public async Task<SignUpCommandResponseDto> Handle(SignUpCommandRequestDto request, CancellationToken cancellationToken)
 		{
 			User user = _mapper.Map<User>(request);
-			var result = await _userManager.CreateAsync(user,request.Password);
-			
-			if (!result.Succeeded)
-			{
-				foreach (var error in result.Errors.Select(x => x.Description)) {
-					Console.WriteLine("hata " + error);
-				}
-				throw new Exception("Something went wrong! Please try again later.");
-			}
-
-			var domainEvent = new UserCreatedDomainEvent(user);
-			user.AddDomainEvent(domainEvent);
+			await _userManager.CreateAsync(user,request.Password);
 			return _mapper.Map<SignUpCommandResponseDto>(user);
 		}
 	}

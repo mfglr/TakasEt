@@ -10,7 +10,9 @@ namespace Repository.Contexts
 {
     public class SqlContext : IdentityDbContext<User,Role,Guid>
 	{
-		private readonly IPublisher publisher;
+
+
+        private readonly IPublisher publisher;
 
 		private IEnumerable<IEntity> GetEntitiesByState(EntityState state)
 		{

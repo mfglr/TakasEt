@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.DomainEventHandlers
 {
-	public class UserCreatedDomainEventHandler : INotificationHandler<UserCreatedDomainEvent>
+	public class UserCreatedDomainEventHandler : INotificationHandler<UserDomainEvent>
 	{
 
 		private readonly ISmtpService _smtpService;
@@ -14,8 +14,9 @@ namespace Application.DomainEventHandlers
 			_smtpService = smtpService;
 		}
 
-		public async Task Handle(UserCreatedDomainEvent notification, CancellationToken cancellationToken)
+		public async Task Handle(UserDomainEvent notification, CancellationToken cancellationToken)
 		{
+			
 			await _smtpService.SendEmailToUserThatAccountHasBeenCreated(notification.User);
 		}
 	}

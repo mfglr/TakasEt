@@ -7,7 +7,9 @@ namespace Application.Entities
         public DateTime CreatedDate { get; private set; }
         public DateTime? UpdatedDate { get; private set; }
 
-		public void SetId()
+
+
+        public void SetId()
 		{
 			Id = Guid.NewGuid();
 		}

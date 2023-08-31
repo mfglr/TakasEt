@@ -28,7 +28,7 @@ namespace Application.Pipelines
 			}
 			var response = await next();
 
-			//Commit the changes.
+			//Commit the changes
 
 			await _unitOfWork.CommitAsync();
 
