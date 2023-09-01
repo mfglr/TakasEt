@@ -2,7 +2,11 @@
 {
 	public interface IEntity
 	{
-		void SetId();
+        Guid Id { get; }
+		DateTime CreatedDate { get; }
+		DateTime? UpdatedDate { get; }
+
+        void SetId();
 		void SetCreatedDate();
 		void SetUpdatedDate();
 	}

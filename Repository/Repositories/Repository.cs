@@ -1,19 +1,15 @@
-﻿using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Repository.Repositories
 {
-	public class Repository<T> : IRepository<T> where T : IEntity
+	public class Repository<T> : IRepository<T> where T : class
 	{
+
 		private readonly SqlContext _context;
-		protected readonly DbSet<T> _dbSet;
+		private readonly DbSet<T> _dbSet;
 
 		public Repository(SqlContext context)
 		{
@@ -21,30 +17,24 @@ namespace Repository.Repositories
 			_dbSet = _context.Set<T>();
 		}
 
-
-		public Task AddAsync(T entity)
+		public async Task AddAsync(T entity)
 		{
-			
-		}
-
-		public Task GetByIdAsync(Guid Id)
-		{
-			throw new NotImplementedException();
+			await _dbSet.AddAsync(entity);
 		}
 
 		public void Remove(T entity)
 		{
-			throw new NotImplementedException();
-		}
-
-		public void RemoveByIdAsync(Guid Id)
-		{
-			throw new NotImplementedException();
+			_dbSet.Remove(entity);
 		}
 
 		public void Update(T entity)
 		{
-			throw new NotImplementedException();
+			_dbSet.Update(entity);
+		}
+
+		public IQueryable<T> Where(Expression<Func<T, bool>> expression)
+		{
+			return _dbSet.Where(expression);
 		}
 	}
 }

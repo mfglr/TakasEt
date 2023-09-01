@@ -1,5 +1,4 @@
-﻿using Application.DomainEventModels;
-using Application.Dtos.SignUp;
+﻿using Application.Dtos.SignUp;
 using Application.Entities;
 using Application.Interfaces;
 using AutoMapper;
@@ -17,12 +16,10 @@ namespace Application.Commands.SignUp
 
 		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
-		private readonly IUnitOfWork _unitOfWork;
-		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper, IUnitOfWork unitOfWork)
+		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper)
 		{
 			_userManager = userManager;
 			_mapper = mapper;
-			_unitOfWork = unitOfWork;
 		}
 
 		public async Task<SignUpCommandResponseDto> Handle(SignUpCommandRequestDto request, CancellationToken cancellationToken)

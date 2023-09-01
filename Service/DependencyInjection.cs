@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Interfaces;
+using Application.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Service
 {
@@ -8,6 +10,9 @@ namespace Service
 		public static void AddServices(this IServiceCollection serviceCollection)
 		{
 			serviceCollection.AddScoped<ISmtpService, SmtpService>();
+			serviceCollection.AddSingleton(new SignService());
+			serviceCollection.AddSingleton(new JwtSecurityTokenHandler());
+			serviceCollection.AddSingleton<ITokenService, TokenService>();
 		}
     }
 }

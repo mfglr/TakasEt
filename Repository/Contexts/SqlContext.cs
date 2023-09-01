@@ -11,6 +11,11 @@ namespace Repository.Contexts
     public class SqlContext : IdentityDbContext<User,Role,Guid>
 	{
 
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Credit> Credits { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
         private readonly IPublisher publisher;
 
@@ -55,7 +60,6 @@ namespace Repository.Contexts
 				entity.PublishAllDomainEvents(publisher);
 				entity.ClearAllDomainEvents();
 			}
-
 			return base.SaveChangesAsync(cancellationToken);
 		}
 	}

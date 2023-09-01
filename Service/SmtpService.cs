@@ -42,12 +42,5 @@ namespace Service
 			await CreateSmtpClient().SendMailAsync(mail);
 		}
 
-		public async Task SendMailtoUserThatCreditHasBeenCreated(User user)
-		{
-			MailMessage mail = new CreatingCreditMail(user);
-			mail.From = From;
-			await CreateSmtpClient().SendMailAsync(mail);
-		}
-
 	}
 }

@@ -8,6 +8,7 @@ namespace Application.Entities
 		private static decimal sAmountForNewUsers = 1000;
 
         public Guid UserId { get; private set; }
+		public User User { get; private set; }
         public decimal SAmount { get; private set; }
 		public CreditType CreditType { get; private set; }
 		public decimal VAmount => CreditType.Value * SAmount;

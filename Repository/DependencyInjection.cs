@@ -1,8 +1,11 @@
-﻿using Application.Entities;
+﻿using Application.Configuration;
+using Application.Entities;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Contexts;
+using Repository.Repositories;
 using Repository.UnitOfWorks;
 
 namespace Repository
@@ -11,11 +14,17 @@ namespace Repository
 	{
 		public static void AddSqlDbContext(this IServiceCollection serviceCollection)
 		{
+			Local local = serviceCollection.BuildServiceProvider().GetRequiredService<Local>();
 			serviceCollection.AddDbContext<SqlContext>(optionsAction =>
 			{
-				optionsAction.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString"));
+				optionsAction.UseSqlServer(local.SqlConnectionString);
 			});
-			serviceCollection.AddIdentityCore<User>().AddEntityFrameworkStores<SqlContext>();
+			serviceCollection.AddIdentityCore<User>(opt =>
+			{
+				opt.User.RequireUniqueEmail = true;
+				opt.Password.RequireNonAlphanumeric = false;
+			}).AddEntityFrameworkStores<SqlContext>();
+			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}
 

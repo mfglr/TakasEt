@@ -13,20 +13,18 @@ namespace Application.Entities
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; set; }
         public string ConfirmationEmailToken { get; private set; }
+		
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
+        public UserRefreshToken RefreshToken { get; private set; }
 
-		public readonly List<Credit> _credits = new List<Credit>();
-        public readonly List<Article> _articles = new List<Article>();
+        private readonly List<Credit> _credits = new List<Credit>();
+        private readonly List<Article> _articles = new List<Article>();
         
 		private List<INotification> _domainEvents = new List<INotification>();
 		public DateTime CreatedDate { get; private set; }
         public DateTime? UpdatedDate { get; private set; }
 
-
-        public User()
-        {
-		}
 
         public User(string email,string username)
         {
@@ -36,7 +34,7 @@ namespace Application.Entities
 			AddDomainEvent(new UserDomainEvent(this));
         }
         
-		public void ConfirmAccount() { 
+		public void ConfirmEmail() { 
 			EmailConfirmed = true;
 		}
 

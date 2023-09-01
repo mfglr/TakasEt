@@ -1,18 +1,12 @@
-﻿using Application.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IRepository<T> where T : IEntity
+    public interface IRepository<T> where T : class
     {
-        Task AddAsync(T entity);
-        Task GetByIdAsync(Guid Id);
-        void Update(T entity);
-        void Remove(T entity);
-        void RemoveByIdAsync(Guid Id);
-    }
+		IQueryable<T> Where(Expression<Func<T, bool>> expression);
+		Task AddAsync(T entity);
+		void Update(T entity);
+		void Remove(T entity);
+	}
 }

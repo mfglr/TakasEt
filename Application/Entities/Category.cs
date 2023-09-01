@@ -5,9 +5,17 @@ namespace Application.Entities
     {
         private readonly List<Article> _articles = new List<Article>();
         public string Name { get; private set; }
+        public string Description {  get; private set; }
+
         public IReadOnlyCollection<Article> Atricles => _articles;
 
-        public void AddArticle(Article article)
+		public Category(string name, string description)
+		{
+			Name = name;
+			Description = description;
+		}
+
+		public void AddArticle(Article article)
         {
             _articles.Add(article);
         }
