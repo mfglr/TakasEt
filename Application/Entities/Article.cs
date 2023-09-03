@@ -21,45 +21,24 @@
             string title,
             string content,
             string sumaryOfContent,
-            int numberOfLikes,
-            int numberOfViews,
-            DateTime publishedDate
+            Guid categoryId
             )
         {
             UserId = userId;
             Title = title;
             Content = content;
             SumaryOfContent = sumaryOfContent;
-            NumberOfLikes = numberOfLikes;
-            NumberOfViews = numberOfViews;
-            PublishedDate = publishedDate;
+            CategoryId = categoryId;
         }
-
-
-		public Article(
-			Guid userId,
-			string title,
-			string content,
-			string sumaryOfContent,
-			int numberOfLikes,
-			int numberOfViews,
-			DateTime publishedDate,
-            List<Comment> comments
-			)
-		{
-			UserId = userId;
-			Title = title;
-			Content = content;
-			SumaryOfContent = sumaryOfContent;
-			NumberOfLikes = numberOfLikes;
-			NumberOfViews = numberOfViews;
-			PublishedDate = publishedDate;
-            comments?.ForEach( comment => _comments.Add( comment ) );
-		}
 
 		public void AddComment(Comment comment)
         {
             _comments.Add(comment);
+        }
+
+        public void Publish()
+        {
+            PublishedDate = DateTime.UtcNow;
         }
     }
 }

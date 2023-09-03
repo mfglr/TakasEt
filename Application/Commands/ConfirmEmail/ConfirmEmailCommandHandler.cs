@@ -4,9 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Commands.ConfirmEmail
+namespace Application.Commands
 {
-	public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommandRequestDto, string>
+	public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailRequestDto, string>
 	{
 		private readonly UserManager<User> _userManager;
 
@@ -15,7 +15,7 @@ namespace Application.Commands.ConfirmEmail
 			_userManager = userManager;
 		}
 			
-		public async Task<string> Handle(ConfirmEmailCommandRequestDto request, CancellationToken cancellationToken)
+		public async Task<string> Handle(ConfirmEmailRequestDto request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.Users.FirstOrDefaultAsync<User>(x => x.UserName == request.UserName);
 			user.ConfirmEmail();

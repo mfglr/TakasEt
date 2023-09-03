@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Validators
 {
-	public class SignUpCommandValidator : AbstractValidator<SignUpCommandRequestDto>
+	public class SignUpCommandValidator : AbstractValidator<SignUpRequestDto>
 	{
 
         public SignUpCommandValidator(UserManager<User> userManager)

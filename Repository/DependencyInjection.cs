@@ -1,4 +1,4 @@
-﻿using Application.Configuration;
+﻿using Application.Configurations;
 using Application.Entities;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
@@ -25,6 +25,7 @@ namespace Repository
 				opt.Password.RequireNonAlphanumeric = false;
 			}).AddEntityFrameworkStores<SqlContext>();
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+			serviceCollection.AddScoped(typeof(IRecursiveRepository<>), typeof(RecursiveRepository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}
 

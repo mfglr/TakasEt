@@ -1,6 +1,6 @@
-﻿using Application.Configuration;
+﻿using Application.Configurations;
 using Application.Entities;
-using Application.Interfaces;
+using Application.Interfaces.Services;
 using Application.ValueObjects;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace Service
 {
-	public class TokenService : ITokenService
+    public class TokenService : ITokenService
 	{
 
 		private readonly CustomTokenOptions _customTokenOptions;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Validators
 {
-    public class ConfirmEmailCommandValidator : AbstractValidator<ConfirmEmailCommandRequestDto>
+    public class ConfirmEmailCommandValidator : AbstractValidator<ConfirmEmailRequestDto>
     {
         public ConfirmEmailCommandValidator(UserManager<User> userManager)
         {

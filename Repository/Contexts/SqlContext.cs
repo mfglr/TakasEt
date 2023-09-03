@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace Repository.Contexts
 {
@@ -44,7 +46,11 @@ namespace Repository.Contexts
 		{
 			this.publisher = publisher;
 		}
-
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+			base.OnModelCreating(builder);
+		}
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			
@@ -69,7 +75,7 @@ namespace Repository.Contexts
 		public SqlContext CreateDbContext(string[] args)
 		{
 			var optionsBuilder = new DbContextOptionsBuilder<SqlContext>();
-			optionsBuilder.UseSqlServer("Data Source=DESKTOP-8JFIPPP\\SQLSERVICE;Initial Catalog=MyBlog;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+			optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MyBlogDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
 			return new SqlContext(optionsBuilder.Options);
 		}
 	}

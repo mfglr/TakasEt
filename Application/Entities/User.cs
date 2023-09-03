@@ -11,25 +11,26 @@ namespace Application.Entities
 		public string? Name { get; private set; }
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
-        public bool? Gender { get; set; }
+        public bool? Gender { get; private set; }
         public string ConfirmationEmailToken { get; private set; }
 		
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
-        public UserRefreshToken RefreshToken { get; private set; }
+        public IReadOnlyCollection<Comment> Comments { get; }
+		public UserRefreshToken RefreshToken { get; private set; }
 
         private readonly List<Credit> _credits = new List<Credit>();
         private readonly List<Article> _articles = new List<Article>();
         
 		private List<INotification> _domainEvents = new List<INotification>();
+		public Guid Id { get; private set; }
 		public DateTime CreatedDate { get; private set; }
         public DateTime? UpdatedDate { get; private set; }
 
-
-        public User(string email,string username)
+        public User(string email,string userName)
         {
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
-			UserName = username;
+			UserName = userName;
 			Email = email;
 			AddDomainEvent(new UserDomainEvent(this));
         }

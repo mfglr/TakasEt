@@ -8,8 +8,8 @@ namespace Application.Mappers
 	{
         public SingUpMapper()
         {
-            CreateMap<SignUpCommandRequestDto, User>();
-			CreateMap<User, SignUpCommandResponseDto>();
+            CreateMap<SignUpRequestDto, User>();
+			CreateMap<User, SignUpResponseDto>();
         }
     }
 }

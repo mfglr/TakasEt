@@ -1,11 +1,12 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Entities;
+using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contexts;
 using System.Linq.Expressions;
 
 namespace Repository.Repositories
 {
-	public class Repository<T> : IRepository<T> where T : class
+	public class Repository<T> : IRepository<T> where T : Entity
 	{
 
 		private readonly SqlContext _context;

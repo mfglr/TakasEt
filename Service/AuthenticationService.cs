@@ -1,4 +1,4 @@
-﻿using Application.Configuration;
+﻿using Application.Configurations;
 using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;

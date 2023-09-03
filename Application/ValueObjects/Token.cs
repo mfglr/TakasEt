@@ -2,15 +2,15 @@
 {
 	public class Token
 	{
-        public string Key { get; private set; }
-        public DateTime Expiration { get; private set; }
+        public string Value { get; private set; }
+        public DateTime ExpirationDate { get; private set; }
 
-		public Token(string key, DateTime expiration)
+		public Token() { }
+		public Token(string value, DateTime expirationDate)
 		{
-			Key = key;
-			Expiration = expiration;
+			Value = value;
+			ExpirationDate = expirationDate;
 		}
-
-		public bool IsValid() => DateTime.Now <= Expiration; 
+		public bool IsValid() => DateTime.UtcNow <= ExpirationDate; 
     }
 }

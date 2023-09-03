@@ -1,13 +1,12 @@
-
 namespace Application.Entities
 {
     public class Category : Entity
     {
         private readonly List<Article> _articles = new List<Article>();
+        
         public string Name { get; private set; }
         public string Description {  get; private set; }
-
-        public IReadOnlyCollection<Article> Atricles => _articles;
+        public IReadOnlyCollection<Article> Articles => _articles;
 
 		public Category(string name, string description)
 		{
@@ -24,6 +23,5 @@ namespace Application.Entities
         {
             _articles.Remove(article);
         }
-
     }
 }

@@ -1,11 +1,10 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Services;
+﻿using Application.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Service
 {
-	public static class DependencyInjection
+    public static class DependencyInjection
 	{
 		public static void AddServices(this IServiceCollection serviceCollection)
 		{
