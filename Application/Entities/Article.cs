@@ -1,4 +1,6 @@
-﻿namespace Application.Entities
+﻿using Application.Interfaces.Repositories;
+
+namespace Application.Entities
 {
     public class Article : Entity
     {
@@ -14,7 +16,7 @@
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; }
 
-        private readonly List<Comment> _comments = new List<Comment>();
+		private readonly List<Comment> _comments = new List<Comment>();
 
         public Article(
             Guid userId,

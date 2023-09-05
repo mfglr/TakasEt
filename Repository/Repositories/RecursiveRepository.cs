@@ -16,7 +16,7 @@ namespace Repository.Repositories
 
 		public RecursiveRepository(RecursiveRepositoryOptions option, SqlContext context)
 		{
-			if (option.Level < 2) throw new Exception("Level is not less than 2.");
+			if (option.Depth < 2) throw new Exception("Depth is not less than 2.");
 			_option = option;
 			_context = context;
 			_dbSet = _context.Set<T>();
@@ -24,19 +24,11 @@ namespace Repository.Repositories
 
 		public async Task AddAsync(T entity)
 		{
-			int level = await findLevelAsync(entity.ParentId);
-			if (level + 1 >= _option.Level) throw new Exception("Entity registration failed. Out of level");
+			int depth = await findDepthAsync(entity.ParentId);
+			if (depth + 1 >= _option.Depth) throw new Exception("Entity registration failed. Out of Max Depth");
 			await _dbSet.AddAsync(entity);
 		}
-		public async Task RemoveAsync(Guid id)
-		{
-			IIncludableQueryable<T, IReadOnlyCollection<T>> query = _dbSet.Include(x => x.Children);
-			for (int j = 2; j < _option.Level; j++)
-				query = query.ThenInclude(x => x.Children);
-			var entity = await query.Where(x => x.Id == id).SingleOrDefaultAsync();
-			_dbSet.Remove(entity);
-		}
-
+		
 		public void Update(T entity)
 		{
 			_dbSet.Update(entity);
@@ -44,14 +36,35 @@ namespace Repository.Repositories
 		
 		public IQueryable<T> Where(Expression<Func<T, bool>> expression)
 		{
-			return _dbSet.Where(expression);
+			var query = _dbSet.Include(x => x.Children);
+			for (int j = 2; j < _option.Depth; j++)
+				query = query.ThenInclude(x => x.Children);
+			return query.Where(expression);
 		}
-		
-		private async Task<int> findLevelAsync(Guid? parentId)
+
+		public void Remove(T entity)
+		{
+			if(entity.Children != null) {
+				foreach (var child in entity.Children)
+				{
+					Remove(child);
+					_dbSet.Remove(child);
+				}
+			}
+			_dbSet.Remove(entity);
+		}
+
+		public void RemoveRange(IReadOnlyCollection<T> entities)
+		{
+			foreach(var entity in entities)
+				Remove(entity);
+		}
+
+		private async Task<int> findDepthAsync(Guid? parentId)
 		{
 			if (parentId == null) return 0;
 			IIncludableQueryable<T, T> query = _dbSet.Include(x => x.Parent);
-			for (int j = 2; j < _option.Level; j++)
+			for (int j = 2; j < _option.Depth; j++)
 				query = query.ThenInclude(x => x.Parent);
 			
 			var parents = await query.Where(x => x.Id == parentId).SingleOrDefaultAsync();

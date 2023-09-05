@@ -1,7 +1,7 @@
 ﻿namespace Application.ValueObjects
 {
-	public class CreditType
-	{
+    public class CreditType
+    {
         public int Value { get; private set; }
 
         public CreditType()

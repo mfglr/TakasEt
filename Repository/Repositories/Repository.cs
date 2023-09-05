@@ -9,7 +9,7 @@ namespace Repository.Repositories
 	public class Repository<T> : IRepository<T> where T : Entity
 	{
 
-		private readonly SqlContext _context;
+		protected readonly SqlContext _context;
 		private readonly DbSet<T> _dbSet;
 
 		public Repository(SqlContext context)

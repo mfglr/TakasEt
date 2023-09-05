@@ -26,6 +26,7 @@ namespace Repository
 			}).AddEntityFrameworkStores<SqlContext>();
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped(typeof(IRecursiveRepository<>), typeof(RecursiveRepository<>));
+			serviceCollection.AddScoped<IArticleRepository, ArticleRepository>();
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}
 

@@ -3,7 +3,7 @@ using Application.ValueObjects;
 
 namespace Application.Entities
 {
-	public class Credit : Entity
+    public class Credit : Entity
 	{
         public Guid UserId { get; private set; }
 		public User User { get; private set; }

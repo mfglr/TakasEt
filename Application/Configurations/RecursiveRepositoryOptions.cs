@@ -2,6 +2,6 @@
 {
 	public class RecursiveRepositoryOptions
 	{
-        public int Level { get; set; }
+        public int Depth { get; set; }
     }
 }

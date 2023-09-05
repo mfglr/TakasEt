@@ -16,14 +16,20 @@ namespace Function.Functions
         }
 
         [Function("add-comment")]
-        public async Task<AddCommentResponseDto> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        public async Task<AddCommentResponseDto> AddComment([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             string json;
             using (var reader = new StreamReader(req.Body))
                 json = await reader.ReadToEndAsync();
-            var comment = JsonConvert.DeserializeObject<AddCommentRequestDto>(json, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            var comment = JsonConvert.DeserializeObject<AddCommentRequestDto>( json );
             return await _mediator.Send(comment);
-
         }
-    }
+		[Function("remove-comment")]
+		public async Task<NoContentResponseDto> RemoveComment(
+            [HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
+            Guid id)
+		{
+			return await _mediator.Send(new RemoveCommentRequestDto(id));
+		}
+	}
 }

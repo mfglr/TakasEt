@@ -10,6 +10,7 @@ namespace Application.Mappers
         {
             CreateMap<AddArticleRequestDto, Article>();
             CreateMap<Article,AddArticleResponseDto>();
+            CreateMap<Article, GetArticleCommentsResponseDto>();
         }
     }
 }

@@ -11,7 +11,8 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.Comments)
 				.WithOne(x => x.Article)
-				.HasForeignKey(x => x.ArticleId);
+				.HasForeignKey(x => x.ArticleId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

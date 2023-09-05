@@ -2,7 +2,7 @@
 
 namespace Application.Entities
 {
-	public class UserRefreshToken : Entity
+    public class UserRefreshToken : Entity
 	{
         public Guid UserId { get; private set; }
         public User User { get; private set; }

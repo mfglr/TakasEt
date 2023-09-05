@@ -1,6 +1,7 @@
 using Application;
 using Application.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,3 +79,4 @@ void AddConfigurations(HostBuilderContext builder, IServiceCollection services)
 	RecursiveRepositoryOptions recursiveRepositoryOptions = services.BuildServiceProvider().GetRequiredService<IOptions<RecursiveRepositoryOptions>>().Value;
 	services.AddSingleton(recursiveRepositoryOptions);
 }
+

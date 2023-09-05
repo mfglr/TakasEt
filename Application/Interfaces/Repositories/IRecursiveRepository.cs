@@ -8,6 +8,7 @@ namespace Application.Interfaces.Repositories
 		IQueryable<T> Where(Expression<Func<T, bool>> expression);
 		Task AddAsync(T entity);
 		void Update(T entity);
-		Task RemoveAsync(Guid id);
+		void Remove(T entity);
+		void RemoveRange(IReadOnlyCollection<T> entities);
 	}
 }
