@@ -34,5 +34,14 @@ namespace Function.Functions
 			var article = JsonConvert.DeserializeObject<RemoveArticleRequestDto>(json);
 			return await _sender.Send(article);
 		}
+
+		[Function("get-article-by-id/{id}")]
+		public async Task<ArticleResponseDto> GetArticleById(
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+			Guid id
+			)
+		{
+			return await _sender.Send(new GetArticleByIdRequestDto(id));
+		}
 	}
 }

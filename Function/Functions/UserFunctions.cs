@@ -15,7 +15,7 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
-		[Function("remove-article")]
+		[Function("remove-user")]
 		public async Task<NoContentResponseDto> RemoveUser([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
 		{
 			string json;

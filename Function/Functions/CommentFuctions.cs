@@ -15,7 +15,17 @@ namespace Function.Functions
             _mediator = mediator;
         }
 
-        [Function("add-comment")]
+
+
+		[Function("get-comment-by-id/{id}")]
+		public async Task<CommentResponseDto> GetCommentById(
+            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+            Guid id)
+		{
+			return await _mediator.Send(new GetCommentByIdRequestDto(id));
+		}
+
+		[Function("add-comment")]
         public async Task<AddCommentResponseDto> AddComment([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             string json;

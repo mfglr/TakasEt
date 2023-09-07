@@ -1,5 +1,7 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +10,20 @@ namespace Application.Commands
 {
 	public class RemoveCommentHandler : IRequestHandler<RemoveCommentRequestDto, NoContentResponseDto>
 	{
+		private readonly IRepository<Comment> _comments;
+		private readonly RecursiveRepositoryOptions _option;
 
-		private readonly IRecursiveRepository<Comment> _comments;
-
-		public RemoveCommentHandler(IRecursiveRepository<Comment> comments)
+		public RemoveCommentHandler(IRepository<Comment> comments, RecursiveRepositoryOptions option)
 		{
 			_comments = comments;
+			_option = option;
 		}
 
 		public async Task<NoContentResponseDto> Handle(RemoveCommentRequestDto request, CancellationToken cancellationToken)
 		{
-			var comment = await _comments.Where(x => x.Id == request.Id).SingleOrDefaultAsync();
+			var comment = await _comments.DbSet
+				.IncludeChildrenByRecursive(_option.Depth)
+				.FirstOrDefaultAsync(x => x.Id == request.Id);
 			if (comment == null) throw new Exception("hata");
 			_comments.Remove(comment);
 			return new NoContentResponseDto();

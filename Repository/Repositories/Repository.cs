@@ -1,12 +1,11 @@
-﻿using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contexts;
 using System.Linq.Expressions;
 
 namespace Repository.Repositories
 {
-	public class Repository<T> : IRepository<T> where T : Entity
+	public class Repository<T> : IRepository<T> where T : class
 	{
 
 		protected readonly SqlContext _context;
@@ -17,6 +16,8 @@ namespace Repository.Repositories
 			_context = context;
 			_dbSet = _context.Set<T>();
 		}
+
+		public DbSet<T> DbSet => _dbSet;
 
 		public async Task AddAsync(T entity)
 		{

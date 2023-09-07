@@ -7,7 +7,6 @@ namespace Application.Validators
 	{
         public AddCommentValidators()
         {
-			RuleFor(x => x.ArticleId).NotEmpty().NotNull().WithMessage("hata");
 			RuleFor(x => x.UserId).NotEmpty().NotNull().WithMessage("hata");
 			RuleFor(x => x.Content).NotEmpty().NotNull().WithMessage("hata");
 		}

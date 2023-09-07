@@ -10,6 +10,7 @@ namespace Application.Mappers
         {
             CreateMap<AddCommentRequestDto, Comment>();
             CreateMap<Comment,AddCommentResponseDto>();
+            CreateMap<Comment,CommentResponseDto>();
         }
     }
 }

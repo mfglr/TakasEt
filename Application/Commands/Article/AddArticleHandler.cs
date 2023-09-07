@@ -19,8 +19,14 @@ namespace Application.Commands
 
 		public async Task<AddArticleResponseDto> Handle(AddArticleRequestDto request, CancellationToken cancellationToken)
 		{
-			var article = new Article(request.UserId,request.Title,request.Content,request.SumaryOfContent,request.CategoryId);
-			await _articles.AddAsync(article);
+			var article = new Article(
+				request.UserId,
+				request.Title,
+				request.Content,
+				request.SumaryOfContent,
+				request.CategoryId
+			);
+			await _articles.DbSet.AddAsync(article);
 			return _mapper.Map<AddArticleResponseDto>(article);
 		}
 	}
