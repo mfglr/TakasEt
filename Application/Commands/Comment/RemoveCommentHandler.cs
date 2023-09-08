@@ -25,7 +25,7 @@ namespace Application.Commands
 				.IncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id);
 			if (comment == null) throw new Exception("hata");
-			_comments.Remove(comment);
+			_comments.DbSet.RemoveRecursive(comment);
 			return new NoContentResponseDto();
 		}
 	}

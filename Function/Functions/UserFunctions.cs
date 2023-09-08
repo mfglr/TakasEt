@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json;
 
 namespace Function.Functions
 {
@@ -15,14 +14,13 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
-		[Function("remove-user")]
-		public async Task<NoContentResponseDto> RemoveUser([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+		[Function("remove-user/{id}")]
+		public async Task<NoContentResponseDto> RemoveUser(
+			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
+			Guid id
+		)
 		{
-			string json;
-			using (var reader = new StreamReader(req.Body))
-				json = await reader.ReadToEndAsync();
-			var article = JsonConvert.DeserializeObject<RemoveArticleRequestDto>(json);
-			return await _sender.Send(article);
+			return await _sender.Send(new RemoveUserRequestDto(id));
 		}
 	}
 }

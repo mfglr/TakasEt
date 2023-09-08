@@ -11,7 +11,7 @@ namespace Application.Dtos
 		public int NumberOfLikes { get; private set; } = 0;
 		public int NumberOfViews { get; private set; } = 0;
 		public DateTime PublishedDate { get; private set; }
-		public IReadOnlyCollection<Comment> Comments { get; }
+		public IReadOnlyCollection<CommentResponseDto> Comments { get; private set; }
 		public Guid CategoryId { get; private set; }
 	}
 }

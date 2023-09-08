@@ -6,7 +6,8 @@ namespace Application.Extentions
 {
 	public static class QueryableExtentions
 	{
-		public static IIncludableQueryable<TRecursiveEntity, IReadOnlyCollection<TRecursiveEntity>> IncludeChildrenByRecursive<TRecursiveEntity>(
+		public static IIncludableQueryable<TRecursiveEntity, IReadOnlyCollection<TRecursiveEntity>>
+			IncludeChildrenByRecursive<TRecursiveEntity>(
 			this IQueryable<TRecursiveEntity> queryable,
 			int depth
 		) where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
@@ -17,7 +18,8 @@ namespace Application.Extentions
 			return query;
 		}
 
-		public static IIncludableQueryable<TRecursiveEntity, TRecursiveEntity> IncludeParentByRecursive<TRecursiveEntity>(
+		public static IIncludableQueryable<TRecursiveEntity, TRecursiveEntity>
+			IncludeParentByRecursive<TRecursiveEntity>(
 			this IQueryable<TRecursiveEntity> queryable,
 			int depth
 		) where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
@@ -28,11 +30,41 @@ namespace Application.Extentions
 			return query;
 		}
 
-		public static IIncludableQueryable<TEntity, IReadOnlyCollection<TRecursiveEntity>> ThenIncludeChildrenByRecursive<TEntity, TRecursiveEntity>(
+		public static void RemoveRecursive<TRecuersiveEntity>(
+			this DbSet<TRecuersiveEntity> dbSet,
+			TRecuersiveEntity entity
+			)
+			where TRecuersiveEntity : RecursiveEntity<TRecuersiveEntity>
+		{
+			if (entity.Children != null)
+			{
+				foreach (var child in entity.Children)
+				{
+					RemoveRecursive(dbSet, child);
+					dbSet.Remove(child);
+				}
+			}
+			dbSet.Remove(entity);
+		}
+
+		public static void RemoveRangeRecursive<TRecuersiveEntity>(
+			this DbSet<TRecuersiveEntity> dbSet,
+			IReadOnlyCollection<TRecuersiveEntity> entities
+			)
+			where TRecuersiveEntity : RecursiveEntity<TRecuersiveEntity>
+		{
+			foreach(var entity in entities)
+			{
+				RemoveRecursive(dbSet, entity);
+			}
+		}
+
+		public static IIncludableQueryable<TEntity, IReadOnlyCollection<TRecursiveEntity>>
+			ThenIncludeChildrenByRecursive<TEntity, TRecursiveEntity>(
 			this IIncludableQueryable<TEntity, IReadOnlyCollection<TRecursiveEntity>> queryable,
 			int depth
 		)
-			where TEntity : Entity
+			where TEntity : class
 			where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
 		{
 			var query = queryable.ThenInclude(x => x.Children);
@@ -41,11 +73,12 @@ namespace Application.Extentions
 			return query;
 		}
 
-		public static IIncludableQueryable<TEntity, TRecursiveEntity> ThenIncludeParentByRecursive<TEntity, TRecursiveEntity>(
+		public static IIncludableQueryable<TEntity, TRecursiveEntity>
+			ThenIncludeParentByRecursive<TEntity, TRecursiveEntity>(
 			this IIncludableQueryable<TEntity, IReadOnlyCollection<TRecursiveEntity>> queryable,
 			int depth
 		)
-			where TEntity : Entity
+			where TEntity : class
 			where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
 		{
 			var query = queryable.ThenInclude(x => x.Parent);
@@ -56,25 +89,25 @@ namespace Application.Extentions
 
 		public static async Task<int> FindParentDepthAsync<TRecursiveEntity>(
 			this IQueryable<TRecursiveEntity> queryable,
-			int depth,
+			int maxDepth,
 			Guid? parentId
 			)
 			where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
 		{
 			var query = queryable.Include(x => x.Children);
-			for (int i = 2; i < depth; i++)
+			for (int i = 2; i < maxDepth; i++)
 				query = query.ThenInclude(x => x.Children);
 
 			var entity = await queryable.SingleOrDefaultAsync(x => x.Id == parentId);
 			
-			int rdepth = 0;
+			int depth = 0;
 			var iter = entity;
 			while(iter != null)
 			{
 				iter = iter.Parent;
-				rdepth++;
+				depth++;
 			}
-			return rdepth;
+			return depth;
 		}
 
 		public static async Task<bool> AddRecursiveAsync<TRecursiveEntiy>(
@@ -88,23 +121,6 @@ namespace Application.Extentions
 			if(parentDepth > depth ) return false;
 			await dbset.AddAsync(entity);
 			return true;
-		}
-
-		public static void RemoveRecursiveAsync<TRecuersiveEntity>(
-			this DbSet<TRecuersiveEntity> dbSet,
-			TRecuersiveEntity entity
-			)
-			where TRecuersiveEntity : RecursiveEntity<TRecuersiveEntity>
-		{
-			if (entity.Children != null)
-			{
-				foreach (var child in entity.Children)
-				{
-					RemoveRecursiveAsync(dbSet,child);
-					dbSet.Remove(child);
-				}
-			}
-			dbSet.Remove(entity);
 		}
 	}
 }

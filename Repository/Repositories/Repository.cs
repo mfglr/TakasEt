@@ -1,7 +1,7 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Entities;
+using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contexts;
-using System.Linq.Expressions;
 
 namespace Repository.Repositories
 {
@@ -18,25 +18,5 @@ namespace Repository.Repositories
 		}
 
 		public DbSet<T> DbSet => _dbSet;
-
-		public async Task AddAsync(T entity)
-		{
-			await _dbSet.AddAsync(entity);
-		}
-
-		public void Remove(T entity)
-		{
-			_dbSet.Remove(entity);
-		}
-
-		public void Update(T entity)
-		{
-			_dbSet.Update(entity);
-		}
-
-		public IQueryable<T> Where(Expression<Func<T, bool>> expression)
-		{
-			return _dbSet.Where(expression);
-		}
 	}
 }

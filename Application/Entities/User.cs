@@ -13,7 +13,7 @@ namespace Application.Entities
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
         public string ConfirmationEmailToken { get; private set; }
-		
+		public IReadOnlyCollection<UserRefreshToken> UserRefreshTokens { get; private set; }
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
         public IReadOnlyCollection<Comment> Comments { get; }

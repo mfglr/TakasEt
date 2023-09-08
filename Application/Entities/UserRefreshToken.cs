@@ -7,7 +7,8 @@ namespace Application.Entities
         public Guid UserId { get; private set; }
         public User User { get; private set; }
         public Token Token { get; private set; }
-        
+        public bool IsDeleted { get; private set; } = false;
+
         public UserRefreshToken()
         {
             
@@ -19,6 +20,11 @@ namespace Application.Entities
         }
         public void UpdateRefreshToken(Token token) {
             Token = token;
+        }
+
+        public void Delete()
+        {
+            IsDeleted = true;
         }
     }
 }

@@ -8,6 +8,6 @@ namespace Application.Dtos
 		public Guid UserId { get; private set; }
 		public string Content { get; private set; }
 		public int NumberOfLikes { get; private set; }
-		public IReadOnlyCollection<Comment> Comments { get; }
+		public IReadOnlyCollection<CommentResponseDto> Children { get; private set; }
 	}
 }

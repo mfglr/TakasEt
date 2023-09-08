@@ -3,6 +3,7 @@ using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,55 +24,74 @@ namespace Service
 			_userRefreshTokenRepository = userRefreshTokenRepository;
 		}
 
-		//public ClientTokenDto CreateClientTokenDto(ClientLoginDto login)
-		//{
-		//	var client = _clients.FirstOrDefault(x => x.Id == login.ClientId && x.Secret == login.ClientSecret);
-		//	if (client == null) throw new Exception("Client id or client secret are not found");
-		//	var token = _tokenService.CreateAccessTokenByClient(client);
-		//	return new 
-		//}
 
-		//public async Task<AccessTokenDto> CreateTokenAsync(LoginDto login)
-		//{
-		//	var user = await _userManager.FindByEmailAsync(login.Email);
-		//	if (user == null) throw new Exception("Email or Password is wrong");
-		//	if(!(await _userManager.CheckPasswordAsync(user, login.Password)))
-		//		throw new Exception("Email or Password is wrong");
+		public async Task<TokenDto> CreateAccessTokenAsync(LoginDto login)
+		{
+			var user = await _userManager.FindByEmailAsync(login.Email);
+			if (user == null) throw new Exception("hata");
+			if (!await _userManager.CheckPasswordAsync(user, login.Password)) throw new Exception("hata");
 			
-		//	var userRefreshToken = await _userRefreshTokenRepository
-		//		.Where(x => x.UserId == user.Id)
-		//		.AsNoTracking()
-		//		.FirstOrDefaultAsync();
-			
-		//	var token = _tokenService.CreateTokenByUser(user);
-			
-		//	if (userRefreshToken == null)
-		//		await _userRefreshTokenRepository.AddAsync(new UserRefreshToken(user.Id,token.RefreshToken,token.ExpirationOfRefreshToken));
-  //          else
-		//		userRefreshToken.UpdateRefreshToken(token.RefreshToken,token.ExpirationOfRefreshToken);
-            
-		//	return token;
-		//}
+			var accessToken = _tokenService.CreateAccessTokenByUser(user);
 
-		//public async Task<AccessTokenDto> CreateTokensByRefreshTokenAsync(string refreshToken)
-		//{
-		//	var userRefreshToken = await _userRefreshTokenRepository
-		//		.Where(x => x.Token == refreshToken)
-		//		.AsNoTracking()
-		//		.Include(x => x.User)
-		//		.FirstOrDefaultAsync();
+			var userRefreshToken = await _userRefreshTokenRepository
+				.DbSet
+				.OrderBy(x => x.CreatedDate)
+				.FirstOrDefaultAsync(x => x.Id == user.Id);
 			
-		//	if (userRefreshToken == null) throw new Exception("Refresh Token is not found!");
-		//	if (userRefreshToken.User == null) throw new Exception("User not found when creating refresh token!");
-		//	var token = _tokenService.CreateTokenByUser(userRefreshToken.User);
-		//	if (!userRefreshToken.IsValid())
-		//		userRefreshToken.UpdateRefreshToken(token.RefreshToken, token.ExpirationOfRefreshToken);
-		//	return token;
-		//}
+			Token newRefreshToken = userRefreshToken?.Token;
 
-		//public Task RevokeRefreshToken(string refreshToken)
-		//{
-		//	throw new NotImplementedException();
-		//}
+			if (userRefreshToken == null || !userRefreshToken.Token.IsValid() || userRefreshToken.IsDeleted)
+			{
+				userRefreshToken?.Delete();
+				newRefreshToken = _tokenService.CreateRefreshToken();
+				await _userRefreshTokenRepository
+					.DbSet
+					.AddAsync(new UserRefreshToken(user.Id, newRefreshToken));
+			}
+
+			return new TokenDto(
+				accessToken.Value,
+				accessToken.ExpirationDate, 
+				newRefreshToken.Value,
+				accessToken.ExpirationDate
+			);
+
+		}
+
+
+		public ClientTokenDto CreateAccessTokenByClient(ClientLoginDto client)
+		{
+			var avaibleClient = _clients.SingleOrDefault(x => x.Id == client.Id && x.Secret == client.Secret);
+			if (avaibleClient == null) throw new Exception("hata");
+			Token accessToken = _tokenService.CreateAccessTokenByClient(avaibleClient);
+			return new ClientTokenDto(accessToken.Value, accessToken.ExpirationDate);
+		}
+
+		public async Task<TokenDto> CreateAccessTokenByRefreshToken(string refreshTokenString)
+		{
+			var userRefreshToken = await _userRefreshTokenRepository
+				.DbSet
+				.Include(x => x.User)
+				.OrderBy(x => x.CreatedDate)
+				.SingleOrDefaultAsync( x => x.Token.Value == refreshTokenString);
+
+			if (userRefreshToken == null || !userRefreshToken.Token.IsValid()) throw new Exception("hata");
+			Token accessToken = _tokenService.CreateAccessTokenByUser(userRefreshToken.User);
+			Token refreshToken = userRefreshToken.Token;
+			return new TokenDto(
+				accessToken.Value,
+				accessToken.ExpirationDate,
+				refreshToken.Value,
+				refreshToken.ExpirationDate
+			);
+		}
+
+		public async Task RevokeRefreshToken(string refreshToken)
+		{
+			var userRefreshToken = await _userRefreshTokenRepository.DbSet.SingleOrDefaultAsync(x => x.Token.Value == refreshToken);
+			if (refreshToken == null) throw new Exception("hata");
+			userRefreshToken.Delete();
+		}
+
 	}
 }

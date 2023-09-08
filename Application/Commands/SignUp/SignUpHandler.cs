@@ -28,7 +28,7 @@ namespace Application.Commands
 		{
 			User user = new User(request.Email, request.UserName);
 			var result = await _userManager.CreateAsync(user,request.Password);
-			if (!result.Succeeded) throw new Exception("Error : SignUpCommandHandler");
+			if (!result.Succeeded) throw new Exception("hata");
 			return _mapper.Map<SignUpResponseDto>(user);
 		}
 	}

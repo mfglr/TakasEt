@@ -4,9 +4,9 @@ namespace Application.Interfaces.Services
 {
 	public interface IAuthenticationService
 	{
-		//Task<AccessTokenDto> CreateTokenAsync(LoginDto login);
-		//Task<AccessTokenDto> CreateTokensByRefreshTokenAsync(string refreshToken);
-		//Task RevokeRefreshToken(string refreshToken);
-		//ClientTokenDto CreateClientTokenDto(ClientLoginDto login);
+		Task<TokenDto> CreateAccessTokenAsync(LoginDto login);
+		ClientTokenDto CreateAccessTokenByClient(ClientLoginDto client);
+		Task<TokenDto> CreateAccessTokenByRefreshToken(string refreshTokenString);
+		Task RevokeRefreshToken(string refreshToken);
 	}
 }
