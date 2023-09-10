@@ -296,6 +296,9 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -304,8 +307,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRefreshTokens");
                 });
@@ -471,8 +473,8 @@ namespace Repository.Migrations
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
                 {
                     b.HasOne("Application.Entities.User", "User")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("Application.Entities.UserRefreshToken", "UserId")
+                        .WithMany("UserRefreshTokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -578,8 +580,7 @@ namespace Repository.Migrations
 
                     b.Navigation("Credits");
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("UserRefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

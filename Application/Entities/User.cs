@@ -17,7 +17,6 @@ namespace Application.Entities
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
         public IReadOnlyCollection<Comment> Comments { get; }
-		public UserRefreshToken RefreshToken { get; private set; }
 
         private readonly List<Credit> _credits = new List<Credit>();
         private readonly List<Article> _articles = new List<Article>();

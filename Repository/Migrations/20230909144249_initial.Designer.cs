@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20230904094831_changeDeleteBehaivorOfArticleAndCommentRelationToNoAction")]
-    partial class changeDeleteBehaivorOfArticleAndCommentRelationToNoAction
+    [Migration("20230909144249_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,7 +104,7 @@ namespace Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ArticleId")
+                    b.Property<Guid?>("ArticleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -299,6 +299,9 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -307,8 +310,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRefreshTokens");
                 });
@@ -440,8 +442,7 @@ namespace Repository.Migrations
                     b.HasOne("Application.Entities.Article", "Article")
                         .WithMany("Comments")
                         .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Application.Entities.Comment", "Parent")
                         .WithMany("Children")
@@ -475,8 +476,8 @@ namespace Repository.Migrations
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
                 {
                     b.HasOne("Application.Entities.User", "User")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("Application.Entities.UserRefreshToken", "UserId")
+                        .WithMany("UserRefreshTokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -582,8 +583,7 @@ namespace Repository.Migrations
 
                     b.Navigation("Credits");
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("UserRefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

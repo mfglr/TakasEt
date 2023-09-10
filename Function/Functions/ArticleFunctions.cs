@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -18,21 +19,13 @@ namespace Function.Functions
         [Function("add-article")]
         public async Task<AddArticleResponseDto> AddArticle([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-            string json;
-            using (var reader = new StreamReader(req.Body))
-                json = await reader.ReadToEndAsync();
-            var article = JsonConvert.DeserializeObject<AddArticleRequestDto>(json);
-            return await _sender.Send(article);
+            return await _sender.Send( await req.ReadFromBodyAsync<AddArticleRequestDto>() );
         }
 
 		[Function("remove-article")]
 		public async Task<NoContentResponseDto> RemoveArticle([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
 		{
-			string json;
-			using (var reader = new StreamReader(req.Body))
-				json = await reader.ReadToEndAsync();
-			var article = JsonConvert.DeserializeObject<RemoveArticleRequestDto>(json);
-			return await _sender.Send(article);
+			return await _sender.Send( await req.ReadFromBodyAsync<RemoveArticleRequestDto>() );
 		}
 
 		[Function("get-article-by-id/{id}")]

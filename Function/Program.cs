@@ -1,7 +1,7 @@
 using Application;
 using Application.Configurations;
+using Function.MiddleWares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,39 +20,18 @@ var host = new HostBuilder()
 	.ConfigureServices(async (builder,services) =>
 	{
 		AddConfigurations(builder, services);
-
 		services.AddSqlDbContext();
 		services.AddApplication();
 		services.AddServices();
-
-		services.AddAuthentication(x =>
-		{
-			x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-			x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-		}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,opt =>
-		{
-			SignService signService = services.BuildServiceProvider().GetRequiredService<SignService>();
-			var customTokenOptions = services.BuildServiceProvider().GetRequiredService<CustomTokenOptions>();
-			
-			opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-			{
-				ValidIssuer = customTokenOptions.Issuer,
-				ValidAudience = customTokenOptions.Audiences[0],
-				IssuerSigningKey = signService.GetSymmetricSecurityKey(customTokenOptions.SecurityKey),
-
-				ValidateIssuer = true,
-				ValidateIssuerSigningKey = true,
-				ValidateAudience = true,
-				ValidateLifetime = true,
-				ClockSkew = TimeSpan.Zero
-			};
-		});
-
 		var context = services.BuildServiceProvider().GetRequiredService<SqlContext>();
 		await context.Database.MigrateAsync();
 
 	})
-	.ConfigureFunctionsWorkerDefaults()
+	.ConfigureFunctionsWorkerDefaults(worker =>
+		{
+			worker.UseMiddleware<CustomMiddleware>();
+		}
+	)
 	.Build();
 
 host.Run();

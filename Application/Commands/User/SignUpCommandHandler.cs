@@ -7,21 +7,19 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Commands
 {
-	public class SignUpHandler : 
+	public class SignUpCommandHandler : 
 		IRequestHandler<
 			SignUpRequestDto,
 			SignUpResponseDto
 		>
 	{
 		private readonly UserManager<User> _userManager;
-		private readonly IRepository<UserRefreshToken> _userRefreshTokens;
 		private readonly IMapper _mapper;
 
-		public SignUpHandler(UserManager<User> userManager, IMapper mapper, IRepository<UserRefreshToken> userRefreshTokens)
+		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper)
 		{
 			_userManager = userManager;
 			_mapper = mapper;
-			_userRefreshTokens = userRefreshTokens;
 		}
 
 		public async Task<SignUpResponseDto> Handle(SignUpRequestDto request, CancellationToken cancellationToken)

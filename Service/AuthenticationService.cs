@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Service
 {
-	public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
 	{
-		private readonly TokenService _tokenService;
+		private readonly ITokenService _tokenService;
 		private readonly List<Client> _clients;
 		private readonly UserManager<User> _userManager;
 		private readonly IRepository<UserRefreshToken> _userRefreshTokenRepository;
 
-		public AuthenticationService(TokenService tokenService, List<Client> clients, UserManager<User> userManager, IRepository<UserRefreshToken> userRefreshTokenRepository)
+		public AuthenticationService(ITokenService tokenService, List<Client> clients, UserManager<User> userManager, IRepository<UserRefreshToken> userRefreshTokenRepository)
 		{
 			_tokenService = tokenService;
 			_clients = clients;
@@ -25,7 +25,7 @@ namespace Service
 		}
 
 
-		public async Task<TokenDto> CreateAccessTokenAsync(LoginDto login)
+		public async Task<TokenDto> CreateTokenByUserAsync(LoginDto login)
 		{
 			var user = await _userManager.FindByEmailAsync(login.Email);
 			if (user == null) throw new Exception("hata");
@@ -59,7 +59,7 @@ namespace Service
 		}
 
 
-		public ClientTokenDto CreateAccessTokenByClient(ClientLoginDto client)
+		public ClientTokenDto CreateTokenByClient(ClientLoginDto client)
 		{
 			var avaibleClient = _clients.SingleOrDefault(x => x.Id == client.Id && x.Secret == client.Secret);
 			if (avaibleClient == null) throw new Exception("hata");
@@ -67,7 +67,7 @@ namespace Service
 			return new ClientTokenDto(accessToken.Value, accessToken.ExpirationDate);
 		}
 
-		public async Task<TokenDto> CreateAccessTokenByRefreshToken(string refreshTokenString)
+		public async Task<TokenDto> CreateAccessTokenByRefreshTokenAsync(string refreshTokenString)
 		{
 			var userRefreshToken = await _userRefreshTokenRepository
 				.DbSet

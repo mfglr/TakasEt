@@ -12,6 +12,7 @@ namespace Service
 			serviceCollection.AddSingleton(new SignService());
 			serviceCollection.AddSingleton(new JwtSecurityTokenHandler());
 			serviceCollection.AddSingleton<ITokenService, TokenService>();
+			serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
 		}
     }
 }

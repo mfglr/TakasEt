@@ -9,11 +9,6 @@ namespace Repository.ModelBuilders
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
 			builder
-				.HasOne(x => x.RefreshToken)
-				.WithOne(x => x.User)
-				.HasForeignKey<UserRefreshToken>(x => x.UserId);
-
-			builder
 				.HasMany(x => x.Articles)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId);
@@ -32,8 +27,7 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.UserRefreshTokens)
 				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId)
-				.OnDelete(DeleteBehavior.NoAction);
+				.HasForeignKey(x => x.UserId);
 		}
 	}
 }

@@ -20,10 +20,9 @@ namespace Service
 		{
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+				new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+				new Claim(JwtRegisteredClaimNames.Email, user.Email),
+				new Claim(JwtRegisteredClaimNames.Name, user.UserName)
 			};
 			claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;

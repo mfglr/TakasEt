@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -18,11 +19,7 @@ namespace Function.Functions
         [Function("add-category")]
         public async Task<AddCategoryResponseDto> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-            string json;
-            using (var reader = new StreamReader(req.Body))
-                json = await reader.ReadToEndAsync();
-            var category = JsonConvert.DeserializeObject<AddCategoryRequestDto>(json);
-            return await _mediator.Send(category);
+            return await _mediator.Send(await req.ReadFromBodyAsync<AddCategoryRequestDto>());
         }
     }
 }
