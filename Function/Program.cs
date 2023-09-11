@@ -1,7 +1,6 @@
 using Application;
 using Application.Configurations;
-using Function.MiddleWares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Function.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,8 @@ var host = new HostBuilder()
 	})
 	.ConfigureFunctionsWorkerDefaults(worker =>
 		{
-			worker.UseMiddleware<CustomMiddleware>();
+			worker.UseMiddleware<ExceptionMiddleware>();
+			worker.UseMiddleware<AuthenticationMiddleware>();
 		}
 	)
 	.Build();

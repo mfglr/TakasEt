@@ -1,25 +1,28 @@
 ﻿using Application.Configurations;
+using Application.Entities;
+using Application.Exceptions;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Function.Attributes;
 using Function.Extentions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Service;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Reflection.PortableExecutable;
+using System.Security.Claims;
 
-namespace Function.MiddleWares
+namespace Function.Middlewares
 {
-	public class CustomMiddleware : IFunctionsWorkerMiddleware
+	public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
 	{
 		private readonly JwtSecurityTokenHandler _jwtHandler;
 		private readonly CustomTokenOptions _customTokenOptions;
 		private readonly SignService _signService;
 
-		public CustomMiddleware(
+
+
+		public AuthenticationMiddleware(
 			JwtSecurityTokenHandler jwtHandler,
 			CustomTokenOptions customTokenOptions,
 			SignService signService)
@@ -43,34 +46,19 @@ namespace Function.MiddleWares
 				ClockSkew = TimeSpan.Zero
 			};
 		} 
-		
+	
 		public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
 		{
 			if (context.FunctionDefinition.HasCustomAttribute(typeof(AuthorizeAttribute)))
 			{
-				var authorization = JsonConvert.DeserializeObject<IReadOnlyDictionary<string, string>>(
-						(string)context.BindingContext.BindingData["Headers"]
-					).GetValueOrDefault("Authorization");
-
-				if (authorization == null) throw new Exception("hata");
+				string? token = await context.GetTokenAsync();
+				if(token == null) throw new TokenNotFoundException();
 				
-				string token = AuthenticationHeaderValue.Parse(authorization).Parameter;
-
-				try
-				{
-					var cliamsPrincibal = _jwtHandler.ValidateToken(
-						token,
-						CreateTokenValidationParameters(_customTokenOptions, _signService),
-						out var validatedToken
-					);
-					Console.WriteLine("");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("hata");
-					return;
-				}
-
+				ClaimsPrincipal cliamsPrincibal = _jwtHandler.ValidateToken(
+					token,
+					CreateTokenValidationParameters(_customTokenOptions, _signService),
+					out var validatedToken
+				);
 			}
 			await next(context);
 			return;

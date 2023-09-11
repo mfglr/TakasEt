@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.SignUp
 {
-	public class SignUpRequestDto : IRequest<SignUpResponseDto>
+	public class SignUpRequestDto : IRequest<AppResponseDto<SignUpResponseDto>>
 	{
 		public string UserName { get; private set; }
 		public string Password { get; private set; }

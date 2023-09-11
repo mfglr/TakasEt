@@ -1,10 +1,7 @@
-﻿using Application.Configurations;
-using Application.Pipelines;
+﻿using Application.Pipelines;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace Application
@@ -19,7 +16,5 @@ namespace Application
 			services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CustomPipeline<,>));
 			services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(),ServiceLifetime.Scoped);
 		}
-
-		
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class GetUserByUserNameRequestDto : IRequest<UserResponseDto>
+	public class GetUserByUserNameRequestDto : IRequest<AppResponseDto<UserResponseDto>>
 	{
         public string UserName { get; private set; }
         

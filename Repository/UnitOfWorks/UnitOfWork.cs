@@ -18,11 +18,6 @@ namespace Repository.UnitOfWorks
 			await _context.SaveChangesAsync();
 		}
 
-		public IEnumerable<T> GetEntities<T>() where T : class
-		{
-			return _context.ChangeTracker.Entries<T>().Select(x => x.Entity);
-		}
-
 		public IEnumerable<T> GetEntities<T>(Func<EntityEntry<T>, bool> expression) where T : class
 		{
 			return _context.ChangeTracker.Entries<T>().Where(expression).Select(x => x.Entity);

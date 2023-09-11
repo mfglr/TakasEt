@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetArticleByIdHandler : IRequestHandler<GetArticleByIdRequestDto, ArticleResponseDto>
+	public class GetArticleByIdHandler : IRequestHandler<GetArticleByIdRequestDto, AppResponseDto<ArticleResponseDto>>
 	{
 		private readonly IRepository<Article> _articles;
 		private readonly RecursiveRepositoryOptions _option;
@@ -22,13 +22,15 @@ namespace Application.Queries
 			_option = option;
 		}
 
-		public async Task<ArticleResponseDto> Handle(GetArticleByIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto<ArticleResponseDto>> Handle(GetArticleByIdRequestDto request, CancellationToken cancellationToken)
 		{
 			var article = await _articles.DbSet
 				.Include(x => x.Comments)
 				.ThenIncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id);
-			return _mapper.Map<ArticleResponseDto>(article);
+			return AppResponseDto<ArticleResponseDto>.Success(
+				_mapper.Map<ArticleResponseDto>(article)
+				);
 		}
 	}
 }

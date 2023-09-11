@@ -1,6 +1,7 @@
 ﻿using Application.Configurations;
 using Application.Dtos;
 using Application.Entities;
+using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.ValueObjects;
@@ -28,7 +29,7 @@ namespace Service
 		public async Task<TokenDto> CreateTokenByUserAsync(LoginDto login)
 		{
 			var user = await _userManager.FindByEmailAsync(login.Email);
-			if (user == null) throw new Exception("hata");
+			if (user == null) throw new UserNotFoundException();
 			if (!await _userManager.CheckPasswordAsync(user, login.Password)) throw new Exception("hata");
 			
 			var accessToken = _tokenService.CreateAccessTokenByUser(user);
@@ -38,7 +39,7 @@ namespace Service
 				.OrderBy(x => x.CreatedDate)
 				.FirstOrDefaultAsync(x => x.Id == user.Id);
 			
-			Token newRefreshToken = userRefreshToken?.Token;
+			Token? newRefreshToken = userRefreshToken?.Token;
 
 			if (userRefreshToken == null || !userRefreshToken.Token.IsValid() || userRefreshToken.IsDeleted)
 			{
@@ -52,7 +53,7 @@ namespace Service
 			return new TokenDto(
 				accessToken.Value,
 				accessToken.ExpirationDate, 
-				newRefreshToken.Value,
+				newRefreshToken!.Value,
 				accessToken.ExpirationDate
 			);
 

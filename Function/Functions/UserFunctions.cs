@@ -18,14 +18,14 @@ namespace Function.Functions
 		}
 
 		[Function("sing-up")]
-		public async Task<SignUpResponseDto> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+		public async Task<AppResponseDto<SignUpResponseDto>> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<SignUpRequestDto>());
 		}
 
 		[Authorize]
 		[Function("get-user-by-username/{username}")]
-		public async Task<UserResponseDto> GetUser(
+		public async Task<AppResponseDto<UserResponseDto>> GetUser(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 			string username
 		)
@@ -34,7 +34,7 @@ namespace Function.Functions
 		}
 
 		[Function("remove-user/{id}")]
-		public async Task<NoContentResponseDto> RemoveUser(
+		public async Task<AppResponseDto<NoContentResponseDto>> RemoveUser(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
 			Guid id
 		)

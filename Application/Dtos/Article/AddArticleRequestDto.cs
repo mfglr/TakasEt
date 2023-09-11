@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class AddArticleRequestDto : IRequest<AddArticleResponseDto>
+	public class AddArticleRequestDto : IRequest<AppResponseDto<AddArticleResponseDto>>
 	{
 		public Guid UserId { get; private set; }
 		public string Title { get; private set; }

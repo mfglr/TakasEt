@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands
 {
-	public class CreateTokenByUserCommandHandler : IRequestHandler<LoginDto, TokenDto>
+	public class CreateTokenByUserCommandHandler : IRequestHandler<LoginDto, AppResponseDto<TokenDto>>
 	{
 
 		private readonly IAuthenticationService _authenticationService;
@@ -14,9 +14,11 @@ namespace Application.Commands
 			_authenticationService = authenticationService;
 		}
 
-		public async Task<TokenDto> Handle(LoginDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto<TokenDto>> Handle(LoginDto request, CancellationToken cancellationToken)
 		{
-			return await _authenticationService.CreateTokenByUserAsync(request);
+			return AppResponseDto<TokenDto>.Success(
+				await _authenticationService.CreateTokenByUserAsync(request)
+				);
 		}
 	}
 }

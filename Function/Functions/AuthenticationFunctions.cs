@@ -16,7 +16,7 @@ namespace Function.Functions
 		}
 
 		[Function("create-token-by-user")]
-        public async Task<TokenDto> CreateTokenByUser(
+        public async Task<AppResponseDto<TokenDto>> CreateTokenByUser(
             [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
             )
         {
@@ -24,7 +24,7 @@ namespace Function.Functions
         }
 
 		[Function("create-token-by-client")]
-		public async Task<ClientTokenDto> CreateTokenByClient(
+		public async Task<AppResponseDto<ClientTokenDto>> CreateTokenByClient(
 			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 			)
 		{
@@ -32,7 +32,7 @@ namespace Function.Functions
 		}
 
 		[Function("create-token-by-refresh-token")]
-		public async Task<TokenDto> CreateTokenByRefreshToken(
+		public async Task<AppResponseDto<TokenDto>> CreateTokenByRefreshToken(
 			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 			)
 		{

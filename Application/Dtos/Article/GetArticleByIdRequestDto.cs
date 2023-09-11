@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class GetArticleByIdRequestDto : IRequest<ArticleResponseDto>
+	public class GetArticleByIdRequestDto : IRequest<AppResponseDto<ArticleResponseDto>>
 	{
         public Guid Id { get; private set; }
 

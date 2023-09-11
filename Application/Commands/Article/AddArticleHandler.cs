@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Commands
 {
-	public class AddArticleHandler : IRequestHandler<AddArticleRequestDto, AddArticleResponseDto>
+	public class AddArticleHandler : IRequestHandler<AddArticleRequestDto, AppResponseDto<AddArticleResponseDto>>
 	{
 		private readonly IRepository<Article> _articles;
 		private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace Application.Commands
 			_mapper = mapper;
 		}
 
-		public async Task<AddArticleResponseDto> Handle(AddArticleRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto<AddArticleResponseDto>> Handle(AddArticleRequestDto request, CancellationToken cancellationToken)
 		{
 			var article = new Article(
 				request.UserId,
@@ -27,7 +27,7 @@ namespace Application.Commands
 				request.CategoryId
 			);
 			await _articles.DbSet.AddAsync(article);
-			return _mapper.Map<AddArticleResponseDto>(article);
+			return  AppResponseDto<AddArticleResponseDto>.Success(_mapper.Map<AddArticleResponseDto>(article));
 		}
 	}
 }
