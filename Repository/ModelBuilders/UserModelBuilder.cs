@@ -28,6 +28,10 @@ namespace Repository.ModelBuilders
 				.HasMany(x => x.UserRefreshTokens)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId);
+
+			builder
+				.HasMany(x => x.Roles)
+				.WithMany(x => x.Users);
 		}
 	}
 }

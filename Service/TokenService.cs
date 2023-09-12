@@ -2,6 +2,7 @@
 using Application.Entities;
 using Application.Interfaces.Services;
 using Application.ValueObjects;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,15 +16,21 @@ namespace Service
 		private readonly CustomTokenOptions _customTokenOptions;
 		private readonly SignService _signService;
 		private readonly JwtSecurityTokenHandler _jwtHandler;
+		private readonly UserManager<User> _userManager;
 
-		private IEnumerable<Claim> GetClaimsByUser(User user, List<String> audiences)
+		private async Task<IEnumerable<Claim>> GetClaimsByUserAsync(User user, List<String> audiences)
 		{
 			var claims = new List<Claim>()
 			{
-				new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-				new Claim(JwtRegisteredClaimNames.Email, user.Email),
-				new Claim(JwtRegisteredClaimNames.Name, user.UserName)
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Email, user.Email),
+				new Claim(ClaimTypes.Name, user.UserName)
 			};
+			claims.AddRange(
+				(await _userManager.GetRolesAsync(user)).Select(
+					x => new Claim(ClaimTypes.Role, x)
+				)
+			);
 			claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;
 		}
@@ -40,11 +47,12 @@ namespace Service
 			return claims;
 		}
 
-		public TokenService(CustomTokenOptions customTokenOptions, SignService signService, JwtSecurityTokenHandler jwtHandler)
+		public TokenService(CustomTokenOptions customTokenOptions, SignService signService, JwtSecurityTokenHandler jwtHandler, UserManager<User> userManager)
 		{
 			_customTokenOptions = customTokenOptions;
 			_signService = signService;
 			_jwtHandler = jwtHandler;
+			_userManager = userManager;
 		}
 
 		public Token CreateRefreshToken()
@@ -71,7 +79,7 @@ namespace Service
 			return new Token(token, expirationOfAccessToken);
 		}
 
-		public Token CreateAccessTokenByUser(User user)
+		public async Task<Token> CreateAccessTokenByUserAsync(User user)
 		{
 			var expirationOfAccessToken = DateTime.Now.AddMinutes(_customTokenOptions.ExprationOfAccessToken);
 			var securityKey = _signService.GetSymmetricSecurityKey(_customTokenOptions.SecurityKey);
@@ -80,7 +88,7 @@ namespace Service
 				issuer: _customTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
 				notBefore: DateTime.Now,
-				claims: GetClaimsByUser(user, _customTokenOptions.Audiences),
+				claims: await GetClaimsByUserAsync(user, _customTokenOptions.Audiences),
 				signingCredentials: signingCredentials
 			);
 			var token = _jwtHandler.WriteToken(jwtSecurityToken);

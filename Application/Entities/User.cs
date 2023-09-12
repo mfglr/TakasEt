@@ -5,28 +5,31 @@ using Microsoft.AspNetCore.Identity;
 namespace Application.Entities
 {
 
-    public class User : IdentityUser<Guid>, IEntity,IEntityDomainEvent
+	public class User : IdentityUser<Guid>, IEntity, IEntityDomainEvent
     {
         
 		public string? Name { get; private set; }
+        public string UserName { get; private set; }
+		public string Email { get; private set; }
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
         public string ConfirmationEmailToken { get; private set; }
-		public IReadOnlyCollection<UserRefreshToken> UserRefreshTokens { get; private set; }
+        public bool IsEmailConfirmed { get; private set; }
+        public IReadOnlyCollection<UserRefreshToken> UserRefreshTokens { get; private set; }
+		public IReadOnlyCollection<Role> Roles => _roles;
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
         public IReadOnlyCollection<Comment> Comments { get; }
+		public DateTime CreatedDate { get; private set; }
+		public DateTime? UpdatedDate { get; private set; }
 
+		private readonly List<Role> _roles = new List<Role>();
         private readonly List<Credit> _credits = new List<Credit>();
         private readonly List<Article> _articles = new List<Article>();
-        
 		private List<INotification> _domainEvents = new List<INotification>();
-		public Guid Id { get; private set; }
-		public DateTime CreatedDate { get; private set; }
-        public DateTime? UpdatedDate { get; private set; }
 
-        public User(string email,string userName)
+		public User(string email,string userName)
         {
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = userName;
@@ -34,8 +37,8 @@ namespace Application.Entities
 			AddDomainEvent(new UserDomainEvent(this));
         }
         
-		public void ConfirmEmail() { 
-			EmailConfirmed = true;
+		public void ConfirmEmail() {
+			IsEmailConfirmed = true;
 		}
 
         public void AddArticle(Article article)
@@ -63,25 +66,26 @@ namespace Application.Entities
 			return totalCredit;
 		}
 
-		//IEntity
-		public void SetId()
+		public void AddRole(Role role)
 		{
-			Id = Guid.NewGuid();
+			_roles.Add(role);
 		}
+
 		public void SetCreatedDate()
 		{
 			CreatedDate = DateTime.UtcNow;
 		}
+
 		public void SetUpdatedDate()
 		{
 			UpdatedDate = DateTime.UtcNow;
 		}
 
-		//IEntityDomainEvents
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);
 		}
+
 		public void PublishAllDomainEvents(IPublisher publisher)
 		{
 			_domainEvents.ForEach(
@@ -91,15 +95,15 @@ namespace Application.Entities
 				}
 			);
 		}
+
 		public void ClearAllDomainEvents()
 		{
 			_domainEvents.Clear();
 		}
+
 		public bool AnyDomainEvents()
 		{
-			var events = _domainEvents;
-			var data =  _domainEvents.Any();
-			return data;
+			return _domainEvents.Any();
 		}
 	}
 }
