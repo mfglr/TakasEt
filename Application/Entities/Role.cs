@@ -1,55 +1,16 @@
-﻿using Application.DomainEventModels;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Application.ValueObjects;
 
 namespace Application.Entities
 {
-	public class Role : IdentityRole<Guid>, IEntity, IEntityDomainEvent
+	public class Role : Entity
 	{
-		private List<INotification> _domainEvents = new List<INotification>();
-		public Guid Id { get; private set; }
-		public DateTime CreatedDate { get; private set; }
-        public DateTime? UpdatedDate { get; private set; }
-
-		public void SetId()
-		{
-			Id = Guid.NewGuid();
+        public RoleType RoleType { get; private set; }
+        public IReadOnlyCollection<User> Users { get; private set; }
+        
+		public Role() { }
+		
+		public Role(RoleType roleType) { 
+			RoleType = roleType;
 		}
-
-		public void SetCreatedDate()
-		{
-			CreatedDate = DateTime.UtcNow;
-		}
-	
-		public void SetUpdatedDate()
-		{
-			UpdatedDate = DateTime.UtcNow;
-		}
-
-
-		public void AddDomainEvent(INotification domainEvent)
-		{
-			_domainEvents.Add(domainEvent);
-		}
-		public void PublishAllDomainEvents(IPublisher publisher)
-		{
-			_domainEvents.ForEach(
-				domainEvent =>
-				{
-					publisher.Publish(domainEvent);
-				}
-			);
-		}
-		public void ClearAllDomainEvents()
-		{
-			_domainEvents.Clear();
-		}
-		public bool AnyDomainEvents()
-		{
-			var events = _domainEvents;
-			var data = _domainEvents.Any();
-			return data;
-		}
-
-	}
+    }
 }

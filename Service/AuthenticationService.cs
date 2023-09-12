@@ -30,7 +30,7 @@ namespace Service
 		{
 			var user = await _userManager.FindByEmailAsync(login.Email);
 			if (user == null) throw new UserNotFoundException();
-			if (!await _userManager.CheckPasswordAsync(user, login.Password)) throw new Exception("hata");
+			if (!await _userManager.CheckPasswordAsync(user, login.Password)) throw new FailedLoginException();
 			
 			var accessToken = _tokenService.CreateAccessTokenByUser(user);
 
@@ -63,7 +63,7 @@ namespace Service
 		public ClientTokenDto CreateTokenByClient(ClientLoginDto client)
 		{
 			var avaibleClient = _clients.SingleOrDefault(x => x.Id == client.Id && x.Secret == client.Secret);
-			if (avaibleClient == null) throw new Exception("hata");
+			if (avaibleClient == null) throw new ClientNotFoundException();
 			Token accessToken = _tokenService.CreateAccessTokenByClient(avaibleClient);
 			return new ClientTokenDto(accessToken.Value, accessToken.ExpirationDate);
 		}
@@ -76,7 +76,7 @@ namespace Service
 				.OrderBy(x => x.CreatedDate)
 				.SingleOrDefaultAsync( x => x.Token.Value == refreshTokenString);
 
-			if (userRefreshToken == null || !userRefreshToken.Token.IsValid()) throw new Exception("hata");
+			if (userRefreshToken == null || !userRefreshToken.Token.IsValid() || userRefreshToken.IsDeleted) throw new InValidRefreshTokenException();
 			Token accessToken = _tokenService.CreateAccessTokenByUser(userRefreshToken.User);
 			Token refreshToken = userRefreshToken.Token;
 			return new TokenDto(
@@ -90,7 +90,7 @@ namespace Service
 		public async Task RevokeRefreshToken(string refreshToken)
 		{
 			var userRefreshToken = await _userRefreshTokenRepository.DbSet.SingleOrDefaultAsync(x => x.Token.Value == refreshToken);
-			if (refreshToken == null) throw new Exception("hata");
+			if (userRefreshToken == null) throw new RefreshTokenNotFoundException();
 			userRefreshToken.Delete();
 		}
 

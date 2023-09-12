@@ -14,24 +14,47 @@ namespace Function.Middlewares
 			try
 			{
 				await next(context);
-				Console.WriteLine("ali");
 			}
-			catch (SystemException ex){
+			catch (CustomException ex)
+			{
+				await context.WriteExceptionAsync(ex.Message, ex.StatusCode);
+			}
+			catch (SystemException ex)
+			{
 				await context.WriteExceptionAsync(
 					$"Server side exception!!!\nType : {ex.GetType()}\nMessage : {ex.Message}",
 					HttpStatusCode.InternalServerError
 				);
 			}
-			catch(SecurityTokenException ex)
+			catch (SecurityTokenException ex)
 			{
 				await context.WriteExceptionAsync(
 					$"Unauthorized : {ex.Message}\nType : {ex.GetType()}\nMessage : {ex.Message}",
 					HttpStatusCode.Unauthorized
 					);
 			}
-			catch (CustomException ex)
+			catch (Exception ex)
 			{
-				await context.WriteExceptionAsync(ex.Message, ex.StatusCode);
+				if (ex is AggregateException aggregateException)
+				{
+					Exception? innerException = aggregateException.InnerException;
+					if (innerException is CustomException customException)
+						await context.WriteExceptionAsync(ex.Message, customException.StatusCode);
+					else
+					{
+						await context.WriteExceptionAsync(
+							$"Undefined Exception!\nType : {innerException?.GetType()}\nMessage : {innerException?.Message}",
+							HttpStatusCode.BadRequest
+						);
+					}
+				}
+				else
+				{
+					await context.WriteExceptionAsync(
+						$"Undefined Exception!\nType : {ex.GetType()}\nMessage : {ex.Message}",
+						HttpStatusCode.BadRequest
+					);
+				}
 			}
 
 		}

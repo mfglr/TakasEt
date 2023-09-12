@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Repository.Contexts;
 using Service;
@@ -22,9 +23,27 @@ var host = new HostBuilder()
 		services.AddSqlDbContext();
 		services.AddApplication();
 		services.AddServices();
-		var context = services.BuildServiceProvider().GetRequiredService<SqlContext>();
-		await context.Database.MigrateAsync();
+		services.AddSingleton(new CurrentUser());
 
+		var customTokenOptions = services.BuildServiceProvider().GetRequiredService<CustomTokenOptions>();
+		var signService = services.BuildServiceProvider().GetRequiredService<SignService>();
+		services.AddSingleton(new TokenValidationParameters()
+		{
+			ValidIssuer = customTokenOptions.Issuer,
+			ValidAudience = customTokenOptions.Audiences[0],
+			IssuerSigningKey = signService.GetSymmetricSecurityKey(customTokenOptions.SecurityKey),
+			ValidateIssuer = true,
+			ValidateIssuerSigningKey = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ClockSkew = TimeSpan.Zero
+		});
+
+		await services
+			.BuildServiceProvider()
+			.GetRequiredService<SqlContext>()
+			.Database
+			.MigrateAsync();
 	})
 	.ConfigureFunctionsWorkerDefaults(worker =>
 		{

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Contexts;
 
@@ -11,9 +12,11 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230912151407_addSeedDataForRole")]
+    partial class addSeedDataForRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +70,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Application.Entities.Category", b =>
@@ -92,7 +95,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -131,7 +134,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Application.Entities.Credit", b =>
@@ -162,7 +165,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Credits", (string)null);
+                    b.ToTable("Credits");
                 });
 
             modelBuilder.Entity("Application.Entities.Role", b =>
@@ -323,7 +326,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRefreshTokens", (string)null);
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -492,7 +495,7 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Application.Entities.UserRefreshToken.Token#Application.ValueObjects.Token", "Token", b1 =>
+                    b.OwnsOne("Application.ValueObjects.Token", "Token", b1 =>
                         {
                             b1.Property<Guid>("UserRefreshTokenId")
                                 .HasColumnType("uniqueidentifier");
@@ -508,7 +511,7 @@ namespace Repository.Migrations
 
                             b1.HasKey("UserRefreshTokenId");
 
-                            b1.ToTable("UserRefreshTokens", (string)null);
+                            b1.ToTable("UserRefreshTokens");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserRefreshTokenId");
