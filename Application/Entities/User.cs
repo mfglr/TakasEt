@@ -78,7 +78,7 @@ namespace Application.Entities
 
 		public void SetUpdatedDate()
 		{
-			UpdatedDate = DateTime.UtcNow;
+			_roles.Add(role);
 		}
 
 		public void AddDomainEvent(INotification domainEvent)
