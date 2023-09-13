@@ -13,12 +13,13 @@ namespace Application.Entities
 			RoleType = roleType;
 		}
 
-        //for seeds
-        public static Role Create(RoleType roleType)
-        {
-            Role role = new Role(roleType);
-            role.SetId();
-            return role;
-        }
+		public static Role Create(string name,int index)
+		{
+			var role = new Role();
+			role.SetId();
+			return role;
+		}
+
+
     }
 }

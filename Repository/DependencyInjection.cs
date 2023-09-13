@@ -1,4 +1,5 @@
 ﻿using Application.Configurations;
+using Application.Entities;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,11 @@ namespace Repository
 			{
 				optionsAction.UseSqlServer(local.SqlConnectionString);
 			});
+			serviceCollection.AddIdentityCore<User>(opt =>
+			{
+				opt.User.RequireUniqueEmail = true;
+				opt.Password.RequireNonAlphanumeric = false;
+			}).AddEntityFrameworkStores<SqlContext>();
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}

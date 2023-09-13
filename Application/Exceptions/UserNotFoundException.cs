@@ -2,7 +2,7 @@
 
 namespace Application.Exceptions
 {
-	public class UserNotFoundException : CustomException
+	public class UserNotFoundException : AppException
 	{
         public UserNotFoundException() : base("User not found!", HttpStatusCode.NotFound)
         {

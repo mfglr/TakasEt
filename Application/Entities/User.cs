@@ -9,8 +9,6 @@ namespace Application.Entities
     {
         
 		public string? Name { get; private set; }
-        public string UserName { get; private set; }
-		public string Email { get; private set; }
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
@@ -58,7 +56,6 @@ namespace Application.Entities
 		{
 			_credits.Remove(credit);
 		}
-
 		public decimal CalculateTotalCredit()
 		{
 			decimal totalCredit = 0;
@@ -70,22 +67,28 @@ namespace Application.Entities
 		{
 			_roles.Add(role);
 		}
+		public void RemoveRole(Role role)
+		{
+			_roles.Remove(role);
+		}
 
+		public void SetId()
+		{
+			Id = Guid.NewGuid();
+		}
 		public void SetCreatedDate()
 		{
 			CreatedDate = DateTime.UtcNow;
 		}
-
 		public void SetUpdatedDate()
 		{
-			_roles.Add(role);
+			UpdatedDate = DateTime.UtcNow;
 		}
 
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);
 		}
-
 		public void PublishAllDomainEvents(IPublisher publisher)
 		{
 			_domainEvents.ForEach(
@@ -95,12 +98,10 @@ namespace Application.Entities
 				}
 			);
 		}
-
 		public void ClearAllDomainEvents()
 		{
 			_domainEvents.Clear();
 		}
-
 		public bool AnyDomainEvents()
 		{
 			return _domainEvents.Any();

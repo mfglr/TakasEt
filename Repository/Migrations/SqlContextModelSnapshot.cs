@@ -67,7 +67,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Application.Entities.Category", b =>
@@ -92,7 +92,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -131,7 +131,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Application.Entities.Credit", b =>
@@ -162,7 +162,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Credits", (string)null);
+                    b.ToTable("Credits");
                 });
 
             modelBuilder.Entity("Application.Entities.Role", b =>
@@ -205,7 +205,6 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
@@ -254,7 +253,6 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -284,7 +282,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRefreshTokens", (string)null);
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -366,12 +364,12 @@ namespace Repository.Migrations
 
                             b1.Property<int>("Index")
                                 .HasColumnType("int")
-                                .HasColumnName("roleIndex");
+                                .HasColumnName("RoleIndex");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("roleName");
+                                .HasColumnName("RoleName");
 
                             b1.HasKey("RoleId");
 
@@ -393,7 +391,7 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Application.Entities.UserRefreshToken.Token#Application.ValueObjects.Token", "Token", b1 =>
+                    b.OwnsOne("Application.ValueObjects.Token", "Token", b1 =>
                         {
                             b1.Property<Guid>("UserRefreshTokenId")
                                 .HasColumnType("uniqueidentifier");
@@ -409,7 +407,7 @@ namespace Repository.Migrations
 
                             b1.HasKey("UserRefreshTokenId");
 
-                            b1.ToTable("UserRefreshTokens", (string)null);
+                            b1.ToTable("UserRefreshTokens");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserRefreshTokenId");

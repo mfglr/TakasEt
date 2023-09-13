@@ -2,7 +2,7 @@
 
 namespace Application.Exceptions
 {
-	public class FailedLoginException : CustomException
+	public class FailedLoginException : AppException
 	{
         public FailedLoginException() : base("Login failed for user!",HttpStatusCode.Unauthorized)
         {

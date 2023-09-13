@@ -11,6 +11,6 @@
 			Index = index;
 		}
 		public static readonly RoleType User = new RoleType("user",0);
-		public static readonly RoleType Client = new RoleType("client", 1);
+		public static readonly RoleType Client = new RoleType("client",1);
     }
 }

@@ -4,11 +4,11 @@ namespace Application.Entities
 {
     public abstract class Entity : EntityDomainEvent, IEntity
 	{
-        public Guid Id { get; private set; }
+        public Guid Id { get; private set; } = Guid.NewGuid();
         public DateTime CreatedDate { get; private set; }
         public DateTime? UpdatedDate { get; private set; }
 
-		protected void SetId()
+		public void SetId()
 		{
 			Id = Guid.NewGuid();
 		}

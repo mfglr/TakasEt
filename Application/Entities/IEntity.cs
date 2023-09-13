@@ -6,6 +6,7 @@
 		DateTime CreatedDate { get; }
 		DateTime? UpdatedDate { get; }
 
+		void SetId();
 		void SetCreatedDate();
 		void SetUpdatedDate();
 	}

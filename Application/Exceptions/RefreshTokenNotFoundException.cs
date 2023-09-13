@@ -2,7 +2,7 @@
 
 namespace Application.Exceptions
 {
-	public class RefreshTokenNotFoundException : CustomException
+	public class RefreshTokenNotFoundException : AppException
 	{
         public RefreshTokenNotFoundException() : base("Refresh token is not found!",HttpStatusCode.NotFound)
         {

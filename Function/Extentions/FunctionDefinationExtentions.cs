@@ -5,7 +5,7 @@ namespace Function.Extentions
 {
 	public static class FunctionDefinationExtentions
 	{
-		public static bool HasCustomAttribute(this FunctionDefinition definition,Type attribute)
+		public static Attribute? GetAttribute(this FunctionDefinition definition,Type attribute)
 		{
 			int indexOfSeparator = definition.EntryPoint.LastIndexOf('.');
 			var className = definition.EntryPoint.Substring(0, indexOfSeparator);
@@ -14,7 +14,12 @@ namespace Function.Extentions
 				.LoadFrom(definition.PathToAssembly)?
 				.GetType(className)?
 				.GetMethod(functionName)?
-				.GetCustomAttribute(attribute) != null;
+				.GetCustomAttribute(attribute);
+		}
+
+		public static bool HasCustomAttribute(this FunctionDefinition definition,Type attribute)
+		{
+			return GetAttribute(definition, attribute) != null;
 		}
 	}
 }

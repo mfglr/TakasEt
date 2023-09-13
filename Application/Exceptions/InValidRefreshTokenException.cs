@@ -2,7 +2,7 @@
 
 namespace Application.Exceptions
 {
-	public class InValidRefreshTokenException : CustomException
+	public class InValidRefreshTokenException : AppException
 	{
         public InValidRefreshTokenException() : base("Invalid refresh token exception", HttpStatusCode.BadRequest)
         {

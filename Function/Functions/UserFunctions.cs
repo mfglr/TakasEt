@@ -17,13 +17,14 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
+		[Authorize("client", "user", "admin")]
 		[Function("sing-up")]
 		public async Task<AppResponseDto<SignUpResponseDto>> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<SignUpRequestDto>());
 		}
 
-		[Authorize]
+		[Authorize("user","client")]
 		[Function("get-user-by-username/{username}")]
 		public async Task<AppResponseDto<UserResponseDto>> GetUser(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
@@ -33,6 +34,7 @@ namespace Function.Functions
 			return await _sender.Send(new GetUserByUserNameRequestDto(username));
 		}
 
+		[Authorize("admin","user")]
 		[Function("remove-user/{id}")]
 		public async Task<AppResponseDto<NoContentResponseDto>> RemoveUser(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,

@@ -4,19 +4,19 @@ using System.Text;
 
 namespace Application.Exceptions
 {
-	public class ValidationException : CustomException
+	public class ValidationException : AppException
 	{
         private ValidationException(string message) : base(message,HttpStatusCode.BadRequest) { }   
 
         public static ValidationException Create(IEnumerable<string> errors)
         {
-            return new ValidationException(errors.Merge("\n"));
+            return new ValidationException(string.Join("\n",errors));
         }
 
         public static ValidationException Create(IEnumerable<string> errors,Type requestType)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(errors.Merge("\n"));
+            builder.Append(string.Join("\n", errors));
             builder.Append($"Request Type : {requestType.Name}\n");
             return new ValidationException(builder.ToString());
         }

@@ -14,40 +14,32 @@ namespace Function.Middlewares
 	public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
 	{
 		private readonly JwtSecurityTokenHandler _jwtHandler;
-		private readonly CustomTokenOptions _customTokenOptions;
-		private readonly SignService _signService;
 
-		public AuthenticationMiddleware(
-			JwtSecurityTokenHandler jwtHandler,
-			CustomTokenOptions customTokenOptions,
-			SignService signService)
+		public AuthenticationMiddleware(JwtSecurityTokenHandler jwtHandler)
 		{
 			_jwtHandler = jwtHandler;
-			_customTokenOptions = customTokenOptions;
-			_signService = signService;
 		}
 
 		private void setCurrentUser(FunctionContext context,ClaimsPrincipal claimsPrincibal,SecurityToken token)
 		{
 			var currentUser = (CurrentUser?)context.InstanceServices.GetService(typeof(CurrentUser));
-			currentUser?.Set(
-				claimsPrincibal.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)!.Value,
-				claimsPrincibal.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value,
-				claimsPrincibal.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.Email)!.Value,
-				token.ValidTo
-			);
+			currentUser?.Set(claimsPrincibal.GetId()!,claimsPrincibal.GetUserName()!,claimsPrincibal.GetEmail()!,token.ValidTo);
 		}
 	
 		public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
 		{
-			if (context.FunctionDefinition.HasCustomAttribute(typeof(AuthorizeAttribute)))
+			AuthorizeAttribute? attribute = (AuthorizeAttribute?)context.FunctionDefinition.GetAttribute(typeof(AuthorizeAttribute));
+			if (attribute != null)
 			{
 				var tokenValidatonParameters = (TokenValidationParameters?)context.InstanceServices.GetService(typeof(TokenValidationParameters));
 				string? token = await context.GetTokenAsync();
 				if(token == null) throw new TokenNotFoundException();
 				var a = _jwtHandler.ReadJwtToken(token);
-				ClaimsPrincipal claimsPrincibal = _jwtHandler.ValidateToken(token,tokenValidatonParameters,out var validatedToken);
-				setCurrentUser(context, claimsPrincibal,validatedToken);
+				ClaimsPrincipal claimsPrincipal = _jwtHandler.ValidateToken(token,tokenValidatonParameters,out var validatedToken);
+				var rolesOfUser = claimsPrincipal.GetRoles();
+
+				if (!attribute.HasRole(rolesOfUser)) throw new Application.Exceptions.UnauthorizedAccessException();
+				setCurrentUser(context, claimsPrincipal, validatedToken);
 			}
 			await next(context);
 		}

@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20230912190931_refactor")]
-    partial class refactor
+    [Migration("20230913091547_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -369,12 +369,12 @@ namespace Repository.Migrations
 
                             b1.Property<int>("Index")
                                 .HasColumnType("int")
-                                .HasColumnName("roleIndex");
+                                .HasColumnName("RoleIndex");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("roleName");
+                                .HasColumnName("RoleName");
 
                             b1.HasKey("RoleId");
 

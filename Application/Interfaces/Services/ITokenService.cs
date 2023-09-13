@@ -7,7 +7,7 @@ namespace Application.Interfaces.Services
     public interface ITokenService
     {
         Token CreateRefreshToken();
-        Task<Token> CreateAccessTokenByUserAsync(User user);
+        Token CreateAccessTokenByUser(User user);
 		Token CreateAccessTokenByClient(Client client);
     }
 }

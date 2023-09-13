@@ -10,8 +10,8 @@ namespace Repository.ModelBuilders
 		{
 			builder.OwnsOne(x => x.RoleType, x =>
 			{
-				x.Property(p => p.Name).HasColumnName("roleName");
-				x.Property(p => p.Index).HasColumnName("roleIndex");
+				x.Property(p => p.Name).HasColumnName("RoleName");
+				x.Property(p => p.Index).HasColumnName("RoleIndex");
 			});
 		}
 	}

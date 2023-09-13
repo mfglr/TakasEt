@@ -2,7 +2,6 @@
 using Application.Entities;
 using Application.Interfaces.Services;
 using Application.ValueObjects;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,25 +11,28 @@ namespace Service
 {
     public class TokenService : ITokenService
 	{
-
 		private readonly CustomTokenOptions _customTokenOptions;
 		private readonly SignService _signService;
 		private readonly JwtSecurityTokenHandler _jwtHandler;
-		private readonly UserManager<User> _userManager;
 
-		private async Task<IEnumerable<Claim>> GetClaimsByUserAsync(User user, List<String> audiences)
+		public TokenService(CustomTokenOptions customTokenOptions, SignService signService, JwtSecurityTokenHandler jwtHandler)
 		{
+			_customTokenOptions = customTokenOptions;
+			_signService = signService;
+			_jwtHandler = jwtHandler;
+		}
+
+		private IEnumerable<Claim> GetClaimsByUser(User user, List<String> audiences)
+		{
+
+			var data = new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.RoleType.Name)));
 			var claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
 				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.Name, user.UserName)
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.RoleType.Name)))
 			};
-			claims.AddRange(
-				(await _userManager.GetRolesAsync(user)).Select(
-					x => new Claim(ClaimTypes.Role, x)
-				)
-			);
 			claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;
 		}
@@ -45,14 +47,6 @@ namespace Service
 			};
 			claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;
-		}
-
-		public TokenService(CustomTokenOptions customTokenOptions, SignService signService, JwtSecurityTokenHandler jwtHandler, UserManager<User> userManager)
-		{
-			_customTokenOptions = customTokenOptions;
-			_signService = signService;
-			_jwtHandler = jwtHandler;
-			_userManager = userManager;
 		}
 
 		public Token CreateRefreshToken()
@@ -79,7 +73,7 @@ namespace Service
 			return new Token(token, expirationOfAccessToken);
 		}
 
-		public async Task<Token> CreateAccessTokenByUserAsync(User user)
+		public Token CreateAccessTokenByUser(User user)
 		{
 			var expirationOfAccessToken = DateTime.Now.AddMinutes(_customTokenOptions.ExprationOfAccessToken);
 			var securityKey = _signService.GetSymmetricSecurityKey(_customTokenOptions.SecurityKey);
@@ -88,7 +82,7 @@ namespace Service
 				issuer: _customTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
 				notBefore: DateTime.Now,
-				claims: await GetClaimsByUserAsync(user, _customTokenOptions.Audiences),
+				claims: GetClaimsByUser(user, _customTokenOptions.Audiences),
 				signingCredentials: signingCredentials
 			);
 			var token = _jwtHandler.WriteToken(jwtSecurityToken);

@@ -1,9 +1,9 @@
 using Application.Dtos;
+using Function.Attributes;
 using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json;
 
 namespace Function.Functions
 {
@@ -16,6 +16,8 @@ namespace Function.Functions
             _sender = sender;
         }
 
+
+		[Authorize("user")]
         [Function("add-article")]
         public async Task<AppResponseDto<AddArticleResponseDto>> AddArticle([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {

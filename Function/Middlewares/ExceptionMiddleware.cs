@@ -15,7 +15,7 @@ namespace Function.Middlewares
 			{
 				await next(context);
 			}
-			catch (CustomException ex)
+			catch (AppException ex)
 			{
 				await context.WriteExceptionAsync(ex.Message, ex.StatusCode);
 			}
@@ -38,7 +38,7 @@ namespace Function.Middlewares
 				if (ex is AggregateException aggregateException)
 				{
 					Exception? innerException = aggregateException.InnerException;
-					if (innerException is CustomException customException)
+					if (innerException is AppException customException)
 						await context.WriteExceptionAsync(ex.Message, customException.StatusCode);
 					else
 					{

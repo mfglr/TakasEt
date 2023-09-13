@@ -26,13 +26,9 @@ namespace Service
 		}
 
 
-		public async Task<TokenDto> CreateTokenByUserAsync(LoginDto login)
+		public async Task<TokenDto> CreateTokenByUserAsync(User user)
 		{
-			var user = await _userManager.FindByEmailAsync(login.Email);
-			if (user == null) throw new UserNotFoundException();
-			if (!await _userManager.CheckPasswordAsync(user, login.Password)) throw new FailedLoginException();
-			
-			var accessToken = await _tokenService.CreateAccessTokenByUserAsync(user);
+			var accessToken = _tokenService.CreateAccessTokenByUser(user);
 
 			var userRefreshToken = await _userRefreshTokenRepository
 				.DbSet
