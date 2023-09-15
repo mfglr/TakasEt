@@ -5,47 +5,34 @@ using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.ValueObjects;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Service
 {
-    public class AuthenticationService : IAuthenticationService
+	public class AuthenticationService : IAuthenticationService
 	{
 		private readonly ITokenService _tokenService;
 		private readonly List<Client> _clients;
-		private readonly UserManager<User> _userManager;
 		private readonly IRepository<UserRefreshToken> _userRefreshTokenRepository;
 
-		public AuthenticationService(ITokenService tokenService, List<Client> clients, UserManager<User> userManager, IRepository<UserRefreshToken> userRefreshTokenRepository)
+		public AuthenticationService(ITokenService tokenService, List<Client> clients, IRepository<UserRefreshToken> userRefreshTokenRepository)
 		{
 			_tokenService = tokenService;
 			_clients = clients;
-			_userManager = userManager;
 			_userRefreshTokenRepository = userRefreshTokenRepository;
 		}
 
-
 		public async Task<TokenDto> CreateTokenByUserAsync(User user)
 		{
-			var accessToken = _tokenService.CreateAccessTokenByUser(user);
-
-			var userRefreshToken = await _userRefreshTokenRepository
-				.DbSet
-				.OrderBy(x => x.CreatedDate)
-				.FirstOrDefaultAsync(x => x.Id == user.Id);
-			
-			Token? newRefreshToken = userRefreshToken?.Token;
-
-			if (userRefreshToken == null || !userRefreshToken.Token.IsValid() || userRefreshToken.IsDeleted)
+			Token? newRefreshToken = user.UserRefreshToken?.Token;
+			if (newRefreshToken == null)
 			{
-				userRefreshToken?.Delete();
 				newRefreshToken = _tokenService.CreateRefreshToken();
-				await _userRefreshTokenRepository
-					.DbSet
-					.AddAsync(new UserRefreshToken(user.Id, newRefreshToken));
+				await _userRefreshTokenRepository.DbSet.AddAsync(new UserRefreshToken(user.Id, newRefreshToken));
 			}
-
+			else if (!newRefreshToken.IsValid())
+				user.UserRefreshToken!.UpdateToken(_tokenService.CreateRefreshToken());
+			var accessToken = _tokenService.CreateAccessTokenByUser(user);
 			return new TokenDto(
 				accessToken.Value,
 				accessToken.ExpirationDate,
@@ -54,7 +41,6 @@ namespace Service
 			);
 
 		}
-
 
 		public ClientTokenDto CreateTokenByClient(ClientLoginDto client)
 		{
@@ -69,11 +55,9 @@ namespace Service
 			var userRefreshToken = await _userRefreshTokenRepository
 				.DbSet
 				.Include(x => x.User)
-				.OrderBy(x => x.CreatedDate)
 				.SingleOrDefaultAsync( x => x.Token.Value == refreshTokenString);
-
-			if (userRefreshToken == null || !userRefreshToken.Token.IsValid() || userRefreshToken.IsDeleted) throw new InValidRefreshTokenException();
-			Token accessToken = await _tokenService.CreateAccessTokenByUserAsync(userRefreshToken.User);
+			if (userRefreshToken == null || !userRefreshToken.Token.IsValid()) throw new InValidRefreshTokenException();
+			Token accessToken = _tokenService.CreateAccessTokenByUser(userRefreshToken.User);
 			Token refreshToken = userRefreshToken.Token;
 			return new TokenDto(
 				accessToken.Value,
@@ -87,8 +71,7 @@ namespace Service
 		{
 			var userRefreshToken = await _userRefreshTokenRepository.DbSet.SingleOrDefaultAsync(x => x.Token.Value == refreshToken);
 			if (userRefreshToken == null) throw new RefreshTokenNotFoundException();
-			userRefreshToken.Delete();
+			_userRefreshTokenRepository.DbSet.Remove(userRefreshToken);
 		}
-
 	}
 }

@@ -25,7 +25,12 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UserRefreshTokens)
+				.HasOne(x => x.UserRefreshToken)
+				.WithOne(x => x.User)
+				.HasForeignKey<UserRefreshToken>(x => x.UserId);
+
+			builder
+				.HasMany(x => x.ProfilePictures)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId);
 

@@ -1,12 +1,16 @@
+using Azure.Core.Serialization;
 using Application;
 using Application.Configurations;
 using Function.Middlewares;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Repository;
 using Repository.Contexts;
 using Service;
@@ -47,6 +51,13 @@ var host = new HostBuilder()
 	})
 	.ConfigureFunctionsWorkerDefaults(worker =>
 		{
+			worker.Services.Configure<WorkerOptions>(workerOptions =>
+			{
+				var settings = NewtonsoftJsonObjectSerializer.CreateJsonSerializerSettings();
+				settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+				settings.NullValueHandling = NullValueHandling.Ignore;
+				workerOptions.Serializer = new NewtonsoftJsonObjectSerializer(settings);
+			});
 			worker.UseMiddleware<ExceptionMiddleware>();
 			worker.UseMiddleware<AuthenticationMiddleware>();
 		}

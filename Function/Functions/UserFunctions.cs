@@ -17,11 +17,16 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
-		[Authorize("client", "user", "admin")]
 		[Function("sing-up")]
-		public async Task<AppResponseDto<SignUpResponseDto>> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+		public async Task<AppResponseDto<SignUpResponseDto>> SingUp([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<SignUpRequestDto>());
+		}
+
+		[Function("login")]
+		public async Task<AppResponseDto<TokenDto>> Login([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<LoginDto>());
 		}
 
 		[Authorize("user","client")]

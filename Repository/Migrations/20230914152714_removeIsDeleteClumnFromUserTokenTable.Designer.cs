@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Contexts;
 
@@ -11,9 +12,11 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230914152714_removeIsDeleteClumnFromUserTokenTable")]
+    partial class removeIsDeleteClumnFromUserTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,31 +166,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Credits");
-                });
-
-            modelBuilder.Entity("Application.Entities.ProfilePicture", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDisplayed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProfilePicture");
                 });
 
             modelBuilder.Entity("Application.Entities.Role", b =>
@@ -378,43 +356,6 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.ProfilePicture", b =>
-                {
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("ProfilePictures")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("Application.ValueObjects.AppFile", "Image", b1 =>
-                        {
-                            b1.Property<Guid>("ProfilePictureId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("BlobName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("BlobNameOfFile");
-
-                            b1.Property<string>("ContainerName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ContainerNameOfFile");
-
-                            b1.HasKey("ProfilePictureId");
-
-                            b1.ToTable("ProfilePicture");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProfilePictureId");
-                        });
-
-                    b.Navigation("Image")
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Application.Entities.Role", b =>
                 {
                     b.OwnsOne("Application.ValueObjects.RoleType", "RoleType", b1 =>
@@ -516,8 +457,6 @@ namespace Repository.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Credits");
-
-                    b.Navigation("ProfilePictures");
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();

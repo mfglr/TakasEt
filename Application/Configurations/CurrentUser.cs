@@ -1,6 +1,4 @@
-﻿using Application.ValueObjects;
-
-namespace Application.Configurations
+﻿namespace Application.Configurations
 {
 	public class CurrentUser
 	{

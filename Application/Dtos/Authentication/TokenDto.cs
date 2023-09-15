@@ -2,7 +2,6 @@
 {
     public class TokenDto
     {
-
         public string AccessToken { get; private set; }
         public DateTime ExpirationDateOfAccesToken { get; private set; }
         public string RefreshToken { get; private set; }

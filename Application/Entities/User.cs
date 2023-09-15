@@ -14,17 +14,21 @@ namespace Application.Entities
         public bool? Gender { get; private set; }
         public string ConfirmationEmailToken { get; private set; }
         public bool IsEmailConfirmed { get; private set; }
-        public IReadOnlyCollection<UserRefreshToken> UserRefreshTokens { get; private set; }
+        public UserRefreshToken UserRefreshToken { get; private set; }
 		public IReadOnlyCollection<Role> Roles => _roles;
 		public IReadOnlyCollection<Credit> Credits => _credits;
 		public IReadOnlyCollection<Article> Articles => _articles;
+		public IReadOnlyCollection<ProfilePicture> ProfilePictures => _profilePictures;
         public IReadOnlyCollection<Comment> Comments { get; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
 
+
 		private readonly List<Role> _roles = new List<Role>();
         private readonly List<Credit> _credits = new List<Credit>();
         private readonly List<Article> _articles = new List<Article>();
+		private readonly List<ProfilePicture> _profilePictures = new List<ProfilePicture>();
+		
 		private List<INotification> _domainEvents = new List<INotification>();
 
 		public User(string email,string userName)
@@ -37,6 +41,15 @@ namespace Application.Entities
         
 		public void ConfirmEmail() {
 			IsEmailConfirmed = true;
+		}
+
+		public void AddProfilePicture(ProfilePicture picture)
+		{
+			_profilePictures.Add(picture);
+		}
+		public void RemoveProfilePicture(ProfilePicture picture)
+		{
+			_profilePictures.Remove(picture);
 		}
 
         public void AddArticle(Article article)
