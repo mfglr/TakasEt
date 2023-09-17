@@ -8,11 +8,11 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<Role> builder)
 		{
-			builder.OwnsOne(x => x.RoleType, x =>
-			{
-				x.Property(p => p.Name).HasColumnName("RoleName");
-				x.Property(p => p.Index).HasColumnName("RoleIndex");
-			});
+			builder
+				.HasMany(x => x.Users)
+				.WithOne(x => x.Role)
+				.HasForeignKey(x => x.RoleId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

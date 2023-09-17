@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20230915152418_addProfilePictureTable")]
-    partial class addProfilePictureTable
+    [Migration("20230917145709_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,54 +24,6 @@ namespace Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Application.Entities.Article", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumberOfLikes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfViews")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SumaryOfContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Articles");
-                });
 
             modelBuilder.Entity("Application.Entities.Category", b =>
                 {
@@ -104,9 +56,6 @@ namespace Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ArticleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,10 +63,10 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NumberOfLikes")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PostId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -128,9 +77,9 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId");
-
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -168,6 +117,44 @@ namespace Repository.Migrations
                     b.ToTable("Credits");
                 });
 
+            modelBuilder.Entity("Application.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("Application.Entities.ProfilePicture", b =>
                 {
                     b.Property<Guid>("Id")
@@ -202,12 +189,36 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e8857ae9-6233-4a5a-b799-2c5d143deaa6"),
+                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(7999),
+                            Name = "client"
+                        },
+                        new
+                        {
+                            Id = new Guid("11e0570e-9ce5-461c-b503-e9f624ad4049"),
+                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8001),
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = new Guid("30923737-ffd4-4588-a07b-f50f8eb7dc3b"),
+                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8002),
+                            Name = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Application.Entities.User", b =>
@@ -218,6 +229,9 @@ namespace Repository.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("CommentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -285,7 +299,59 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserPostLikes", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPostLikes");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserPostViews", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPostViews");
                 });
 
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
@@ -311,50 +377,43 @@ namespace Repository.Migrations
                     b.ToTable("UserRefreshTokens");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("Application.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RolesId", "UsersId");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("UsersId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.ToTable("RoleUser");
-                });
+                    b.HasKey("Id");
 
-            modelBuilder.Entity("Application.Entities.Article", b =>
-                {
-                    b.HasOne("Application.Entities.Category", "Category")
-                        .WithMany("Articles")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasIndex("RoleId");
 
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("Articles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasIndex("UserId");
 
-                    b.Navigation("Category");
-
-                    b.Navigation("User");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
                 {
-                    b.HasOne("Application.Entities.Article", "Article")
-                        .WithMany("Comments")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("Application.Entities.Comment", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Application.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Application.Entities.User", "User")
@@ -363,9 +422,9 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Article");
-
                     b.Navigation("Parent");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -379,6 +438,21 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.Post", b =>
+                {
+                    b.HasOne("Application.Entities.Category", "Category")
+                        .WithMany("Posts")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", null)
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Application.Entities.ProfilePicture", b =>
@@ -418,32 +492,49 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.Role", b =>
+            modelBuilder.Entity("Application.Entities.User", b =>
                 {
-                    b.OwnsOne("Application.ValueObjects.RoleType", "RoleType", b1 =>
-                        {
-                            b1.Property<Guid>("RoleId")
-                                .HasColumnType("uniqueidentifier");
+                    b.HasOne("Application.Entities.Comment", null)
+                        .WithMany("UsersWhoLiked")
+                        .HasForeignKey("CommentId");
+                });
 
-                            b1.Property<int>("Index")
-                                .HasColumnType("int")
-                                .HasColumnName("RoleIndex");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("RoleName");
-
-                            b1.HasKey("RoleId");
-
-                            b1.ToTable("Roles");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RoleId");
-                        });
-
-                    b.Navigation("RoleType")
+            modelBuilder.Entity("Application.Entities.UserPostLikes", b =>
+                {
+                    b.HasOne("Application.Entities.Post", "Post")
+                        .WithMany("UsersWhoLiked")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("LikedPosts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserPostViews", b =>
+                {
+                    b.HasOne("Application.Entities.Post", "Post")
+                        .WithMany("UsersWhoViewed")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("ViewedPosts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
@@ -482,48 +573,69 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("Application.Entities.UserRole", b =>
                 {
-                    b.HasOne("Application.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Application.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Application.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Application.Entities.Article", b =>
-                {
-                    b.Navigation("Comments");
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Application.Entities.Category", b =>
                 {
-                    b.Navigation("Articles");
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("UsersWhoLiked");
+                });
+
+            modelBuilder.Entity("Application.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("UsersWhoLiked");
+
+                    b.Navigation("UsersWhoViewed");
+                });
+
+            modelBuilder.Entity("Application.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Application.Entities.User", b =>
                 {
-                    b.Navigation("Articles");
-
                     b.Navigation("Comments");
 
                     b.Navigation("Credits");
 
+                    b.Navigation("LikedPosts");
+
+                    b.Navigation("Posts");
+
                     b.Navigation("ProfilePictures");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();
+
+                    b.Navigation("ViewedPosts");
                 });
 #pragma warning restore 612, 618
         }

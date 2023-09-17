@@ -26,7 +26,7 @@ namespace Application.Queries
 		{
 			var comment = await _comments.DbSet
 				.AsNoTracking()
-				.IncludeChildrenByRecursive(3)
+				.IncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id);
 			return AppResponseDto<CommentResponseDto>.Success(
 				_mapper.Map<CommentResponseDto>(comment)

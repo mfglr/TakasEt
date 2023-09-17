@@ -7,7 +7,7 @@ namespace Application.Entities
         public Guid UserId { get; private set; }
 		public User User { get; private set; }
 		public AppFile Image { get; private set; }
-        public bool IsDisplayed { get; private set; } = true;
+        public bool IsDisplayed { get; private set; }
 
 		public void Display()
 		{

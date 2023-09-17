@@ -14,6 +14,8 @@ namespace Service
 			serviceCollection.AddSingleton<ITokenService, TokenService>();
 			serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
 			serviceCollection.AddScoped<IBlobStorage,BlobStorage>();
+			serviceCollection.AddSingleton<IRoleService, RoleService>();
+			serviceCollection.AddScoped<IGetLoggedInUserService, GetLoggedInUserService>();
 		}
     }
 }

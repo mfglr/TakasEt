@@ -9,7 +9,7 @@ namespace Repository.ModelBuilders
 		public void Configure(EntityTypeBuilder<Category> builder)
 		{
 			builder
-				.HasMany(x => x.Articles)
+				.HasMany(x => x.Posts)
 				.WithOne(x => x.Category)
 				.HasForeignKey(x => x.CategoryId);
 		}

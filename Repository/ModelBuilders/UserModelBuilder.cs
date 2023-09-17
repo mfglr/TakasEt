@@ -8,20 +8,11 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
-			builder
-				.HasMany(x => x.Articles)
-				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId);
-
-			builder
-				.HasMany(x => x.Credits)
-				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId);
 
 			builder
 				.HasMany(x => x.Comments)
 				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId)
+				.HasForeignKey(x => x.UserId) 
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
@@ -36,7 +27,22 @@ namespace Repository.ModelBuilders
 
 			builder
 				.HasMany(x => x.Roles)
-				.WithMany(x => x.Users);
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.LikedPosts)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.ViewedPosts)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+
 		}
 	}
 }

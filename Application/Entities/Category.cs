@@ -2,11 +2,11 @@ namespace Application.Entities
 {
     public class Category : Entity
     {
-        private readonly List<Article> _articles = new List<Article>();
+        private readonly List<Post> _posts = new List<Post>();
         
         public string Name { get; private set; }
         public string Description {  get; private set; }
-        public IReadOnlyCollection<Article> Articles => _articles;
+        public IReadOnlyCollection<Post> Posts => _posts;
 
 		public Category(string name, string description)
 		{
@@ -14,14 +14,14 @@ namespace Application.Entities
 			Description = description;
 		}
 
-		public void AddArticle(Article article)
+		public void AddArticle(Post article)
         {
-            _articles.Add(article);
+			_posts.Add(article);
         }
 
-        public void RemoveArticle(Article article)
+        public void RemoveArticle(Post article)
         {
-            _articles.Remove(article);
+			_posts.Remove(article);
         }
     }
 }

@@ -7,13 +7,13 @@ namespace Repository.Contexts
 {
     public class SqlContext : DbContext
 	{
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Credit> Credits { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         public DbSet<User> Users { get; set; }
-		public DbSet<Role> Roles { get; set; }
+		public DbSet<Role> Roles { get; set; } 
 
 		public SqlContext(DbContextOptions<SqlContext> options) : base(options)
 		{

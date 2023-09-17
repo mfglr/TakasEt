@@ -25,13 +25,13 @@ namespace Service
 		private IEnumerable<Claim> GetClaimsByUser(User user, List<String> audiences)
 		{
 
-			var data = new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.RoleType.Name)));
+			var data = new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.Role.Name)));
 			var claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.RoleType.Name)))
+				new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.Role.Name)))
 			};
 			claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;

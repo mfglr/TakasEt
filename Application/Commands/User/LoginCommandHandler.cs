@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
 using Application.Exceptions;
-using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,20 +11,22 @@ namespace Application.Commands
 	public class LoginCommandHandler : IRequestHandler<LoginDto, AppResponseDto<TokenDto>>
 	{
 		private readonly SignInManager<User> _signInManager;
-		private readonly IRepository<User> _users;
+		private readonly UserManager<User> _userManger;
 		private readonly IAuthenticationService _authenticationService;
 
-		public LoginCommandHandler(SignInManager<User> signInManager, IRepository<User> users)
+		public LoginCommandHandler(SignInManager<User> signInManager, UserManager<User> userManger, IAuthenticationService authenticationService)
 		{
 			_signInManager = signInManager;
-			_users = users;
+			_userManger = userManger;
+			_authenticationService = authenticationService;
 		}
 
 		public async Task<AppResponseDto<TokenDto>> Handle(LoginDto request, CancellationToken cancellationToken)
 		{
-			var user = await _users
-				.DbSet
+			var user = await _userManger
+				.Users
 				.Include(x => x.Roles)
+				.ThenInclude(x => x.Role)
 				.Include(x => x.UserRefreshToken)
 				.SingleOrDefaultAsync(x => x.Email == request.Email);
 			if (user == null) throw new UserNotFoundException();

@@ -7,7 +7,6 @@ namespace Application.Entities
 
 	public class User : IdentityUser<Guid>, IEntity, IEntityDomainEvent
     {
-        
 		public string? Name { get; private set; }
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
@@ -15,19 +14,15 @@ namespace Application.Entities
         public string ConfirmationEmailToken { get; private set; }
         public bool IsEmailConfirmed { get; private set; }
         public UserRefreshToken UserRefreshToken { get; private set; }
-		public IReadOnlyCollection<Role> Roles => _roles;
-		public IReadOnlyCollection<Credit> Credits => _credits;
-		public IReadOnlyCollection<Article> Articles => _articles;
-		public IReadOnlyCollection<ProfilePicture> ProfilePictures => _profilePictures;
+		public IReadOnlyCollection<UserRole> Roles { get; }
+		public IReadOnlyCollection<Credit> Credits { get; }
+		public IReadOnlyCollection<Post> Posts { get; }
+		public IReadOnlyCollection<ProfilePicture> ProfilePictures { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
+		public IReadOnlyCollection<UserPostLikes> LikedPosts { get; }
+		public IReadOnlyCollection<UserPostViews> ViewedPosts { get; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
-
-
-		private readonly List<Role> _roles = new List<Role>();
-        private readonly List<Credit> _credits = new List<Credit>();
-        private readonly List<Article> _articles = new List<Article>();
-		private readonly List<ProfilePicture> _profilePictures = new List<ProfilePicture>();
 		
 		private List<INotification> _domainEvents = new List<INotification>();
 
@@ -38,51 +33,16 @@ namespace Application.Entities
 			Email = email;
 			AddDomainEvent(new UserDomainEvent(this));
         }
-        
+
 		public void ConfirmEmail() {
 			IsEmailConfirmed = true;
 		}
-
-		public void AddProfilePicture(ProfilePicture picture)
-		{
-			_profilePictures.Add(picture);
-		}
-		public void RemoveProfilePicture(ProfilePicture picture)
-		{
-			_profilePictures.Remove(picture);
-		}
-
-        public void AddArticle(Article article)
-		{
-			_articles.Add(article);
-		}
-		public void RemoveArticle(Article article)
-		{
-			_articles.Remove(article);
-		}
-
-		public void AddCredit(Credit credit)
-		{
-			_credits.Add(credit);
-		}
-		public void RemoveCredit(Credit credit)
-		{
-			_credits.Remove(credit);
-		}
+		
 		public decimal CalculateTotalCredit()
 		{
 			decimal totalCredit = 0;
 			_credits.ForEach(creadit => totalCredit += creadit.VAmount);
 			return totalCredit;
-		}
-
-		public void AddRole(Role role)
-		{
-			_roles.Add(role);
-		}
-		public void RemoveRole(Role role)
-		{
-			_roles.Remove(role);
 		}
 
 		public void SetId()

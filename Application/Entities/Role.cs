@@ -1,25 +1,12 @@
-﻿using Application.ValueObjects;
-
-namespace Application.Entities
+﻿namespace Application.Entities
 {
 	public class Role : Entity
 	{
-        public RoleType RoleType { get; private set; }
-        public IReadOnlyCollection<User> Users { get; private set; }
+        public string Name { get; private set; }
+		public IReadOnlyCollection<UserRole> Users { get;}
         
-		public Role() { }
-		
-		public Role(RoleType roleType) { 
-			RoleType = roleType;
+		private Role(string name) {
+			Name = name;
 		}
-
-		public static Role Create(string name,int index)
-		{
-			var role = new Role();
-			role.SetId();
-			return role;
-		}
-
-
     }
 }

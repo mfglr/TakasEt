@@ -8,10 +8,10 @@ namespace Application.Mappers
 	{
         public ArticleMapper()
         {
-            CreateMap<AddArticleRequestDto, Article>();
-            CreateMap<Article,AddArticleResponseDto>();
-            CreateMap<Article, GetArticleCommentsResponseDto>();
-            CreateMap<Article, ArticleResponseDto>();
+            CreateMap<AddPostRequestDto, Post>();
+            CreateMap<Post,AddPostResponseDto>();
+            CreateMap<Post, GetPostCommentsResponseDto>();
+            CreateMap<Post, PostResponseDto>();
         }
     }
 }

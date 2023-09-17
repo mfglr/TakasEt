@@ -5,7 +5,6 @@ using Function.Extentions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.IdentityModel.Tokens;
-using Service;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -19,12 +18,6 @@ namespace Function.Middlewares
 		{
 			_jwtHandler = jwtHandler;
 		}
-
-		private void setCurrentUser(FunctionContext context,ClaimsPrincipal claimsPrincibal,SecurityToken token)
-		{
-			var currentUser = (CurrentUser?)context.InstanceServices.GetService(typeof(CurrentUser));
-			currentUser?.Set(claimsPrincibal.GetId()!,claimsPrincibal.GetUserName()!,claimsPrincibal.GetEmail()!,token.ValidTo);
-		}
 	
 		public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
 		{
@@ -37,9 +30,10 @@ namespace Function.Middlewares
 				var a = _jwtHandler.ReadJwtToken(token);
 				ClaimsPrincipal claimsPrincipal = _jwtHandler.ValidateToken(token,tokenValidatonParameters,out var validatedToken);
 				var rolesOfUser = claimsPrincipal.GetRoles();
-
 				if (!attribute.HasRole(rolesOfUser)) throw new Application.Exceptions.UnauthorizedAccessException();
-				setCurrentUser(context, claimsPrincipal, validatedToken);
+				((LoggedInUser?)context.InstanceServices.GetService(typeof(LoggedInUser)))?.SetUserId(
+					Guid.Parse(claimsPrincipal.GetId()!)
+				) ;
 			}
 			await next(context);
 		}

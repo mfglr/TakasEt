@@ -25,6 +25,7 @@ namespace Application.Commands
 			var user = await _userManager
 				.Users
 				.Include(x => x.Roles)
+				.ThenInclude(x => x.Role)
 				.Include(x => x.UserRefreshToken)
 				.SingleOrDefaultAsync(x => x.Email == request.Email);
 			if (user == null) throw new UserNotFoundException();

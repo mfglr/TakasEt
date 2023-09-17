@@ -2,20 +2,18 @@
 
 namespace Application.Dtos
 {
-	public class AddArticleRequestDto : IRequest<AppResponseDto<AddArticleResponseDto>>
+	public class AddPostRequestDto : IRequest<AppResponseDto<AddPostResponseDto>>
 	{
 		public Guid UserId { get; private set; }
 		public string Title { get; private set; }
 		public string Content { get; private set; }
-		public string SumaryOfContent { get; private set; }
 		public Guid CategoryId { get; private set; }
 
-		public AddArticleRequestDto(Guid userId, string title, string content, string sumaryOfContent, DateTime publishedDate, Guid categoryId)
+		public AddPostRequestDto(Guid userId,string title, string content, Guid categoryId)
 		{
 			UserId = userId;
 			Title = title;
 			Content = content;
-			SumaryOfContent = sumaryOfContent;
 			CategoryId = categoryId;
 		}
 	}

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-	public class RemoveArticleValidator : AbstractValidator<RemoveArticleRequestDto>
+	public class RemoveArticleValidator : AbstractValidator<RemovePostRequestDto>
 	{
         public RemoveArticleValidator()
         {

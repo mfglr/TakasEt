@@ -27,7 +27,7 @@ var host = new HostBuilder()
 		services.AddSqlDbContext();
 		services.AddApplication();
 		services.AddServices();
-		services.AddSingleton(new CurrentUser());
+		services.AddSingleton(new LoggedInUser());
 
 		var customTokenOptions = services.BuildServiceProvider().GetRequiredService<CustomTokenOptions>();
 		var signService = services.BuildServiceProvider().GetRequiredService<SignService>();
@@ -43,11 +43,8 @@ var host = new HostBuilder()
 			ClockSkew = TimeSpan.Zero
 		});
 
-		await services
-			.BuildServiceProvider()
-			.GetRequiredService<SqlContext>()
-			.Database
-			.MigrateAsync();
+		var context = services.BuildServiceProvider().GetRequiredService<SqlContext>();
+		await context.Database.MigrateAsync();
 	})
 	.ConfigureFunctionsWorkerDefaults(worker =>
 		{
