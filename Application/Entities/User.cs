@@ -21,9 +21,12 @@ namespace Application.Entities
         public IReadOnlyCollection<Comment> Comments { get; }
 		public IReadOnlyCollection<UserPostLikes> LikedPosts { get; }
 		public IReadOnlyCollection<UserPostViews> ViewedPosts { get; }
+		public IReadOnlyCollection<Following> Followeds { get; }
+		public IReadOnlyCollection<Following> Followers { get; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
-		
+
+
 		private List<INotification> _domainEvents = new List<INotification>();
 
 		public User(string email,string userName)
@@ -31,17 +34,21 @@ namespace Application.Entities
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = userName;
 			Email = email;
-			AddDomainEvent(new UserDomainEvent(this));
+			//AddDomainEvent(new UserDomainEvent(this));
         }
 
-		public void ConfirmEmail() {
+        public User()
+        {
+            
+        }
+        public void ConfirmEmail() {
 			IsEmailConfirmed = true;
 		}
 		
 		public decimal CalculateTotalCredit()
 		{
 			decimal totalCredit = 0;
-			_credits.ForEach(creadit => totalCredit += creadit.VAmount);
+			foreach (var credit in Credits) totalCredit += credit.VAmount;
 			return totalCredit;
 		}
 

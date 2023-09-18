@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-	public class GetArticleByIdValidator : AbstractValidator<GetPostByIdRequestDto>
+	public class GetPostByIdQueryValidator : AbstractValidator<GetPostByIdRequestDto>
 	{
-        public GetArticleByIdValidator()
+        public GetPostByIdQueryValidator()
         {
 			RuleFor(x => x.PostId).NotEmpty().NotNull().WithMessage("hata");
 		}

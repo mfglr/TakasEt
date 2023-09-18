@@ -8,6 +8,9 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
+			builder
+				.HasMany(x => x.Posts)
+				.WithOne(x => x.User);
 
 			builder
 				.HasMany(x => x.Comments)
@@ -41,6 +44,18 @@ namespace Repository.ModelBuilders
 				.HasMany(x => x.ViewedPosts)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.Followeds)
+				.WithOne(x => x.Follower)
+				.HasForeignKey(x => x.FollowerId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.Followers)
+				.WithOne(x => x.Followed)
+				.HasForeignKey (x => x.FollowedId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 		}

@@ -114,6 +114,33 @@ namespace Repository.Migrations
                     b.ToTable("Credits");
                 });
 
+            modelBuilder.Entity("Application.Entities.Following", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FollowedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("Following");
+                });
+
             modelBuilder.Entity("Application.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -140,7 +167,7 @@ namespace Repository.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -200,20 +227,20 @@ namespace Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e8857ae9-6233-4a5a-b799-2c5d143deaa6"),
-                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(7999),
+                            Id = new Guid("b2408e0d-9791-42f0-b71c-65c0d0b52529"),
+                            CreatedDate = new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5195),
                             Name = "client"
                         },
                         new
                         {
-                            Id = new Guid("11e0570e-9ce5-461c-b503-e9f624ad4049"),
-                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8001),
+                            Id = new Guid("0db5cc7e-59c9-48d4-99d9-05b1c64886f9"),
+                            CreatedDate = new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5197),
                             Name = "user"
                         },
                         new
                         {
-                            Id = new Guid("30923737-ffd4-4588-a07b-f50f8eb7dc3b"),
-                            CreatedDate = new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8002),
+                            Id = new Guid("5684a7cd-99f8-490d-8296-8a9a0abb34b5"),
+                            CreatedDate = new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5208),
                             Name = "admin"
                         });
                 });
@@ -321,6 +348,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PostId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPostLikes");
@@ -345,6 +374,8 @@ namespace Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -437,6 +468,25 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Application.Entities.Following", b =>
+                {
+                    b.HasOne("Application.Entities.User", "Followed")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "Follower")
+                        .WithMany("Followeds")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Followed");
+
+                    b.Navigation("Follower");
+                });
+
             modelBuilder.Entity("Application.Entities.Post", b =>
                 {
                     b.HasOne("Application.Entities.Category", "Category")
@@ -445,11 +495,15 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Application.Entities.User", null)
+                    b.HasOne("Application.Entities.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Application.Entities.ProfilePicture", b =>
@@ -500,7 +554,7 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Application.Entities.Post", "Post")
                         .WithMany("UsersWhoLiked")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -519,7 +573,7 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Application.Entities.Post", "Post")
                         .WithMany("UsersWhoViewed")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -620,6 +674,10 @@ namespace Repository.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Credits");
+
+                    b.Navigation("Followeds");
+
+                    b.Navigation("Followers");
 
                     b.Navigation("LikedPosts");
 

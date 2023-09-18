@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Dtos.SignUp;
+using Application.Dtos.User;
 using Function.Attributes;
 using Function.Extentions;
 using MediatR;
@@ -48,5 +49,43 @@ namespace Function.Functions
 		{
 			return await _sender.Send(new RemoveUserRequestDto(id));
 		}
+
+		[Authorize("user")]
+		[Function("add-followed")]
+		public async Task<AppResponseDto<NoContentResponseDto>> AddFollowed(
+			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
+		)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<AddFollowedRequestDto>());
+		}
+
+		[Authorize("user")]
+		[Function("remove-followed")]
+		public async Task<AppResponseDto<NoContentResponseDto>> RemoveFollowed(
+			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
+		)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<RemoveFollowedRequestDto>());
+		}
+
+		[Authorize("user")]
+		[Function("get-followeds-by-user-id")]
+		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> GetFollowedsById(
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
+		)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowedsByUserIdRequestDto>());
+		}
+
+
+		[Authorize("user")]
+		[Function("get-followers-by-user-id")]
+		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> GetFollowersById(
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
+		)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowersByUserIdRequestDto>());
+		}
+
 	}
 }

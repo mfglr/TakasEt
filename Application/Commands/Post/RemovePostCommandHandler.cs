@@ -33,7 +33,7 @@ namespace Application.Commands
 				.ThenIncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.PostId);
 			if (post == null) throw new PostNotFoundException();
-			if (post.User.Id != _loggedInUser.UserId) throw new UnmatchedRequestException("Remove - Post - Command");
+			if (post.User.Id != _loggedInUser.UserId) throw new UnmatchedRequestException("Remove-Post");
 			_comments.DbSet.RemoveRangeRecursive(post.Comments);
 			_posts.DbSet.Remove(post);
 			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());

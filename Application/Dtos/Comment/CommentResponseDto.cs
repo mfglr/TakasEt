@@ -1,13 +1,10 @@
-﻿using Application.Entities;
-
-namespace Application.Dtos
+﻿namespace Application.Dtos
 {
 	public class CommentResponseDto : BaseResponseDto
 	{
-		public Guid ArticleId { get; private set; }
-		public Guid UserId { get; private set; }
-		public string Content { get; private set; }
-		public int NumberOfLikes { get; private set; }
-		public IReadOnlyCollection<CommentResponseDto> Children { get; private set; }
+		public Guid ArticleId { get;  set; }
+		public Guid UserId { get;  set; }
+		public string Content { get;  set; }
+		public int NumberOfLikes { get;  set; }
 	}
 }

@@ -17,13 +17,13 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.UsersWhoLiked)
 				.WithOne(x => x.Post)
-				.HasForeignKey(x => x.UserId)
+				.HasForeignKey(x => x.PostId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
 				.HasMany(x => x.UsersWhoViewed)
 				.WithOne(x => x.Post)
-				.HasForeignKey(x => x.UserId)
+				.HasForeignKey(x => x.PostId)
 				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}

@@ -3,6 +3,7 @@ using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
@@ -19,7 +20,8 @@ namespace Application.Commands
 
 		public async Task<AppResponseDto<NoContentResponseDto>> Handle(LikePostRequestDto request, CancellationToken cancellationToken)
 		{
-			await _likes.DbSet.AddAsync(new UserPostLikes(_user.UserId,request.PostId));	
+			if(!await _likes.DbSet.AnyAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId))
+				await _likes.DbSet.AddAsync(new UserPostLikes(_user.UserId,request.PostId));	
 			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
 		}
 	}

@@ -1,7 +1,7 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.SignUp;
 using Application.Entities;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
 using MediatR;
@@ -13,21 +13,23 @@ namespace Application.Commands
 	{
 		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
-		private readonly IRoleService _roles;
+		private readonly IRepository<UserRole> _userRoles;
+		private readonly IRoleService _roleService;
 
-		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper, IRoleService roles)
+		public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper, IRepository<UserRole> userRoles, IRoleService roleService)
 		{
 			_userManager = userManager;
 			_mapper = mapper;
-			_roles = roles;
+			_userRoles = userRoles;
+			_roleService = roleService;
 		}
 
 		public async Task<AppResponseDto<SignUpResponseDto>> Handle(SignUpRequestDto request, CancellationToken cancellationToken)
 		{
 			User user = new User(request.Email, request.UserName);
-			user.AddRole(_roles.User.Id);
 			var result = await _userManager.CreateAsync(user,request.Password);
 			if (!result.Succeeded) throw new Exception(string.Join("\n",result.Errors.Select(x => x.Description)));
+			await _userRoles.DbSet.AddAsync(new UserRole(user.Id, _roleService.User.Id));
 			return AppResponseDto<SignUpResponseDto>.Success(
 				_mapper.Map<SignUpResponseDto>(user)
 				);

@@ -24,15 +24,16 @@ namespace Application.Queries
 				.Include(x => x.UsersWhoViewed)
 				.Where(x => x.Id == request.PostId)
 				.Select(
-					x => new PostResponseDto(
-						x.Id,
-						x.Title,
-						x.Content,
-						x.UsersWhoLiked.Count,
-						x.UsersWhoViewed.Count,
-						x.PublishedDate,
-						x.CategoryId
-					)
+					x => new PostResponseDto() {
+						UserId = x.UserId,
+						Id = x.Id,
+						Title = x.Title,
+						Content = x.Content,
+						CountOfLikes = x.UsersWhoLiked.Count,
+						CountOfViews = x.UsersWhoViewed.Count,
+						CategoryId = x.CategoryId,
+						CreatedDate = x.CreatedDate
+					}
 				)
 				.FirstOrDefaultAsync();
 			if (post == null) throw new PostNotFoundException();

@@ -18,7 +18,7 @@ using Service;
 var host = new HostBuilder()
 	.ConfigureAppConfiguration(config =>
 	{
-		config.AddJsonFile("appsettings.json", false, true);
+		config.AddJsonFile("appsettings.json", false, false);
 		config.Build();
 	})
 	.ConfigureServices(async (builder,services) =>

@@ -43,7 +43,7 @@ namespace Function.Functions
 		[Authorize("user")]
 		[Function("like-post")]
 		public async Task<AppResponseDto<NoContentResponseDto>> LikePost(
-			[HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req
+			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 			)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<LikePostRequestDto>());
@@ -52,7 +52,7 @@ namespace Function.Functions
 		[Authorize("user")]
 		[Function("unlike-post")]
 		public async Task<AppResponseDto<NoContentResponseDto>> UnlikePost(
-			[HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req
+			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
 			)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<UnlikePostRequestDto>());

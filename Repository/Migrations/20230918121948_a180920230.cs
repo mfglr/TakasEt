@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class a180920230 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -127,15 +127,40 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Following",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FollowedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Following", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Following_Users_FollowedId",
+                        column: x => x.FollowedId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Following_Users_FollowerId",
+                        column: x => x.FollowerId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -152,7 +177,8 @@ namespace Repository.Migrations
                         name: "FK_Posts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -239,8 +265,8 @@ namespace Repository.Migrations
                 {
                     table.PrimaryKey("PK_UserPostLikes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPostLikes_Posts_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserPostLikes_Posts_PostId",
+                        column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -264,8 +290,8 @@ namespace Repository.Migrations
                 {
                     table.PrimaryKey("PK_UserPostViews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPostViews_Posts_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserPostViews_Posts_PostId",
+                        column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -280,9 +306,9 @@ namespace Repository.Migrations
                 columns: new[] { "Id", "CreatedDate", "Name", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { new Guid("11e0570e-9ce5-461c-b503-e9f624ad4049"), new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8001), "user", null },
-                    { new Guid("30923737-ffd4-4588-a07b-f50f8eb7dc3b"), new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(8002), "admin", null },
-                    { new Guid("e8857ae9-6233-4a5a-b799-2c5d143deaa6"), new DateTime(2023, 9, 17, 14, 57, 8, 940, DateTimeKind.Utc).AddTicks(7999), "client", null }
+                    { new Guid("0db5cc7e-59c9-48d4-99d9-05b1c64886f9"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5197), "user", null },
+                    { new Guid("5684a7cd-99f8-490d-8296-8a9a0abb34b5"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5208), "admin", null },
+                    { new Guid("b2408e0d-9791-42f0-b71c-65c0d0b52529"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5195), "client", null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -306,6 +332,16 @@ namespace Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Following_FollowedId",
+                table: "Following",
+                column: "FollowedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Following_FollowerId",
+                table: "Following",
+                column: "FollowerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Posts_CategoryId",
                 table: "Posts",
                 column: "CategoryId");
@@ -321,9 +357,19 @@ namespace Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserPostLikes_PostId",
+                table: "UserPostLikes",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserPostLikes_UserId",
                 table: "UserPostLikes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPostViews_PostId",
+                table: "UserPostViews",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPostViews_UserId",
@@ -379,6 +425,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Credits");
+
+            migrationBuilder.DropTable(
+                name: "Following");
 
             migrationBuilder.DropTable(
                 name: "ProfilePicture");
