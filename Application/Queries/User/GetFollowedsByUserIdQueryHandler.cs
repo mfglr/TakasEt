@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetFollowedsByUserIdQueryHandler : IRequestHandler<GetFollowedsByUserIdRequestDto, AppResponseDto<IEnumerable<UserResponseDto>>>
+	public class GetFollowedsByUserIdQueryHandler : IRequestHandler<GetFollowedsByUserIdRequestDto, AppResponseDto>
 	{
 		private readonly IRepository<Following> _followings;
 		public GetFollowedsByUserIdQueryHandler(IRepository<Following> followings)
@@ -16,7 +16,7 @@ namespace Application.Queries
 			_followings = followings;
 		}
 
-		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> Handle(GetFollowedsByUserIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetFollowedsByUserIdRequestDto request, CancellationToken cancellationToken)
 		{
 			var users = await _followings
 				.DbSet
@@ -39,7 +39,7 @@ namespace Application.Queries
 					CountOfFollowers = x.Followed.Followers.Count()
 				})
 				.ToListAsync();
-			return AppResponseDto<IEnumerable<UserResponseDto>>.Success(users);
+			return AppResponseDto.Success(users);
 		}
 	}
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemoveFollowedCommandHandler : IRequestHandler<RemoveFollowedRequestDto, AppResponseDto<NoContentResponseDto>>
+	public class RemoveFollowedCommandHandler : IRequestHandler<RemoveFollowedRequestDto, AppResponseDto>
 	{
 
 		private readonly IRepository<Following> _followings;
@@ -20,11 +20,11 @@ namespace Application.Commands
 			_user = user;
 		}
 
-		public async Task<AppResponseDto<NoContentResponseDto>> Handle(RemoveFollowedRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemoveFollowedRequestDto request, CancellationToken cancellationToken)
 		{
 			var record = await _followings.DbSet.SingleOrDefaultAsync(x => x.FollowerId == _user.UserId && x.FollowedId == request.FollowedId);
 			if(record != null) _followings.DbSet.Remove(record);
-			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
+			return AppResponseDto.Success();
 		}
 	}
 }

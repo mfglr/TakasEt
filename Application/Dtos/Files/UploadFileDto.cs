@@ -1,19 +1,24 @@
-﻿using MediatR;
+﻿using HttpMultipartParser;
+using MediatR;
 
 namespace Application.Dtos
 {
-	public class UploadFileDto : IRequest<AppResponseDto<FileResponseDto>>
+	public class UploadFileDto : IRequest<AppResponseDto>
 	{
 
-		public Stream File { get; private set; }
-		public string BlobName { get; private set; }
+		private readonly List<Stream> _streams = new List<Stream>();
+		public IReadOnlyCollection<Stream> Streams { get; private set; }
         public string ContainerName { get; private set; }
 
-        public UploadFileDto(Stream file, string blobName,string containerName)
+        public UploadFileDto(IEnumerable<Stream> streams ,string containerName)
 		{
-			File = file;
-			BlobName = blobName;
+			if(streams != null)
+				_streams.ForEach(stream =>
+				{
+					_streams.Add(stream);
+				});
 			ContainerName = containerName;
 		}
+
 	}
 }

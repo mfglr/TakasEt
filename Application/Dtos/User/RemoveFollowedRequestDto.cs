@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.User
 {
-	public class RemoveFollowedRequestDto : IRequest<AppResponseDto<NoContentResponseDto>>
+	public class RemoveFollowedRequestDto : IRequest<AppResponseDto>
 	{
         public Guid FollowedId { get; private set; }
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemovePostCommandHandler : IRequestHandler<RemovePostRequestDto, AppResponseDto<NoContentResponseDto>>
+	public class RemovePostCommandHandler : IRequestHandler<RemovePostRequestDto, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
 		private readonly IRepository<Comment> _comments;
@@ -24,7 +24,7 @@ namespace Application.Commands
 			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto<NoContentResponseDto>> Handle(RemovePostRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemovePostRequestDto request, CancellationToken cancellationToken)
 		{
 			var post = await _posts
 				.DbSet
@@ -36,7 +36,7 @@ namespace Application.Commands
 			if (post.User.Id != _loggedInUser.UserId) throw new UnmatchedRequestException("Remove-Post");
 			_comments.DbSet.RemoveRangeRecursive(post.Comments);
 			_posts.DbSet.Remove(post);
-			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
+			return AppResponseDto.Success();
 		}
 	}
 }

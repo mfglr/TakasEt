@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class LikePostRequestDto : IRequest<AppResponseDto<NoContentResponseDto>>
+	public class LikePostRequestDto : IRequest<AppResponseDto>
 	{
         public Guid PostId { get; private set; }
 

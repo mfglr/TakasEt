@@ -16,7 +16,7 @@ namespace Function.Functions
         }
 
 		[Function("get-comment-by-id/{id}")]
-		public async Task<AppResponseDto<CommentResponseDto>> GetCommentById(
+		public async Task<AppResponseDto> GetCommentById(
             [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
             Guid id)
 		{
@@ -24,13 +24,13 @@ namespace Function.Functions
 		}
 
 		[Function("add-comment")]
-        public async Task<AppResponseDto<AddCommentResponseDto>> AddComment([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        public async Task<AppResponseDto> AddComment([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             return await _mediator.Send(await req.ReadFromBodyAsync<AddCommentRequestDto>());
         }
 
 		[Function("remove-comment")]
-		public async Task<AppResponseDto<NoContentResponseDto>> RemoveComment(
+		public async Task<AppResponseDto> RemoveComment(
             [HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
             Guid id)
 		{

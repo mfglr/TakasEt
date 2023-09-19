@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class AddPostRequestDto : IRequest<AppResponseDto<AddPostResponseDto>>
+	public class AddPostRequestDto : IRequest<AppResponseDto>
 	{
 		public Guid UserId { get; private set; }
 		public string Title { get; private set; }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class LoginCommandHandler : IRequestHandler<LoginDto, AppResponseDto<TokenDto>>
+	public class LoginCommandHandler : IRequestHandler<LoginDto, AppResponseDto>
 	{
 		private readonly SignInManager<User> _signInManager;
 		private readonly UserManager<User> _userManger;
@@ -21,7 +21,7 @@ namespace Application.Commands
 			_authenticationService = authenticationService;
 		}
 
-		public async Task<AppResponseDto<TokenDto>> Handle(LoginDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(LoginDto request, CancellationToken cancellationToken)
 		{
 			var user = await _userManger
 				.Users
@@ -32,7 +32,7 @@ namespace Application.Commands
 			if (user == null) throw new UserNotFoundException();
 			var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 			if (!result.Succeeded) throw new FailedLoginException();
-			return AppResponseDto<TokenDto>.Success(
+			return AppResponseDto.Success(
 				await _authenticationService.CreateTokenByUserAsync(user)
 				);
 		}

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemoveCommentHandler : IRequestHandler<RemoveCommentRequestDto, AppResponseDto<NoContentResponseDto>>
+	public class RemoveCommentHandler : IRequestHandler<RemoveCommentRequestDto, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
 		private readonly RecursiveRepositoryOptions _option;
@@ -20,14 +20,14 @@ namespace Application.Commands
 			_option = option;
 		}
 
-		public async Task<AppResponseDto<NoContentResponseDto>> Handle(RemoveCommentRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemoveCommentRequestDto request, CancellationToken cancellationToken)
 		{
 			var comment = await _comments.DbSet
 				.IncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id);
 			if (comment == null) throw new CommentNotFoundException();
 			_comments.DbSet.RemoveRecursive(comment);
-			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
+			return AppResponseDto.Success();
 		}
 	}
 }

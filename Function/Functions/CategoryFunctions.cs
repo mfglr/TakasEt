@@ -17,7 +17,7 @@ namespace Function.Functions
         }
 
         [Function("add-category")]
-        public async Task<AppResponseDto<AddCategoryResponseDto>> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        public async Task<AppResponseDto> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             return await _mediator.Send(await req.ReadFromBodyAsync<AddCategoryRequestDto>());
         }

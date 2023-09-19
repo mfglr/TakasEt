@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class AddFollowedCommandHandler : IRequestHandler<AddFollowedRequestDto, AppResponseDto<NoContentResponseDto>>
+	public class AddFollowedCommandHandler : IRequestHandler<AddFollowedRequestDto, AppResponseDto>
 	{
 
 
@@ -21,12 +21,12 @@ namespace Application.Commands
 			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto<NoContentResponseDto>> Handle(AddFollowedRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(AddFollowedRequestDto request, CancellationToken cancellationToken)
 		{
 			if (_loggedInUser.UserId == request.FollowedId) throw new FollowYourselfException();
 			if(!await _followeds.DbSet.AnyAsync(x => x.FollowerId == _loggedInUser.UserId && x.FollowedId == request.FollowedId))
 				await _followeds.DbSet.AddAsync(new Following(_loggedInUser.UserId, request.FollowedId));
-			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
+			return AppResponseDto.Success();
 		}
 	}
 }

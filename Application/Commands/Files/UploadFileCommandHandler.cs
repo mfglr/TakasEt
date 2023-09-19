@@ -2,9 +2,10 @@
 using Application.Interfaces.Services;
 using MediatR;
 
+
 namespace Application.Commands
 {
-	public class UploadFileCommandHandler : IRequestHandler<UploadFileDto, AppResponseDto<FileResponseDto>>
+	public class UploadFileCommandHandler : IRequestHandler<UploadFileDto, AppResponseDto>
 	{
 
 		private readonly IBlobStorage _blobStorage;
@@ -12,16 +13,11 @@ namespace Application.Commands
 		{
 			_blobStorage = blobStorage;
 		}
-		public async Task<AppResponseDto<FileResponseDto>> Handle(UploadFileDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(UploadFileDto request, CancellationToken cancellationToken)
 		{
-			await _blobStorage.UploadAsync(
-				request.File,
-				request.BlobName,
-				request.ContainerName
-			);
-			return AppResponseDto<FileResponseDto>.Success(
-				new FileResponseDto(request.BlobName,request.ContainerName)
-			);
+			foreach(var stream in  request.Streams)
+				await _blobStorage.UploadAsync(stream,Guid.NewGuid().ToString(),request.ContainerName);
+			return AppResponseDto.Success();
 		}
 	}
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-    public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserNameRequestDto, AppResponseDto<UserResponseDto>>
+    public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserNameRequestDto, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
 
@@ -16,7 +16,7 @@ namespace Application.Queries
 			_userManager = userManager;
         }
 
-        public async Task<AppResponseDto<UserResponseDto>> Handle(GetUserByUserNameRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(GetUserByUserNameRequestDto request, CancellationToken cancellationToken)
         {
             var user = await _userManager
                 .Users
@@ -36,7 +36,7 @@ namespace Application.Queries
                 })
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
             if (user == null) throw new UserNotFoundException();
-            return AppResponseDto<UserResponseDto>.Success(user);
+            return AppResponseDto.Success(user);
         }
     }
 }

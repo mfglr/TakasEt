@@ -1,35 +1,42 @@
 ﻿namespace Application.Dtos
 {
-	public class AppResponseDto<T> where T : class
+	public class AppResponseDto
 	{
 
-        public T? Data { get; private set; }
-        public IReadOnlyCollection<string> Errors => _errors;
+        public object? Data { get; private set; }
+        public IReadOnlyCollection<string> Errors => _errors!;
 
-        private readonly List<string> _errors = new List<string>();
+        private List<string>? _errors;
 
 		private void AddError(string error)
         {
-            _errors.Add(error);
+            _errors!.Add(error);
         }
 
-        public static AppResponseDto<T> Success(T data)
-        {
-            return new AppResponseDto<T> { Data = data };
+        public static AppResponseDto Success<T>(T data) where T : class
+		{
+            return new AppResponseDto { Data = data };
         }
 
-        public static AppResponseDto<T> Fail(IEnumerable<string> errors)
+        public static AppResponseDto Success()
         {
-            var response = new AppResponseDto<T>() { Data = null};
+            return new AppResponseDto { Data = new NoContentResponseDto() };
+        }
+        
+        public static AppResponseDto Fail(IEnumerable<string> errors)
+		{
+            var response = new AppResponseDto() { Data = null};
+            response._errors = new List<string>();
             foreach (var error in errors)
                 response.AddError(error);
             return response;
 		}
 
-        public static AppResponseDto<T> Fail(string error) 
+        public static AppResponseDto Fail(string error) 
         {
-            var response = new AppResponseDto<T>() { Data = null};
-            response.AddError(error);
+            var response = new AppResponseDto() { Data = null};
+            response._errors = new List<string>();
+			response.AddError(error);
             return response;
         }
     }
