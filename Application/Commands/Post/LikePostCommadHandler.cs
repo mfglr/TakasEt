@@ -20,8 +20,8 @@ namespace Application.Commands
 
 		public async Task<AppResponseDto> Handle(LikePostRequestDto request, CancellationToken cancellationToken)
 		{
-			if(!await _likes.DbSet.AnyAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId))
-				await _likes.DbSet.AddAsync(new UserPostLikes(_user.UserId,request.PostId));	
+			if(!await _likes.DbSet.AnyAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId,cancellationToken))
+				await _likes.DbSet.AddAsync(new UserPostLikes(_user.UserId,request.PostId), cancellationToken);	
 			return AppResponseDto.Success();
 		}
 	}

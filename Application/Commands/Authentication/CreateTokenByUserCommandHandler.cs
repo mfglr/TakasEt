@@ -31,7 +31,7 @@ namespace Application.Commands
 			if (user == null) throw new UserNotFoundException();
 			if (!await _userManager.CheckPasswordAsync(user, request.Password)) throw new FailedLoginException();
 			return AppResponseDto.Success(
-				await _authenticationService.CreateTokenByUserAsync(user)
+				await _authenticationService.CreateTokenByUserAsync(user, cancellationToken)
 				);
 		}
 	}

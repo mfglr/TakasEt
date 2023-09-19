@@ -22,13 +22,13 @@ namespace Service
 			_userRefreshTokenRepository = userRefreshTokenRepository;
 		}
 
-		public async Task<TokenDto> CreateTokenByUserAsync(User user)
+		public async Task<TokenDto> CreateTokenByUserAsync(User user,CancellationToken cancellationToken )
 		{
 			Token? newRefreshToken = user.UserRefreshToken?.Token;
 			if (newRefreshToken == null)
 			{
 				newRefreshToken = _tokenService.CreateRefreshToken();
-				await _userRefreshTokenRepository.DbSet.AddAsync(new UserRefreshToken(user.Id, newRefreshToken));
+				await _userRefreshTokenRepository.DbSet.AddAsync(new UserRefreshToken(user.Id, newRefreshToken),cancellationToken);
 			}
 			else if (!newRefreshToken.IsValid())
 				user.UserRefreshToken!.UpdateToken(_tokenService.CreateRefreshToken());
@@ -50,12 +50,12 @@ namespace Service
 			return new ClientTokenDto(accessToken.Value, accessToken.ExpirationDate);
 		}
 
-		public async Task<TokenDto> CreateAccessTokenByRefreshTokenAsync(string refreshTokenString)
+		public async Task<TokenDto> CreateAccessTokenByRefreshTokenAsync(string refreshTokenString,CancellationToken cancellationToken)
 		{
 			var userRefreshToken = await _userRefreshTokenRepository
 				.DbSet
 				.Include(x => x.User)
-				.SingleOrDefaultAsync( x => x.Token.Value == refreshTokenString);
+				.SingleOrDefaultAsync( x => x.Token.Value == refreshTokenString,cancellationToken);
 			if (userRefreshToken == null || !userRefreshToken.Token.IsValid()) throw new InValidRefreshTokenException();
 			Token accessToken = _tokenService.CreateAccessTokenByUser(userRefreshToken.User);
 			Token refreshToken = userRefreshToken.Token;
@@ -67,9 +67,9 @@ namespace Service
 			);
 		}
 
-		public async Task RevokeRefreshTokenAsync(string refreshToken)
+		public async Task RevokeRefreshTokenAsync(string refreshToken,CancellationToken cancellationToken)
 		{
-			var userRefreshToken = await _userRefreshTokenRepository.DbSet.SingleOrDefaultAsync(x => x.Token.Value == refreshToken);
+			var userRefreshToken = await _userRefreshTokenRepository.DbSet.SingleOrDefaultAsync(x => x.Token.Value == refreshToken,cancellationToken);
 			if (userRefreshToken == null) throw new RefreshTokenNotFoundException();
 			_userRefreshTokenRepository.DbSet.Remove(userRefreshToken);
 		}

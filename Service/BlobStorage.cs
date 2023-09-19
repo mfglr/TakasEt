@@ -29,12 +29,12 @@ namespace Service
 			throw new NotImplementedException();
 		}
 
-		public async Task UploadAsync(Stream stream, string blobName, string containerName)
+		public async Task UploadAsync(Stream stream, string blobName, string containerName,CancellationToken cancellationToken)
 		{
 			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 			await blobContainerClient.CreateIfNotExistsAsync();
 			await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
-			await blobContainerClient.GetBlobClient(blobName).UploadAsync(stream);
+			await blobContainerClient.GetBlobClient(blobName).UploadAsync(stream, cancellationToken);
 		}
 	}
 }

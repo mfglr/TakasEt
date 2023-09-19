@@ -20,7 +20,7 @@ namespace Application.Commands
 		public async Task<AppResponseDto> Handle(AddPostRequestDto request, CancellationToken cancellationToken)
 		{
 			var post = new Post(request.UserId,request.Title, request.Content, request.CategoryId);
-			await _posts.DbSet.AddAsync(post);
+			await _posts.DbSet.AddAsync(post,cancellationToken);
 			return  AppResponseDto.Success(_mapper.Map<AddPostResponseDto>(post));
 		}
 	}

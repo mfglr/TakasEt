@@ -21,7 +21,7 @@ namespace Application.Commands
 
 		public async Task<AppResponseDto> Handle(UnlikePostRequestDto request, CancellationToken cancellationToken)
 		{
-			var record = await _likes.DbSet.SingleOrDefaultAsync(x => x.UserId == _user.UserId &&  x.PostId == request.PostId);
+			var record = await _likes.DbSet.SingleOrDefaultAsync(x => x.UserId == _user.UserId &&  x.PostId == request.PostId, cancellationToken);
 			if (record != null) _likes.DbSet.Remove(record);
 			return AppResponseDto.Success();
 		}

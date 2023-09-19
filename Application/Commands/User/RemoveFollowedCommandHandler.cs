@@ -22,7 +22,7 @@ namespace Application.Commands
 
 		public async Task<AppResponseDto> Handle(RemoveFollowedRequestDto request, CancellationToken cancellationToken)
 		{
-			var record = await _followings.DbSet.SingleOrDefaultAsync(x => x.FollowerId == _user.UserId && x.FollowedId == request.FollowedId);
+			var record = await _followings.DbSet.SingleOrDefaultAsync(x => x.FollowerId == _user.UserId && x.FollowedId == request.FollowedId,cancellationToken);
 			if(record != null) _followings.DbSet.Remove(record);
 			return AppResponseDto.Success();
 		}

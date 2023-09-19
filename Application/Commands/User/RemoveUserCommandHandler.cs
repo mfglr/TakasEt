@@ -28,7 +28,7 @@ namespace Application.Commands
 				.Include(x => x.Posts)
 				.ThenInclude(x => x.Comments)
 				.ThenIncludeChildrenByRecursive(_option.Depth)
-				.SingleOrDefaultAsync(x => x.Id == request.Id);
+				.SingleOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
 			if (user == null) throw new UserNotFoundException();
 			foreach (var post in user.Posts)
 				_comments.DbSet.RemoveRangeRecursive(post.Comments);

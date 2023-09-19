@@ -18,7 +18,7 @@ namespace Application.Commands.Authentication
 		{
 
 			return AppResponseDto.Success(
-				await _authenticationService.CreateAccessTokenByRefreshTokenAsync(request.RefreshToken)
+				await _authenticationService.CreateAccessTokenByRefreshTokenAsync(request.RefreshToken,cancellationToken)
 				);
 		}
 	}

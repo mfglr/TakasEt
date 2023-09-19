@@ -21,7 +21,7 @@ namespace Application.Commands
 		public async Task<AppResponseDto> Handle(AddCommentRequestDto request, CancellationToken cancellationToken)
 		{
 			var comment = new Comment(request.ParentId,request.ArticleId, request.UserId, request.Content);
-			await _comments.DbSet.AddAsync(comment);
+			await _comments.DbSet.AddAsync(comment,cancellationToken);
 
 			return AppResponseDto.Success(
 				_mapper.Map<AddCommentResponseDto>(comment)
