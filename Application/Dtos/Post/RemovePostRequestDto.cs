@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class RemovePostRequestDto : IRequest<AppResponseDto<NoContentResponseDto>>
+	public class RemovePostRequestDto : IRequest<AppResponseDto>
 	{
         public Guid PostId { get; private set; }
 

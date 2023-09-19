@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-    public class ClientLoginDto : IRequest<AppResponseDto<ClientTokenDto>>
+    public class ClientLoginDto : IRequest<AppResponseDto>
     {
         public string Id { get; private set; }
         public string Secret { get; private set; }

@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class AddCommentRequestDto : IRequest<AppResponseDto<AddCommentResponseDto>>
+	public class AddCommentRequestDto : IRequest<AppResponseDto>
 	{
         public Guid? ParentId { get; private set; }
         public Guid ArticleId { get; private set; }

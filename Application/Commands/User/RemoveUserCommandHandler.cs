@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemoveUserCommandHandler : IRequestHandler<RemoveUserRequestDto, AppResponseDto<NoContentResponseDto>>
+	public class RemoveUserCommandHandler : IRequestHandler<RemoveUserRequestDto, AppResponseDto>
 	{
 		private readonly UserManager<User> _users;
 		private readonly IRepository<Comment> _comments;
@@ -22,7 +22,7 @@ namespace Application.Commands
 			_comments = comments;
 		}
 
-		public async Task<AppResponseDto<NoContentResponseDto>> Handle(RemoveUserRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemoveUserRequestDto request, CancellationToken cancellationToken)
 		{
 			var user = await _users.Users
 				.Include(x => x.Posts)
@@ -33,7 +33,7 @@ namespace Application.Commands
 			foreach (var post in user.Posts)
 				_comments.DbSet.RemoveRangeRecursive(post.Comments);
 			await _users.DeleteAsync(user);
-			return AppResponseDto<NoContentResponseDto>.Success(new NoContentResponseDto());
+			return AppResponseDto.Success();
 		}
 	}
 }

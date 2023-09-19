@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetPostByIdHandler : IRequestHandler<GetPostByIdRequestDto, AppResponseDto<PostResponseDto>>
+	public class GetPostByIdHandler : IRequestHandler<GetPostByIdRequestDto, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
 
@@ -16,7 +16,7 @@ namespace Application.Queries
 			_posts = posts;
 		}
 
-		public async Task<AppResponseDto<PostResponseDto>> Handle(GetPostByIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetPostByIdRequestDto request, CancellationToken cancellationToken)
 		{
 			var post = await _posts
 				.DbSet
@@ -37,7 +37,7 @@ namespace Application.Queries
 				)
 				.FirstOrDefaultAsync();
 			if (post == null) throw new PostNotFoundException();
-			return AppResponseDto<PostResponseDto>.Success(post);
+			return AppResponseDto.Success(post);
 		}
 	}
 }

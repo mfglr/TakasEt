@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetFollowersByUserIdQueryHandler : IRequestHandler<GetFollowersByUserIdRequestDto, AppResponseDto<IEnumerable<UserResponseDto>>>
+	public class GetFollowersByUserIdQueryHandler : IRequestHandler<GetFollowersByUserIdRequestDto, AppResponseDto>
 	{
 
 		private readonly IRepository<Following> _followings;
@@ -16,7 +16,7 @@ namespace Application.Queries
 			_followings = followings;
 		}
 
-		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> Handle(GetFollowersByUserIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetFollowersByUserIdRequestDto request, CancellationToken cancellationToken)
 		{
 			var users = await _followings
 				.DbSet
@@ -38,7 +38,7 @@ namespace Application.Queries
 					CountOfFollowers = x.Follower.Followers.Count()
 				})
 				.ToListAsync();
-			return AppResponseDto<IEnumerable<UserResponseDto>>.Success(users);
+			return AppResponseDto.Success(users);
 		}
 	}
 }

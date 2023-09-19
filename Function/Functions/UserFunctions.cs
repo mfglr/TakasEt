@@ -19,20 +19,20 @@ namespace Function.Functions
 		}
 
 		[Function("sing-up")]
-		public async Task<AppResponseDto<SignUpResponseDto>> SingUp([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+		public async Task<AppResponseDto> SingUp([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<SignUpRequestDto>());
 		}
 
 		[Function("login")]
-		public async Task<AppResponseDto<TokenDto>> Login([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+		public async Task<AppResponseDto> Login([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<LoginDto>());
 		}
 
 		[Authorize("user","client")]
 		[Function("get-user-by-username/{username}")]
-		public async Task<AppResponseDto<UserResponseDto>> GetUser(
+		public async Task<AppResponseDto> GetUser(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 			string username
 		)
@@ -42,7 +42,7 @@ namespace Function.Functions
 
 		[Authorize("admin","user")]
 		[Function("remove-user/{id}")]
-		public async Task<AppResponseDto<NoContentResponseDto>> RemoveUser(
+		public async Task<AppResponseDto> RemoveUser(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
 			Guid id
 		)
@@ -52,7 +52,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("add-followed")]
-		public async Task<AppResponseDto<NoContentResponseDto>> AddFollowed(
+		public async Task<AppResponseDto> AddFollowed(
 			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 		)
 		{
@@ -61,7 +61,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("remove-followed")]
-		public async Task<AppResponseDto<NoContentResponseDto>> RemoveFollowed(
+		public async Task<AppResponseDto> RemoveFollowed(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
 		)
 		{
@@ -70,7 +70,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("get-followeds-by-user-id")]
-		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> GetFollowedsById(
+		public async Task<AppResponseDto> GetFollowedsById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
 		)
 		{
@@ -80,7 +80,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("get-followers-by-user-id")]
-		public async Task<AppResponseDto<IEnumerable<UserResponseDto>>> GetFollowersById(
+		public async Task<AppResponseDto> GetFollowersById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
 		)
 		{

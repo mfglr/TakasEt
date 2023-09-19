@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Commands
 {
-	public class SignUpCommandHandler : IRequestHandler<SignUpRequestDto, AppResponseDto<SignUpResponseDto>>
+	public class SignUpCommandHandler : IRequestHandler<SignUpRequestDto, AppResponseDto>
 	{
 		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
@@ -24,13 +24,13 @@ namespace Application.Commands
 			_roleService = roleService;
 		}
 
-		public async Task<AppResponseDto<SignUpResponseDto>> Handle(SignUpRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(SignUpRequestDto request, CancellationToken cancellationToken)
 		{
 			User user = new User(request.Email, request.UserName);
 			var result = await _userManager.CreateAsync(user,request.Password);
 			if (!result.Succeeded) throw new Exception(string.Join("\n",result.Errors.Select(x => x.Description)));
 			await _userRoles.DbSet.AddAsync(new UserRole(user.Id, _roleService.User.Id));
-			return AppResponseDto<SignUpResponseDto>.Success(
+			return AppResponseDto.Success(
 				_mapper.Map<SignUpResponseDto>(user)
 				);
 		}

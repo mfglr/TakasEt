@@ -18,21 +18,21 @@ namespace Function.Functions
 
 		[Authorize("user")]
         [Function("add-post")]
-        public async Task<AppResponseDto<AddPostResponseDto>> AddPost([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        public async Task<AppResponseDto> AddPost([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             return await _sender.Send( await req.ReadFromBodyAsync<AddPostRequestDto>() );
         }
 
 		[Authorize("user")]
 		[Function("remove-post")]
-		public async Task<AppResponseDto<NoContentResponseDto>> RemovePost([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+		public async Task<AppResponseDto> RemovePost([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
 		{
 			return await _sender.Send( await req.ReadFromBodyAsync<RemovePostRequestDto>() );
 		}
 
 		[Authorize("user")]
 		[Function("get-post-by-id/{id}")]
-		public async Task<AppResponseDto<PostResponseDto>> GetPostById(
+		public async Task<AppResponseDto> GetPostById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 			Guid id
 			)
@@ -42,7 +42,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("like-post")]
-		public async Task<AppResponseDto<NoContentResponseDto>> LikePost(
+		public async Task<AppResponseDto> LikePost(
 			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 			)
 		{
@@ -51,7 +51,7 @@ namespace Function.Functions
 
 		[Authorize("user")]
 		[Function("unlike-post")]
-		public async Task<AppResponseDto<NoContentResponseDto>> UnlikePost(
+		public async Task<AppResponseDto> UnlikePost(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
 			)
 		{

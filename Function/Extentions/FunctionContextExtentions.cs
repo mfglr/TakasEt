@@ -13,7 +13,7 @@ namespace Function.Extentions
 		{
 			HttpResponseData response = (await context.GetHttpRequestDataAsync())!.CreateResponse();
 			await response.WriteAsJsonAsync(
-				AppResponseDto<NoContentResponseDto>.Fail(error)
+				AppResponseDto.Fail(error)
 			);
 			response.StatusCode = statusCode;
 			context.GetInvocationResult().Value = response;
@@ -23,7 +23,7 @@ namespace Function.Extentions
 		{
 			HttpResponseData response = (await context.GetHttpRequestDataAsync())!.CreateResponse();
 			await response.WriteAsJsonAsync(
-				AppResponseDto<NoContentResponseDto>.Fail(errors)
+				AppResponseDto.Fail(errors)
 			);
 			response.StatusCode = statusCode;
 			context.GetInvocationResult().Value = response;

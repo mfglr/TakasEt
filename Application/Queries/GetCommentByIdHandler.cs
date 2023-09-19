@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetCommentByIdHandler : IRequestHandler<GetCommentByIdRequestDto, AppResponseDto<CommentResponseDto>>
+	public class GetCommentByIdHandler : IRequestHandler<GetCommentByIdRequestDto, AppResponseDto>
 	{
 
 		private readonly IRepository<Comment> _comments;
@@ -22,13 +22,13 @@ namespace Application.Queries
 			_option = option;
 		}
 
-		public async Task<AppResponseDto<CommentResponseDto>> Handle(GetCommentByIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetCommentByIdRequestDto request, CancellationToken cancellationToken)
 		{
 			var comment = await _comments.DbSet
 				.AsNoTracking()
 				.IncludeChildrenByRecursive(_option.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id);
-			return AppResponseDto<CommentResponseDto>.Success(
+			return AppResponseDto.Success(
 				_mapper.Map<CommentResponseDto>(comment)
 				);
 		}
