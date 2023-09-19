@@ -3,6 +3,7 @@ using Application.Dtos.SignUp;
 using Application.Dtos.User;
 using Function.Attributes;
 using Function.Extentions;
+using HttpMultipartParser;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -85,6 +86,16 @@ namespace Function.Functions
 		)
 		{
 			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowersByUserIdRequestDto>());
+		}
+
+
+		[Authorize("user")] 
+		[Function("add-profile-picture")]
+		public async Task<AppResponseDto> AddProfilePicture(
+			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
+		)
+		{
+			return await _sender.Send((await MultipartFormDataParser.ParseAsync(req.Body)).Parse());
 		}
 
 	}

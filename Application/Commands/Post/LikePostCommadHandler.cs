@@ -9,7 +9,6 @@ namespace Application.Commands
 {
 	public class LikePostCommadHandler : IRequestHandler<LikePostRequestDto,AppResponseDto>
 	{
-
 		private readonly IRepository<UserPostLikes> _likes;
 		private readonly LoggedInUser _user;
 		public LikePostCommadHandler(IRepository<UserPostLikes> likes, LoggedInUser user)
@@ -17,7 +16,6 @@ namespace Application.Commands
 			_likes = likes;
 			_user = user;
 		}
-
 		public async Task<AppResponseDto> Handle(LikePostRequestDto request, CancellationToken cancellationToken)
 		{
 			if(!await _likes.DbSet.AnyAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId,cancellationToken))

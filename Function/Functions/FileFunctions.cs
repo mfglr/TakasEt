@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Function.Extentions;
 using HttpMultipartParser;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
@@ -15,21 +16,18 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
-		private UploadFileDto parse(MultipartFormDataParser parser)
-		{
-			return new UploadFileDto(
-				parser.Files.Select(x => x.Data),
-				parser.Parameters.Where(x => x.Name.ToLower() == "containername").Select(x => x.Data).FirstOrDefault()
-			);
-		}
-
-
-		[Function("Upload")]
+		[Function("file/upload")]
         public async Task<AppResponseDto> Upload([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-			var request = parse(await MultipartFormDataParser.ParseAsync(req.Body));
-			return await _sender.Send(request);
+			return await _sender.Send( (await MultipartFormDataParser.ParseAsync(req.Body)).Parse() );
         }
-    }
+
+		[Function("file/download")]
+		public async Task<AppResponseDto> Download([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+		{
+			return await _sender.Send(await req.ReadFromBodyAsync<DownloadFileRequestDto>());
+		}
+
+	}
 }
  

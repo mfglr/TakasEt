@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Repository;
 using Repository.Contexts;
 using Service;
+using Azure.Storage.Blobs;
 
 var host = new HostBuilder()
 	.ConfigureAppConfiguration(config =>
@@ -28,6 +29,12 @@ var host = new HostBuilder()
 		services.AddApplication();
 		services.AddServices();
 		services.AddSingleton(new LoggedInUser());
+		services.AddScoped(typeof(BlobServiceClient),serviceProvider =>
+		{
+			Local local = serviceProvider.GetRequiredService<Local>();
+			return new BlobServiceClient(local.AzureStorage);
+		});
+
 
 		var customTokenOptions = services.BuildServiceProvider().GetRequiredService<CustomTokenOptions>();
 		var signService = services.BuildServiceProvider().GetRequiredService<SignService>();

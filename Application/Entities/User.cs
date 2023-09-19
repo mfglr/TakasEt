@@ -17,7 +17,7 @@ namespace Application.Entities
 		public IReadOnlyCollection<UserRole> Roles { get; }
 		public IReadOnlyCollection<Credit> Credits { get; }
 		public IReadOnlyCollection<Post> Posts { get; }
-		public IReadOnlyCollection<ProfilePicture> ProfilePictures { get; }
+		public IReadOnlyCollection<AppFile> AppFiles { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
 		public IReadOnlyCollection<UserPostLikes> LikedPosts { get; }
 		public IReadOnlyCollection<UserPostViews> ViewedPosts { get; }
@@ -34,7 +34,6 @@ namespace Application.Entities
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = userName;
 			Email = email;
-			//AddDomainEvent(new UserDomainEvent(this));
         }
 
         public User()

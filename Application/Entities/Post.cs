@@ -10,6 +10,7 @@
         public IReadOnlyCollection<Comment> Comments { get; }
         public IReadOnlyCollection<UserPostLikes> UsersWhoLiked { get; }
         public IReadOnlyCollection<UserPostViews> UsersWhoViewed { get; }
+        public IReadOnlyCollection<AppFile> AppFiles { get; }
 		public Guid CategoryId { get; private set; }
         public Category Category { get; }
 

@@ -8,15 +8,16 @@ namespace Service
 	{
 
 		private readonly BlobServiceClient _blobServiceClient;
-        public BlobStorage(Local local)
-        {
-			_blobServiceClient = new BlobServiceClient(local.AzureStorage);
-        }
-        public string BlobUrl => throw new NotImplementedException();
-
-		public Task<Stream> DownloadAsync(string name, string containerName)
+		public BlobStorage(Local local, BlobServiceClient blobServiceClient)
 		{
-			throw new NotImplementedException();
+			_blobServiceClient = blobServiceClient;
+		}
+
+		public async Task<byte[]> DownloadAsync(string name, string containerName, CancellationToken cancellationToken)
+		{
+			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+			var bytes = (await blobContainerClient.GetBlobClient(name).DownloadContentAsync(cancellationToken)).Value.Content.ToArray();
+			return bytes;
 		}
 
 		public Task<List<string>> GetBlobNamesAsync(string containerName)

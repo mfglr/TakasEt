@@ -24,7 +24,7 @@ namespace Repository.ModelBuilders
 				.HasForeignKey<UserRefreshToken>(x => x.UserId);
 
 			builder
-				.HasMany(x => x.ProfilePictures)
+				.HasMany(x => x.AppFiles)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId);
 

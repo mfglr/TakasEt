@@ -3,7 +3,6 @@ using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json;
 
 namespace Function.Functions
 {
