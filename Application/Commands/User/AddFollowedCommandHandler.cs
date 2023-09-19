@@ -24,8 +24,8 @@ namespace Application.Commands
 		public async Task<AppResponseDto> Handle(AddFollowedRequestDto request, CancellationToken cancellationToken)
 		{
 			if (_loggedInUser.UserId == request.FollowedId) throw new FollowYourselfException();
-			if(!await _followeds.DbSet.AnyAsync(x => x.FollowerId == _loggedInUser.UserId && x.FollowedId == request.FollowedId))
-				await _followeds.DbSet.AddAsync(new Following(_loggedInUser.UserId, request.FollowedId));
+			if(!await _followeds.DbSet.AnyAsync(x => x.FollowerId == _loggedInUser.UserId && x.FollowedId == request.FollowedId, cancellationToken))
+				await _followeds.DbSet.AddAsync(new Following(_loggedInUser.UserId, request.FollowedId),cancellationToken);
 			return AppResponseDto.Success();
 		}
 	}

@@ -17,7 +17,7 @@ namespace Application.Commands
 			
 		public async Task<string> Handle(ConfirmEmailRequestDto request, CancellationToken cancellationToken)
 		{
-			var user = await _userManager.Users.FirstOrDefaultAsync<User>(x => x.UserName == request.UserName);
+			var user = await _userManager.Users.FirstOrDefaultAsync<User>(x => x.UserName == request.UserName, cancellationToken);
 			user.ConfirmEmail();
 			string result;
 			using(var reader = new StreamReader("HtmlTemplates/AfterEmailConfirmationPageTemplate.html"))

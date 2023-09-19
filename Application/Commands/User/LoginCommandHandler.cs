@@ -28,12 +28,12 @@ namespace Application.Commands
 				.Include(x => x.Roles)
 				.ThenInclude(x => x.Role)
 				.Include(x => x.UserRefreshToken)
-				.SingleOrDefaultAsync(x => x.Email == request.Email);
+				.SingleOrDefaultAsync(x => x.Email == request.Email,cancellationToken);
 			if (user == null) throw new UserNotFoundException();
 			var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 			if (!result.Succeeded) throw new FailedLoginException();
 			return AppResponseDto.Success(
-				await _authenticationService.CreateTokenByUserAsync(user)
+				await _authenticationService.CreateTokenByUserAsync(user, cancellationToken)
 				);
 		}
 	}

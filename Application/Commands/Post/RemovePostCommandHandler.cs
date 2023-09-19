@@ -31,7 +31,7 @@ namespace Application.Commands
 				.Include(x => x.User)
 				.Include(x => x.Comments)
 				.ThenIncludeChildrenByRecursive(_option.Depth)
-				.FirstOrDefaultAsync(x => x.Id == request.PostId);
+				.FirstOrDefaultAsync(x => x.Id == request.PostId, cancellationToken);
 			if (post == null) throw new PostNotFoundException();
 			if (post.User.Id != _loggedInUser.UserId) throw new UnmatchedRequestException("Remove-Post");
 			_comments.DbSet.RemoveRangeRecursive(post.Comments);

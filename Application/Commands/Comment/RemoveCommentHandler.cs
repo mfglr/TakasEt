@@ -24,7 +24,7 @@ namespace Application.Commands
 		{
 			var comment = await _comments.DbSet
 				.IncludeChildrenByRecursive(_option.Depth)
-				.FirstOrDefaultAsync(x => x.Id == request.Id);
+				.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 			if (comment == null) throw new CommentNotFoundException();
 			_comments.DbSet.RemoveRecursive(comment);
 			return AppResponseDto.Success();

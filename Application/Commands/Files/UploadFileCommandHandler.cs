@@ -16,7 +16,7 @@ namespace Application.Commands
 		public async Task<AppResponseDto> Handle(UploadFileDto request, CancellationToken cancellationToken)
 		{
 			foreach(var stream in  request.Streams)
-				await _blobStorage.UploadAsync(stream,Guid.NewGuid().ToString(),request.ContainerName);
+				await _blobStorage.UploadAsync(stream,Guid.NewGuid().ToString(),request.ContainerName,cancellationToken);
 			return AppResponseDto.Success();
 		}
 	}
