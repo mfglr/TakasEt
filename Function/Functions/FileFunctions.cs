@@ -19,7 +19,9 @@ namespace Function.Functions
 		[Function("file/upload")]
         public async Task<AppResponseDto> Upload([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-			return await _sender.Send( (await MultipartFormDataParser.ParseAsync(req.Body)).Parse() );
+			var a = await MultipartFormDataParser.ParseAsync(req.Body);
+			var dto = a.Parse();
+			return await _sender.Send(dto);
         }
 
 		[Function("file/download")]

@@ -26,7 +26,8 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.AppFiles)
 				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId);
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
 				.HasMany(x => x.Roles)

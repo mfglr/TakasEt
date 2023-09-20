@@ -9,6 +9,7 @@ namespace Application.Validators
         {
             RuleFor(x => x.OwnerId).NotEmpty().NotNull().WithMessage("hata");
 			RuleFor(x => x.Extention).NotEmpty().NotNull().WithMessage("hata");
+			RuleFor(x => x.FileType).NotEmpty().NotNull().WithMessage("hata");
 		}
 	}
 }

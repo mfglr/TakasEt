@@ -6,9 +6,9 @@ namespace Repository.UnitOfWorks
 {
 	public class UnitOfWork : IUnitOfWork
 	{
-		private readonly SqlContext _context;
+		private readonly Contexts.AppDbContext _context;
 
-		public UnitOfWork(SqlContext context)
+		public UnitOfWork(Contexts.AppDbContext context)
 		{
 			_context = context;
 		}

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class a180920230 : Migration
+    public partial class migration20092023 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,6 +40,23 @@ namespace Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlobName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContainerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppFiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,29 +199,6 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfilePicture",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BlobNameOfFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContainerNameOfFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDisplayed = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProfilePicture", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProfilePicture_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRefreshTokens",
                 columns: table => new
                 {
@@ -306,10 +300,15 @@ namespace Repository.Migrations
                 columns: new[] { "Id", "CreatedDate", "Name", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { new Guid("0db5cc7e-59c9-48d4-99d9-05b1c64886f9"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5197), "user", null },
-                    { new Guid("5684a7cd-99f8-490d-8296-8a9a0abb34b5"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5208), "admin", null },
-                    { new Guid("b2408e0d-9791-42f0-b71c-65c0d0b52529"), new DateTime(2023, 9, 18, 12, 19, 47, 976, DateTimeKind.Utc).AddTicks(5195), "client", null }
+                    { new Guid("08c492de-908b-4cda-ae9b-1374e4c9192c"), new DateTime(2023, 9, 20, 11, 42, 41, 275, DateTimeKind.Utc).AddTicks(5405), "admin", null },
+                    { new Guid("12fb765f-6381-4841-9c12-e706896b0d54"), new DateTime(2023, 9, 20, 11, 42, 41, 275, DateTimeKind.Utc).AddTicks(5393), "client", null },
+                    { new Guid("6532d9c0-17df-457b-8897-c6de143ab41e"), new DateTime(2023, 9, 20, 11, 42, 41, 275, DateTimeKind.Utc).AddTicks(5395), "user", null }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppFiles_OwnerId",
+                table: "AppFiles",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_ParentId",
@@ -349,11 +348,6 @@ namespace Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
                 table: "Posts",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProfilePicture_UserId",
-                table: "ProfilePicture",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -398,6 +392,20 @@ namespace Repository.Migrations
                 column: "CommentId");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_AppFiles_Posts_OwnerId",
+                table: "AppFiles",
+                column: "OwnerId",
+                principalTable: "Posts",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AppFiles_Users_OwnerId",
+                table: "AppFiles",
+                column: "OwnerId",
+                principalTable: "Users",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Comments_Posts_PostId",
                 table: "Comments",
                 column: "PostId",
@@ -424,13 +432,13 @@ namespace Repository.Migrations
                 table: "Comments");
 
             migrationBuilder.DropTable(
+                name: "AppFiles");
+
+            migrationBuilder.DropTable(
                 name: "Credits");
 
             migrationBuilder.DropTable(
                 name: "Following");
-
-            migrationBuilder.DropTable(
-                name: "ProfilePicture");
 
             migrationBuilder.DropTable(
                 name: "UserPostLikes");

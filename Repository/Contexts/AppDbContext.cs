@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Repository.Contexts
 {
-    public class SqlContext : DbContext
+    public class AppDbContext : DbContext
 	{
         public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -13,9 +13,10 @@ namespace Repository.Contexts
         public DbSet<Credit> Credits { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         public DbSet<User> Users { get; set; }
-		public DbSet<Role> Roles { get; set; } 
+		public DbSet<Role> Roles { get; set; }
+        public DbSet<AppFile> AppFiles { get; set; }
 
-		public SqlContext(DbContextOptions<SqlContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
 		}
 
@@ -27,13 +28,13 @@ namespace Repository.Contexts
 
 	}
 	
-	public class SqlContextFactory : IDesignTimeDbContextFactory<SqlContext>
+	public class SqlContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 	{
-		public SqlContext CreateDbContext(string[] args)
+		public AppDbContext CreateDbContext(string[] args)
 		{
-			var optionsBuilder = new DbContextOptionsBuilder<SqlContext>();
+			var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 			optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MyBlogDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-			return new SqlContext(optionsBuilder.Options);
+			return new AppDbContext(optionsBuilder.Options);
 		}
 	}
 }

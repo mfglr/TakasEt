@@ -8,14 +8,15 @@ namespace Function.Extentions
 
 		public static string? GetValueByName(this MultipartFormDataParser parser, string name)
 		{
-			return parser.Parameters.Where(x => x.Name.ToLower() == name).Select(x => x.Data).FirstOrDefault();
+			return parser.Parameters.Where(x => x.Name.ToLower() == name.ToLower()).Select(x => x.Data).FirstOrDefault();
 		}
 
 		public static UploadFileRequestDto Parse( this MultipartFormDataParser parser)
 		{
 			return new UploadFileRequestDto(
 				parser.Files.Select(x => x.Data),
-				Guid.Parse(GetValueByName(parser,"ownerid")),
+				GetValueByName(parser,"containerName"),
+				Guid.Parse(GetValueByName(parser,"ownerId")),
 				GetValueByName(parser,"extention")
 			);
 		}

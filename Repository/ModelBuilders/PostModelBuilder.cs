@@ -29,7 +29,8 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.AppFiles)
 				.WithOne(x => x.Post)
-				.HasForeignKey(x => x.PostId);
+				.HasForeignKey(x => x.PostId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

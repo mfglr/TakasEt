@@ -50,7 +50,7 @@ var host = new HostBuilder()
 			ClockSkew = TimeSpan.Zero
 		});
 
-		var context = services.BuildServiceProvider().GetRequiredService<SqlContext>();
+		var context = services.BuildServiceProvider().GetRequiredService<Repository.Contexts.AppDbContext>();
 		await context.Database.MigrateAsync();
 	})
 	.ConfigureFunctionsWorkerDefaults(worker =>
