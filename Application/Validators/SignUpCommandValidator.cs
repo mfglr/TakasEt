@@ -1,4 +1,4 @@
-﻿using Application.Dtos.SignUp;
+﻿using Application.Dtos;
 using Application.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Validators
 {
-	public class SignUpCommandValidator : AbstractValidator<SignUpRequestDto>
+    public class SignUpCommandValidator : AbstractValidator<SignUpRequestDto>
 	{
 
         public SignUpCommandValidator(UserManager<User> userManager)

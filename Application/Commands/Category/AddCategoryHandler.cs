@@ -22,7 +22,7 @@ namespace Application.Commands
 			var category = new Category(request.Name, request.Description);
 			await _categories.DbSet.AddAsync(category, cancellationToken);
 			return AppResponseDto.Success(
-				_mapper.Map<AddCategoryResponseDto>(category)
+				_mapper.Map<CategoryResponseDto>(category)
 				);
 		}
 	}

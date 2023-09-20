@@ -1,5 +1,4 @@
 ﻿using Application.Dtos;
-using Application.Dtos.SignUp;
 using Application.Dtos.User;
 using Function.Attributes;
 using Function.Extentions;
@@ -10,7 +9,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Function.Functions
 {
-	public class UserFunctions
+    public class UserFunctions
 	{
 		private readonly ISender _sender;
 
