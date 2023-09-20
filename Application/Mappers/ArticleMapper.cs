@@ -4,12 +4,11 @@ using AutoMapper;
 
 namespace Application.Mappers
 {
-	public class ArticleMapper : Profile
+	public class PostMapper : Profile
 	{
-        public ArticleMapper()
+        public PostMapper()
         {
             CreateMap<AddPostRequestDto, Post>();
-            CreateMap<Post,AddPostResponseDto>();
             CreateMap<Post, GetPostCommentsResponseDto>();
             CreateMap<Post, PostResponseDto>();
         }

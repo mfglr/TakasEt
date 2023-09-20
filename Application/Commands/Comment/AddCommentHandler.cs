@@ -24,7 +24,7 @@ namespace Application.Commands
 			await _comments.DbSet.AddAsync(comment,cancellationToken);
 
 			return AppResponseDto.Success(
-				_mapper.Map<AddCommentResponseDto>(comment)
+				_mapper.Map<CommentResponseDto>(comment)
 				);
 		}
 	}

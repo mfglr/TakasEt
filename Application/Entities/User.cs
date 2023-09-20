@@ -34,6 +34,7 @@ namespace Application.Entities
 			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = userName;
 			Email = email;
+			SetCreatedDate();
         }
 
         public User()
