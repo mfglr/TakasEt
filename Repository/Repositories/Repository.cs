@@ -7,10 +7,10 @@ namespace Repository.Repositories
 	public class Repository<T> : IRepository<T> where T : class
 	{
 
-		protected readonly Contexts.AppDbContext _context;
+		protected readonly AppDbContext _context;
 		private readonly DbSet<T> _dbSet;
 
-		public Repository(Contexts.AppDbContext context)
+		public Repository(AppDbContext context)
 		{
 			_context = context;
 			_dbSet = _context.Set<T>();

@@ -19,30 +19,20 @@ namespace Application.Commands.Files
 			_appFiles = appFiles;
 			_blobStorage = blobStorage;
 		}
-
-
-		private async Task<string[]> AddAppfilesAsync(Guid ownerId, string extentions)
-		{
-			string[] extentionList = extentions.Split(",");
-			for (int i = 0; i < extentionList.Length; i++)
-			{
-
-
-
-				await _appFiles.DbSet.AddAsync(
-					new AppFile(ownerId,)
-			}
-		}
-
+		
 		public async Task<AppResponseDto> Handle(UploadFileRequestDto request, CancellationToken cancellationToken)
 		{
 			if (!request.Streams.Any()) throw new StreamNotFoundException();
-			foreach (var stream in request.Streams)
+			var extentions = request.Extentions.Split(",");
+			var iter = request.Streams.GetEnumerator();
+			iter.MoveNext();
+			for (int i = 0; i < extentions.Length;i++)
 			{
-				var appFileName = CreateUniqFileName.RunHelper(request.OwnerId, request.Extentions);
+				var appFileName = CreateUniqFileName.RunHelper(request.OwnerId, extentions[i]);
 				var appFile = new AppFile(request.OwnerId, appFileName,new ContainerName(request.ContainerName));
-				await _blobStorage.UploadAsync(stream, appFileName, request.ContainerName, cancellationToken);
+				await _blobStorage.UploadAsync(iter.Current, appFileName, request.ContainerName, cancellationToken);
 				await _appFiles.DbSet.AddAsync(appFile);
+				iter.MoveNext();
 			}
 			return AppResponseDto.Success();
 		}

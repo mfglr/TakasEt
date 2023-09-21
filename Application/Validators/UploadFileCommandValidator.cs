@@ -8,8 +8,8 @@ namespace Application.Validators
         public UploadFileCommandValidator()
         {
             RuleFor(x => x.OwnerId).NotEmpty().NotNull().WithMessage("hata");
-			RuleFor(x => x.Extention).NotEmpty().NotNull().WithMessage("hata");
-			RuleFor(x => x.FileType).NotEmpty().NotNull().WithMessage("hata");
+			RuleFor(x => x.Extentions).NotEmpty().NotNull().WithMessage("hata");
+			RuleFor(x => x.ContainerName).NotEmpty().NotNull().WithMessage("hata");
 		}
 	}
 }
