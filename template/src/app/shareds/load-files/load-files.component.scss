@@ -1,0 +1,16 @@
+.root-wrapper{
+  display: inline;
+  .input-label{
+    .input-label-icon{
+      font-size: 36px;
+    }:hover{
+      font-size: 48px;
+      transition-duration: 500ms;
+    }
+  }
+  .input{
+    display: none;
+  }
+}
+
+

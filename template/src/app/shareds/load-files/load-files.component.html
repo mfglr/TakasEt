@@ -1,0 +1,8 @@
+<div class="root-wrapper">
+  <label for="input" class="input-label">
+    <i class="fa-solid fa-file-import input-label-icon"></i>
+  </label>
+  <form [formGroup]="fileUploadForm">
+    <input id='input' type="file" class="input" formControlName="fileInput" #fileInput multiple>
+  </form>
+</div>

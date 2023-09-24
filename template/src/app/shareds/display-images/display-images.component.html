@@ -1,0 +1,9 @@
+<div class="root-wrapper">
+  <div  class="image-wrapper">
+    <img *ngIf="!mode.isLastIndex()" class="image" [src]="urls[mode.currentIndex]">
+    <app-load-files *ngIf="mode.isLastIndex()" (files)="getFiles($event)"></app-load-files>
+    <i *ngIf="anyUrl()" class="fa-solid fa-angle-left prev-icon" (click)="mode.prev()"></i>
+    <i *ngIf="anyUrl()" class="fa-solid fa-angle-right next-icon" (click)="mode.next()"></i>
+  </div>
+</div>
+<app-upload-files [ownerId]="ownerId" [containerName]="containerName" [files]="files"></app-upload-files>
