@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-	public class UploadFileCommandValidator : AbstractValidator<UploadFileRequestDto>
+	public class UploadFileCommandValidator : AbstractValidator<UploadFilesRequestDto>
 	{
         public UploadFileCommandValidator()
         {

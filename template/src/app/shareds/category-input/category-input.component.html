@@ -1,0 +1,12 @@
+<div>
+  <label for="category">Category</label>
+</div>
+<div>
+  <input name="category" type="search" [formControl]="categoryNameFormControl">
+  <input type="hidden" [formControl]="categoryIdFormControl">
+  <div class="drop-down">
+    <div class="drop-down-item" *ngFor="let item of (namesOfCategories$ | async)" (click)="setCategory(item)">
+      {{item.name}}
+    </div>
+  </div>
+</div>

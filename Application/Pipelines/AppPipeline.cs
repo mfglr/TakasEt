@@ -12,13 +12,11 @@ namespace Application.Pipelines
 
 		private readonly IValidator<TRequest> _validator;
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IPublisher _publisher;
 
-		public AppPipeline(IValidator<TRequest> validator, IUnitOfWork unitOfWork, IPublisher publisher)
+		public AppPipeline(IValidator<TRequest> validator, IUnitOfWork unitOfWork)
 		{
 			_validator = validator;
 			_unitOfWork = unitOfWork;
-			_publisher = publisher;
 		}
 
 		public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -33,22 +31,8 @@ namespace Application.Pipelines
 			}
 			var response = await next();
 
-			//Commit the changes
-
-			var entitiesThatHaveDomainEvents = _unitOfWork.GetEntities<IEntityDomainEvent>(x => x.Entity.AnyDomainEvents());
-			foreach (var entity in entitiesThatHaveDomainEvents)
-			{
-				entity.PublishAllDomainEvents(_publisher);
-				entity.ClearAllDomainEvents();
-			}
-
-			var createdEntity = _unitOfWork.GetEntities<IEntity>(x => x.State == EntityState.Added);
-			foreach (var entity in createdEntity) entity.SetCreatedDate();
-
-			var updatedEntity = _unitOfWork.GetEntities<IEntity>(x => x.State == EntityState.Modified);
-			foreach (var entity in updatedEntity) entity.SetUpdatedDate();
-
-			await _unitOfWork.CommitAsync();
+			//Commit the changes if there are changes.
+			if(_unitOfWork.HasChanges()) await _unitOfWork.CommitAsync();
 
 			return response;
 		}

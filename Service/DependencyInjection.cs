@@ -13,7 +13,7 @@ namespace Service
 			serviceCollection.AddSingleton(new JwtSecurityTokenHandler());
 			serviceCollection.AddSingleton<ITokenService, TokenService>();
 			serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
-			serviceCollection.AddScoped<IBlobStorage,BlobStorage>();
+			serviceCollection.AddScoped<IAppFileService,AppFileService>();
 			serviceCollection.AddSingleton<IRoleService, RoleService>();
 		}
     }

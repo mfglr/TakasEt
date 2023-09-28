@@ -14,7 +14,7 @@
 		public Guid CategoryId { get; private set; }
         public Category Category { get; }
 
-        public Post(Guid userId,string title,string content,Guid categoryId)
+        public Post(Guid userId, string title, string content, Guid categoryId)
         {
             UserId = userId;
             Title = title;

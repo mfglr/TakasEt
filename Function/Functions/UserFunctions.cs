@@ -27,11 +27,11 @@ namespace Function.Functions
 		[Function("login")]
 		public async Task<AppResponseDto> Login([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
 		{
-			return await _sender.Send(await req.ReadFromBodyAsync<LoginDto>());
+			return await _sender.Send(await req.ReadFromBodyAsync<LoginRequestDto>());
 		}
 
 		[Authorize("user","client")]
-		[Function("get-user-by-username/{username}")]
+		[Function("user/get-user-by-username/{username}")]
 		public async Task<AppResponseDto> GetUser(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 			string username
@@ -40,8 +40,8 @@ namespace Function.Functions
 			return await _sender.Send(new GetUserByUserNameRequestDto(username));
 		}
 
-		[Authorize("admin","user")]
-		[Function("remove-user/{id}")]
+		[Authorize("user")]
+		[Function("user/remove-user/{id}")]
 		public async Task<AppResponseDto> RemoveUser(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
 			Guid id
@@ -51,7 +51,7 @@ namespace Function.Functions
 		}
 
 		[Authorize("user")]
-		[Function("add-followed")]
+		[Function("user/add-followed")]
 		public async Task<AppResponseDto> AddFollowed(
 			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
 		)
@@ -60,7 +60,7 @@ namespace Function.Functions
 		}
 
 		[Authorize("user")]
-		[Function("remove-followed")]
+		[Function("user/remove-followed")]
 		public async Task<AppResponseDto> RemoveFollowed(
 			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
 		)
@@ -69,7 +69,7 @@ namespace Function.Functions
 		}
 
 		[Authorize("user")]
-		[Function("get-followeds-by-user-id")]
+		[Function("user/get-followeds-by-user-id")]
 		public async Task<AppResponseDto> GetFollowedsById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
 		)
@@ -79,7 +79,7 @@ namespace Function.Functions
 
 
 		[Authorize("user")]
-		[Function("get-followers-by-user-id")]
+		[Function("user/get-followers-by-user-id")]
 		public async Task<AppResponseDto> GetFollowersById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
 		)
@@ -88,14 +88,14 @@ namespace Function.Functions
 		}
 
 
-		[Authorize("user")] 
-		[Function("add-profile-picture")]
-		public async Task<AppResponseDto> AddProfilePicture(
-			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
-		)
-		{
-			return await _sender.Send((await MultipartFormDataParser.ParseAsync(req.Body)).Parse());
-		}
+		//[Authorize("user")] 
+		//[Function("add-profile-picture")]
+		//public async Task<AppResponseDto> AddProfilePicture(
+		//	[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
+		//)
+		//{
+		//	return await _sender.Send((await MultipartFormDataParser.ParseAsync(req.Body)).Parse());
+		//}
 
 	}
 }

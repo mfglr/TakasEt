@@ -1,4 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.DomainEventModels;
+using Application.Entities;
+using Application.Interfaces;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Repository.Contexts;
 
@@ -6,16 +10,33 @@ namespace Repository.UnitOfWorks
 {
 	public class UnitOfWork : IUnitOfWork
 	{
-		private readonly Contexts.AppDbContext _context;
+		private readonly AppDbContext _context;
+		private readonly IPublisher _publisher;
 
-		public UnitOfWork(Contexts.AppDbContext context)
+		public UnitOfWork(AppDbContext context, IPublisher publisher)
 		{
 			_context = context;
+			_publisher = publisher;
 		}
 
 		public async Task CommitAsync()
 		{
+			var entitiesThatHaveDomainEvents = GetEntities<IEntityDomainEvent>(x => x.Entity.AnyDomainEvents());
+			foreach (var entity in entitiesThatHaveDomainEvents)
+			{
+				entity.PublishAllDomainEvents(_publisher);
+				entity.ClearAllDomainEvents();
+			}
+			var createdEntity = GetEntities<IEntity>(x => x.State == EntityState.Added);
+			foreach (var entity in createdEntity) entity.SetCreatedDate();
+			var updatedEntity = GetEntities<IEntity>(x => x.State == EntityState.Modified);
+			foreach (var entity in updatedEntity) entity.SetUpdatedDate();
 			await _context.SaveChangesAsync();
+		}
+
+		public bool HasChanges()
+		{
+			return _context.ChangeTracker.HasChanges();
 		}
 
 		public IEnumerable<T> GetEntities<T>(Func<EntityEntry<T>, bool> expression) where T : class

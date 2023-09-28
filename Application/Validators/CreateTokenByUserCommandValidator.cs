@@ -1,9 +1,10 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Authentication;
 using FluentValidation;
 
 namespace Application.Validators
 {
-	public class CreateTokenByUserCommandValidator : AbstractValidator<LoginDto>
+    public class CreateTokenByUserCommandValidator : AbstractValidator<CreateTokenByUserRequestDto>
 	{
         public CreateTokenByUserCommandValidator()
         {

@@ -1,0 +1,35 @@
+<form [formGroup]="createPostForm" class="row">
+
+  <div class="col-6">
+    <div>
+      <label for="title">Title</label>
+    </div>
+    <div>
+      <input name="title" formControlName="title" type="text">
+    </div>
+
+    <div>
+      <label for="content">Content</label>
+    </div>
+    <div>
+      <input name="content" formControlName="content" type="textarea">
+    </div>
+
+    <div>
+      <app-category-input (categoryIdEvent)="getCategoryId($event)"></app-category-input>
+    </div>
+
+  </div>
+
+  <div class="col-6">
+    <div class="root-wrapper">
+      <div  class="image-wrapper">
+        <img *ngIf="!mode.isLastIndex()" class="image" [src]="files[mode.currentIndex].url">
+        <app-load-files [ngStyle]="{'display' : mode.isLastIndex() ? 'inline' : 'none' }" (filesEvent)="getFiles($event)"></app-load-files>
+        <i *ngIf="anyUrl()" class="fa-solid fa-angle-left prev-icon" (click)="mode.prev()"></i>
+        <i *ngIf="anyUrl()" class="fa-solid fa-angle-right next-icon" (click)="mode.next()"></i>
+      </div>
+    </div>
+  </div>
+  <button #submit>send</button>
+</form>

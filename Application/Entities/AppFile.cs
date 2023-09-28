@@ -24,9 +24,9 @@ namespace Application.Entities
 
         public AppFile(Guid ownerId,string blobName, ContainerName containerName)
         {
-            setOwnerId(ownerId);
             BlobName = blobName;
             ContainerName = containerName;
-        }
+			setOwnerId(ownerId);
+		}
     }
 }

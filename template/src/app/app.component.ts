@@ -1,23 +1,28 @@
-import { Component } from '@angular/core';
-import { LoggedInUserService } from './services/logged-in-user.service';
-import { ContainerName } from './models/containerName';
+import { Component, OnInit } from '@angular/core';
+import { CategoryService } from './services/category.service';
+import { UserState } from './states/user/state';
+import { Store } from '@ngrx/store';
+import { isLogin } from './states/user/selector';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'Template';
-  public isLogin : boolean = false;
+
+  islogin$ = this.store.select(isLogin);
 
 
+  constructor(
+    private store : Store<UserState>) {
+    }
 
-  constructor(public loggedInUser: LoggedInUserService) {}
+  ngOnInit(): void {
 
-  login(event : boolean){
-    this.isLogin = event;
   }
+
 
 
 }

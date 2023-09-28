@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Authentication;
 using Application.Entities;
 using Application.Exceptions;
 using Application.Interfaces.Services;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class CreateTokenByUserCommandHandler : IRequestHandler<LoginDto, AppResponseDto>
+    public class CreateTokenByUserCommandHandler : IRequestHandler<CreateTokenByUserRequestDto, AppResponseDto>
 	{
 
 		private readonly IAuthenticationService _authenticationService;
@@ -20,7 +21,7 @@ namespace Application.Commands
 			_userManager = userManager;
 		}
 
-		public async Task<AppResponseDto> Handle(LoginDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(CreateTokenByUserRequestDto request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager
 				.Users

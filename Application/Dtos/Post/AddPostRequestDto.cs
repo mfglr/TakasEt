@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using HttpMultipartParser;
+using MediatR;
 
 namespace Application.Dtos
 {
@@ -8,13 +9,15 @@ namespace Application.Dtos
 		public string Title { get; private set; }
 		public string Content { get; private set; }
 		public Guid CategoryId { get; private set; }
-
-		public AddPostRequestDto(Guid userId,string title, string content, Guid categoryId)
+        public UploadFilesRequestDto UploadFiles { get; private set; }
+        
+		public AddPostRequestDto(MultipartFormDataParser parser)
 		{
-			UserId = userId;
-			Title = title;
-			Content = content;
-			CategoryId = categoryId;
+			UploadFiles = new UploadFilesRequestDto(parser);
+			UserId = Guid.Parse( parser.GetParameterValue("userId") ); 
+			Title = parser.GetParameterValue("title");
+			Content = parser.GetParameterValue("content");
+			CategoryId = Guid.Parse( parser.GetParameterValue("categoryId"));
 		}
 	}
 }

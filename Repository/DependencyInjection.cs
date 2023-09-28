@@ -15,7 +15,7 @@ namespace Repository
 		public static void AddSqlDbContext(this IServiceCollection serviceCollection)
 		{
 			Local local = serviceCollection.BuildServiceProvider().GetRequiredService<Local>();
-			serviceCollection.AddDbContext<Contexts.AppDbContext>(optionsAction =>
+			serviceCollection.AddDbContext<AppDbContext>(optionsAction =>
 			{
 				optionsAction.UseSqlServer(local.SqlConnectionString);
 			});
@@ -23,7 +23,7 @@ namespace Repository
 			{
 				opt.User.RequireUniqueEmail = true;
 				opt.Password.RequireNonAlphanumeric = false;
-			}).AddEntityFrameworkStores<Contexts.AppDbContext>();
+			}).AddEntityFrameworkStores<AppDbContext>();
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}

@@ -1,0 +1,20 @@
+<form [formGroup]="loginForm">
+    <div class="row">
+        <div class="col-6 col-sm-4 col-md-3">
+            <input [placeholder]="appStringsService.typeEmail" formControlName="email" type="email" class="form-control"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 col-sm-4 col-md-3">
+            <input type="password" [placeholder]="appStringsService.typePassword" formControlName="password" class="form-control"/>
+        </div>
+    </div>
+    <div class="row text-center">
+        <a href="#">{{appStringsService.forgotPassword}}</a>
+    </div>
+    <div class="row">
+        <div class="col-6 col-sm-4 col-md-3">
+            <button #submit>{{appStringsService.login}}</button>
+        </div>
+    </div>
+</form>

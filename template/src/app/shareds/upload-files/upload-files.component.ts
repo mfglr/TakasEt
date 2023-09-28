@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { fromEvent, mergeMap } from 'rxjs';
-import { FileHelper } from 'src/app/helpers/file-helpers';
-import { ContainerName } from 'src/app/models/containerName';
-import { BlobService } from 'src/app/services/blob.service';
+import { FormDataHelper } from 'src/app/helpers/formData-helpers';
+import { ContainerName } from 'src/app/models/enums/containerName';
+import { FileService } from 'src/app/services/file.service';
 
 @Component({
   selector: 'app-upload-files',
@@ -16,15 +16,15 @@ export class UploadFilesComponent {
   @Input() containerName? : ContainerName
   @Input() ownerId? : string;
 
-  constructor(private blobService:BlobService) {
+  constructor(private fileService:FileService) {
 
   }
 
   ngOnInit(): void {
     fromEvent(this.submit?.nativeElement,"click").pipe(
       mergeMap( () => {
-        return this.blobService.upload(
-          FileHelper.createFormData(
+        return this.fileService.upload(
+          FormDataHelper.createFormDataForUploadFiles(
             this.files!,
             this.containerName!,
             this.ownerId!

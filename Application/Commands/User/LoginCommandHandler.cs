@@ -8,20 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class LoginCommandHandler : IRequestHandler<LoginDto, AppResponseDto>
+    public class LoginCommandHandler : IRequestHandler<LoginRequestDto, AppResponseDto>
 	{
-		private readonly SignInManager<User> _signInManager;
 		private readonly UserManager<User> _userManger;
 		private readonly IAuthenticationService _authenticationService;
 
-		public LoginCommandHandler(SignInManager<User> signInManager, UserManager<User> userManger, IAuthenticationService authenticationService)
+		public LoginCommandHandler(UserManager<User> userManger, IAuthenticationService authenticationService)
 		{
-			_signInManager = signInManager;
 			_userManger = userManger;
 			_authenticationService = authenticationService;
 		}
 
-		public async Task<AppResponseDto> Handle(LoginDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(LoginRequestDto request, CancellationToken cancellationToken)
 		{
 			var user = await _userManger
 				.Users
@@ -30,11 +28,17 @@ namespace Application.Commands
 				.Include(x => x.UserRefreshToken)
 				.SingleOrDefaultAsync(x => x.Email == request.Email,cancellationToken);
 			if (user == null) throw new UserNotFoundException();
-			var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-			if (!result.Succeeded) throw new FailedLoginException();
-			return AppResponseDto.Success(
-				await _authenticationService.CreateTokenByUserAsync(user, cancellationToken)
-				);
+			var result = await _userManger.CheckPasswordAsync(user, request.Password);
+			if (!result) throw new FailedLoginException();
+			var token = await _authenticationService.CreateTokenByUserAsync(user, cancellationToken);
+			var loginResponse = new LoginResponseDto(
+				token.AccessToken,
+				token.RefreshToken,
+				user.Id,
+				user.UserName!,
+				user.Email!
+			);
+			return AppResponseDto.Success( loginResponse );
 		}
 	}
 }

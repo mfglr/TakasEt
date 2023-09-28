@@ -1,28 +1,34 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, map, mergeMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-load-files',
   templateUrl: './load-files.component.html',
   styleUrls: ['./load-files.component.scss']
 })
-export class LoadFilesComponent implements OnInit {
+export class LoadFilesComponent{
 
   @ViewChild("fileInput",{static : true}) fileInut? : ElementRef;
-  @Output() files = new EventEmitter<File[]>();
+  @Output() filesEvent = new EventEmitter<{file : File,url : string}[]>();
+  files : {file : File,url : string}[] = [];
 
   fileUploadForm = new FormGroup({
     fileInput : new FormControl()
   })
 
-  get fileInputControl(){
-    return this.fileUploadForm.get('fileInput');
-  }
-
   ngOnInit(){
-    this.fileUploadForm.valueChanges.subscribe( () => {
-      this.files.emit(this.fileInut?.nativeElement.files);
-      this.fileInputControl?.patchValue(null,{onlySelf : true});
+    this.fileUploadForm.valueChanges.pipe(
+      mergeMap( () : Observable<File[]> => of(this.fileInut?.nativeElement.files) ),
+      map((x) : {file : File,url : string}[] =>{
+        for(let i = 0; i < x.length; i++)
+          this.files.push({ file : x[i], url : URL.createObjectURL(x[i]) })
+        return this.files;
+      })
+    ).subscribe(() => {
+      this.filesEvent.emit(this.files);
+      this.fileUploadForm.get('fileInput')?.setValue(null,{onlySelf : true});
     })
   }
+
 }

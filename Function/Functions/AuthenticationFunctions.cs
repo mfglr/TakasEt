@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Application.Dtos.User;
 using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
@@ -20,7 +21,7 @@ namespace Function.Functions
             [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
             )
         {
-            return await _sender.Send( await req.ReadFromBodyAsync<LoginDto>());
+            return await _sender.Send( await req.ReadFromBodyAsync<LoginRequestDto>());
         }
 
 		[Function("create-token-by-client")]

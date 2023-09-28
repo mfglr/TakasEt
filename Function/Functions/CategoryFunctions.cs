@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Function.Attributes;
 using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
@@ -8,17 +9,25 @@ namespace Function.Functions
 {
     public class CategoryFunctions
     {
-        private readonly IMediator _mediator;
+        private readonly ISender _sender;
 
-        public CategoryFunctions(IMediator mediator)
+        public CategoryFunctions(ISender sender)
         {
-            _mediator = mediator;
+			_sender = sender;
         }
 
-        [Function("add-category")]
-        public async Task<AppResponseDto> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        [Authorize("user")]
+        [Function("category/add-category")]
+        public async Task<AppResponseDto> AddCategory([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-            return await _mediator.Send(await req.ReadFromBodyAsync<AddCategoryRequestDto>());
+            return await _sender.Send(await req.ReadFromBodyAsync<AddCategoryRequestDto>());
+        }
+
+        [Authorize("user")]
+        [Function("category/filter-categories/{key}")]
+        public async Task<AppResponseDto> FilterCategories([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,string key)
+        {
+            return await _sender.Send(new FilterCategoriesRequestDto(key));
         }
     }
 }

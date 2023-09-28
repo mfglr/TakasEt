@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Function.Attributes;
 using Function.Extentions;
 using HttpMultipartParser;
 using MediatR;
@@ -16,14 +17,18 @@ namespace Function.Functions
 			_sender = sender;
 		}
 
+		[Authorize("user")]
 		[Function("file/upload")]
         public async Task<AppResponseDto> Upload([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
-			var a = await MultipartFormDataParser.ParseAsync(req.Body);
-			var dto = a.Parse();
-			return await _sender.Send(dto);
+			return await _sender.Send(
+				new UploadFilesRequestDto(
+					await MultipartFormDataParser.ParseAsync(req.Body)
+				)
+			);
         }
 
+		[Authorize("user")]
 		[Function("file/download")]
 		public async Task<AppResponseDto> Download([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
 		{
