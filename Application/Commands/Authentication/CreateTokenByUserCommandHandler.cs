@@ -1,5 +1,4 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Authentication;
 using Application.Entities;
 using Application.Exceptions;
 using Application.Interfaces.Services;

@@ -30,7 +30,10 @@ export class CreatePostComponent implements OnInit,OnDestroy,AfterContentInit{
     files : new FormControl<File[] | null >(null)
   })
 
-  constructor(private store: Store<UserState>,private postService: PostService) {
+  constructor(
+    private store: Store<UserState>,
+    private postService: PostService
+  ) {
     this.mode = new Mode(this.files.length + 1);
   }
 

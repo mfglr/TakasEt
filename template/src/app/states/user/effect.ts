@@ -1,5 +1,5 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { login, loginSuccess, setHttpHeaders } from "./actions";
+import { login, loginSuccess } from "./actions";
 import { UserService } from "src/app/services/user.service";
 import { map, mergeMap, of} from "rxjs";
 import { Injectable } from "@angular/core";
@@ -18,7 +18,6 @@ export class UserEffect{
         response => {
           return of(
             loginSuccess({ payload : response}),
-            setHttpHeaders({accessToken : response.accessToken})
           )
         }
       )

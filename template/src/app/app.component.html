@@ -1,7 +1,9 @@
 <app-login *ngIf="!(islogin$ | async)"></app-login>
 
 <div *ngIf="(islogin$ | async)" class="row">
-  <div class="col-6 offset-3">
-    <app-create-post ></app-create-post>
+  <div class="row">
+    <div class="col-6 offset-3">
+      <app-display-post postId="08c915b0-2830-49f0-b3ee-9f459dfbd537" userId="83f301af-4deb-45ab-9d01-08dbc412d2d8"></app-display-post>
+    </div>
   </div>
 </div>

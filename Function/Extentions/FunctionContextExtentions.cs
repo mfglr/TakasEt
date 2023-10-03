@@ -9,6 +9,15 @@ namespace Function.Extentions
 {
 	internal static class FunctionContextExtentions
 	{
+
+		public static async Task WriteDataAsync(this FunctionContext context, byte[] data)
+		{
+			HttpResponseData response = (await context.GetHttpRequestDataAsync())!.CreateResponse();
+			await response.WriteAsJsonAsync(data);
+			response.StatusCode = HttpStatusCode.OK;
+			context.GetInvocationResult().Value = response;
+		}
+
 		public static async Task WriteExceptionAsync(this FunctionContext context,string error,HttpStatusCode statusCode)
 		{
 			HttpResponseData response = (await context.GetHttpRequestDataAsync())!.CreateResponse();

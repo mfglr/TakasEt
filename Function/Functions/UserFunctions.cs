@@ -1,5 +1,4 @@
 ﻿using Application.Dtos;
-using Application.Dtos.User;
 using Function.Attributes;
 using Function.Extentions;
 using HttpMultipartParser;
@@ -30,7 +29,7 @@ namespace Function.Functions
 			return await _sender.Send(await req.ReadFromBodyAsync<LoginRequestDto>());
 		}
 
-		[Authorize("user","client")]
+		[Authorize("user")]
 		[Function("user/get-user-by-username/{username}")]
 		public async Task<AppResponseDto> GetUser(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
@@ -77,7 +76,6 @@ namespace Function.Functions
 			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowedsByUserIdRequestDto>());
 		}
 
-
 		[Authorize("user")]
 		[Function("user/get-followers-by-user-id")]
 		public async Task<AppResponseDto> GetFollowersById(
@@ -88,14 +86,26 @@ namespace Function.Functions
 		}
 
 
-		//[Authorize("user")] 
-		//[Function("add-profile-picture")]
-		//public async Task<AppResponseDto> AddProfilePicture(
-		//	[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
-		//)
-		//{
-		//	return await _sender.Send((await MultipartFormDataParser.ParseAsync(req.Body)).Parse());
-		//}
+		[Authorize("user")]
+		[Function("user/get-active-profile-image-by-user-id/{userId}")]
+		public async Task<byte[]> GetActiveProfileImageByUserId(
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+			Guid userId
+		)
+		{
+			return await _sender.Send(new GetActiveProfileImageByIdRequestDto(userId));
+		}
+
+		[Authorize("user")]
+		[Function("user/add-profile-image")]
+		public async Task<AppResponseDto> AddProfileImageByUserId(
+			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
+		)
+		{
+			return await _sender.Send(new AddProfileImageRequestDto(await MultipartFormDataParser.ParseAsync(req.Body)));
+		}
+
+
 
 	}
 }

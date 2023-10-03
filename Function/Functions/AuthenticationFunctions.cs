@@ -1,5 +1,4 @@
 using Application.Dtos;
-using Application.Dtos.User;
 using Function.Extentions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;

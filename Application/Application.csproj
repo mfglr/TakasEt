@@ -24,4 +24,10 @@
     <PackageReference Include="System.Memory.Data" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Images\noImage.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

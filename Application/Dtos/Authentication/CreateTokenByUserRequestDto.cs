@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Dtos.Authentication
+namespace Application.Dtos
 {
 	public class CreateTokenByUserRequestDto : IRequest<AppResponseDto>
 	{

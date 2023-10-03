@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Dtos.User
+namespace Application.Dtos
 {
 	public class AddFollowedRequestDto : IRequest<AppResponseDto>
 	{

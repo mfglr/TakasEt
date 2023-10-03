@@ -1,6 +1,5 @@
 ﻿using Application.Configurations;
 using Application.Dtos;
-using Application.Dtos.User;
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using MediatR;

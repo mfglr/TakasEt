@@ -8,10 +8,6 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<AppFile> builder)
 		{
-			builder.OwnsOne(x => x.ContainerName, x =>
-			{
-				x.Property(x => x.Value).HasColumnName("ContainerName");
-			});
 		}
 	}
 }

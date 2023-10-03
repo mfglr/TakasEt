@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryService } from './services/category.service';
 import { UserState } from './states/user/state';
 import { Store } from '@ngrx/store';
 import { isLogin } from './states/user/selector';
@@ -16,13 +15,12 @@ export class AppComponent implements OnInit{
 
 
   constructor(
-    private store : Store<UserState>) {
+    private store : Store<UserState>,
+    ) {
     }
 
   ngOnInit(): void {
 
   }
-
-
 
 }

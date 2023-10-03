@@ -17,7 +17,7 @@ namespace Application.Entities
 		public IReadOnlyCollection<UserRole> Roles { get; }
 		public IReadOnlyCollection<Credit> Credits { get; }
 		public IReadOnlyCollection<Post> Posts { get; }
-		public IReadOnlyCollection<AppFile> AppFiles { get; }
+		public IReadOnlyCollection<ProfileImage> ProfilePictures { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
 		public IReadOnlyCollection<UserPostLikes> LikedPosts { get; }
 		public IReadOnlyCollection<UserPostViews> ViewedPosts { get; }

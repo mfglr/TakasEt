@@ -6,15 +6,16 @@ namespace Service
 {
     public static class DependencyInjection
 	{
-		public static void AddServices(this IServiceCollection serviceCollection)
+		public static void AddServices(this IServiceCollection services)
 		{
-			serviceCollection.AddScoped<ISmtpService, SmtpService>();
-			serviceCollection.AddSingleton(new SignService());
-			serviceCollection.AddSingleton(new JwtSecurityTokenHandler());
-			serviceCollection.AddSingleton<ITokenService, TokenService>();
-			serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
-			serviceCollection.AddScoped<IAppFileService,AppFileService>();
-			serviceCollection.AddSingleton<IRoleService, RoleService>();
+			services.AddScoped<ISmtpService, SmtpService>();
+			services.AddSingleton(new SignService());
+			services.AddSingleton(new JwtSecurityTokenHandler());
+			services.AddSingleton<ITokenService, TokenService>();
+			services.AddScoped<IAuthenticationService, AuthenticationService>();
+			services.AddScoped<IBlobService,BlobService>();
+			services.AddSingleton<IRoleService, RoleService>();
+			services.AddTransient<IFileWriterService, FileWriterService>();
 		}
     }
 }

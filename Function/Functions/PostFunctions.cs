@@ -32,7 +32,7 @@ namespace Function.Functions
 		}
 
 		[Authorize("user")]
-		[Function("post/get-post-by-id/{id}")]
+		[Function("post/get-by-id/{id}")]
 		public async Task<AppResponseDto> GetPostById(
 			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 			Guid id
@@ -59,5 +59,13 @@ namespace Function.Functions
 			return await _sender.Send(await req.ReadFromBodyAsync<UnlikePostRequestDto>());
 		}
 
+		[Function("post/get-post-images-by-post-id/{postId}")]
+		public async Task<byte[]> GetPostImagesByPostId(
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+			Guid postId
+		)
+		{
+			return await _sender.Send(new GetPostImagesByPostIdRequestDto(postId));
+		}
 	}
 }

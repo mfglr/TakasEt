@@ -10,8 +10,3 @@ export const loginSuccess = createAction(
   "login success",
   props<{payload : LoginResponse}>()
 )
-
-export const setHttpHeaders = createAction(
-  "set httpHeaders",
-  props<{accessToken : string}>()
-)

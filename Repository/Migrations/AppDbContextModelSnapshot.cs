@@ -32,25 +32,31 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContainerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Extention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("AppFiles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AppFile");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Application.Entities.Category", b =>
@@ -233,20 +239,20 @@ namespace Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("78e6daab-6d9e-4473-a3a3-e08a241c4621"),
-                            CreatedDate = new DateTime(2023, 9, 25, 11, 37, 58, 534, DateTimeKind.Utc).AddTicks(6240),
+                            Id = new Guid("64e5a80d-cf99-4f04-ba7f-44aed243c885"),
+                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5058),
                             Name = "client"
                         },
                         new
                         {
-                            Id = new Guid("e3e0e00e-05cd-4139-9302-aa1f2a4a291b"),
-                            CreatedDate = new DateTime(2023, 9, 25, 11, 37, 58, 534, DateTimeKind.Utc).AddTicks(6244),
+                            Id = new Guid("a3abc9c0-f483-4069-9f39-e2d1a8de6739"),
+                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5061),
                             Name = "user"
                         },
                         new
                         {
-                            Id = new Guid("d2a29620-2f53-450d-b384-013eb297e87b"),
-                            CreatedDate = new DateTime(2023, 9, 25, 11, 37, 58, 534, DateTimeKind.Utc).AddTicks(6245),
+                            Id = new Guid("fdd8270a-167d-4a06-b7f8-0b0dfffcfab4"),
+                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5071),
                             Name = "admin"
                         });
                 });
@@ -438,42 +444,31 @@ namespace Repository.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("Application.Entities.AppFile", b =>
+            modelBuilder.Entity("Application.Entities.PostImage", b =>
                 {
-                    b.HasOne("Application.Entities.Post", "Post")
-                        .WithMany("AppFiles")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasBaseType("Application.Entities.AppFile");
 
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("AppFiles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.OwnsOne("Application.ValueObjects.ContainerName", "ContainerName", b1 =>
-                        {
-                            b1.Property<Guid>("AppFileId")
-                                .HasColumnType("uniqueidentifier");
+                    b.HasIndex("PostId");
 
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ContainerName");
+                    b.HasDiscriminator().HasValue("PostImage");
+                });
 
-                            b1.HasKey("AppFileId");
+            modelBuilder.Entity("Application.Entities.ProfileImage", b =>
+                {
+                    b.HasBaseType("Application.Entities.AppFile");
 
-                            b1.ToTable("AppFiles");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                            b1.WithOwner()
-                                .HasForeignKey("AppFileId");
-                        });
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("ContainerName")
-                        .IsRequired();
+                    b.HasIndex("UserId");
 
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
+                    b.HasDiscriminator().HasValue("ProfileImage");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -650,6 +645,26 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Application.Entities.PostImage", b =>
+                {
+                    b.HasOne("Application.Entities.Post", "Post")
+                        .WithMany("PostImages")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("Application.Entities.ProfileImage", b =>
+                {
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("ProfilePictures")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Application.Entities.Category", b =>
                 {
                     b.Navigation("Posts");
@@ -664,9 +679,9 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.Post", b =>
                 {
-                    b.Navigation("AppFiles");
-
                     b.Navigation("Comments");
+
+                    b.Navigation("PostImages");
 
                     b.Navigation("UsersWhoLiked");
 
@@ -680,8 +695,6 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.User", b =>
                 {
-                    b.Navigation("AppFiles");
-
                     b.Navigation("Comments");
 
                     b.Navigation("Credits");
@@ -693,6 +706,8 @@ namespace Repository.Migrations
                     b.Navigation("LikedPosts");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("ProfilePictures");
 
                     b.Navigation("Roles");
 

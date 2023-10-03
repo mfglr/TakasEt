@@ -1,0 +1,17 @@
+<div class="root-wrapper">
+
+  <ng-container  *ngIf="mode.anyData(); else template;">
+    <div class="image-wrapper">
+      <img class="image" [src]="mode.current()">
+      <i class="fa-solid fa-angle-left prev-icon" (click)="mode.prev()"></i>
+      <i class="fa-solid fa-angle-right next-icon" (click)="mode.next()"></i>
+    </div>
+  </ng-container>
+
+  <ng-template #template>
+    <div class="image-wrapper">
+      <img class="image" src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg">
+    </div>
+  </ng-template>
+
+</div>
