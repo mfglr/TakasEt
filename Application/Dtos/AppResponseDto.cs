@@ -6,7 +6,7 @@
         public IReadOnlyCollection<string>? Errors => _errors;
         private List<string>? _errors;
 
-        public static AppResponseDto Success<T>(T data) where T : class
+        public static AppResponseDto Success<T>(T data)
 		{
             return new AppResponseDto { Data = data };
         }

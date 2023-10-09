@@ -17,7 +17,7 @@ export class AppHttpClientService {
     private store : Store<UserState>
   ) { }
 
-  private baseUrl : string = 'http://localhost:7188/api'
+  private baseUrl : string = 'http://localhost:5027/api'
   private getHttpHeaders$ = this.store.select(getLoginResponse).pipe(
     take(1),
     map(loginResponse => {
@@ -56,7 +56,7 @@ export class AppHttpClientService {
 
   delete(url : string) : Observable<NoContentResponse>{
     return this.getHttpHeaders$.pipe(
-      mergeMap( (headers) => this.httpClient.get<AppResponse<NoContentResponse>>( `${this.baseUrl}/${url}`,{headers : headers}) ),
+      mergeMap( (headers) => this.httpClient.delete<AppResponse<NoContentResponse>>( `${this.baseUrl}/${url}`,{headers : headers}) ),
       map(appResponse => appResponse.data)
     )
   }

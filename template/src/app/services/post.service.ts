@@ -3,7 +3,7 @@ import { AppHttpClientService } from './app-http-client.service';
 import { Observable } from 'rxjs';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
-import { AppFileService } from './app-file.service';
+import { Likeable } from '../interfaces/likeable';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,7 @@ import { AppFileService } from './app-file.service';
 export class PostService {
 
   constructor(
-    private appHttpClient: AppHttpClientService,
-    private appFileService : AppFileService
+    private appHttpClient: AppHttpClientService
   ) { }
 
   addPost(formData : FormData) : Observable<NoContentResponse>{
@@ -23,7 +22,15 @@ export class PostService {
     return this.appHttpClient.get<PostResponse>(`post/get-by-id/${postId}`);
   }
 
-  getPostImagesByPostId(postId : string) : Observable<string[]>{
-    return this.appFileService.createUrlsFromBlob(this.appHttpClient.getBlob(`post/get-post-images-by-post-id/${postId}`))
+  getPostsByUserId(userId : string) : Observable<PostResponse[]>{
+    return this.appHttpClient.get<PostResponse[]>(`post/get-posts-by-user-id/${userId}`);
+  }
+
+  like(postId : string) : Observable<NoContentResponse>{
+    return this.appHttpClient.post("post/like-post",{"postId" : postId});
+  }
+
+  unlike(postId :string) : Observable<NoContentResponse>{
+    return this.appHttpClient.delete(`post/unlike-post/${postId}`);
   }
 }

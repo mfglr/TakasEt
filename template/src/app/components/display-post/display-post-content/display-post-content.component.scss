@@ -1,0 +1,32 @@
+.root-wrapper{
+  border-radius: 0;
+  padding: 0;
+  height: 600px;
+  .post-content-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .post-content-header-user{
+      display: flex;
+      align-items: center;
+    }
+  }
+  .post-content-body{
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .post-content-body-title{
+      font-size: x-large;
+    }
+    .post-content-body-content{
+    }
+  }
+  .post-content-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+}
+

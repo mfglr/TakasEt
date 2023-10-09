@@ -49,40 +49,26 @@ namespace Function.Functions
 			return await _sender.Send(new RemoveUserRequestDto(id));
 		}
 
-		[Authorize("user")]
-		[Function("user/add-followed")]
-		public async Task<AppResponseDto> AddFollowed(
-			[HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req
-		)
-		{
-			return await _sender.Send(await req.ReadFromBodyAsync<AddFollowedRequestDto>());
-		}
 
 		[Authorize("user")]
-		[Function("user/remove-followed")]
-		public async Task<AppResponseDto> RemoveFollowed(
-			[HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req
-		)
-		{
-			return await _sender.Send(await req.ReadFromBodyAsync<RemoveFollowedRequestDto>());
-		}
-
-		[Authorize("user")]
-		[Function("user/get-followeds-by-user-id")]
+		[Function("user/get-followeds-by-user-id/{userId}")]
 		public async Task<AppResponseDto> GetFollowedsById(
-			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+			Guid userId
 		)
 		{
-			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowedsByUserIdRequestDto>());
+			return await _sender.Send(new GetFollowedsByUserIdRequestDto(userId));
 		}
 
 		[Authorize("user")]
-		[Function("user/get-followers-by-user-id")]
+		[Function("user/get-followers-by-user-id/{userId}")]
 		public async Task<AppResponseDto> GetFollowersById(
-			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req
+			[HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+			Guid userId
+
 		)
 		{
-			return await _sender.Send(await req.ReadFromBodyAsync<GetFollowersByUserIdRequestDto>());
+			return await _sender.Send(new GetFollowersByUserIdRequestDto(userId));
 		}
 
 

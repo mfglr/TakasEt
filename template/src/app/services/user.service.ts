@@ -22,20 +22,10 @@ export class UserService {
   }
 
   getUserByUserName(userName : string) : Observable<UserResponse>{
-    return this.appHttpClient.get<UserResponse>(`get-user-by-username/${userName}`);
+    return this.appHttpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
   }
 
   addProfileImage(formData:FormData) : Observable<NoContentResponse> {
     return this.appHttpClient.post<NoContentResponse>('user/add-profile-image',formData);
   }
-
-  getActiveProfileImage(userId : string) : Observable<string>{
-    return this.appFileService.createUrlsFromBlob(
-      this.appHttpClient.getBlob(`user/get-active-profile-image-by-user-id/${userId}`)
-    ).pipe(
-      mergeMap( (urls) => from(urls) ),
-      first()
-    )
-  }
-
 }

@@ -13,6 +13,12 @@ namespace Repository.ModelBuilders
 				.WithOne(x => x.Parent)
 				.HasForeignKey(x => x.ParentId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.UsersWhoLiked)
+				.WithOne(x => x.Comment)
+				.HasForeignKey(x => x.CommentId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

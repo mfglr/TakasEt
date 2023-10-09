@@ -17,6 +17,7 @@ export class FormDataHelper{
     let formData = new FormData();
     for(let i = 0; i < value.files.length; i++)
       formData.append("streams",value.files[i]);
+    formData.append("countOfImages",value.files.length.toString());
     formData.append("extentions",this.getExtenstions(value.files));
     formData.append("content",value.content);
     formData.append("title",value.title);
@@ -25,9 +26,8 @@ export class FormDataHelper{
     return formData;
   }
 
-  static createFormDataForAddProfileImage(value : {userId : string,file : File}) : FormData{
+  static createFormDataForAddProfileImage(value : {file : File}) : FormData{
     let formData = new FormData();
-    formData.append('userId',value.userId);
     formData.append('extention',this.getExtention(value.file));
     formData.append('stream',value.file);
     return formData;

@@ -27,7 +27,6 @@ namespace Function.Middlewares
 				var tokenValidatonParameters = (TokenValidationParameters?)context.InstanceServices.GetService(typeof(TokenValidationParameters));
 				string? token = await context.GetTokenAsync();
 				if(token == null) throw new TokenNotFoundException();
-				var a = _jwtHandler.ReadJwtToken(token);
 				ClaimsPrincipal claimsPrincipal = _jwtHandler.ValidateToken(token,tokenValidatonParameters,out var validatedToken);
 				var rolesOfUser = claimsPrincipal.GetRoles();
 				if (!attribute.HasRole(rolesOfUser)) throw new Application.Exceptions.UnauthorizedAccessException();

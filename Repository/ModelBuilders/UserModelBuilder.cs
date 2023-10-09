@@ -10,7 +10,9 @@ namespace Repository.ModelBuilders
 		{
 			builder
 				.HasMany(x => x.Posts)
-				.WithOne(x => x.User);
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
 				.HasMany(x => x.Comments)
@@ -24,7 +26,7 @@ namespace Repository.ModelBuilders
 				.HasForeignKey<UserRefreshToken>(x => x.UserId);
 
 			builder
-				.HasMany(x => x.ProfilePictures)
+				.HasMany(x => x.ProfileImages)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -57,6 +59,12 @@ namespace Repository.ModelBuilders
 				.HasMany(x => x.Followers)
 				.WithOne(x => x.Followed)
 				.HasForeignKey (x => x.FollowedId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.LikedComments)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 		}

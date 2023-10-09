@@ -24,9 +24,5 @@ namespace Function.Functions
             return await _sender.Send(new GetAppFileByKeyRequestDto(blobName,containerName));
         }
 
-		
-
-		
-
 	}
 }

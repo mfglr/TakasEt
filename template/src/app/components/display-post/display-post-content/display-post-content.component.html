@@ -1,0 +1,50 @@
+<div class="card root-wrapper">
+  <div class="card-header post-content-header" >
+    <div class="post-content-header-user">
+      <app-display-profile-image [url]="profileImage$ | async" diameter="60"></app-display-profile-image>
+      <span class="card-text">
+        <a href="">{{post?.userName}}</a>
+      </span>
+    </div>
+    <div class="post-content-header-category">
+      <span class="card-text">
+        <a href="">{{post?.categoryName}}</a>
+      </span>
+    </div>
+  </div>
+  <div class="card-body post-content-body">
+
+    <div class="post-content-body-title text-center">
+      <span>{{post?.title | uppercase}}</span>
+    </div>
+
+    <div class="post-content-body-content text-center">
+      <div>{{post?.content}}</div>
+    </div>
+
+  </div>
+  <div class="card-footer post-content-footer">
+    <div>
+      <app-like-button
+        [initialValue]="(loggedInUserIsLiked$ | async)  ? 1 : 0"
+        [ownerId]="post?.id"
+        [likeable]="likingService">
+      </app-like-button>
+      <span>{{counts?.countOfLikes}}</span>
+      <span><i class="fa-solid fa-eye"></i>{{counts?.countOfViews}}</span>
+    </div>
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa-solid fa-rotate"></i>takas istegi
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" data-toggle="modal" data-target="#exampleModal">Yeni urun ekle</button>
+          <button class="dropdown-item" data-toggle="modal" data-target="#swapRequest">Var olan urunu ekle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-swap-request [userId]="(loginResponse$ | async)?.id" [requestedId]="post?.id"></app-swap-request>

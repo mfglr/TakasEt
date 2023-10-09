@@ -11,7 +11,6 @@ namespace Service.CustomMailMessages
 
             Dictionary<string,string> replacedValues = new Dictionary<string,string>();
 			replacedValues.Add("{{username}}", user.UserName);
-            replacedValues.Add("{{token}}", user.ConfirmationEmailToken);
 
             this.SetBodyFromHtmlTemplate("HtmlTemplates/UserEmailConfirmaionMailTemplate.html", replacedValues);
 

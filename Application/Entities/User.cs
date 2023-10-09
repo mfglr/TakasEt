@@ -11,27 +11,21 @@ namespace Application.Entities
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
-        public string ConfirmationEmailToken { get; private set; }
-        public bool IsEmailConfirmed { get; private set; }
-        public UserRefreshToken UserRefreshToken { get; private set; }
+        public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<UserRole> Roles { get; }
 		public IReadOnlyCollection<Credit> Credits { get; }
 		public IReadOnlyCollection<Post> Posts { get; }
-		public IReadOnlyCollection<ProfileImage> ProfilePictures { get; }
+		public IReadOnlyCollection<ProfileImage> ProfileImages { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
-		public IReadOnlyCollection<UserPostLikes> LikedPosts { get; }
-		public IReadOnlyCollection<UserPostViews> ViewedPosts { get; }
-		public IReadOnlyCollection<Following> Followeds { get; }
-		public IReadOnlyCollection<Following> Followers { get; }
+        public IReadOnlyCollection<UserCommentLiking> LikedComments { get; }
+        public IReadOnlyCollection<UserPostLiking> LikedPosts { get; }
+		public IReadOnlyCollection<UserPostViewing> ViewedPosts { get; }
+		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
+		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
-
-
-		private List<INotification> _domainEvents = new List<INotification>();
-
 		public User(string email,string userName)
         {
-			ConfirmationEmailToken = Guid.NewGuid().ToString();
 			UserName = userName;
 			Email = email;
 			SetCreatedDate();
@@ -41,9 +35,6 @@ namespace Application.Entities
         {
             
         }
-        public void ConfirmEmail() {
-			IsEmailConfirmed = true;
-		}
 		
 		public decimal CalculateTotalCredit()
 		{
@@ -52,10 +43,6 @@ namespace Application.Entities
 			return totalCredit;
 		}
 
-		public void SetId()
-		{
-			Id = Guid.NewGuid();
-		}
 		public void SetCreatedDate()
 		{
 			CreatedDate = DateTime.UtcNow;
@@ -65,6 +52,7 @@ namespace Application.Entities
 			UpdatedDate = DateTime.UtcNow;
 		}
 
+		private List<INotification> _domainEvents = new List<INotification>();
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);

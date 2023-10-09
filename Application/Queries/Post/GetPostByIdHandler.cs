@@ -2,7 +2,6 @@
 using Application.Entities;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +10,13 @@ namespace Application.Queries
 {
     public class GetPostByIdHandler : IRequestHandler<GetPostByIdRequestDto, AppResponseDto>
     {
-		private readonly IMapper _mapper;
 		private readonly IRepository<Post> _posts;
+		private readonly IMapper _mapper;
 
-		public GetPostByIdHandler(IMapper mapper, IRepository<Post> posts)
+		public GetPostByIdHandler(IRepository<Post> posts, IMapper mapper)
 		{
-			_mapper = mapper;
 			_posts = posts;
+			_mapper = mapper;
 		}
 
 		public async Task<AppResponseDto> Handle(GetPostByIdRequestDto request, CancellationToken cancellationToken)
@@ -26,10 +25,9 @@ namespace Application.Queries
 				.DbSet
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.FirstOrDefaultAsync(post => post.Id == request.PostId);
-			
+				.FirstOrDefaultAsync(post => post.Id == request.PostId, cancellationToken);
 			if (post == null) throw new PostNotFoundException();
-			return AppResponseDto.Success(_mapper.Map<PostResponseDto>(post));
+			return AppResponseDto.Success( _mapper.Map<PostResponseDto>(post) );
         }
     }
 }

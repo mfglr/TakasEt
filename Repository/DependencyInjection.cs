@@ -14,10 +14,10 @@ namespace Repository
 	{
 		public static void AddSqlDbContext(this IServiceCollection serviceCollection)
 		{
-			Local local = serviceCollection.BuildServiceProvider().GetRequiredService<Local>();
+			Configuration configuration = serviceCollection.BuildServiceProvider().GetRequiredService<Configuration>();
 			serviceCollection.AddDbContext<AppDbContext>(optionsAction =>
 			{
-				optionsAction.UseSqlServer(local.SqlConnectionString);
+				optionsAction.UseSqlServer(configuration.Local.SqlConnectionString);
 			});
 			serviceCollection.AddIdentityCore<User>(opt =>
 			{

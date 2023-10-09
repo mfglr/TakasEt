@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -15,6 +14,7 @@ using Repository;
 using Repository.Contexts;
 using Service;
 using Azure.Storage.Blobs;
+using System.Text;
 
 var host = new HostBuilder()
 	.ConfigureAppConfiguration(config =>
@@ -24,7 +24,9 @@ var host = new HostBuilder()
 	})
 	.ConfigureServices(async (builder,services) =>
 	{
-		AddConfigurations(builder, services);
+		services.AddOptions();
+		var configuration = builder.Configuration.GetSection("Configuration").Get<Configuration>();
+		services.AddSingleton(configuration);
 		services.AddSqlDbContext();
 		services.AddApplication();
 		services.AddServices();
@@ -34,15 +36,12 @@ var host = new HostBuilder()
 			Local local = serviceProvider.GetRequiredService<Local>();
 			return new BlobServiceClient(local.AzureStorage);
 		});
-
-
-		var customTokenOptions = services.BuildServiceProvider().GetRequiredService<CustomTokenOptions>();
-		var signService = services.BuildServiceProvider().GetRequiredService<SignService>();
+		
 		services.AddSingleton(new TokenValidationParameters()
 		{
-			ValidIssuer = customTokenOptions.Issuer,
-			ValidAudience = customTokenOptions.Audiences[0],
-			IssuerSigningKey = signService.GetSymmetricSecurityKey(customTokenOptions.SecurityKey),
+			ValidIssuer = configuration.CustomTokenOptions.Issuer,
+			ValidAudience = configuration.CustomTokenOptions.Audiences[0],
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.CustomTokenOptions.SecurityKey)),
 			ValidateIssuer = true,
 			ValidateIssuerSigningKey = true,
 			ValidateAudience = true,
@@ -65,31 +64,6 @@ var host = new HostBuilder()
 			worker.UseMiddleware<ExceptionMiddleware>();
 			worker.UseMiddleware<AuthenticationMiddleware>();
 		}
-	)
-	.Build();
-
+)
+.Build();
 host.Run();
-
-
-
-void AddConfigurations(HostBuilderContext builder, IServiceCollection services)
-{
-	services.AddOptions();
-
-	services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("CustomTokenOptions"));
-	CustomTokenOptions customTokenOptions = services.BuildServiceProvider().GetRequiredService<IOptions<CustomTokenOptions>>().Value;
-	services.AddSingleton(customTokenOptions);
-
-	services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
-	List<Client> clients = services.BuildServiceProvider().GetRequiredService<IOptions<List<Client>>>().Value;
-	services.AddSingleton(clients);
-
-	services.Configure<Local>(builder.Configuration.GetSection("Local"));
-	Local local = services.BuildServiceProvider().GetRequiredService<IOptions<Local>>().Value;
-	services.AddSingleton(local);
-
-	services.Configure<RecursiveRepositoryOptions>(builder.Configuration.GetSection("RecursiveRepositoryOptions"));
-	RecursiveRepositoryOptions recursiveRepositoryOptions = services.BuildServiceProvider().GetRequiredService<IOptions<RecursiveRepositoryOptions>>().Value;
-	services.AddSingleton(recursiveRepositoryOptions);
-}
-

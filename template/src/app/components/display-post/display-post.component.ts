@@ -1,41 +1,34 @@
-import { Component, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { filter, mergeMap } from 'rxjs';
-import { PostService } from 'src/app/services/post.service';
-import { UserService } from 'src/app/services/user.service';
-import { isLogin } from 'src/app/states/user/selector';
-import { UserState } from 'src/app/states/user/state';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Observable, Subscription} from 'rxjs';
+import { PostResponse } from 'src/app/models/responses/post-response';
+import { PostImageService } from 'src/app/services/post-image.service';
+import { UserPostViewingService } from 'src/app/services/user-post-viewing.service';
 
 @Component({
   selector: 'app-display-post',
   templateUrl: './display-post.component.html',
   styleUrls: ['./display-post.component.scss']
 })
-export class DisplayPostComponent {
-  @Input() postId? : string;
-  @Input() userId? : string;
+export class DisplayPostComponent implements OnChanges,OnDestroy{
 
-  isLogin$ = this.store.select(isLogin).pipe(
-    filter(x => x)
-  )
+  @Input() post : PostResponse | null = null;
+  private viewPostSubscription? : Subscription
+  urls$? : Observable<string[]>;
 
   constructor(
-    private postService : PostService,
-    private store : Store<UserState>,
-    private userService : UserService
+    private postImageService : PostImageService,
+    private viewingService : UserPostViewingService
     ) {
     }
 
-  urls$ = this.isLogin$.pipe(
-    mergeMap( () => this.postService.getPostImagesByPostId(this.postId!))
-  )
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.post){
+      this.urls$ = this.postImageService.getPostImagesByPostId(this.post.id);
+      this.viewPostSubscription = this.viewingService.viewPost(this.post.id).subscribe();
+    }
+  }
 
-  post$ = this.isLogin$.pipe(
-    mergeMap( () => this.postService.getById(this.postId!))
-  )
-
-  profileImage$ = this.isLogin$.pipe(
-    mergeMap( () => this.userService.getActiveProfileImage(this.userId!) )
-  )
-
+  ngOnDestroy(): void {
+    this.viewPostSubscription?.unsubscribe();
+  }
 }

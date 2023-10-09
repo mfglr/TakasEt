@@ -12,13 +12,13 @@ namespace Service
 	public class AuthenticationService : IAuthenticationService
 	{
 		private readonly ITokenService _tokenService;
-		private readonly List<Client> _clients;
+		private readonly Configuration _configuration;
 		private readonly IRepository<UserRefreshToken> _userRefreshTokenRepository;
 
-		public AuthenticationService(ITokenService tokenService, List<Client> clients, IRepository<UserRefreshToken> userRefreshTokenRepository)
+		public AuthenticationService(ITokenService tokenService, Configuration configuration, IRepository<UserRefreshToken> userRefreshTokenRepository)
 		{
 			_tokenService = tokenService;
-			_clients = clients;
+			_configuration = configuration;
 			_userRefreshTokenRepository = userRefreshTokenRepository;
 		}
 
@@ -44,7 +44,7 @@ namespace Service
 
 		public ClientTokenDto CreateTokenByClient(ClientLoginDto client)
 		{
-			var avaibleClient = _clients.SingleOrDefault(x => x.Id == client.Id && x.Secret == client.Secret);
+			var avaibleClient = _configuration.Clients.SingleOrDefault(x => x.Id == client.Id && x.Secret == client.Secret);
 			if (avaibleClient == null) throw new ClientNotFoundException();
 			Token accessToken = _tokenService.CreateAccessTokenByClient(avaibleClient);
 			return new ClientTokenDto(accessToken.Value, accessToken.ExpirationDate);

@@ -28,6 +28,18 @@
     <None Update="Images\noImage.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Images\noProfileMan.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\noProfileWoman.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\PostImage\" />
+    <Folder Include="Queries\UserCommentLiking\" />
+    <Folder Include="Validators\UserCommentLike\" />
   </ItemGroup>
 
 </Project>

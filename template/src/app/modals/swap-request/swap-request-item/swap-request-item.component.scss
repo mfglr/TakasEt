@@ -1,0 +1,20 @@
+.root-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .image-wrapper{
+    .image{
+      width: 100px;
+      height: 100px;
+    }
+  }
+  .title-wrapper{
+    text-align: center;
+  }
+  .category-wrapper{
+
+  }
+}
+.selected{
+  background-color: rgb(160, 160, 160);
+}

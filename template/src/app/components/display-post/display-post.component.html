@@ -1,13 +1,8 @@
-<div class="row">
-  <div class="col-6">
-    <div class="card">
-      <div class="card-header" style="display: flex; align-items: center;">
-        <app-display-profile-image [url]="profileImage$ | async" diameter="60"></app-display-profile-image>
-        <span style="margin-left: 1rem;"><a href="">{{(post$ | async)?.userName}}</a></span>
-      </div>
-    </div>
+<div class="row root-wrapper">
+  <div class="col-6 post-content-wrapper">
+    <app-display-post-content [post]="post"></app-display-post-content>
   </div>
-  <div class="col-6">
+  <div class="col-6 post-images-wrapper">
     <app-display-post-images [urls]="(urls$ | async)"></app-display-post-images>
   </div>
 </div>

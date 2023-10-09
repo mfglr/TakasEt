@@ -17,7 +17,7 @@ namespace Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,7 +52,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppFiles");
+                    b.ToTable("AppFile");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("AppFile");
 
@@ -81,7 +81,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -117,7 +117,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("Application.Entities.Credit", b =>
@@ -148,34 +148,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Credits");
-                });
-
-            modelBuilder.Entity("Application.Entities.Following", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("FollowedId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FollowerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FollowedId");
-
-                    b.HasIndex("FollowerId");
-
-                    b.ToTable("Following");
+                    b.ToTable("Credit");
                 });
 
             modelBuilder.Entity("Application.Entities.Post", b =>
@@ -190,6 +163,9 @@ namespace Repository.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountOfImages")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -213,7 +189,34 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Post");
+                });
+
+            modelBuilder.Entity("Application.Entities.PostPostRequesting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RequestedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RequesterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestedId");
+
+                    b.HasIndex("RequesterId");
+
+                    b.ToTable("PostPostRequesting");
                 });
 
             modelBuilder.Entity("Application.Entities.Role", b =>
@@ -234,25 +237,25 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("64e5a80d-cf99-4f04-ba7f-44aed243c885"),
-                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5058),
+                            Id = new Guid("9dbcc1a1-2350-4f95-a7a1-3802818843fe"),
+                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3682),
                             Name = "client"
                         },
                         new
                         {
-                            Id = new Guid("a3abc9c0-f483-4069-9f39-e2d1a8de6739"),
-                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5061),
+                            Id = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
+                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3688),
                             Name = "user"
                         },
                         new
                         {
-                            Id = new Guid("fdd8270a-167d-4a06-b7f8-0b0dfffcfab4"),
-                            CreatedDate = new DateTime(2023, 10, 3, 13, 12, 50, 232, DateTimeKind.Utc).AddTicks(5071),
+                            Id = new Guid("a1adfeff-b017-4825-a595-1a691fef079a"),
+                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3689),
                             Name = "admin"
                         });
                 });
@@ -266,14 +269,7 @@ namespace Repository.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConfirmationEmailToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
@@ -289,9 +285,6 @@ namespace Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Gender")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
@@ -335,12 +328,60 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "605095b2-c70f-4f4d-b85c-b2adde79c0ec",
+                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3781),
+                            DateOfBirth = new DateTime(1998, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "thenqlv@outlook.com",
+                            EmailConfirmed = false,
+                            Gender = true,
+                            LastName = "Guler",
+                            LockoutEnabled = true,
+                            Name = "Furkan",
+                            NormalizedEmail = "THENQLV@OUTLOOK.COM",
+                            NormalizedUserName = "THENQLV",
+                            PasswordHash = "AQAAAAIAAYagAAAAED6NMviLL2arHtiYhoWGr4sgZ8Fshn5Zle16j09bcR35MFXSGYpE0wskAKdEiV6LYw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "MJ3TWU3F4CA3YUYFWTJMO3GXQUXGWT4F",
+                            TwoFactorEnabled = false,
+                            UserName = "thenqlv"
+                        });
+                });
+
+            modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("CommentId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCommentLiking");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostLikes", b =>
+            modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,10 +405,10 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPostLikes");
+                    b.ToTable("UserPostLiking");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostViews", b =>
+            modelBuilder.Entity("Application.Entities.UserPostViewing", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -391,7 +432,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPostViews");
+                    b.ToTable("UserPostViewing");
                 });
 
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
@@ -414,7 +455,7 @@ namespace Repository.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserRefreshTokens");
+                    b.ToTable("UserRefreshToken");
                 });
 
             modelBuilder.Entity("Application.Entities.UserRole", b =>
@@ -442,6 +483,42 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0064a172-4d58-4bdf-a2e7-a9c07928bcc9"),
+                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3746),
+                            RoleId = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
+                            UserId = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733")
+                        });
+                });
+
+            modelBuilder.Entity("Application.Entities.UserUserFollowing", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FollowedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("UserUserFollowing");
                 });
 
             modelBuilder.Entity("Application.Entities.PostImage", b =>
@@ -507,25 +584,6 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.Following", b =>
-                {
-                    b.HasOne("Application.Entities.User", "Followed")
-                        .WithMany("Followers")
-                        .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Application.Entities.User", "Follower")
-                        .WithMany("Followeds")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Followed");
-
-                    b.Navigation("Follower");
-                });
-
             modelBuilder.Entity("Application.Entities.Post", b =>
                 {
                     b.HasOne("Application.Entities.Category", "Category")
@@ -537,7 +595,7 @@ namespace Repository.Migrations
                     b.HasOne("Application.Entities.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -545,14 +603,45 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.User", b =>
+            modelBuilder.Entity("Application.Entities.PostPostRequesting", b =>
                 {
-                    b.HasOne("Application.Entities.Comment", null)
-                        .WithMany("UsersWhoLiked")
-                        .HasForeignKey("CommentId");
+                    b.HasOne("Application.Entities.Post", "Requested")
+                        .WithMany("Requesters")
+                        .HasForeignKey("RequestedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.Post", "Requester")
+                        .WithMany("Requesteds")
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Requested");
+
+                    b.Navigation("Requester");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostLikes", b =>
+            modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
+                {
+                    b.HasOne("Application.Entities.Comment", "Comment")
+                        .WithMany("UsersWhoLiked")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("LikedComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
                 {
                     b.HasOne("Application.Entities.Post", "Post")
                         .WithMany("UsersWhoLiked")
@@ -571,7 +660,7 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostViews", b =>
+            modelBuilder.Entity("Application.Entities.UserPostViewing", b =>
                 {
                     b.HasOne("Application.Entities.Post", "Post")
                         .WithMany("UsersWhoViewed")
@@ -614,7 +703,7 @@ namespace Repository.Migrations
 
                             b1.HasKey("UserRefreshTokenId");
 
-                            b1.ToTable("UserRefreshTokens");
+                            b1.ToTable("UserRefreshToken");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserRefreshTokenId");
@@ -643,6 +732,25 @@ namespace Repository.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserUserFollowing", b =>
+                {
+                    b.HasOne("Application.Entities.User", "Followed")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "Follower")
+                        .WithMany("Followeds")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Followed");
+
+                    b.Navigation("Follower");
                 });
 
             modelBuilder.Entity("Application.Entities.PostImage", b =>
@@ -683,6 +791,10 @@ namespace Repository.Migrations
 
                     b.Navigation("PostImages");
 
+                    b.Navigation("Requesteds");
+
+                    b.Navigation("Requesters");
+
                     b.Navigation("UsersWhoLiked");
 
                     b.Navigation("UsersWhoViewed");
@@ -702,6 +814,8 @@ namespace Repository.Migrations
                     b.Navigation("Followeds");
 
                     b.Navigation("Followers");
+
+                    b.Navigation("LikedComments");
 
                     b.Navigation("LikedPosts");
 

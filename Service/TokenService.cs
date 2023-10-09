@@ -6,19 +6,18 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Service
 {
     public class TokenService : ITokenService
 	{
-		private readonly CustomTokenOptions _customTokenOptions;
-		private readonly SignService _signService;
+		private readonly Configuration _configuration;
 		private readonly JwtSecurityTokenHandler _jwtHandler;
 
-		public TokenService(CustomTokenOptions customTokenOptions, SignService signService, JwtSecurityTokenHandler jwtHandler)
+		public TokenService(Configuration configuration, JwtSecurityTokenHandler jwtHandler)
 		{
-			_customTokenOptions = customTokenOptions;
-			_signService = signService;
+			_configuration = configuration;
 			_jwtHandler = jwtHandler;
 		}
 
@@ -59,11 +58,11 @@ namespace Service
 		
 		public Token CreateAccessTokenByClient(Client client)
 		{
-			var expirationOfAccessToken = DateTime.Now.AddMinutes(_customTokenOptions.ExprationOfAccessToken);
-			var securityKey = _signService.GetSymmetricSecurityKey(_customTokenOptions.SecurityKey);
+			var expirationOfAccessToken = DateTime.Now.AddMinutes(_configuration.CustomTokenOptions.ExprationOfAccessToken);
+			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.CustomTokenOptions.SecurityKey));
 			var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 			var jwtSecurityToken = new JwtSecurityToken(
-				issuer: _customTokenOptions.Issuer,
+				issuer: _configuration.CustomTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
 				notBefore: DateTime.Now,
 				claims: GetClaimsByClient(client),
@@ -75,14 +74,14 @@ namespace Service
 
 		public Token CreateAccessTokenByUser(User user)
 		{
-			var expirationOfAccessToken = DateTime.Now.AddMinutes(_customTokenOptions.ExprationOfAccessToken);
-			var securityKey = _signService.GetSymmetricSecurityKey(_customTokenOptions.SecurityKey);
+			var expirationOfAccessToken = DateTime.Now.AddMinutes(_configuration.CustomTokenOptions.ExprationOfAccessToken);
+			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.CustomTokenOptions.SecurityKey));
 			var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 			var jwtSecurityToken = new JwtSecurityToken(
-				issuer: _customTokenOptions.Issuer,
+				issuer: _configuration.CustomTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
 				notBefore: DateTime.Now,
-				claims: GetClaimsByUser(user, _customTokenOptions.Audiences),
+				claims: GetClaimsByUser(user, _configuration.CustomTokenOptions.Audiences),
 				signingCredentials: signingCredentials
 			);
 			var token = _jwtHandler.WriteToken(jwtSecurityToken);

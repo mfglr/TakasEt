@@ -1,0 +1,13 @@
+<div class="root-wrapper" [ngClass]="{'selected' : mode.currentIndex}" (click)="switch()">
+  <div class="image-wrapper">
+    <img [src]="imageUrl" alt="" class="image">
+  </div>
+  <div class="title-wrapper">
+    <span>{{post?.title}}</span>
+  </div>
+  <div class="category-wrapper">
+    <span>
+      <a href="">{{post?.categoryName}}</a>
+    </span>
+  </div>
+</div>

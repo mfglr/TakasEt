@@ -14,11 +14,9 @@ namespace Application.Commands
 	{
 		private readonly UserManager<User> _users;
 		private readonly IRepository<Comment> _comments;
-		private readonly RecursiveRepositoryOptions _option;
-		public RemoveUserCommandHandler(UserManager<User> users, RecursiveRepositoryOptions option, IRepository<Comment> comments)
+		public RemoveUserCommandHandler(UserManager<User> users, IRepository<Comment> comments)
 		{
 			_users = users;
-			_option = option;
 			_comments = comments;
 		}
 
@@ -27,7 +25,7 @@ namespace Application.Commands
 			var user = await _users.Users
 				.Include(x => x.Posts)
 				.ThenInclude(x => x.Comments)
-				.ThenIncludeChildrenByRecursive(_option.Depth)
+				.ThenIncludeChildrenByRecursive(Comment.Depth)
 				.SingleOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
 			if (user == null) throw new UserNotFoundException();
 			foreach (var post in user.Posts)

@@ -13,15 +13,11 @@ namespace Application.Commands
 	{
 		private readonly IRepository<Post> _posts;
 		private readonly IRepository<Comment> _comments;
-		private readonly RecursiveRepositoryOptions _option;
-		private readonly LoggedInUser _loggedInUser;
 
-		public RemovePostCommandHandler(IRepository<Post> post, RecursiveRepositoryOptions option, IRepository<Comment> comments, LoggedInUser loggedInUser)
+		public RemovePostCommandHandler(IRepository<Post> post, IRepository<Comment> comments)
 		{
 			_posts = post;
-			_option = option;
 			_comments = comments;
-			_loggedInUser = loggedInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(RemovePostRequestDto request, CancellationToken cancellationToken)
@@ -30,10 +26,8 @@ namespace Application.Commands
 				.DbSet
 				.Include(x => x.User)
 				.Include(x => x.Comments)
-				.ThenIncludeChildrenByRecursive(_option.Depth)
+				.ThenIncludeChildrenByRecursive(Comment.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.PostId, cancellationToken);
-			if (post == null) throw new PostNotFoundException();
-			if (post.User.Id != _loggedInUser.UserId) throw new UnmatchedRequestException("Remove-Post");
 			_comments.DbSet.RemoveRangeRecursive(post.Comments);
 			_posts.DbSet.Remove(post);
 			return AppResponseDto.Success();

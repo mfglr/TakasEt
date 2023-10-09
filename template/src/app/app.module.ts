@@ -13,8 +13,13 @@ import { StoreModule } from '@ngrx/store';
 import { userReducer } from './states/user/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffect } from './states/user/effect';
-import { DisplayPostImagesComponent } from './shareds/display-post-images/display-post-images.component';
+import { DisplayPostImagesComponent } from './components/display-post/display-post-images/display-post-images.component';
 import { DisplayProfileImageComponent } from './shareds/display-profile-image/display-profile-image.component';
+import { AppHubConnectionService } from './services/app-hub-connection.service';
+import { DisplayPostContentComponent } from './components/display-post/display-post-content/display-post-content.component';
+import { LikeButtonComponent } from './shareds/like-button/like-button.component';
+import { SwapRequestComponent } from './modals/swap-request/swap-request.component';
+import { SwapRequestItemComponent } from './modals/swap-request/swap-request-item/swap-request-item.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,11 @@ import { DisplayProfileImageComponent } from './shareds/display-profile-image/di
     CategoryInputComponent,
     CreatePostComponent,
     DisplayPostImagesComponent,
-    DisplayProfileImageComponent
+    DisplayProfileImageComponent,
+    DisplayPostContentComponent,
+    LikeButtonComponent,
+    SwapRequestComponent,
+    SwapRequestItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +45,7 @@ import { DisplayProfileImageComponent } from './shareds/display-profile-image/di
     StoreModule.forFeature("userStoreSlice" , userReducer),
     EffectsModule.forRoot([UserEffect])
   ],
-  providers: [],
+  providers: [AppHubConnectionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

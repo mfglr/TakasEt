@@ -23,7 +23,7 @@ namespace Application.Commands
 
 		public async Task<AppResponseDto> Handle(AddPostRequestDto request, CancellationToken cancellationToken)
 		{
-			var post = new Post(request.UserId,request.Title, request.Content, request.CategoryId);
+			var post = new Post(request.UserId,request.Title, request.Content, request.CategoryId,request.CountOfImages);
 			var result = await _posts.DbSet.AddAsync(post,cancellationToken);
 			var extentions = request.Extentions.Split(',');
 			var list = extentions.Zip(request.Streams, (extention, stream) => new { extention, stream });

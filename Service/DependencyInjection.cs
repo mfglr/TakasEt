@@ -9,12 +9,10 @@ namespace Service
 		public static void AddServices(this IServiceCollection services)
 		{
 			services.AddScoped<ISmtpService, SmtpService>();
-			services.AddSingleton(new SignService());
 			services.AddSingleton(new JwtSecurityTokenHandler());
 			services.AddSingleton<ITokenService, TokenService>();
 			services.AddScoped<IAuthenticationService, AuthenticationService>();
-			services.AddScoped<IBlobService,BlobService>();
-			services.AddSingleton<IRoleService, RoleService>();
+			services.AddScoped<IBlobService,AzureBlobService>();
 			services.AddTransient<IFileWriterService, FileWriterService>();
 		}
     }

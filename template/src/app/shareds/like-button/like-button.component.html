@@ -1,0 +1,8 @@
+<span (click)="switch()">
+  <ng-container>
+    <i *ngIf="currentValue; else template" class="fa-solid fa-heart" style="color:red;"></i>
+  </ng-container>
+  <ng-template #template>
+    <i class="fa-regular fa-heart" style="color:black;"></i>
+  </ng-template>
+</span>

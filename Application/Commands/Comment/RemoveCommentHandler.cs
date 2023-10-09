@@ -12,18 +12,16 @@ namespace Application.Commands
 	public class RemoveCommentHandler : IRequestHandler<RemoveCommentRequestDto, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
-		private readonly RecursiveRepositoryOptions _option;
 
-		public RemoveCommentHandler(IRepository<Comment> comments, RecursiveRepositoryOptions option)
+		public RemoveCommentHandler(IRepository<Comment> comments)
 		{
 			_comments = comments;
-			_option = option;
 		}
 
 		public async Task<AppResponseDto> Handle(RemoveCommentRequestDto request, CancellationToken cancellationToken)
 		{
 			var comment = await _comments.DbSet
-				.IncludeChildrenByRecursive(_option.Depth)
+				.IncludeChildrenByRecursive(Comment.Depth)
 				.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 			if (comment == null) throw new CommentNotFoundException();
 			_comments.DbSet.RemoveRecursive(comment);
