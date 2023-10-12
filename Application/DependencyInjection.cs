@@ -13,7 +13,7 @@ namespace Application
 		{
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-			services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AppPipeline<,>));
+			services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AppPipelineBehavior<,>));
 			services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(),ServiceLifetime.Scoped);
 			services.AddSingleton(new LoggedInUser());
 		}

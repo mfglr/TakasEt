@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-    public class FollowUserCommandHandler : IRequestHandler<FollowUserRequestDto, AppResponseDto>
+    public class FollowUserCommandHandler : IRequestHandler<FollowUser, AppResponseDto>
     {
 
 
@@ -20,7 +20,7 @@ namespace Application.Commands
 			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(FollowUserRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(FollowUser request, CancellationToken cancellationToken)
         {
             var record = await _followeds.DbSet.AnyAsync(
                 x => x.FollowerId == _loggedInUser.UserId && x.FollowedId == request.FollowedId,

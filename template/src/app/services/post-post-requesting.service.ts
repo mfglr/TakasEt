@@ -10,9 +10,9 @@ export class PostPostRequestingService {
     private appHttpClient : AppHttpClientService
   ) { }
 
-  addSwapRequests(requestedId : string, requesterIds : string[]){
+  addRequestings(requestedId : string, requesterIds : string[]){
     return this.appHttpClient.post(
-      "post-post-requesting/add-swap-requests",
+      "requesting/add-requestings",
       {requestedId : requestedId , requesterIds : requesterIds}
     );
   }

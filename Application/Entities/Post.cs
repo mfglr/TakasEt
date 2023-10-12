@@ -16,9 +16,8 @@
         public IReadOnlyCollection<PostImage> PostImages { get; }
         public IReadOnlyCollection<PostPostRequesting> Requesteds { get; }//talep ettikleri
 		public IReadOnlyCollection<PostPostRequesting> Requesters { get; }//telap edenler
-
-
-		public Post(Guid userId, string title, string content, Guid categoryId,int countOfImages)
+        public IReadOnlyCollection<UserPostFollowing> UsersFollowingThePost { get; }
+        public Post(Guid userId, string title, string content, Guid categoryId,int countOfImages)
         {
             UserId = userId;
 			CategoryId = categoryId;

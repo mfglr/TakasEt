@@ -39,6 +39,7 @@
   <ItemGroup>
     <Folder Include="Commands\PostImage\" />
     <Folder Include="Queries\UserCommentLiking\" />
+    <Folder Include="Validators\AppFile\" />
     <Folder Include="Validators\UserCommentLike\" />
   </ItemGroup>
 

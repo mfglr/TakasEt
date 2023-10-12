@@ -243,19 +243,19 @@ namespace Repository.Migrations
                         new
                         {
                             Id = new Guid("9dbcc1a1-2350-4f95-a7a1-3802818843fe"),
-                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3682),
+                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1154),
                             Name = "client"
                         },
                         new
                         {
                             Id = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
-                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3688),
+                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1158),
                             Name = "user"
                         },
                         new
                         {
                             Id = new Guid("a1adfeff-b017-4825-a595-1a691fef079a"),
-                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3689),
+                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1159),
                             Name = "admin"
                         });
                 });
@@ -336,7 +336,7 @@ namespace Repository.Migrations
                             Id = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "605095b2-c70f-4f4d-b85c-b2adde79c0ec",
-                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3781),
+                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1277),
                             DateOfBirth = new DateTime(1998, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thenqlv@outlook.com",
                             EmailConfirmed = false,
@@ -379,6 +379,38 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserCommentLiking");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserPostFollowing", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("UserPostFollowing");
                 });
 
             modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
@@ -488,7 +520,7 @@ namespace Repository.Migrations
                         new
                         {
                             Id = new Guid("0064a172-4d58-4bdf-a2e7-a9c07928bcc9"),
-                            CreatedDate = new DateTime(2023, 10, 9, 21, 50, 1, 710, DateTimeKind.Utc).AddTicks(3746),
+                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1232),
                             RoleId = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
                             UserId = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733")
                         });
@@ -641,6 +673,29 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Application.Entities.UserPostFollowing", b =>
+                {
+                    b.HasOne("Application.Entities.Post", "Post")
+                        .WithMany("UsersFollowingThePost")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("PostsFollowedByTheUser")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", null)
+                        .WithMany("TheUserSPostsFollowedByUsers")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
                 {
                     b.HasOne("Application.Entities.Post", "Post")
@@ -766,7 +821,7 @@ namespace Repository.Migrations
             modelBuilder.Entity("Application.Entities.ProfileImage", b =>
                 {
                     b.HasOne("Application.Entities.User", "User")
-                        .WithMany("ProfilePictures")
+                        .WithMany("ProfileImages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -795,6 +850,8 @@ namespace Repository.Migrations
 
                     b.Navigation("Requesters");
 
+                    b.Navigation("UsersFollowingThePost");
+
                     b.Navigation("UsersWhoLiked");
 
                     b.Navigation("UsersWhoViewed");
@@ -821,9 +878,13 @@ namespace Repository.Migrations
 
                     b.Navigation("Posts");
 
-                    b.Navigation("ProfilePictures");
+                    b.Navigation("PostsFollowedByTheUser");
+
+                    b.Navigation("ProfileImages");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("TheUserSPostsFollowedByUsers");
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();

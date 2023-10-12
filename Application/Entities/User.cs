@@ -11,7 +11,10 @@ namespace Application.Entities
 		public string? LastName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
-        public UserRefreshToken UserRefreshToken { get; }
+		public DateTime CreatedDate { get; private set; }
+		public DateTime? UpdatedDate { get; private set; }
+
+		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<UserRole> Roles { get; }
 		public IReadOnlyCollection<Credit> Credits { get; }
 		public IReadOnlyCollection<Post> Posts { get; }
@@ -22,8 +25,8 @@ namespace Application.Entities
 		public IReadOnlyCollection<UserPostViewing> ViewedPosts { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
-		public DateTime CreatedDate { get; private set; }
-		public DateTime? UpdatedDate { get; private set; }
+        public IReadOnlyCollection<UserPostFollowing> TheUserSPostsFollowedByUsers { get; }
+        public IReadOnlyCollection<UserPostFollowing> PostsFollowedByTheUser { get; }
 		public User(string email,string userName)
         {
 			UserName = userName;

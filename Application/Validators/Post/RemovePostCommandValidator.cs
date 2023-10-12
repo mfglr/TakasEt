@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Validators
 {
-    public class RemovePostCommandValidator : AbstractValidator<RemovePostRequestDto>
+    public class RemovePostCommandValidator : AbstractValidator<RemovePost>
     {
 		private readonly LoggedInUser _loggedInUser;
 		private readonly IRepository<Post> _posts;

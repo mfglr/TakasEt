@@ -18,7 +18,7 @@ namespace WebApi.Controllers
 		
 		[Authorize(Roles = "user")]
 		[HttpPost("user-user-viewing/view-post")]
-		public async Task<AppResponseDto> ViewPost(ViewPostRequestDto request)
+		public async Task<AppResponseDto> ViewPost(ViewPost request)
 		{
 			return await _sender.Send(request);
 		}

@@ -18,7 +18,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPost("category/add-category")]
-		public async Task<AppResponseDto> AddCategory(AddCategoryRequestDto request)
+		public async Task<AppResponseDto> AddCategory(AddCategory request)
 		{
 			return await _sender.Send(request);
 		}
@@ -27,7 +27,7 @@ namespace WebApi.Controllers
 		[HttpGet("category/filter-categories/{key}")]
 		public async Task<AppResponseDto> FilterCategories(string key)
 		{
-			return await _sender.Send(new FilterCategoriesRequestDto(key));
+			return await _sender.Send(new FilterCategories(key));
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { login, loginSuccess } from "./actions";
+import { login, loginFailedFromLocalStorage, loginFromLocalStorage, loginSuccess } from "./actions";
 import { UserService } from "src/app/services/user.service";
 import { map, mergeMap, of} from "rxjs";
 import { Injectable } from "@angular/core";
@@ -21,6 +21,17 @@ export class UserEffect{
           )
         }
       )
+    )
+  })
+
+  loginFromLocalStorage$ = createEffect( () => {
+    return this.actions.pipe(
+      ofType(loginFromLocalStorage),
+      mergeMap( () => {
+        var loginResponse = localStorage.getItem("loginResponse");
+        if(loginResponse) return of( loginSuccess({payload : JSON.parse(loginResponse)}) )
+        else return of( loginFailedFromLocalStorage() )
+      })
     )
   })
 

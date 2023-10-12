@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, first, from, mergeMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/responses/login-response';
 import { UserResponse } from '../models/responses/user-response';
 import { AppHttpClientService } from './app-http-client.service';
 import { NoContentResponse } from '../models/responses/no-content-response';
-import { AppFileService } from './app-file.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,6 @@ export class UserService {
 
   constructor(
     private appHttpClient: AppHttpClientService,
-    private appFileService : AppFileService
     ) {
   }
 
@@ -23,6 +21,10 @@ export class UserService {
 
   getUserByUserName(userName : string) : Observable<UserResponse>{
     return this.appHttpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
+  }
+
+  getUser(userId : string) : Observable<UserResponse>{
+    return this.appHttpClient.get<UserResponse>(`user/get-user/${userId}`);
   }
 
   addProfileImage(formData:FormData) : Observable<NoContentResponse> {

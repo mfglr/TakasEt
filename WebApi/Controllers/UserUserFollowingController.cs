@@ -17,31 +17,38 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpPost("user-user-following/followed-user")]
-		public async Task<AppResponseDto> AddFollowed(FollowUserRequestDto request)
+		[HttpPost("following/follow-user")]
+		public async Task<AppResponseDto> FollowUser(FollowUser request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("user-user-following/unfollowed-user")]
-		public async Task<AppResponseDto> RemoveFollowed(UnfollowUserRequestDto request)
+		[HttpDelete("following/unfollow-user")]
+		public async Task<AppResponseDto> RemoveFollowed(UnfollowUser request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user-user-following/get-followeds-by-user-id/{userId}")]
-		public async Task<AppResponseDto> GetFollowedsById(Guid userId)
+		[HttpGet("following/get-followeds/{userId}")]
+		public async Task<AppResponseDto> GetFolloweds(Guid userId)
 		{
-			return await _sender.Send(new GetFollowedsByUserIdRequestDto(userId));
+			return await _sender.Send(new GetFolloweds(userId));
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user-user-following/get-followers-by-user-id/{userId}")]
-		public async Task<AppResponseDto> GetFollowersById(Guid userId)
+		[HttpGet("following/get-followers/{userId}")]
+		public async Task<AppResponseDto> GetFollowers(Guid userId)
 		{
-			return await _sender.Send(new GetFollowersByUserIdRequestDto(userId));
+			return await _sender.Send(new GetFollowers(userId));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("following/is-followed/{userId}")]
+		public async Task<AppResponseDto> IsFollowed(Guid userId)
+		{
+			return await _sender.Send(new IsFollowed(userId));
 		}
 	}
 }

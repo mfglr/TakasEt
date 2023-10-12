@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-    public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserNameRequestDto, AppResponseDto>
+    public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserName, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
 
@@ -16,13 +16,14 @@ namespace Application.Queries
 			_userManager = userManager;
         }
 
-        public async Task<AppResponseDto> Handle(GetUserByUserNameRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(GetUserByUserName request, CancellationToken cancellationToken)
         {
             var user = await _userManager
                 .Users
                 .Include (x => x.Followers)
                 .Include(x => x.Followeds)
-                .Select(x => new UserResponseDto()
+				.Include(x => x.Posts)
+				.Select(x => new UserResponseDto()
                 {
                     Id = x.Id,
                     CreatedDate = x.CreatedDate,
@@ -32,7 +33,8 @@ namespace Application.Queries
                     Email = x.Email!,
                     UserName = x.UserName!,
                     CountOfFolloweds = x.Followeds.Count(),
-                    CountOfFollowers = x.Followers.Count()
+                    CountOfFollowers = x.Followers.Count(),
+                    CountOfPosts = x.Posts.Count()
                 })
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
             if (user == null) throw new UserNotFoundException();

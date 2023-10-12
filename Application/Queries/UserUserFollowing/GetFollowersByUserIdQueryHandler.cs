@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-    public class GetFollowersByUserIdQueryHandler : IRequestHandler<GetFollowersByUserIdRequestDto, AppResponseDto>
+    public class GetFollowersByUserIdQueryHandler : IRequestHandler<GetFollowers, AppResponseDto>
     {
 
         private readonly IRepository<UserUserFollowing> _followings;
@@ -16,7 +16,7 @@ namespace Application.Queries
             _followings = followings;
         }
 
-        public async Task<AppResponseDto> Handle(GetFollowersByUserIdRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(GetFollowers request, CancellationToken cancellationToken)
         {
             var users = await _followings
                 .DbSet

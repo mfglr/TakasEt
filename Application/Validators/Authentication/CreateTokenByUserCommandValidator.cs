@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class CreateTokenByUserCommandValidator : AbstractValidator<CreateTokenByUserRequestDto>
+    public class CreateTokenByUserCommandValidator : AbstractValidator<CreateTokenByUser>
     {
         public CreateTokenByUserCommandValidator()
         {

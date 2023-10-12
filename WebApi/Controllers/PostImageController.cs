@@ -17,18 +17,34 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post-image/get-post-images-by-post-id/{postId}")]
-		public async Task GetPostImagesByPostId(Guid postId)
+		[HttpGet("post-image/get-post-images/{postId}")]
+		public async Task GetPostImages(Guid postId)
 		{
-			var bytes = await _sender.Send(new GetPostImagesByPostIdRequestDto(postId));
+			var bytes = await _sender.Send(new GetPostImages(postId));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post-image/get-first-image-of-posts-by-user-id/{userId}")]
+		[HttpGet("post-image/get-first-images-of-posts-by-user-id/{userId}")]
 		public async Task GetFirstImageOfPostsByUserId(Guid userId)
 		{
-			var bytes = await _sender.Send(new GetFirstImageOfPostsByUserIdRequestDto(userId));
+			var bytes = await _sender.Send(new GetFirstImagesOfPostsByUserId(userId));
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post-image/get-first-images-of-posts-by-user-name/{userName}")]
+		public async Task GetFirstImageOfPostsByUserName(string userName)
+		{
+			var bytes = await _sender.Send(new GetFirstImagesOfPostsByUserName(userName));
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post-image/get-first-images-of-posts-except-reuqesters/{postId}")]
+		public async Task GetFirstImageOfPostsExceptReuqesters(Guid postId)
+		{
+			var bytes = await _sender.Send(new GetFirstImagesOfPostsExceptRequesters(postId));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 	}

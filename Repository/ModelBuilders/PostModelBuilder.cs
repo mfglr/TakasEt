@@ -44,6 +44,12 @@ namespace Repository.ModelBuilders
 				.HasForeignKey(x => x.RequesterId)
 				.OnDelete(DeleteBehavior.NoAction);
 
+			builder
+				.HasMany(x => x.UsersFollowingThePost)
+				.WithOne(x => x.Post)
+				.HasForeignKey (x => x.PostId)
+				.OnDelete (DeleteBehavior.NoAction);
+
 		}
 	}
 }

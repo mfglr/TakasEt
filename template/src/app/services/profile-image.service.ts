@@ -16,12 +16,22 @@ export class ProfileImageService {
 
     getActiveProfileImage(userId : string) : Observable<string>{
       return this.appFileService.createUrlsFromBlob(
-        this.appHttpClient.getBlob(`profile-image/get-active-profile-image-by-user-id/${userId}`)
+        this.appHttpClient.getBlob(`profile-image/get-active-profile-image/${userId}`)
       ).pipe(
         mergeMap( (urls) => from(urls) ),
         first()
       )
     }
+
+    getActiveProfileImageByUserName(userName : string) : Observable<string>{
+      return this.appFileService.createUrlsFromBlob(
+        this.appHttpClient.getBlob(`profile-image/get-active-profile-image-by-user-name/${userName}`)
+      ).pipe(
+        mergeMap( (urls) => from(urls) ),
+        first()
+      )
+    }
+
 
     addProfileImage(formData : FormData) : Observable<NoContentResponse>{
       return this.appHttpClient.post<NoContentResponse>("profile-image/add-profile-image",formData);

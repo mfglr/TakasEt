@@ -17,17 +17,17 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpPost("post-post-requesting/add-swap-requests")]
-		public async Task<AppResponseDto> AddSwapRequests(AddSwapRequestsRequestDto request)
+		[HttpPost("requesting/add-requestings")]
+		public async Task<AppResponseDto> AddRequestings(AddRequestings request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post-post-requesting/get-requester-posts-by-post-id/{postId}")]
-		public async Task<AppResponseDto> GetRequesterPostsByPostId(Guid postId)
+		[HttpGet("requesting/get-requesters/{postId}")]
+		public async Task<AppResponseDto> GetRequesters(Guid postId)
 		{
-			return await _sender.Send(new GetRequesterPostsRequestDto(postId));
+			return await _sender.Send(new GetRequesters(postId));
 		}
 	}
 }

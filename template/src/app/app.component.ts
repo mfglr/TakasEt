@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { UserState } from './states/user/state';
 import { Store } from '@ngrx/store';
-import { isLogin } from './states/user/selector';
+import { getLoginResponse, isLogin } from './states/user/selector';
 import { PostService } from './services/post.service';
+import { loginFromLocalStorage } from './states/user/actions';
+import { filter, map, mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,24 +12,23 @@ import { PostService } from './services/post.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
-  urls : string[] = [
-    "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=600",
-    "https://media-cdn.tripadvisor.com/media/photo-s/1d/8a/28/fc/dr.jpg"
-  ]
-
-
-  imageUrl : string =  "https://media-cdn.tripadvisor.com/media/photo-s/1d/8a/28/fc/dr.jpg"
-  private postId = "16aa2259-44a1-4aaf-a070-df3c1e998e9d";
+  private postId = "7abbd9b4-4033-4940-8e2d-1ff9c97f7e19";
   isLogin$ = this.store.select(isLogin)
 
-  post$ = this.postService.getById(this.postId);
-
+  userId$ =  this.isLogin$.pipe(
+    filter(x => x),
+    mergeMap( () => this.store.select(getLoginResponse)),
+    map(x => x!.id)
+  )
   constructor(
     private store : Store<UserState>,
-    private postService : PostService
+    private postService : PostService,
+
     ) {
     }
 
     ngOnInit(){
+      this.store.dispatch(loginFromLocalStorage());
+
     }
 }

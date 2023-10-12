@@ -17,24 +17,24 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpPost("user-post-like/like-post")]
-		public async Task<AppResponseDto> LikePost(LikePostRequestDto request)
+		[HttpPost("user-post-liking/like-post")]
+		public async Task<AppResponseDto> LikePost(LikePost request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("user-post-like/unlike-post/{postId}")]
+		[HttpDelete("user-post-liking/unlike-post/{postId}")]
 		public async Task<AppResponseDto> UnlikePost(Guid postId)
 		{
-			return await _sender.Send(new UnlikePostRequestDto(postId));
+			return await _sender.Send(new UnLikePost(postId));
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user-post-like/is-liked-logged-in-user/{postId}")]
-		public async Task<AppResponseDto> IsLikedLoggedInUser(Guid postId)
+		[HttpGet("user-post-liking/is-liked-logged-in-user-the-post/{postId}")]
+		public async Task<AppResponseDto> IsLikedLoggedInUserThePost(Guid postId)
 		{
-			return await _sender.Send(new IsLikedLoggedInUserPostRequestDto(postId));
+			return await _sender.Send(new IsLikedLoggedInUserThePost(postId));
 		}
 	}
 }

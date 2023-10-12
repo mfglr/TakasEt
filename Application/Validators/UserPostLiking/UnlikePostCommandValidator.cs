@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class UnlikePostCommandValidator : AbstractValidator<UnlikePostRequestDto>
+    public class UnlikePostCommandValidator : AbstractValidator<UnLikePost>
     {
         public UnlikePostCommandValidator()
         {

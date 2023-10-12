@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemovePostCommandHandler : IRequestHandler<RemovePostRequestDto, AppResponseDto>
+	public class RemovePostCommandHandler : IRequestHandler<RemovePost, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
 		private readonly IRepository<Comment> _comments;
@@ -20,7 +20,7 @@ namespace Application.Commands
 			_comments = comments;
 		}
 
-		public async Task<AppResponseDto> Handle(RemovePostRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemovePost request, CancellationToken cancellationToken)
 		{
 			var post = await _posts
 				.DbSet

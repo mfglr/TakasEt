@@ -1,9 +1,9 @@
 ﻿using Application.Dtos;
 using FluentValidation;
 
-namespace Application.Validators.PostImage
+namespace Application.Validators
 {
-    public class GetFirstImageOfPostsByUserIdQueryValidator : AbstractValidator<GetFirstImageOfPostsByUserIdRequestDto>
+    public class GetFirstImageOfPostsByUserIdQueryValidator : AbstractValidator<GetFirstImagesOfPostsByUserId>
 	{
         public GetFirstImageOfPostsByUserIdQueryValidator()
         {

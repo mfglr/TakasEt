@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Commands
 {
-    public class SignUpCommandHandler : IRequestHandler<SignUpRequestDto, AppResponseDto>
+    public class SignUpCommandHandler : IRequestHandler<SignUp, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace Application.Commands
             _configuration = configuration;
         }
 
-        public async Task<AppResponseDto> Handle(SignUpRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(SignUp request, CancellationToken cancellationToken)
         {
             User user = new User(request.Email, request.UserName);
             var result = await _userManager.CreateAsync(user, request.Password);

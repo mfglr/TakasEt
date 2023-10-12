@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class LIkePostCommandValidator : AbstractValidator<LikePostRequestDto>
+    public class LIkePostCommandValidator : AbstractValidator<LikePost>
     {
         public LIkePostCommandValidator()
         {

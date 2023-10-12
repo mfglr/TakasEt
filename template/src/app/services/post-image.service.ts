@@ -13,11 +13,27 @@ export class PostImageService {
     private appFileService : AppFileService
     ) { }
 
-  getPostImagesByPostId(postId : string) : Observable<string[]>{
-    return this.appFileService.createUrlsFromBlob(this.appHttpClient.getBlob(`post-image/get-post-images-by-post-id/${postId}`))
+  getPostImages(postId : string) : Observable<string[]>{
+    return this.appFileService.createUrlsFromBlob(
+      this.appHttpClient.getBlob(`post-image/get-post-images/${postId}`)
+    )
   }
 
-  getFirsImagesOfPostByUserId(userId : string) : Observable<string[]>{
-    return this.appFileService.createUrlsFromBlob(this.appHttpClient.getBlob(`post-image/get-first-image-of-posts-by-user-id/${userId}`))
+  getFirsImageOfPostsByUserId(userId : string) : Observable<string[]>{
+    return this.appFileService.createUrlsFromBlob(
+      this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-by-user-id/${userId}`)
+    )
+  }
+
+  getFirsImageOfPostsByUserName(userName : string) : Observable<string[]>{
+    return this.appFileService.createUrlsFromBlob(
+      this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-by-user-name/${userName}`)
+    )
+  }
+
+  getFirstImageOfPostsExceptReuqesters(postId : string) : Observable<string[]>{
+    return this.appFileService.createUrlsFromBlob(
+      this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-except-reuqesters/${postId}`)
+    );
   }
 }

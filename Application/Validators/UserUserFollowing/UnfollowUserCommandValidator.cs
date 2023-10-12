@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class UnfollowUserCommandValidator : AbstractValidator<UnfollowUserRequestDto>
+    public class UnfollowUserCommandValidator : AbstractValidator<UnfollowUser>
     {
         public UnfollowUserCommandValidator()
         {

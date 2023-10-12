@@ -18,16 +18,24 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPost("profile-image/add-profile-image")]
-		public async Task<AppResponseDto> AddProfileImageByUserId([FromForm] IFormCollection form)
+		public async Task<AppResponseDto> AddProfileImage([FromForm] IFormCollection form)
 		{
-			return await _sender.Send(new AddProfileImageRequestDto(form));
+			return await _sender.Send(new AddProfileImage(form));
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("profile-image/get-active-profile-image-by-user-id/{userId}")]
-		public async Task GetActiveProfileImageByUserId(Guid userId)
+		[HttpGet("profile-image/get-active-profile-image/{userId}")]
+		public async Task GetActiveProfileImage(Guid userId)
 		{
-			var bytes = await _sender.Send(new GetActiveProfileImageByIdRequestDto(userId));
+			var bytes = await _sender.Send(new GetActiveProfileImage(userId));
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("profile-image/get-active-profile-image-by-user-name/{userName}")]
+		public async Task GetActiveProfileImageByUserName(string userName)
+		{
+			var bytes = await _sender.Send(new GetActiveProfileImageByUserName(userName));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 	}

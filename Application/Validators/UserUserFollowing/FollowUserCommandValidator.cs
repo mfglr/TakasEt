@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class FollowUserCommandValidator : AbstractValidator<FollowUserRequestDto>
+    public class FollowUserCommandValidator : AbstractValidator<FollowUser>
     {
 
 		private readonly LoggedInUser _loggedInUser;

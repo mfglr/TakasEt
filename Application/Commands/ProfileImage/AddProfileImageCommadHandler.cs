@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-    public class AddProfileImageCommadHandler : IRequestHandler<AddProfileImageRequestDto, AppResponseDto>
+    public class AddProfileImageCommadHandler : IRequestHandler<AddProfileImage, AppResponseDto>
     {
 
         private readonly IBlobService _blobService;
@@ -23,7 +23,7 @@ namespace Application.Commands
             _loggedInUser = loggedInUser;
         }
 
-        public async Task<AppResponseDto> Handle(AddProfileImageRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(AddProfileImage request, CancellationToken cancellationToken)
         {
             var prevProfileImage = await _profileImages
                 .DbSet

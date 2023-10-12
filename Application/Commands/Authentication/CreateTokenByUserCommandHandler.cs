@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-    public class CreateTokenByUserCommandHandler : IRequestHandler<CreateTokenByUserRequestDto, AppResponseDto>
+    public class CreateTokenByUserCommandHandler : IRequestHandler<CreateTokenByUser, AppResponseDto>
 	{
 
 		private readonly IAuthenticationService _authenticationService;
@@ -20,7 +20,7 @@ namespace Application.Commands
 			_userManager = userManager;
 		}
 
-		public async Task<AppResponseDto> Handle(CreateTokenByUserRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(CreateTokenByUser request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager
 				.Users
