@@ -15,10 +15,6 @@ export class UserService {
     ) {
   }
 
-  login(email : string,password : string): Observable<LoginResponse>{
-    return this.appHttpClient.post<LoginResponse>("login",{email : email,password : password});
-  }
-
   getUserByUserName(userName : string) : Observable<UserResponse>{
     return this.appHttpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
   }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetUserQueryHandler : IRequestHandler<GetUser,AppResponseDto>
+    public class GetUserQueryHandler : IRequestHandler<GetUser,AppResponseDto>
 	{
 		private readonly IRepository<User> _users;
 

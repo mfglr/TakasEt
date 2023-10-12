@@ -6,7 +6,7 @@ import { DisplayPostContentComponent } from './pages/display-post-page/display-p
 const routes: Routes = [
   {path : 'profile',component : ProfileComponent},
   {path : 'profile/:id',component : ProfileComponent},
-  {path : 'diplay-post',component : DisplayPostContentComponent}
+  {path : 'diplay-post/:id',component : DisplayPostContentComponent}
 ];
 
 @NgModule({

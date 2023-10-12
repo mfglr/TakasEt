@@ -24,6 +24,7 @@ import { ProfileContentComponent } from './pages/profile/profile-content/profile
 import { ProfileComponent } from './pages/profile/profile.component';
 import { DisplayPostPageComponent } from './pages/display-post-page/display-post-page.component';
 import { PostListComponent } from './shareds/post-list/post-list.component';
+import { FollowButtonComponent } from './shareds/follow-button/follow-button.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { PostListComponent } from './shareds/post-list/post-list.component';
     ProfileContentComponent,
     ProfileComponent,
     DisplayPostPageComponent,
-    PostListComponent
+    PostListComponent,
+    FollowButtonComponent
   ],
   imports: [
     BrowserModule,

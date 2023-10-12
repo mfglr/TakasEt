@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-	[Route("api")]
+    [Route("api")]
 	[ApiController]
 	public class UserController : ControllerBase
 	{
@@ -16,17 +16,7 @@ namespace WebApi.Controllers
 			_sender = sender;
 		}
 
-		[HttpPost("login")]
-		public async Task<AppResponseDto> Login(Login request)
-		{
-			return await _sender.Send(request);
-		}
-
-		[HttpPost("sing-up")]
-		public async Task<AppResponseDto> SingUp(SignUp request)
-		{
-			return await _sender.Send(request);
-		}
+		
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-user-by-username/{username}")]

@@ -24,10 +24,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("following/unfollow-user")]
-		public async Task<AppResponseDto> RemoveFollowed(UnfollowUser request)
+		[HttpDelete("following/unfollow-user/{followedId}")]
+		public async Task<AppResponseDto> UnfollowUser(Guid followedId)
 		{
-			return await _sender.Send(request);
+			return await _sender.Send(new UnfollowUser(followedId));
 		}
 
 		[Authorize(Roles = "user")]

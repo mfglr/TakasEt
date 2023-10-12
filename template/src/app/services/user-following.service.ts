@@ -2,22 +2,23 @@ import { Injectable } from '@angular/core';
 import { AppHttpClientService } from './app-http-client.service';
 import { Observable } from 'rxjs';
 import { NoContentResponse } from '../models/responses/no-content-response';
+import { Followable } from '../interfaces/followable';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FollowingService {
+export class UserFollowingService implements Followable {
 
   constructor(
     private appHttpClient : AppHttpClientService
   ) { }
 
-  followUser(followedId : string) : Observable<NoContentResponse>{
+  follow(followedId : string) : Observable<NoContentResponse>{
     return this.appHttpClient.post<NoContentResponse>("following/follow-user",{followedId : followedId});
   }
 
-  unfollowUser(followedId : string) : Observable<NoContentResponse>{
-    return this.appHttpClient.post<NoContentResponse>("following/unfollow-user",{followedId : followedId});
+  unfollow(followedId : string) : Observable<NoContentResponse>{
+    return this.appHttpClient.delete(`following/unfollow-user/${followedId}`);
   }
 
   isFollowed(userId : string) : Observable<boolean>{

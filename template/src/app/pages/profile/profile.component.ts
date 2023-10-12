@@ -26,8 +26,8 @@ export class ProfileComponent implements OnChanges {
     this.userId = this.activatedRoute.snapshot.paramMap.get('id');
     if(this.userId)
       this.data$ = ObservableHelpers.mergeArrays(
-        this.postService.getPostsByUserName(this.userId),
-        this.postImageService.getFirsImageOfPostsByUserName(this.userId)
+        this.postService.getPostsByUserId(this.userId),
+        this.postImageService.getFirstImagesOfPostsByUserId(this.userId)
       )
   }
   ngOnChanges(){

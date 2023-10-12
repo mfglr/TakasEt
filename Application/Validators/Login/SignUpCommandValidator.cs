@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Validators
 {
     public class SignUpCommandValidator : AbstractValidator<SignUp>
-	{
+    {
 
         public SignUpCommandValidator(UserManager<User> userManager)
         {
             RuleFor(x => x.UserName).NotEmpty().WithMessage("You have to specify a username!");
-			RuleFor(x => x.Password).NotEmpty().WithMessage("The {PropertyName} can't be empty!");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("The {PropertyName} can't be empty!");
             RuleFor(x => x.PasswordConfirmation).NotEmpty().WithMessage("The field can't be empty!");
             RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("The field can't be empty!");
             RuleFor(x => x.Password).Equal(x => x.PasswordConfirmation).WithMessage("Password field and PasswordConfirmation field does not match!");

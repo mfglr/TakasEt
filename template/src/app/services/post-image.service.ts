@@ -19,13 +19,13 @@ export class PostImageService {
     )
   }
 
-  getFirsImageOfPostsByUserId(userId : string) : Observable<string[]>{
+  getFirstImagesOfPostsByUserId(userId : string) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
       this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-by-user-id/${userId}`)
     )
   }
 
-  getFirsImageOfPostsByUserName(userName : string) : Observable<string[]>{
+  getFirstImagesOfPostsByUserName(userName : string) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
       this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-by-user-name/${userName}`)
     )

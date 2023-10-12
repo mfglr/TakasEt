@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Commands
 {
-    public class SignUpCommandHandler : IRequestHandler<SignUp, AppResponseDto>
+	public class SignUpCommandHandler : IRequestHandler<SignUp, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;

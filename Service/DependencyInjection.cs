@@ -11,7 +11,6 @@ namespace Service
 			services.AddScoped<ISmtpService, SmtpService>();
 			services.AddSingleton(new JwtSecurityTokenHandler());
 			services.AddSingleton<ITokenService, TokenService>();
-			services.AddScoped<IAuthenticationService, AuthenticationService>();
 			services.AddScoped<IBlobService,AzureBlobService>();
 			services.AddTransient<IFileWriterService, FileWriterService>();
 		}

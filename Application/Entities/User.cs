@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Entities
 {
-
 	public class User : IdentityUser<Guid>, IEntity, IEntityDomainEvent
     {
 		public string? Name { get; private set; }
@@ -13,7 +12,6 @@ namespace Application.Entities
         public bool? Gender { get; private set; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
-
 		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<UserRole> Roles { get; }
 		public IReadOnlyCollection<Credit> Credits { get; }

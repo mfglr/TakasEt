@@ -18,7 +18,12 @@
   </div>
 
   <div class="buttons">
-    <button class="follow-button" #followingButton>{{ (isFollowed$ | async) ? 'unfollow' : 'follow' }}</button>
+    <div class="follow-button">
+      <app-follow-button
+      (value)="getValue($event)"
+      [followable]="followingService"
+      [followedId]="user?.id"></app-follow-button>
+    </div>
     <button class="chat-button">chat</button>
   </div>
 
