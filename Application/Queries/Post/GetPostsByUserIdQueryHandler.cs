@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries
 {
-	public class GetPostsByUserIdQueryHandler : IRequestHandler<GetPostsByUserIdRequestDto, AppResponseDto>
+	public class GetPostsByUserIdQueryHandler : IRequestHandler<GetPostsByUserId, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
 		private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace Application.Queries
 			_mapper = mapper;
 		}
 
-		public async Task<AppResponseDto> Handle(GetPostsByUserIdRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetPostsByUserId request, CancellationToken cancellationToken)
 		{
 			var posts = await _posts
 				.DbSet

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class AddCommentValidators : AbstractValidator<AddCommentRequestDto>
+    public class AddCommentValidators : AbstractValidator<AddComment>
     {
         public AddCommentValidators()
         {

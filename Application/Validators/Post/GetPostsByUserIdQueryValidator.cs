@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-	public class GetPostsByUserIdQueryValidator : AbstractValidator<GetPostsByUserIdRequestDto>
+	public class GetPostsByUserIdQueryValidator : AbstractValidator<GetPostsByUserId>
 	{
         public GetPostsByUserIdQueryValidator()
         {

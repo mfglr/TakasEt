@@ -8,7 +8,7 @@ namespace Application.Mappers
 	{
         public CommentMapper()
         {
-            CreateMap<AddCommentRequestDto, Comment>();
+            CreateMap<AddComment, Comment>();
             CreateMap<Comment,CommentResponseDto>();
         }
     }

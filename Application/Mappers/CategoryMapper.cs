@@ -8,7 +8,7 @@ namespace Application.Mappers
 	{
         public CategoryMapper()
         {
-            CreateMap<AddCategoryRequestDto, Category>();
+            CreateMap<AddCategory, Category>();
             CreateMap<Category,CategoryResponseDto>();
         }
 

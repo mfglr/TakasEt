@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.UserPostViewing
 {
-	public class ViewPostCommandValidator : AbstractValidator<ViewPostRequestDto>
+	public class ViewPostCommandValidator : AbstractValidator<ViewPost>
 	{
         public ViewPostCommandValidator()
         {

@@ -16,11 +16,12 @@ namespace WebApi.Controllers
 			_sender = sender;
 		}
 
-		[Authorize(Roles = "admin")]
-		[HttpGet("app-file/get-by-key/{containerName}/{blobName}")]
-		public async Task<byte[]> GetByKey(string containerName,string blobName)
+		[Authorize(Roles = "user")]
+		[HttpGet("app-file/get-app-file/{containerName}/{blobName}")]
+		public async Task GetAppFile(string containerName,string blobName)
 		{
-			return await _sender.Send(new GetAppFileByKeyRequestDto(blobName, containerName));
+			var bytes = await _sender.Send(new GetAppFile(blobName, containerName));
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 	}
 }

@@ -8,5 +8,6 @@
 		public string? LastName { get; set; }
 		public int CountOfFolloweds { get; set; }
 		public int CountOfFollowers { get; set; }
+		public int CountOfPosts { get; set; }
     }
 }

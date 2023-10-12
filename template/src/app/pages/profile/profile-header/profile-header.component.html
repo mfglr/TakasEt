@@ -1,0 +1,25 @@
+<div class="root">
+  <div class="user-informations">
+    <app-display-profile-image diameter="150" [userName]="userName"></app-display-profile-image>
+    <div class="quantitative-informations">
+      <div class="followers">
+        <span>{{user?.countOfFollowers}}</span>
+        <span>followers</span>
+      </div>
+      <div class="followeds">
+        <span>{{user?.countOfFolloweds}}</span>
+        <span>followeds</span>
+      </div>
+      <div class="posts">
+        <span>{{user?.countOfPosts}}</span>
+        <span>posts</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="follow-button" #followButton>follow</button>
+    <button class="chat-button">chat</button>
+  </div>
+
+</div>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-    public class UnfollowUserCommandHandler : IRequestHandler<UnfollowUserRequestDto, AppResponseDto>
+    public class UnfollowUserCommandHandler : IRequestHandler<UnfollowUser, AppResponseDto>
     {
 
         private readonly IRepository<UserUserFollowing> _followings;
@@ -19,7 +19,7 @@ namespace Application.Commands
             _user = user;
         }
 
-        public async Task<AppResponseDto> Handle(UnfollowUserRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(UnfollowUser request, CancellationToken cancellationToken)
         {
             var record = await _followings.DbSet.SingleOrDefaultAsync(x => x.FollowerId == _user.UserId && x.FollowedId == request.FollowedId, cancellationToken);
             if (record != null) _followings.DbSet.Remove(record);

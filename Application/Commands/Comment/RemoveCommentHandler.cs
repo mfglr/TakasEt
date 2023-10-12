@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-	public class RemoveCommentHandler : IRequestHandler<RemoveCommentRequestDto, AppResponseDto>
+	public class RemoveCommentHandler : IRequestHandler<RemoveComment, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
 
@@ -18,7 +18,7 @@ namespace Application.Commands
 			_comments = comments;
 		}
 
-		public async Task<AppResponseDto> Handle(RemoveCommentRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(RemoveComment request, CancellationToken cancellationToken)
 		{
 			var comment = await _comments.DbSet
 				.IncludeChildrenByRecursive(Comment.Depth)

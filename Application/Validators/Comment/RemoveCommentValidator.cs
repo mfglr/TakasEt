@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class RemoveCommentValidator : AbstractValidator<RemoveCommentRequestDto>
+    public class RemoveCommentValidator : AbstractValidator<RemoveComment>
     {
         public RemoveCommentValidator()
         {

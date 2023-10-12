@@ -1,9 +1,6 @@
-﻿using Application.DomainEventModels;
-using Application.Entities;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Pipelines
 {
@@ -21,8 +18,8 @@ namespace Application.Pipelines
 
 		public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
 		{
-			//Validation
 			
+			//Validation
 			var validationResult = await _validator.ValidateAsync(request);
 			if (!validationResult.IsValid)
 			{

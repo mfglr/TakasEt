@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Commands
 {
-	public class AddCategoryHandler : IRequestHandler<AddCategoryRequestDto,  AppResponseDto>
+	public class AddCategoryHandler : IRequestHandler<AddCategory,  AppResponseDto>
 	{
 		private readonly IRepository<Category> _categories;
 		private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace Application.Commands
 			_mapper = mapper;
 		}
 
-		public async Task<AppResponseDto> Handle(AddCategoryRequestDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(AddCategory request, CancellationToken cancellationToken)
 		{
 			var category = new Category(request.Name, request.Description);
 			await _categories.DbSet.AddAsync(category, cancellationToken);

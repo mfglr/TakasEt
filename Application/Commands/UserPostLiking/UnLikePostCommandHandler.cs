@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands
 {
-    public class UnLikePostCommandHandler : IRequestHandler<UnlikePostRequestDto, AppResponseDto>
+    public class UnLikePostCommandHandler : IRequestHandler<UnLikePost, AppResponseDto>
     {
         private readonly IRepository<UserPostLiking> _likes;
         private readonly LoggedInUser _user;
@@ -17,7 +17,7 @@ namespace Application.Commands
             _user = user;
         }
 
-        public async Task<AppResponseDto> Handle(UnlikePostRequestDto request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(UnLikePost request, CancellationToken cancellationToken)
         {
             var record = await _likes.DbSet.SingleOrDefaultAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId, cancellationToken);
             if (record != null) _likes.DbSet.Remove(record);
