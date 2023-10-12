@@ -20,7 +20,11 @@ namespace Application.Queries
 
 		public async Task<AppResponseDto> Handle(IsFollowed request, CancellationToken cancellationToken)
 		{
+<<<<<<< HEAD
 			var isFollowed = await _followings
+=======
+			var data = await _followings
+>>>>>>> 09da29054d6471dde54a0de1d45413d2928e3635
 				.DbSet
 				.AnyAsync(
 					x =>
@@ -28,7 +32,11 @@ namespace Application.Queries
 						x.FollowedId == request.UserId,
 					cancellationToken
 				);
+<<<<<<< HEAD
 			return AppResponseDto.Success(isFollowed);
+=======
+			return AppResponseDto.Success(data);
+>>>>>>> 09da29054d6471dde54a0de1d45413d2928e3635
 		}
 	}
 }
