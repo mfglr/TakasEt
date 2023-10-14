@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.UserPostLike
 {
-	public class IsLikedLoggedInUserThePostQueryValidator : AbstractValidator<IsLikedLoggedInUserThePost>
+	public class IsLikedLoggedInUserThePostQueryValidator : AbstractValidator<IsPostLiked>
 	{
         public IsLikedLoggedInUserThePostQueryValidator()
         {

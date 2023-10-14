@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +9,9 @@ namespace Application.Queries
 	public class GetPostsByUserIdQueryHandler : IRequestHandler<GetPostsByUserId, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
-		private readonly IMapper _mapper;
-		public GetPostsByUserIdQueryHandler(IRepository<Post> posts, IMapper mapper)
+		public GetPostsByUserIdQueryHandler(IRepository<Post> posts)
 		{
 			_posts = posts;
-			_mapper = mapper;
 		}
 
 		public async Task<AppResponseDto> Handle(GetPostsByUserId request, CancellationToken cancellationToken)
@@ -23,11 +20,28 @@ namespace Application.Queries
 				.DbSet
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
+				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
 				.Where(post => post.UserId == request.UserId)
+				.Select(x => new PostResponseDto()
+				{
+					Id = x.Id,
+					CreatedDate = x.CreatedDate,
+					UpdatedDate = x.UpdatedDate,
+					UserId = x.User.Id,
+					UserName = x.User.UserName,
+					CategoryName = x.Category.Name,
+					Title = x.Title,
+					Content = x.Content,
+					PublishedDate = x.PublishedDate,
+					CountOfImages = x.CountOfImages,
+					CountOfLikes = x.UsersWhoLiked.Count,
+					CountOfViews = x.UsersWhoViewed.Count,
+					CountOfComments = x.Comments.Count,
+				})
 				.ToListAsync(cancellationToken);
-			return AppResponseDto.Success(_mapper.Map<List<PostResponseDto>>(posts));
+			return AppResponseDto.Success(posts);
 		}
 	}
 }

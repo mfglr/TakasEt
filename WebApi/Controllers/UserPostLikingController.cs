@@ -31,10 +31,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user-post-liking/is-liked-logged-in-user-the-post/{postId}")]
-		public async Task<AppResponseDto> IsLikedLoggedInUserThePost(Guid postId)
+		[HttpGet("user-post-liking/is-liked/{postId}")]
+		public async Task<AppResponseDto> IsLiked(Guid postId)
 		{
-			return await _sender.Send(new IsLikedLoggedInUserThePost(postId));
+			return await _sender.Send(new IsPostLiked(postId));
 		}
 	}
 }

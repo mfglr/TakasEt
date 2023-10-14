@@ -26,8 +26,7 @@
   <div class="card-footer post-content-footer">
     <div>
       <app-like-button
-        [initialValue]="(loggedInUserIsLiked$ | async)  ? 1 : 0"
-        [ownerId]="post?.id"
+        [id]="post?.id"
         [likeable]="likingService">
       </app-like-button>
       <span>{{counts?.countOfLikes}}</span>

@@ -19,6 +19,12 @@ export class PostImageService {
     )
   }
 
+  getFirstImagesOfPosts() : Observable<string[]>{
+    return this.appFileService.createUrlsFromBlob(
+      this.appHttpClient.getBlob(`post-image/get-first-images-of-posts`)
+    )
+  }
+
   getFirstImagesOfPostsByUserId(userId : string) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
       this.appHttpClient.getBlob(`post-image/get-first-images-of-posts-by-user-id/${userId}`)

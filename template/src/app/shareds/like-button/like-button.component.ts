@@ -1,5 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged, mergeMap, skip } from 'rxjs';
+import { AfterContentInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged, filter, fromEvent, mergeMap, of, skip } from 'rxjs';
+import { Mode } from 'src/app/helpers/mode';
 import { Likeable } from 'src/app/interfaces/likeable';
 import { NoContentResponse } from 'src/app/models/responses/no-content-response';
 
@@ -8,41 +9,39 @@ import { NoContentResponse } from 'src/app/models/responses/no-content-response'
   templateUrl: './like-button.component.html',
   styleUrls: ['./like-button.component.scss']
 })
-export class LikeButtonComponent implements OnDestroy,OnChanges{
+export class LikeButtonComponent implements OnChanges,AfterContentInit{
 
-  @Input() ownerId? : string;
-  @Input() initialValue : number = 0;
+  @Input() id? : string;
   @Input() likeable? : Likeable;
-  public currentValue : number = this.initialValue;
-  private valueSource$? : BehaviorSubject<number>;
+  @Output() likeVector = new EventEmitter<number>();
+  @ViewChild("likeButton",{static : true}) likeButton? : ElementRef;
+  mode? : Mode;
   private methods? : ((x:string) => Observable<NoContentResponse>)[];
-  private likeSubscription? : Subscription
-
-  constructor(
-  ) {
-  }
+  classes = ['fa-regular fa-heart unlike','fa-solid fa-heart like']
 
   ngOnChanges(){
-    if(this.ownerId && this.likeable){
-      this.currentValue = this.initialValue;
-      this.valueSource$ = new BehaviorSubject<number>(this.initialValue);
-      this.methods = [this.likeable.unlike,this.likeable.like];
-      this.likeSubscription = this.valueSource$.pipe(
-        skip(1),
-        debounceTime(500),
-        distinctUntilChanged(),
-        mergeMap(() => this.methods![this.currentValue].call(this.likeable,this.ownerId!))
-      ).subscribe();
+    if(this.id && this.likeable){
+      this.likeable.isLiked.call(this.likeable,this.id).subscribe(
+        x => {
+          this.mode = new Mode(2,x ? 1 : 0);
+          this.methods = [this.likeable!.unlike,this.likeable!.like];
+        }
+      )
     }
   }
 
-  switch(){
-    this.valueSource$?.next( this.currentValue = (this.currentValue + 1) % 2 )
-  }
-
-  ngOnDestroy(): void {
-    this.valueSource$?.complete();
-    this.likeSubscription?.unsubscribe();
+  ngAfterContentInit(){
+    fromEvent(this.likeButton?.nativeElement,'click').pipe(
+      filter( () => !(!this.mode || !this.methods)),
+      mergeMap(() => {
+        let next = this.mode!.next();
+        this.likeVector.emit(next ? next : -1)
+        return of(next)
+      }),
+      debounceTime(500),
+      distinctUntilChanged(),
+      mergeMap( (x) => this.methods![x].call(this.likeable,this.id!))
+    ).subscribe();
   }
 
 }

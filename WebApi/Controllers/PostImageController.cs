@@ -33,6 +33,14 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
+		[HttpGet("post-image/get-first-images-of-posts")]
+		public async Task GetFirstImageOfPosts()
+		{
+			var bytes = await _sender.Send(new GetFirstImagesOfPosts());
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
+		}
+
+		[Authorize(Roles = "user")]
 		[HttpGet("post-image/get-first-images-of-posts-by-user-name/{userName}")]
 		public async Task GetFirstImageOfPostsByUserName(string userName)
 		{

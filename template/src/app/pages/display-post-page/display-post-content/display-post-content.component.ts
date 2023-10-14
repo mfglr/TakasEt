@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription, filter, interval, map, mergeMap } from 'rxjs';
+import { Counts } from 'src/app/models/hub/counts';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { AppHubConnectionService } from 'src/app/services/app-hub-connection.service';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
@@ -15,9 +16,9 @@ import { UserState } from 'src/app/states/user/state';
 })
 export class DisplayPostContentComponent {
 
-  @Input() post : PostResponse | null = null;
+  @Input() post : PostResponse | null | undefined = null;
 
-  public counts? : {countOfLikes : number,countOfViews : number};
+  public counts? : Counts;
   private postSubject = new BehaviorSubject<PostResponse | undefined | null>(undefined);
   private source$ : Observable<PostResponse | undefined | null> = this.postSubject.pipe(
     filter(post => post != undefined && post != null)
@@ -36,16 +37,12 @@ export class DisplayPostContentComponent {
 
   countsSubscription = this.source$.pipe(
     mergeMap(
-      () => this.appHubConnection.on<{countOfLikes : number,countOfViews : number}>(
+      () => this.appHubConnection.on<Counts>(
         "recieveCountOfViewsAndLikes",
-        {  countOfLikes:0,countOfViews : 0}
+        {  countOfLikes:0,countOfViews : 0,countOfComments : 0}
       )
     )
   ).subscribe(x => this.counts = x);
-
-  loggedInUserIsLiked$ = this.source$.pipe(
-    mergeMap(() => this.likingService.IsLikedLoggedInUser(this.post!.id))
-  )
 
   constructor(
     public likingService : UserPostLikingService,

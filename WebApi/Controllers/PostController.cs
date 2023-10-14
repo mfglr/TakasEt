@@ -37,7 +37,14 @@ namespace WebApi.Controllers
 		{
 			return await _sender.Send(new GetPost(id));
 		}
-		
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-posts")]
+		public async Task<AppResponseDto> GetPosts()
+		{
+			return await _sender.Send(new GetPosts());
+		}
+
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-user-id/{userId}")]
 		public async Task<AppResponseDto> GetPostsByUserId(Guid userId)
@@ -58,5 +65,8 @@ namespace WebApi.Controllers
 		{
 			return await _sender.Send(new GetPostsExceptRequesters(postId));
 		}
+
+
+
 	}
 }

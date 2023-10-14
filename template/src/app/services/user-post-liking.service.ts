@@ -21,7 +21,7 @@ export class UserPostLikingService implements Likeable {
     return this.appHttpClient.delete(`user-post-liking/unlike-post/${postId}`);
   }
 
-  IsLikedLoggedInUser(postId : string): Observable<boolean>{
-    return this.appHttpClient.get<boolean>(`user-post-liking/is-liked-logged-in-user-the-post/${postId}`);
+  isLiked(postId: string): Observable<boolean> {
+    return this.appHttpClient.get<boolean>(`user-post-liking/is-liked/${postId}`)
   }
 }

@@ -1,0 +1,27 @@
+<div class="footer">
+
+  <div class="likes">
+    <span>
+      <app-like-button
+      [likeable]="userPostLikingService"
+      [id]="post?.id"
+      (likeVector)="getLikeVector($event)"></app-like-button>
+      {{post?.countOfLikes}}
+    </span>
+  </div>
+
+  <div class="views">
+    <span>
+      <i class="fa-solid fa-eye"></i>
+      {{post?.countOfViews}}
+    </span>
+  </div>
+
+  <div class="comments">
+    <span>
+      <i class="fa-solid fa-comment"></i>
+      {{post?.countOfComments}}
+    </span>
+  </div>
+
+</div>

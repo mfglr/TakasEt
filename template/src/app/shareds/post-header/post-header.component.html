@@ -1,0 +1,15 @@
+<div class="header" >
+  <div class="header-user">
+    <div class="header-user-profile">
+      <app-display-profile-image [userId]="post?.userId" diameter="60"></app-display-profile-image>
+    </div>
+    <span class="card-text">
+      <a href="">{{post?.userName}}</a>
+    </span>
+  </div>
+  <div class="post-content-header-category">
+    <span class="card-text">
+      <a href="">{{post?.categoryName}}</a>
+    </span>
+  </div>
+</div>

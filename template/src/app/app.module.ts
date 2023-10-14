@@ -25,6 +25,19 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { DisplayPostPageComponent } from './pages/display-post-page/display-post-page.component';
 import { PostListComponent } from './shareds/post-list/post-list.component';
 import { FollowButtonComponent } from './shareds/follow-button/follow-button.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
+import { AppLayoutHeaderComponent } from './layouts/app-layout-header/app-layout-header.component';
+import { SearchComponent } from './pages/search/search.component';
+import { MessagesComponent } from './pages/messages/messages.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { SwapProposalsComponent } from './pages/profile/swap-proposals/swap-proposals.component';
+import { SwapRequestsComponent } from './pages/profile/swap-requests/swap-requests.component';
+import { FollowedPostsComponent } from './pages/profile/followed-posts/followed-posts.component';
+import { PostComponent } from './shareds/post/post.component';
+import { PostHeaderComponent } from './shareds/post-header/post-header.component';
+import { PostFooterComponent } from './shareds/post-footer/post-footer.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +56,19 @@ import { FollowButtonComponent } from './shareds/follow-button/follow-button.com
     ProfileComponent,
     DisplayPostPageComponent,
     PostListComponent,
-    FollowButtonComponent
+    FollowButtonComponent,
+    HomeComponent,
+    AppLayoutComponent,
+    AppLayoutHeaderComponent,
+    SearchComponent,
+    MessagesComponent,
+    NotificationsComponent,
+    SwapProposalsComponent,
+    SwapRequestsComponent,
+    FollowedPostsComponent,
+    PostComponent,
+    PostHeaderComponent,
+    PostFooterComponent
   ],
   imports: [
     BrowserModule,

@@ -7,4 +7,8 @@ export interface PostResponse extends BaseResponse{
   title : string;
   content : string;
   publishDate : Date;
+  images : string[];
+  countOfLikes : number;
+  countOfViews : number;
+  countOfComments : number;
 }

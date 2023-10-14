@@ -1,36 +1,36 @@
 import { Component, OnChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { filter, mergeMap } from 'rxjs';
 import { ObservableHelpers } from 'src/app/helpers/observable-helpers';
-import { PostResponse } from 'src/app/models/responses/post-response';
 import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
+import { UserService } from 'src/app/services/user.service';
+import { getLoginResponse } from 'src/app/states/user/selector';
+import { UserState } from 'src/app/states/user/state';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnChanges {
-  data$? : Observable<{x : PostResponse,y:string}[]>
-  public userId : string | null = null;
+export class ProfileComponent{
+
+  data$ = this.store.select(getLoginResponse).pipe(
+    filter(x => !(!x)),
+    mergeMap(loginResponse => this.postService.getPostsWithFirstImagesByUserId(loginResponse!.id))
+  )
+
+  user$ = this.store.select(getLoginResponse).pipe(
+    filter(x => !(!x)),
+    mergeMap(x => this.userService.getUser(x!.id))
+  )
 
   constructor(
     private postImageService : PostImageService,
     private postService : PostService,
-    private activatedRoute : ActivatedRoute
+    private store : Store<UserState>,
+    private userService : UserService
     ) {
-
-  }
-  ngOnInit(){
-    this.userId = this.activatedRoute.snapshot.paramMap.get('id');
-    if(this.userId)
-      this.data$ = ObservableHelpers.mergeArrays(
-        this.postService.getPostsByUserId(this.userId),
-        this.postImageService.getFirstImagesOfPostsByUserId(this.userId)
-      )
-  }
-  ngOnChanges(){
 
   }
 

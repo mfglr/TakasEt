@@ -14,22 +14,24 @@ namespace WebApi.Hubs
 			_posts = posts;
 		}
 
-		public async Task SendCountOfViewsAndLikes(Guid postId)
+		public async Task SendCounts(List<Guid> postIds)
 		{
-			var data = await _posts
+			var counts = await _posts
 				.DbSet
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
-				.Where(x => x.Id == postId)
+				.Include(x => x.Comments)
+				.Where(x => postIds.Contains(x.Id))
 				.Select(
 					x => new
 					{
 						countOfLikes = x.UsersWhoLiked.Count,
-						countOfViews = x.UsersWhoViewed.Count
+						countOfViews = x.UsersWhoViewed.Count,
+						countOfComments = x.Comments.Count
 					}
 				)
-				.FirstOrDefaultAsync();
-			await Clients.Caller.SendAsync("recieveCountOfViewsAndLikes",data);
+				.ToListAsync();
+			await Clients.Caller.SendAsync("recieveCounts", counts);
 		}
 	}
 }

@@ -1,0 +1,22 @@
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .logo{
+    text-decoration-line: none;
+    font-size: 1.75rem;
+  }
+  .content{
+    display: flex;
+    flex-direction: row;
+    .item{
+      margin-left: 10px;
+      color: rgb(200, 200, 200);
+    }:hover{
+      color: black;
+    }
+    .active-item{
+      color: black;
+    }
+  }
+}

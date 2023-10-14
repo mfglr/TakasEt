@@ -2,11 +2,11 @@
 
 namespace Application.Dtos
 {
-	public class IsLikedLoggedInUserThePost : IRequest<AppResponseDto>
+	public class IsPostLiked : IRequest<AppResponseDto>
 	{
         public Guid PostId { get; private set; }
 
-		public IsLikedLoggedInUserThePost(Guid postId)
+		public IsPostLiked(Guid postId)
 		{
 			PostId = postId;
 		}
