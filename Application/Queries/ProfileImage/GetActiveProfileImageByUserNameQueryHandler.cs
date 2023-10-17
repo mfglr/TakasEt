@@ -26,6 +26,7 @@ namespace Application.Queries
 		{
 			var user = await _userManager
 				.Users
+				.AsNoTracking()
 				.Include(x => x.ProfileImages)
 				.FirstOrDefaultAsync(x => x.UserName == request.UserName);
 			if (user == null) throw new UserNotFoundException();

@@ -24,6 +24,7 @@ namespace Application.Queries
 		{
 			var images = await _postImages
 				.DbSet
+				.AsNoTracking()
 				.Include(x => x.Post)
 				.ThenInclude(x => x.User)
 				.Where(x => x.Post.User.UserName == request.UserName)

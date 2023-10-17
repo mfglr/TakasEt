@@ -9,7 +9,10 @@ namespace Application.Mappers
         public CommentMapper()
         {
             CreateMap<AddComment, Comment>();
-            CreateMap<Comment,CommentResponseDto>();
+            CreateMap<User,CommentResponseDto>();
+            CreateMap<Comment,CommentResponseDto>()
+                .IncludeMembers(x => x.User)
+                .ForMember(dest => dest.UserName,opt => opt.MapFrom(source => source.User.UserName));
         }
     }
 }

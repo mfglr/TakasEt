@@ -9,6 +9,9 @@ export class GenericMode<T>{
   private _mode : number;
   private _data : T[] | null | undefined;
 
+  get currentIndex() : number{
+    return this._curruntIndex;
+  }
   anyData() : boolean{
     return this._mode != 0;
   }

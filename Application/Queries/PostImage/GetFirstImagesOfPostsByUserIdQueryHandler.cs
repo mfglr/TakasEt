@@ -26,7 +26,8 @@ namespace Application.Queries
         {
             var images = await _postImages
                 .DbSet
-                .Include(x => x.Post)
+				.AsNoTracking()
+				.Include(x => x.Post)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Post.User.Id == request.UserId)
                 .GroupBy(x => x.Post)

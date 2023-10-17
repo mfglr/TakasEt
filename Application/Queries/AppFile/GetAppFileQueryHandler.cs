@@ -24,6 +24,7 @@ namespace Application.Queries
 		{
 			var record = await _appFiles
 				.DbSet
+				.AsNoTracking()
 				.FirstOrDefaultAsync(
 					appFile =>
 						appFile.BlobName == request.BlobName &&

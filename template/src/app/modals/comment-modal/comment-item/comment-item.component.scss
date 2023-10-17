@@ -1,0 +1,21 @@
+.root{
+  .parent-comment-item-content{
+
+  }
+  .children{
+    .children-comment-item-content{
+      margin-left: 1rem;
+    }
+    .footer{
+      .show-children-comments{
+        font-size: 8px;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .comment-to-parent{
+    font-size: 8px;
+  }
+
+}

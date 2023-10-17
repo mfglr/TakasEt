@@ -21,6 +21,7 @@ namespace Application.Queries
         {
 			var post = await _posts
 				.DbSet
+				.AsNoTracking()
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)

@@ -24,6 +24,7 @@ namespace Application.Queries
 		{
 			var images = await _postImages
 				.DbSet
+				.AsNoTracking()
 				.GroupBy(x => x.Post)
 				.Select(x => x.OrderBy(x => x.Id).First())
 				.ToListAsync(cancellationToken);

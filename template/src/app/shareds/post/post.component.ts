@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PostResponse } from 'src/app/models/responses/post-response';
 
 @Component({
@@ -9,9 +9,14 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 export class PostComponent implements OnChanges {
 
   @Input() post? : PostResponse;
+  @Output() commentButtonEvent = new EventEmitter<PostResponse>();
   firstImage? : string;
 
   ngOnChanges(changes: SimpleChanges): void {
     if(this.post) this.firstImage = this.post.images[0];
+  }
+
+  transitCommentButtonEvent(post : PostResponse){
+    this.commentButtonEvent.emit(post);
   }
 }

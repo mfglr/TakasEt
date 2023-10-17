@@ -1,0 +1,19 @@
+<div class="root">
+  <div class="parent-comment-item-content">
+    <app-comment-item-content [comment]="comment"></app-comment-item-content>
+  </div>
+  <div class="children" *ngIf="comment">
+    <div [hidden]="!childrenVisibility">
+      <div class="children-comment-item-content" *ngFor="let child of comment.children">
+        <app-comment-item-content [comment]="child"></app-comment-item-content>
+      </div>
+    </div>
+    <div class="footer">
+      <span (click)="switchChildrenVisibility()" class="show-children-comments">
+        {{childrenVisibility ? 'yanitlari gizle' : comment.countOfChildren + ' yaniti goster'}}
+      </span>
+    </div>
+  </div>
+  <span (click)="commentToParent()" class="comment-to-parent">yanit ver</span>
+  <hr>
+</div>

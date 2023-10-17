@@ -20,7 +20,8 @@ namespace Application.Queries
         {
             var users = await _followings
                 .DbSet
-                .Where(x => x.FollowedId == request.UserId)
+				.AsNoTracking()
+				.Where(x => x.FollowedId == request.UserId)
                 .Include(x => x.Follower)
                 .ThenInclude(x => x.Followeds)
                 .Include(x => x.Follower)

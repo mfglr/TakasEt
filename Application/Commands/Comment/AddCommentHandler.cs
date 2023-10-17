@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
@@ -21,8 +22,9 @@ namespace Application.Commands
 		public async Task<AppResponseDto> Handle(AddComment request, CancellationToken cancellationToken)
 		{
 			var comment = new Comment(request.ParentId,request.PostId, request.UserId, request.Content);
-			await _comments.DbSet.AddAsync(comment,cancellationToken);
-
+			await _comments
+				.DbSet
+				.AddAsync(comment,cancellationToken);
 			return AppResponseDto.Success(
 				_mapper.Map<CommentResponseDto>(comment)
 				);

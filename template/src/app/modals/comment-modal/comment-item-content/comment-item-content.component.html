@@ -1,0 +1,11 @@
+<div class="root">
+  <div class="user-info">
+    <app-display-profile-image diameter="20" [userId]="comment?.userId" ></app-display-profile-image>
+    <span class="user-name">{{comment?.userName}}</span>
+  </div>
+  <div class="content">
+    <span>{{comment?.content}}</span>
+    <app-like-button [likeable]="commentLikingService" [id]="comment?.id"></app-like-button>
+  </div>
+</div>
+

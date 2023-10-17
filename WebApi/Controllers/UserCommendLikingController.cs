@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api")]
 	[ApiController]
 	public class UserCommendLikingController : ControllerBase
 	{
@@ -28,6 +28,13 @@ namespace WebApi.Controllers
 		public async Task<AppResponseDto> UnlikeComment(Guid commentId)
 		{
 			return await _sender.Send(new UnlikeComment(commentId));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("user-comment-liking/is-comment-liked/{commentId}")]
+		public async Task<AppResponseDto> IsCommentLiked(Guid commentId)
+		{
+			return await _sender.Send(new IsCommentLiked(commentId));
 		}
 
 	}

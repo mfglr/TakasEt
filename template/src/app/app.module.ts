@@ -37,6 +37,11 @@ import { FollowedPostsComponent } from './pages/profile/followed-posts/followed-
 import { PostComponent } from './shareds/post/post.component';
 import { PostHeaderComponent } from './shareds/post-header/post-header.component';
 import { PostFooterComponent } from './shareds/post-footer/post-footer.component';
+import { CommentModalComponent } from './modals/comment-modal/comment-modal.component';
+import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
+import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
+import { commentReducer } from './states/comment/reducer';
+import { CommentEffect } from './states/comment/effect';
 
 @NgModule({
   declarations: [
@@ -68,7 +73,10 @@ import { PostFooterComponent } from './shareds/post-footer/post-footer.component
     FollowedPostsComponent,
     PostComponent,
     PostHeaderComponent,
-    PostFooterComponent
+    PostFooterComponent,
+    CommentModalComponent,
+    CommentItemComponent,
+    CommentItemContentComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +85,10 @@ import { PostFooterComponent } from './shareds/post-footer/post-footer.component
     ReactiveFormsModule,
     StoreModule.forRoot(),
     StoreModule.forFeature("userStoreSlice" , userReducer),
-    EffectsModule.forRoot([UserEffect])
+    StoreModule.forFeature("commentStoreSlice",commentReducer),
+    EffectsModule.forRoot(),
+    EffectsModule.forFeature([UserEffect]),
+    EffectsModule.forFeature([CommentEffect])
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

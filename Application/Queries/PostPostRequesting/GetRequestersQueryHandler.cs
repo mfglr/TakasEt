@@ -24,7 +24,8 @@ namespace Application.Queries
         {
             var posts = await _requestings
 				.DbSet
-                .Include(x => x.Requester)
+				.AsNoTracking()
+				.Include(x => x.Requester)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Requester)
                 .ThenInclude(x => x.Category)

@@ -90,15 +90,16 @@ namespace Application.Extentions
 		public static async Task<int> FindParentDepthAsync<TRecursiveEntity>(
 			this IQueryable<TRecursiveEntity> queryable,
 			int maxDepth,
-			Guid? parentId
-			)
+			Guid? parentId,
+			CancellationToken cancellationToken
+		)
 			where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>
 		{
 			var query = queryable.Include(x => x.Children);
 			for (int i = 2; i < maxDepth; i++)
 				query = query.ThenInclude(x => x.Children);
 
-			var entity = await queryable.SingleOrDefaultAsync(x => x.Id == parentId);
+			var entity = await queryable.SingleOrDefaultAsync(x => x.Id == parentId, cancellationToken);
 			
 			int depth = 0;
 			var iter = entity;
@@ -113,13 +114,14 @@ namespace Application.Extentions
 		public static async Task<bool> AddRecursiveAsync<TRecursiveEntiy>(
 			this DbSet<TRecursiveEntiy> dbset,
 			int depth,
-			TRecursiveEntiy entity
-			)
+			TRecursiveEntiy entity,
+			CancellationToken cancellationToken
+		)
 			where TRecursiveEntiy : RecursiveEntity<TRecursiveEntiy>
 		{
-			int parentDepth = await dbset.FindParentDepthAsync(depth, entity.ParentId);
+			int parentDepth = await dbset.FindParentDepthAsync(depth, entity.ParentId, cancellationToken);
 			if(parentDepth > depth ) return false;
-			await dbset.AddAsync(entity);
+			await dbset.AddAsync(entity, cancellationToken);
 			return true;
 		}
 	}

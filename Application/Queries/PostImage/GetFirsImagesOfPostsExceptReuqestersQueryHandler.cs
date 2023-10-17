@@ -27,6 +27,7 @@ namespace Application.Queries
 		{
 			var images = await _postImages
 				.DbSet
+				.AsNoTracking()
 				.Include(x => x.Post)
 				.ThenInclude(x => x.User)
 				.Include(x => x.Post)

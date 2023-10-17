@@ -23,7 +23,8 @@ namespace Application.Queries
         {
             var categories = await _categories
 				.DbSet
-                .Where(c =>
+				.AsNoTracking()
+				.Where(c =>
                     
                         request.Key == null ||
                         c.Name.ToLower().Contains(request.Key.ToLower()) ||

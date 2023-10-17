@@ -20,6 +20,7 @@ namespace Application.Queries
 		{
 			var user = await _users
 				.DbSet
+				.AsNoTracking()
 				.Include(x => x.Followers)
 				.Include(x => x.Followeds)
 				.Include(x => x.Posts)

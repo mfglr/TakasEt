@@ -24,7 +24,11 @@ namespace Application.Queries
 
         public async Task<byte[]> Handle(GetPostImages request, CancellationToken cancellationToken)
         {
-            var files = await _appFiles.DbSet.Where(x => x.PostId == request.PostId).ToListAsync();
+            var files = await _appFiles
+                .DbSet
+				.AsNoTracking()
+				.Where(x => x.PostId == request.PostId)
+                .ToListAsync();
             foreach (var file in files)
                 await _fileWriterService.WriteFileAsync(
                     await _blobService.DownloadAsync(file.BlobName, file.ContainerName, cancellationToken),

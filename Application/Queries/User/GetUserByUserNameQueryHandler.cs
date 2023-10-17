@@ -20,7 +20,8 @@ namespace Application.Queries
         {
             var user = await _userManager
                 .Users
-                .Include (x => x.Followers)
+				.AsNoTracking()
+				.Include (x => x.Followers)
                 .Include(x => x.Followeds)
 				.Include(x => x.Posts)
 				.Select(x => new UserResponseDto()
