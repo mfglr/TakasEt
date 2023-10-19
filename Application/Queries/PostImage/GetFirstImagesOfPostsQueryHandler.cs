@@ -26,9 +26,12 @@ namespace Application.Queries
 				.DbSet
 				.AsNoTracking()
 				.GroupBy(x => x.Post)
+				.OrderByDescending(x => x.Key.CreatedDate)
+				.Where(x => new DateTime(request.FirstQueryDate) < x.Key.CreatedDate)
 				.Select(x => x.OrderBy(x => x.Id).First())
+				.Skip(request.Skip)
+				.Take(request.Take)
 				.ToListAsync(cancellationToken);
-			
 			foreach (var image in images)
 			{
 				var file = await _blobService.DownloadAsync(image.BlobName, image.ContainerName, cancellationToken);

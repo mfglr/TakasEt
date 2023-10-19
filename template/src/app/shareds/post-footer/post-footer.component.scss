@@ -1,10 +1,19 @@
-.footer{
+.root{
   display: flex;
-  justify-content: center;
-  .likes{
-    margin-right: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  .footer{
+    display: flex;
+    justify-content: center;
+    .likes{
+      margin-right: 0.5rem;
+    }
+    .views{
+      margin-right: 0.5rem;
+    }
   }
-  .views{
-    margin-right: 0.5rem;
+  .date{
+    font-size: 0.6rem;
   }
 }
+

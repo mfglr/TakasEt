@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 		[HttpGet("post-image/get-first-images-of-posts")]
 		public async Task GetFirstImageOfPosts()
 		{
-			var bytes = await _sender.Send(new GetFirstImagesOfPosts());
+			var bytes = await _sender.Send(new GetFirstImagesOfPosts(Request.Query));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 

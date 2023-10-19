@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PostResponse } from 'src/app/models/responses/post-response';
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
@@ -8,7 +10,7 @@ import { PostService } from 'src/app/services/post.service';
 })
 export class SearchComponent {
 
-  posts$ = this.postService.getPostsWithFirstImages()
+  posts$? : Observable<PostResponse[]>
 
   constructor(
     private postService : PostService

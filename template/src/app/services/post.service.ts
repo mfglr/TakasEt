@@ -4,6 +4,8 @@ import { Observable, from, map, mergeMap, toArray } from 'rxjs';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { PostImageService } from './post-image.service';
+import { UrlHelper } from '../helpers/url-helper';
+import { Page } from '../states/state';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +25,18 @@ export class PostService {
     return this.appHttpClient.get<PostResponse>(`post/get-post/${postId}`);
   }
 
-  getPosts() : Observable<PostResponse[]>{
-    return this.appHttpClient.get<PostResponse[]>(`post/get-posts`);
+  getPosts(page : Page) : Observable<PostResponse[]>{
+    return this.appHttpClient.get<PostResponse[]>(
+      UrlHelper.createPaginationUrl("post/get-posts",page)
+    );
   }
 
-  getPostsWithFirstImages() : Observable<PostResponse[]>{
-    return this.appHttpClient.get<PostResponse[]>(`post/get-posts`).pipe(
+  getPostsWithFirstImages(page : Page) : Observable<PostResponse[]>{
+    return this.appHttpClient.get<PostResponse[]>(
+      UrlHelper.createPaginationUrl("post/get-posts",page)
+    ).pipe(
       mergeMap(
-        posts => this.postImageService.getFirstImagesOfPosts().pipe(
+        posts => this.postImageService.getFirstImagesOfPosts(page).pipe(
           mergeMap( images => from(images) ),
           map(
             (image,index) => {

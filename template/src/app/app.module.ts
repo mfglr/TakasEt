@@ -40,8 +40,8 @@ import { PostFooterComponent } from './shareds/post-footer/post-footer.component
 import { CommentModalComponent } from './modals/comment-modal/comment-modal.component';
 import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
 import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
-import { commentReducer } from './states/comment/reducer';
-import { CommentEffect } from './states/comment/effect';
+import { homeReducer } from './states/home/reducer';
+import { HomeEffect } from './states/home/effect';
 
 @NgModule({
   declarations: [
@@ -85,10 +85,10 @@ import { CommentEffect } from './states/comment/effect';
     ReactiveFormsModule,
     StoreModule.forRoot(),
     StoreModule.forFeature("userStoreSlice" , userReducer),
-    StoreModule.forFeature("commentStoreSlice",commentReducer),
+    StoreModule.forFeature("homeStoreSlice",homeReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([UserEffect]),
-    EffectsModule.forFeature([CommentEffect])
+    EffectsModule.forFeature([HomeEffect])
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

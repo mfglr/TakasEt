@@ -1,27 +1,31 @@
-<div class="footer">
+<div class="root">
+  <div class="footer">
+    <div class="likes">
+      <span>
+        <app-like-button
+        [likeable]="userPostLikingService"
+        [id]="post?.id"
+        (likeVector)="getLikeVector($event)"></app-like-button>
+        {{post?.countOfLikes}}
+      </span>
+    </div>
 
-  <div class="likes">
-    <span>
-      <app-like-button
-      [likeable]="userPostLikingService"
-      [id]="post?.id"
-      (likeVector)="getLikeVector($event)"></app-like-button>
-      {{post?.countOfLikes}}
-    </span>
+    <div class="views">
+      <span>
+        <i class="fa-solid fa-eye"></i>
+        {{post?.countOfViews}}
+      </span>
+    </div>
+
+    <div class="comments" (mouseover)="hover()" (click)="displayCommentsButton()">
+      <span>
+        <i class="fa-solid fa-comment"></i>
+        {{post?.countOfComments}}
+      </span>
+    </div>
   </div>
-
-  <div class="views">
-    <span>
-      <i class="fa-solid fa-eye"></i>
-      {{post?.countOfViews}}
-    </span>
+  <div class="date">
+    <span>{{post?.createdDate}}</span>
   </div>
-
-  <div class="comments" (click)="emitCommentButtonEvent()">
-    <span>
-      <i class="fa-solid fa-comment"></i>
-      {{post?.countOfComments}}
-    </span>
-  </div>
-
 </div>
+

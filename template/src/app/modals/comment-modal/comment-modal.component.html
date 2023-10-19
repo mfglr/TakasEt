@@ -31,6 +31,7 @@
         <div class="comment-item" *ngFor="let comment of (comments$ | async)">
           <app-comment-item [comment]="comment"></app-comment-item>
         </div>
+        <button (click)="getMore()">more</button>
       </div>
 
     </div>

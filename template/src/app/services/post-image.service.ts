@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AppHttpClientService } from './app-http-client.service';
 import { Observable } from 'rxjs';
 import { AppFileService } from './app-file.service';
+import { UrlHelper } from '../helpers/url-helper';
+import { Page } from '../states/state';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +21,11 @@ export class PostImageService {
     )
   }
 
-  getFirstImagesOfPosts() : Observable<string[]>{
+  getFirstImagesOfPosts(page : Page) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
-      this.appHttpClient.getBlob(`post-image/get-first-images-of-posts`)
+      this.appHttpClient.getBlob(
+        UrlHelper.createPaginationUrl("post-image/get-first-images-of-posts",page)
+      )
     )
   }
 

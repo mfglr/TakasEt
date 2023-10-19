@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +22,7 @@ namespace Application.Queries
 				.AsNoTracking()
 				.Include(x => x.User)
 				.Include(x => x.Children)
-				.Where(x => x.PostId == request.PostId)
+				.Where(x => x.PostId == request.PostId && new DateTime(request.FirstQueryDate) < x.CreatedDate)
 				.Select(
 					x => new CommentResponseDto()
 					{
@@ -38,6 +37,8 @@ namespace Application.Queries
 						UserName = x.User.UserName!
 					}
 				)
+				.Skip(request.Skip)
+				.Take(request.Take)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(comments);
 		}

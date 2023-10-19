@@ -10,12 +10,12 @@ namespace Application.Entities
 
 		public void SetCreatedDate()
 		{
-			CreatedDate = DateTime.UtcNow;
+			CreatedDate = DateTime.Now;
 		}
 
 		public void SetUpdatedDate()
 		{
-			UpdatedDate = DateTime.UtcNow;
+			UpdatedDate = DateTime.Now;
 		}
 
 	}

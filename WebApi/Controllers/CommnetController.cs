@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 		[HttpGet("comment/get-comments-by-post-id/{postId}")]
 		public async Task<AppResponseDto> GetCommentsByPostId(Guid postId)
 		{
-			return await _sender.Send(new GetCommentsByPostId(postId));
+			return await _sender.Send(new GetCommentsByPostId(postId,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]

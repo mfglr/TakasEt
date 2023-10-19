@@ -42,7 +42,7 @@ namespace WebApi.Controllers
 		[HttpGet("post/get-posts")]
 		public async Task<AppResponseDto> GetPosts()
 		{
-			return await _sender.Send(new GetPosts());
+			return await _sender.Send(new GetPosts(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]

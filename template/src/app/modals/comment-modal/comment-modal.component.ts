@@ -1,15 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AddComment } from 'src/app/models/requests/add-comment';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { CommentState } from 'src/app/states/comment/reducer';
-import * as CommentActions from 'src/app/states/comment/actions'
-import * as CommentSelectors from "src/app/states/comment/selector";
 import * as UserSelector from "src/app/states/user/selector"
-import { Subscription, filter } from 'rxjs';
+import { Observable, Subscription, filter } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
+import { HomeState } from 'src/app/states/home/reducer';
 @Component({
   selector: 'app-comment-modal',
   templateUrl: './comment-modal.component.html',
@@ -26,12 +23,10 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
   );
 
   private respondedCommentSubscription? : Subscription;
-
+  comments$? : Observable<CommentResponse[]>
   cancelRespondingComment(){
-    this.store.dispatch(CommentActions.setRespondedComment({ comment : null}));
   }
 
-  comments$ = this.store.select(CommentSelectors.selectComments)
 
   commentForm = new FormGroup({
     parentId : new FormControl<string | undefined>(undefined),
@@ -41,34 +36,25 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
   });
 
   constructor(
-    private store : Store<CommentState>,
-    private userStore : Store<UserState>
+    private userStore : Store<UserState>,
+    private homeStore : Store<HomeState>
   ) {}
-  commets$? = this.store.select(CommentSelectors.selectComments).subscribe(x => console.log(x))
+
+
+  getMore(){
+  }
   ngOnChanges() {
     if(this.post){
 
-      this.store.dispatch(CommentActions.getCommentsByPostId({ postId : this.post.id}))
 
       this.commentForm.patchValue({
           postId : this.post.id,
           userId : this.userId
       })
-      // this.respondedCommentSubscription = this.store.select(CommentSelectors.getRespondedComment).subscribe(
-      //   x => {
-      //     this.respondedComment = x;
-      //     if(x)
-      //       this.commentForm.patchValue({ postId : null,parentId : x.id,content : `@${x.userName} `})
-      //     else
-      //       this.commentForm.patchValue( { postId : this.post!.id,parentId : null,content : ''})
-      //   }
-      // );
-
     }
   }
 
   publishComment(){
-    this.store.dispatch(CommentActions.addComment({comment : this.commentForm.value as AddComment}));
     if(this.commentForm.value.postId) this.postCommentCountVector.emit(1);
     if(this.post)
       this.commentForm.patchValue( { postId : this.post.id,parentId : null,content : ''})

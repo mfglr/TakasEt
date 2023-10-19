@@ -1,7 +1,6 @@
 import { Component, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, mergeMap } from 'rxjs';
-import { ObservableHelpers } from 'src/app/helpers/observable-helpers';
 import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 import { UserService } from 'src/app/services/user.service';
@@ -26,7 +25,6 @@ export class ProfileComponent{
   )
 
   constructor(
-    private postImageService : PostImageService,
     private postService : PostService,
     private store : Store<UserState>,
     private userService : UserService
