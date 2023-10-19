@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
 import { setSelectedPostId } from 'src/app/states/home/actions';
-import { HomeState } from 'src/app/states/home/reducer';
+import { HomeState } from 'src/app/states/home/states';
 
 @Component({
   selector: 'app-post-footer',
@@ -19,7 +19,6 @@ export class PostFooterComponent {
     public userPostLikingService : UserPostLikingService,
     private store : Store<HomeState>
   ) {}
-
 
   hover(){
     if(this.post)

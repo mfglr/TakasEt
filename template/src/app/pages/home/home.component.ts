@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, first, map, mergeMap } from 'rxjs';
 import { nextPageOfPosts } from 'src/app/states/home/actions';
-import { HomeState } from 'src/app/states/home/reducer';
 import { selectPosts } from 'src/app/states/home/selectors';
+import { HomeState } from 'src/app/states/home/states';
 
 @Component({
   selector: 'app-home',

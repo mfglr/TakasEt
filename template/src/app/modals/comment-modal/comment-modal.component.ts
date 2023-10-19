@@ -6,7 +6,9 @@ import * as UserSelector from "src/app/states/user/selector"
 import { Observable, Subscription, filter } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
-import { HomeState } from 'src/app/states/home/reducer';
+import { HomeState } from 'src/app/states/home/states';
+import { selectComments } from 'src/app/states/home/selectors';
+import { nextPageOfComments } from 'src/app/states/home/actions';
 @Component({
   selector: 'app-comment-modal',
   templateUrl: './comment-modal.component.html',
@@ -23,7 +25,7 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
   );
 
   private respondedCommentSubscription? : Subscription;
-  comments$? : Observable<CommentResponse[]>
+  comments$ = this.homeStore.select(selectComments)
   cancelRespondingComment(){
   }
 
@@ -42,10 +44,13 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
 
 
   getMore(){
+    this.homeStore.dispatch(nextPageOfComments())
+  }
+  ngOnInit(){
+    this.homeStore.dispatch(nextPageOfComments())
   }
   ngOnChanges() {
     if(this.post){
-
 
       this.commentForm.patchValue({
           postId : this.post.id,
