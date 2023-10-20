@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { PostService } from "src/app/services/post.service";
-import { nextPageOfComments, nextPageOfCommentsSuccess, nextPageOfPosts, nextPageOfPostsSuccess,setPageOfComments,setPageOfPosts, setStatusOfComments, setStatusOfPosts } from "./actions";
+import { nextPageOfComments, nextPageOfCommentsSuccess, nextPageOfPosts, nextPageOfPostsSuccess } from "./actions";
 import { selectCurrentPageOfComments, selectCurrentPageOfPosts, selectSelectedPostId, selectStatusOfComments, selectStatusOfPosts } from "./selectors";
 import { HomeState } from "./states";
 import { CommentService } from "src/app/services/comment.service";
@@ -25,13 +25,7 @@ export class HomeEffect{
         filter(([action,status]) => !status),
         withLatestFrom(this.store.select(selectCurrentPageOfPosts)),
         mergeMap( ([[action,status],page]) => this.postService.getPostsWithFirstImages(page)),
-        mergeMap(
-          response => of(
-            nextPageOfPostsSuccess({posts : response}),
-            setStatusOfPosts( {count : response.length} ),
-            setPageOfPosts()
-          )
-        )
+        mergeMap(response => of(nextPageOfPostsSuccess({posts : response})))
       )
     }
   )
@@ -47,14 +41,18 @@ export class HomeEffect{
         withLatestFrom(this.store.select(selectCurrentPageOfComments)),
         filter(([[[action,postId],isLast],page]) => !(!page)),
         mergeMap(([[[action,postId],isLast],page]) => this.commentService.getCommnetsByPostId(postId!,page!)),
-        mergeMap(
-          response => of(
-            nextPageOfCommentsSuccess({comments : response}),
-            setStatusOfComments( {count : response.length} ),
-            setPageOfComments()
-          )
-        )
+        mergeMap(response => of(nextPageOfCommentsSuccess({comments : response})))
       )
     }
   )
+
+  // nextPageOfChildren$ = createEffect(
+  //   () => {
+  //     return this.actions.pipe(
+  //       withLatestFrom(this.store.select(selectSelectedPostId)),
+  //       filter(([action,postId]) => !(!postId)),
+  //       withLatestFrom(this.store.select())
+  //     )
+  //   }
+  // )
 }

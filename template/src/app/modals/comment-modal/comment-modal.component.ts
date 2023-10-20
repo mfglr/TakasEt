@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import * as UserSelector from "src/app/states/user/selector"
-import { Observable, Subscription, filter } from 'rxjs';
+import { Observable, Subscription, filter, first, map } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
 import { HomeState } from 'src/app/states/home/states';
@@ -42,12 +42,16 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
     private homeStore : Store<HomeState>
   ) {}
 
-
   getMore(){
     this.homeStore.dispatch(nextPageOfComments())
   }
+
   ngOnInit(){
-    this.homeStore.dispatch(nextPageOfComments())
+    this.comments$.pipe(
+      first(),
+      filter( x => !(!x) && x.length <= 0),
+      map(() => this.homeStore.dispatch(nextPageOfComments()) )
+    ).subscribe();
   }
   ngOnChanges() {
     if(this.post){

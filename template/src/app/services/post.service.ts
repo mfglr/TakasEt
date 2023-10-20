@@ -5,7 +5,7 @@ import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { PostImageService } from './post-image.service';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../states/state';
+import { Page } from '../states/app-state';
 
 @Injectable({
   providedIn: 'root'

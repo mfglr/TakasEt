@@ -1,11 +1,10 @@
-import { initialPageOfPosts, takeValueOfComments, takeValueOfPosts } from "../state";
+import { initialPageOfPosts, takeValueOfComments, takeValueOfPosts } from "../app-state";
 import { createReducer, on } from "@ngrx/store";
-import { nextPageOfCommentsSuccess, nextPageOfPostsSuccess, resetPageOfPosts,  setPageOfComments,  setPageOfPosts, setSelectedPostId,  setStatusOfComments,  setStatusOfPosts } from "./actions";
-import { adapterOfComments, adapterOfHome } from "./adapters";
-import { CommentsState, HomeState } from "./states";
-import { createCommentStates, createPostStates } from "./creators";
+import { nextPageOfCommentsSuccess, nextPageOfPostsSuccess, resetPageOfPosts, setSelectedCommentId, setSelectedPostId } from "./actions";
+import { HomeState } from "./states";
+import { adapter, createCommentStates, createPostStates } from "./adapter";
 
-const initialState : HomeState = adapterOfHome.getInitialState({
+const initialState : HomeState = adapter.getInitialState({
   status : false,
   page : {...initialPageOfPosts},
   selectedId : undefined
@@ -13,49 +12,45 @@ const initialState : HomeState = adapterOfHome.getInitialState({
 
 export const homeReducer = createReducer(
   initialState,
-  on(nextPageOfPostsSuccess, (state,action) : HomeState => adapterOfHome.addMany(createPostStates(action.posts),state)),
-  on(setStatusOfPosts, (state,action) : HomeState => ({...state,status : action.count < takeValueOfPosts})),
-  on(setPageOfPosts, (state) : HomeState => ({...state,page : {...state.page,skip : state.page.skip + takeValueOfPosts}})),
+  on(nextPageOfPostsSuccess, (state,action) : HomeState => {
+    return {
+      ...adapter.addMany(createPostStates(action.posts),state),
+      status : action.posts.length < takeValueOfPosts,
+      page : {...state.page,skip : state.page.skip + takeValueOfPosts}
+    }
+  }),
   on(resetPageOfPosts, (state) : HomeState => ({...state,page : {...initialPageOfPosts}})),
   on(setSelectedPostId,(state,action) : HomeState =>({...state,selectedId : action.postId})),
 
   on(nextPageOfCommentsSuccess,(state,action) : HomeState => {
     if(state.selectedId && state.entities[state.selectedId])
-      return adapterOfHome.updateOne({
-        id : state.selectedId,
-        changes : {
-          comments : adapterOfComments.addMany(
-            createCommentStates(action.comments),
-            state.entities[state.selectedId!]!.comments
-          )
-        }
-      },state)
-    return state;
-  }),
-  on(setStatusOfComments,(state,action) : HomeState => {
-    if(state.selectedId && state.entities[state.selectedId])
-      return adapterOfHome.updateOne({
+      return adapter.updateOne({
         id : state.selectedId,
         changes : {
           comments : {
             ...state.entities[state.selectedId]!.comments,
-            status : action.count < takeValueOfComments
+            entities : [
+              ...state.entities[state.selectedId]!.comments.entities,
+              ...createCommentStates(action.comments)
+            ],
+            status : action.comments.length < takeValueOfComments,
+            page : {
+              ...state.entities[state.selectedId]!.comments.page,
+              skip : state.entities[state.selectedId]!.comments.page.skip + takeValueOfComments
+            }
           }
         }
       },state)
     return state;
   }),
-  on(setPageOfComments,(state,action) : HomeState => {
+  on(setSelectedCommentId,(state,action) => {
     if(state.selectedId && state.entities[state.selectedId])
-      return adapterOfHome.updateOne({
+      return adapter.updateOne({
         id : state.selectedId,
         changes : {
           comments : {
             ...state.entities[state.selectedId]!.comments,
-            page : {
-              ...state.entities[state.selectedId]!.comments.page,
-              skip : state.entities[state.selectedId]!.comments.page.skip + takeValueOfComments
-            }
+            selectedId : action.commentId
           }
         }
       },state)

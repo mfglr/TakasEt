@@ -1,30 +1,23 @@
-import { CommentState, CommentsState, PostState, UserState } from "./states"
+import { CommentState, PostState, UserState } from "./states"
 import { UserResponse } from "src/app/models/responses/user-response"
 import { CommentResponse } from "src/app/models/responses/comment-response"
-import { initialPageOfComments, initialPageOfPosts, initialPageOfUsers } from "../state"
+import { initialPageOfComments, initialPageOfUsers } from "../app-state"
 import { PostResponse } from "src/app/models/responses/post-response"
-import { adapterOfChildren, adapterOfComments, adapterOfUsersLiked, adapterOfUsersVeiwed } from "./adapters"
-import { EntityAdapter, createEntityAdapter } from "@ngrx/entity"
+import { createEntityAdapter } from "@ngrx/entity"
 
-export class Handler{
-
-}
-
-
-export const homeAdapter : EntityAdapter<PostState> = createEntityAdapter<PostState>({
-  selectId : state => state.post.id
+export const adapter = createEntityAdapter<PostState>({
+  selectId : (state) => state.post.id
 })
-export const commentAdapeters : EntityAdapter<CommentState>[] = [];
-export const childAdapters : EntityAdapter<CommentState>[] = [];
 
 function createCommentState( commentResponse : CommentResponse) : CommentState{
   return {
     comment : commentResponse,
-    children : adapterOfChildren.getInitialState({
+    children : {
+      entities : [],
       status : false,
       page : {...initialPageOfComments},
       selectedId : undefined
-    }),
+    },
   };
 }
 export function createCommentStates( commentResponses : CommentResponse[]) : CommentState[]{
@@ -39,21 +32,24 @@ export function createUserStates(userResponses : UserResponse[]) : UserState[]{
 function createPostState(postResponse : PostResponse) : PostState{
   return {
     post : postResponse,
-    comments : adapterOfComments.getInitialState({
+    comments : {
+      entities : [],
       status : false,
-      page : {...initialPageOfPosts},
+      page : {...initialPageOfComments},
       selectedId : undefined
-    }),
-    usersLiked : adapterOfUsersLiked.getInitialState({
+    },
+    usersLiked : {
+      entities : [],
       selectedId : undefined,
       status : false,
       page : {...initialPageOfUsers},
-    }),
-    usersViewed : adapterOfUsersVeiwed.getInitialState({
+    },
+    usersViewed : {
+      entities:[],
       selectedId : undefined,
       status : false,
       page : {...initialPageOfUsers}
-    })
+    }
   }
 }
 export function createPostStates(postResponses : PostResponse[]) : PostState[]{
