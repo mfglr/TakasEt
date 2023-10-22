@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace Application.Queries
 				.Include(x => x.User)
 				.Include(x => x.Category)
 				.Where(post => post.User.UserName == request.UserName)
+				.ToPage(request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,

@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { CommentResponse } from "src/app/models/responses/comment-response";
 import { PostResponse } from "src/app/models/responses/post-response";
 
-export const nextPageOfPosts = createAction( "next page of posts" );
+export const nextPageOfPosts = createAction( "next page of posts");
 export const nextPageOfPostsSuccess = createAction( "next page of posts success",props<{posts : PostResponse[]}>() );
 export const setSelectedPostId = createAction("set selected post",props<{postId : string}>());
 export const resetPageOfPosts = createAction("reset page of posts");

@@ -4,6 +4,7 @@ import { filter, mergeMap } from 'rxjs';
 import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 import { UserService } from 'src/app/services/user.service';
+import { initialPageOfPosts } from 'src/app/states/app-states';
 import { getLoginResponse } from 'src/app/states/user/selector';
 import { UserState } from 'src/app/states/user/state';
 
@@ -16,7 +17,7 @@ export class ProfileComponent{
 
   data$ = this.store.select(getLoginResponse).pipe(
     filter(x => !(!x)),
-    mergeMap(loginResponse => this.postService.getPostsWithFirstImagesByUserId(loginResponse!.id))
+    mergeMap(loginResponse => this.postService.getPostsWithFirstImagesByUserId(loginResponse!.id,{...initialPageOfPosts}))
   )
 
   user$ = this.store.select(getLoginResponse).pipe(

@@ -40,8 +40,9 @@ import { PostFooterComponent } from './shareds/post-footer/post-footer.component
 import { CommentModalComponent } from './modals/comment-modal/comment-modal.component';
 import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
 import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
-import { homeReducer } from './states/home/reducer';
-import { HomeEffect } from './states/home/effect';
+import { DateFormatPipe } from './pipes/date-format.pipe';
+import { HomeEffect } from './states/home-page/effect';
+import { homeReducer } from './states/home-page/reducer';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { HomeEffect } from './states/home/effect';
     PostFooterComponent,
     CommentModalComponent,
     CommentItemComponent,
-    CommentItemContentComponent
+    CommentItemContentComponent,
+    DateFormatPipe
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,7 @@ import { HomeEffect } from './states/home/effect';
     ReactiveFormsModule,
     StoreModule.forRoot(),
     StoreModule.forFeature("userStoreSlice" , userReducer),
-    StoreModule.forFeature("homeStoreSlice",homeReducer),
+    StoreModule.forFeature("homePageStoreSlice",homeReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([UserEffect]),
     EffectsModule.forFeature([HomeEffect])

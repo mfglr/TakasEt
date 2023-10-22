@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
-import { setSelectedPostId } from 'src/app/states/home/actions';
-import { HomeState } from 'src/app/states/home/states';
+import { setSelectedPostId } from 'src/app/states/home-page/actions';
+import { HomePageState } from 'src/app/states/home-page/reducer';
 
 @Component({
   selector: 'app-post-footer',
@@ -17,7 +17,7 @@ export class PostFooterComponent {
 
   constructor(
     public userPostLikingService : UserPostLikingService,
-    private store : Store<HomeState>
+    private store : Store<HomePageState>
   ) {}
 
   hover(){

@@ -32,7 +32,7 @@ namespace Application.Pipelines
 			var response = await next();
 
 			//Commit the changes if there are changes.
-			if(_unitOfWork.HasChanges()) await _unitOfWork.CommitAsync();
+			if(_unitOfWork.HasChanges()) await _unitOfWork.CommitAsync(cancellationToken);
 
 			return response;
 		}

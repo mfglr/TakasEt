@@ -1,6 +1,7 @@
 ﻿using Application.Configurations;
 using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using MediatR;
@@ -39,6 +40,7 @@ namespace Application.Queries
 				)
 				.GroupBy(x => x.Post)
 				.Select(x => x.OrderBy(image => image.Id).First())
+				.ToPage(request)
 				.ToListAsync(cancellationToken);
 			
 			foreach (var image in images) {

@@ -1,11 +1,27 @@
 <div class="root">
-  <div class="user-info">
-    <app-display-profile-image diameter="20" [userId]="comment?.userId" ></app-display-profile-image>
-    <span class="user-name">{{comment?.userName}}</span>
-  </div>
-  <div class="content">
-    <span>{{comment?.content}}</span>
+
+  <div class="header">
+    <app-display-profile-image diameter="32" [userId]="comment?.userId" ></app-display-profile-image>
+    <div class="content-wrapper">
+
+      <div class="content">
+        <span class="user-name">{{comment?.userName + "  "}}</span>
+        <span class="content-text">{{comment?.content}}</span>
+      </div>
+
+      <div class="content-info">
+        <ng-container *ngIf="comment && comment.countOfLikes > 0">
+          <span class="count-of-likes">{{comment.countOfLikes + ' begeni'}}</span>
+        </ng-container>
+        <span (click)="replyToComment()" class="reply-to-comment">Yanit ver</span>
+        <span>{{comment?.createdDate | dateFormat}}</span>
+      </div>
+
+    </div>
     <app-like-button [likeable]="commentLikingService" [id]="comment?.id"></app-like-button>
   </div>
+
+
+
 </div>
 

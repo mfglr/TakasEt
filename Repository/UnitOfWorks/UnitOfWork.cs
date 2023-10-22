@@ -19,7 +19,7 @@ namespace Repository.UnitOfWorks
 			_publisher = publisher;
 		}
 
-		public async Task CommitAsync()
+		public async Task CommitAsync(CancellationToken cancellationToken)
 		{
 			var entitiesThatHaveDomainEvents = GetEntities<IEntityDomainEvent>(x => x.Entity.AnyDomainEvents());
 			foreach (var entity in entitiesThatHaveDomainEvents)
@@ -27,11 +27,12 @@ namespace Repository.UnitOfWorks
 				entity.PublishAllDomainEvents(_publisher);
 				entity.ClearAllDomainEvents();
 			}
+			var date = DateTime.Now;
 			var createdEntity = GetEntities<IEntity>(x => x.State == EntityState.Added);
-			foreach (var entity in createdEntity) entity.SetCreatedDate();
+			foreach (var entity in createdEntity) entity.SetCreatedDate(date);
 			var updatedEntity = GetEntities<IEntity>(x => x.State == EntityState.Modified);
-			foreach (var entity in updatedEntity) entity.SetUpdatedDate();
-			await _context.SaveChangesAsync();
+			foreach (var entity in updatedEntity) entity.SetUpdatedDate(date);
+			await _context.SaveChangesAsync(cancellationToken);
 		}
 
 		public bool HasChanges()

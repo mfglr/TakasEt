@@ -49,21 +49,21 @@ namespace WebApi.Controllers
 		[HttpGet("post/get-posts-by-user-id/{userId}")]
 		public async Task<AppResponseDto> GetPostsByUserId(Guid userId)
 		{
-			return await _sender.Send(new GetPostsByUserId(userId));
+			return await _sender.Send(new GetPostsByUserId(userId,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-user-name/{userName}")]
 		public async Task<AppResponseDto> GetPostsByUserName(string userName)
 		{
-			return await _sender.Send(new GetPostsByUserName(userName));
+			return await _sender.Send(new GetPostsByUserName(userName,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-except-requesters/{postId}")]
 		public async Task<AppResponseDto> GetPostsExceptRequesters(Guid postId)
 		{
-			return await _sender.Send(new GetPostsExceptRequesters(postId));
+			return await _sender.Send(new GetPostsExceptRequesters(postId,Request.Query));
 		}
 
 

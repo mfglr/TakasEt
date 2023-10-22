@@ -7,6 +7,5 @@ export interface CommentResponse extends BaseResponse{
 	userName : string;
   content : string;
   countOfChildren : number;
-
-  children : CommentResponse[];
+  countOfLikes : number;
 }

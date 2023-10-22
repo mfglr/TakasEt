@@ -1,16 +1,42 @@
 .root{
-  display: flex;
-  flex-direction: column;
-  .user-info{
+  .header{
     display: flex;
     align-items: center;
-    .user-name{
-      margin-left: 0.5rem;
+    margin-bottom : 0.5rem;
+    .content-wrapper{
+      display: flex;
+      flex-direction: column;
+      .content{
+        display: flex;
+        .user-name{
+          margin-left: 0.5rem;
+          font-size: 15px;
+          font: 500;
+        }
+        .content-text{
+
+        }
+      }
+      .content-info{
+        display: flex;
+        align-items: center;
+        font-size: 10px;
+        .count-of-likes{
+          margin-right: 0.5rem;
+          text-decoration-line: underline;
+        }
+        .line{
+          width: 1.5rem;
+          margin-right: 0.5rem;
+        }
+        .reply-to-comment{
+          margin-right: 0.5rem;
+          text-decoration-line: underline;
+        }
+      }
     }
+
   }
-  .content{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+
+
 }

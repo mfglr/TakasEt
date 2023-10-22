@@ -14,14 +14,14 @@ namespace Application.Entities
 		public DateTime? UpdatedDate { get; private set; }
 
 
-		public void SetCreatedDate()
+		public void SetCreatedDate(DateTime date)
 		{
-			CreatedDate = DateTime.Now;
+			CreatedDate = date;
 		}
 
-		public void SetUpdatedDate()
+		public void SetUpdatedDate(DateTime date)
 		{
-			UpdatedDate = DateTime.Now;
+			UpdatedDate = date;
 		}
 
 	}

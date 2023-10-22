@@ -6,7 +6,7 @@
 		DateTime CreatedDate { get; }
 		DateTime? UpdatedDate { get; }
 
-		void SetCreatedDate();
-		void SetUpdatedDate();
+		void SetCreatedDate(DateTime date);
+		void SetUpdatedDate(DateTime date);
 	}
 }

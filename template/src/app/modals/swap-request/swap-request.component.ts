@@ -5,6 +5,7 @@ import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 import { PostPostRequestingService } from 'src/app/services/post-post-requesting.service';
 import { ObservableHelpers } from 'src/app/helpers/observable-helpers';
+import { initialPageOfPosts } from 'src/app/states/app-states';
 
 @Component({
   selector: 'app-swap-request',
@@ -46,7 +47,7 @@ export class SwapRequestComponent implements OnChanges,OnDestroy,AfterContentIni
     if(this.requestedId){
       this.dataSubscription = ObservableHelpers.mergeArrays(
         this.postService.getPostsExceptRequesters(this.requestedId),
-        this.postImageService.getFirstImageOfPostsExceptReuqesters(this.requestedId)
+        this.postImageService.getFirstImageOfPostsExceptReuqesters(this.requestedId,{...initialPageOfPosts})
       ).subscribe(x => this.data = x)
     }
   }

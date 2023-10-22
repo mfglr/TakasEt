@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,9 @@ namespace Application.Queries
 				.AsNoTracking()
 				.Include(x => x.User)
 				.Include(x => x.Children)
-				.Where(x => x.PostId == request.PostId && new DateTime(request.FirstQueryDate) < x.CreatedDate)
+				.Include(x => x.UsersWhoLiked)
+				.Where(x => x.PostId == request.PostId)
+				.ToPage(request)
 				.Select(
 					x => new CommentResponseDto()
 					{
@@ -34,11 +37,10 @@ namespace Application.Queries
 						ParentId = x.ParentId,
 						UpdatedDate = x.UpdatedDate,
 						UserId = x.UserId,
-						UserName = x.User.UserName!
+						UserName = x.User.UserName!,
+						CountOfLikes = x.Children.Count
 					}
 				)
-				.Skip(request.Skip)
-				.Take(request.Take)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(comments);
 		}

@@ -1,7 +1,7 @@
 import { EntityState } from "@ngrx/entity";
 import { CommentResponse } from "../models/responses/comment-response";
-import { UserResponse } from "../models/responses/user-response";
 import { PostResponse } from "../models/responses/post-response";
+import { UserResponse } from "../models/responses/user-response";
 
 export const takeValueOfPosts = 1;
 export const takeValueOfComments = 1;
@@ -17,35 +17,34 @@ export interface Page{
   firstQueryDate : number;
 }
 
-export interface AppState<T>{
-  entities : T[];
-  selectedId : string | undefined,
+export interface AppEntityState<T> extends EntityState<T>{
   status : boolean;
   page : Page;
 }
 
-export interface AppEntityState<T> extends EntityState<T>{
-  selectedId : string | undefined,
-  status : boolean;
-  page : Page;
+export interface UserState{
+  user : UserResponse;
+  postsState : PostsState;
+  followersState : UsersState;
+  followedsState : UsersState;
 }
+export interface UsersState extends AppEntityState<UserState>{}
+
 export interface CommentState{
   comment : CommentResponse;
-  childrend : CommentsState;
+  children : CommentsState;
+  likes : UsersState;
 }
 export interface CommentsState extends AppEntityState<CommentState>{}
+
 export interface PostState{
   post : PostResponse;
   comments : CommentsState;
-  usersLiked : UsersState;
-  usersViewed : UsersState;
-}
-export interface PostsState extends AppEntityState<PostState>{}
-export interface UserState{
-  user : UserResponse;
-  posts : PostsState;
-  followeds : UsersState;
+  likes : UsersState;
+  views : UsersState;
+  requesters : PostsState;
+  requesteds : PostsState;
   followers : UsersState;
 }
-export interface UsersState extends AppEntityState<UserState>{}
+export interface PostsState extends AppEntityState<PostState>{}
 

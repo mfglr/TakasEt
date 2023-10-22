@@ -6,9 +6,9 @@ import * as UserSelector from "src/app/states/user/selector"
 import { Observable, Subscription, filter, first, map } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
-import { HomeState } from 'src/app/states/home/states';
-import { selectComments } from 'src/app/states/home/selectors';
-import { nextPageOfComments } from 'src/app/states/home/actions';
+import { nextPageOfComments } from 'src/app/states/home-page/actions';
+import { HomePageState } from 'src/app/states/home-page/reducer';
+import { selectCommentResponsesOfPostReponse } from 'src/app/states/home-page/selectors';
 @Component({
   selector: 'app-comment-modal',
   templateUrl: './comment-modal.component.html',
@@ -17,6 +17,7 @@ import { nextPageOfComments } from 'src/app/states/home/actions';
 export class CommentModalComponent implements OnChanges, OnDestroy {
   @Input() post? : PostResponse;
   @Output() postCommentCountVector = new EventEmitter<number>();
+  comments$? : Observable<CommentResponse[]>
   respondedComment : CommentResponse | null = null;
   userId? : string;
 
@@ -25,11 +26,6 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
   );
 
   private respondedCommentSubscription? : Subscription;
-  comments$ = this.homeStore.select(selectComments)
-  cancelRespondingComment(){
-  }
-
-
   commentForm = new FormGroup({
     parentId : new FormControl<string | undefined>(undefined),
     postId : new FormControl<string | undefined>(undefined),
@@ -39,7 +35,7 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
 
   constructor(
     private userStore : Store<UserState>,
-    private homeStore : Store<HomeState>
+    private homeStore : Store<HomePageState>
   ) {}
 
   getMore(){
@@ -47,22 +43,16 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
   }
 
   ngOnInit(){
-    this.comments$.pipe(
-      first(),
-      filter( x => !(!x) && x.length <= 0),
-      map(() => this.homeStore.dispatch(nextPageOfComments()) )
-    ).subscribe();
   }
   ngOnChanges() {
     if(this.post){
-
+      this.comments$ = this.homeStore.select(selectCommentResponsesOfPostReponse({postId : this.post.id}))
       this.commentForm.patchValue({
           postId : this.post.id,
           userId : this.userId
       })
     }
   }
-
   publishComment(){
     if(this.commentForm.value.postId) this.postCommentCountVector.emit(1);
     if(this.post)

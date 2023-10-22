@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,7 @@ namespace Application.Queries
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.Where(x => new DateTime(request.FirstQueryDate) < x.CreatedDate)
-				.OrderByDescending(x => x.CreatedDate)
+				.ToPage(request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,
@@ -43,8 +43,6 @@ namespace Application.Queries
 					CountOfViews = x.UsersWhoViewed.Count,
 					CountOfComments = x.Comments.Count,
 				})
-				.Skip(request.Skip)
-				.Take(request.Take)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

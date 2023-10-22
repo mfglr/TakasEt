@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
@@ -24,13 +25,14 @@ namespace Application.Queries
             var categories = await _categories
 				.DbSet
 				.AsNoTracking()
-				.Where(c =>
-                    
+				.Where(
+                    c =>
                         request.Key == null ||
                         c.Name.ToLower().Contains(request.Key.ToLower()) ||
                         c.Description.ToLower().Contains(request.Key.ToLower())
-                    
-                ).ToListAsync();
+                )
+                .ToPage(request)
+                .ToListAsync();
             return AppResponseDto.Success(_mapper.Map<IEnumerable<CategoryResponseDto>>(categories));
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using MediatR;
@@ -30,6 +31,7 @@ namespace Application.Queries
 				.Include(x => x.Post)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Post.User.Id == request.UserId)
+                .ToPage(request)
                 .GroupBy(x => x.Post)
                 .Select(x => x.OrderBy(x => x.Id).First())
                 .ToListAsync(cancellationToken);

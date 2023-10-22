@@ -27,7 +27,7 @@ namespace WebApi.Controllers
 		[HttpGet("category/filter-categories/{key}")]
 		public async Task<AppResponseDto> FilterCategories(string key)
 		{
-			return await _sender.Send(new FilterCategories(key));
+			return await _sender.Send(new FilterCategories(key,Request.Query));
 		}
 	}
 }

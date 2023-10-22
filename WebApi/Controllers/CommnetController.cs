@@ -24,10 +24,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("comment/get-comment-with-children/{id}")]
-		public async Task<AppResponseDto> GetCommentWithChildren(Guid id)
+		[HttpGet("comment/get-children/{id}")]
+		public async Task<AppResponseDto> GetChildren(Guid id)
 		{
-			return await _sender.Send(new GetChildren(id));
+			return await _sender.Send(new GetChildren(id,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]

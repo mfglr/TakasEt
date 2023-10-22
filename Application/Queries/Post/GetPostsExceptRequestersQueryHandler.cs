@@ -2,6 +2,7 @@
 using Application.Dtos;
 using Application.Dtos.Post;
 using Application.Entities;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,7 @@ namespace Application.Queries
                         x.UserId == _loggedInUser.UserId &&
                         !x.Requesteds.Select(r => r.RequestedId).Contains(request.PostId)
                 )
+				.ToPage(request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,

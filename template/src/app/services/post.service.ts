@@ -5,7 +5,7 @@ import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { PostImageService } from './post-image.service';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../states/app-state';
+import { Page } from '../states/app-states';
 
 @Injectable({
   providedIn: 'root'
@@ -54,10 +54,13 @@ export class PostService {
     return this.appHttpClient.get<PostResponse[]>(`post/get-posts-by-user-id/${userId}`);
   }
 
-  getPostsWithFirstImagesByUserId(userId : string) : Observable<PostResponse[]>{
-    return this.appHttpClient.get<PostResponse[]>(`post/get-posts-by-user-id/${userId}`).pipe(
+  getPostsWithFirstImagesByUserId(userId : string,page : Page) : Observable<PostResponse[]>{
+    return this.appHttpClient.get<PostResponse[]>
+      (
+        UrlHelper.createPaginationUrl(`post/get-posts-by-user-id/${userId}`,page)
+      ).pipe(
       mergeMap(
-        posts => this.postImageService.getFirstImagesOfPostsByUserId(userId).pipe(
+        posts => this.postImageService.getFirstImagesOfPostsByUserId(userId,page).pipe(
           mergeMap( images => from(images) ),
           map(
             (image,index) => {

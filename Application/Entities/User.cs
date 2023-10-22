@@ -29,7 +29,7 @@ namespace Application.Entities
         {
 			UserName = userName;
 			Email = email;
-			SetCreatedDate();
+			SetCreatedDate(DateTime.Now);
         }
 
         public User()
@@ -44,13 +44,13 @@ namespace Application.Entities
 			return totalCredit;
 		}
 
-		public void SetCreatedDate()
+		public void SetCreatedDate(DateTime date)
 		{
-			CreatedDate = DateTime.Now;
+			CreatedDate = date;
 		}
-		public void SetUpdatedDate()
+		public void SetUpdatedDate(DateTime date)
 		{
-			UpdatedDate = DateTime.Now;
+			UpdatedDate = date;
 		}
 
 		private List<INotification> _domainEvents = new List<INotification>();

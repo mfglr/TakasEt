@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { HomeState } from 'src/app/states/home/states';
 
 @Component({
   selector: 'app-post',
@@ -15,7 +14,6 @@ export class PostComponent implements OnChanges {
   firstImage? : string;
 
   constructor(
-    private store : Store<HomeState>
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

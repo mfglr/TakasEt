@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-	public class GetFirstImagesOfPostsByUserName : IRequest<byte[]>
+	public class GetFirstImagesOfPostsByUserName : Pagination, IRequest<byte[]>
 	{
         public string UserName { get; private set; }
 
-		public GetFirstImagesOfPostsByUserName(string userName)
+		public GetFirstImagesOfPostsByUserName(string userName,IQueryCollection collection) : base(collection)
 		{
 			UserName = userName;
+
 		}
 	}
 }
