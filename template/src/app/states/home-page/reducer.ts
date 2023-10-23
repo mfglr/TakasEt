@@ -1,7 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
-import { PostsState, initialPageOfPosts, takeValueOfComments, takeValueOfPosts } from "../app-states";
+import { PostsState, initialPageOfPosts,takeValueOfPosts } from "../app-states";
 import { nextPageOfChildrenSuccess,nextPageOfCommentsSuccess, nextPageOfPostsSuccess, resetPageOfPosts, setSelectedCommentId, setSelectedPostId } from "./actions";
-import { commentAdapter, commentChildrenAdapter, createCommentStates, createPostStates, postAdapter } from "../app-adapters";
+import { createPostStates, postAdapter } from "../app-adapters";
+import { PostsStateFunctions } from "../app-functions";
 
 
 export interface HomePageState{
@@ -34,56 +35,17 @@ export const homeReducer = createReducer(
   on(resetPageOfPosts, (state) : HomePageState => ({...state,posts : {...state.posts,page : {...initialPageOfPosts}}})),
   on(setSelectedPostId,(state,action) : HomePageState =>({...state, selectedPostId : action.postId})),
   on(nextPageOfCommentsSuccess,(state,action) : HomePageState => {
-    if(state.selectedPostId){
-      let selectedCommentsState = state.posts.entities[state.selectedPostId]!.comments;
-      let page = selectedCommentsState.page;
-      return{
-        ...state,
-        posts : postAdapter.updateOne(
-          {
-            id : state.selectedPostId,
-            changes : {
-              comments : {
-                ...commentAdapter.addMany(createCommentStates(action.comments),selectedCommentsState),
-                status : action.comments.length < takeValueOfComments,
-                page : {...page,skip : page.skip + takeValueOfComments}
-              }
-            }
-          },
-          state.posts
-        )
-      }
-    }
+    if(state.selectedPostId)
+      return {...state, posts : PostsStateFunctions.loadComments(state.posts,action.comments,state.selectedPostId)}
     return state;
   }),
   on(setSelectedCommentId,(state,action) : HomePageState =>({...state,selectedCommentId : action.commentId})),
   on(nextPageOfChildrenSuccess,(state,action) : HomePageState => {
-    if(state.selectedPostId && state.selectedCommentId){
-      let selectedCommentsState = state.posts.entities[state.selectedPostId]!.comments;
-      let selectedChildrenState = selectedCommentsState.entities[state.selectedCommentId]!.children
-      let page = selectedChildrenState.page;
-      return{
+    if(state.selectedPostId && state.selectedCommentId)
+      return {
         ...state,
-        posts : postAdapter.updateOne({
-          id : state.selectedPostId,
-          changes : {
-            comments : commentAdapter.updateOne({
-              id : state.selectedCommentId,
-                changes : {
-                  children : {
-                    ...commentChildrenAdapter.addMany(createCommentStates(action.comments),selectedChildrenState),
-                    page : {...page,skip : page.skip + takeValueOfComments},
-                    status : action.comments.length < takeValueOfComments
-                  }
-                }
-              },
-              selectedCommentsState
-            )}
-          },
-          state.posts
-        )
+        posts : PostsStateFunctions.loadChildComments(state.posts,action.comments,state.selectedPostId,state.selectedCommentId)
       }
-    }
     return state;
   })
 )

@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { HomePageState } from "./reducer";
-import { commentChildrenAdapter, postAdapter, postCommentsAdapter } from "../app-adapters";
+import { commentAdapter, postAdapter } from "../app-adapters";
 import { CommentsState } from "../app-states";
 
 //HomePageState Selectors;
@@ -34,8 +34,8 @@ const selectCommentsOfPostState = (props : {postId : string} ) => createSelector
 )
 const selectCommentStatesOfCommentsOfPostsState = (props : {postId : string} ) => createSelector(
   selectCommentsOfPostState(props),
-  postCommentsAdapter.getSelectors(
-    (state : CommentsState | undefined) => state ? state : postCommentsAdapter.getInitialState()
+  commentAdapter.getSelectors(
+    (state : CommentsState | undefined) => state ? state : commentAdapter.getInitialState()
   ).selectAll
 )
 export const selectCommentResponsesOfPostReponse = (props : {postId : string} ) => createSelector(
@@ -49,8 +49,8 @@ const selectChildrenOfCommentState = (props : {postId : string,commentId : strin
 )
 const selectCommentStatesOfChildrenOfCommentState = (props : {postId : string,commentId : string}) => createSelector(
   selectChildrenOfCommentState(props),
-  commentChildrenAdapter.getSelectors(
-    (state : CommentsState | undefined) => state ? state : commentChildrenAdapter.getInitialState()
+  commentAdapter.getSelectors(
+    (state : CommentsState | undefined) => state ? state : commentAdapter.getInitialState()
   ).selectAll
 )
 export const selectCommentReponsesOfCommentResponse = (props : {postId : string,commentId : string}) => createSelector(

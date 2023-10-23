@@ -5,7 +5,7 @@ import { UserResponse } from "../models/responses/user-response";
 
 export const takeValueOfPosts = 1;
 export const takeValueOfComments = 1;
-export const takeValueOfUsers = 10;
+export const takeValueOfUsers = 1;
 
 export const initialPageOfPosts = { skip : 0, take : takeValueOfPosts,firstQueryDate : Date.now() }
 export const initialPageOfComments = { skip : 0, take : takeValueOfComments,firstQueryDate : Date.now() }
@@ -24,23 +24,23 @@ export interface AppEntityState<T> extends EntityState<T>{
 
 export interface UserState{
   user : UserResponse;
-  postsState : PostsState;
-  followersState : UsersState;
-  followedsState : UsersState;
+  posts : PostsState;
+  followers : UsersState;
+  followeds : UsersState;
 }
 export interface UsersState extends AppEntityState<UserState>{}
 
 export interface CommentState{
   comment : CommentResponse;
   children : CommentsState;
-  likes : UsersState;
+  likers : UsersState;
 }
 export interface CommentsState extends AppEntityState<CommentState>{}
 
 export interface PostState{
   post : PostResponse;
   comments : CommentsState;
-  likes : UsersState;
+  likers : UsersState;
   views : UsersState;
   requesters : PostsState;
   requesteds : PostsState;
