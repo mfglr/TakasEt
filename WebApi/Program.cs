@@ -4,12 +4,14 @@ using Repository.Contexts;
 using Service;
 using Repository;
 using Application;
+using Handler;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Hubs;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Function.Middlewares;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddSqlDbContext();
 builder.Services.AddApplication();
+builder.Services.AddHandlers();
 builder.Services.AddServices();
 
 builder.Services.AddAuthentication(
