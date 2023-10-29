@@ -6,7 +6,12 @@
     display: flex;
     justify-content: center;
     .likes{
+      display: flex;
+      align-items: center;
       margin-right: 0.5rem;
+      .likes-span{
+        font-size: 0.75rem;
+      }
     }
     .views{
       margin-right: 0.5rem;

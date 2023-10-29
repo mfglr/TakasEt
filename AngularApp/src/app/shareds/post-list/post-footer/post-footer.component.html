@@ -1,23 +1,21 @@
 <div class="root">
   <div class="footer">
     <div class="likes">
-      <span>
-        <app-like-button
+      <app-like-button
         [likeable]="userPostLikingService"
         [id]="post?.id"
         (likeVector)="getLikeVector($event)"></app-like-button>
-        {{post?.countOfLikes}}
-      </span>
+      <span class="likes-span" (click)="displayPostLikers()">{{post?.countOfLikes + ' begeni'}}</span>
     </div>
 
-    <div class="views">
+    <div class="views" (click)="displayPostViewers()">
       <span>
         <i class="fa-solid fa-eye"></i>
         {{post?.countOfViews}}
       </span>
     </div>
 
-    <div class="comments" (mouseover)="hover()" (click)="displayCommentsButton()">
+    <div class="comments" (click)="displayComments()">
       <span>
         <i class="fa-solid fa-comment"></i>
         {{post?.countOfComments}}
@@ -28,6 +26,4 @@
   <div class="date">
     <span>{{post?.createdDate | dateFormat}}</span>
   </div>
-
 </div>
-

@@ -1,0 +1,27 @@
+
+<div class="modal fade" id="usersListModal" tabindex="-1" role="dialog" aria-labelledby="usersListModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="users">
+          <div class="user-item" *ngFor="let user of users">
+            <app-user-item [user]="user"></app-user-item>
+          </div>
+        </div>
+        <button (click)="getNextPageOfPostLikers()">more</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+

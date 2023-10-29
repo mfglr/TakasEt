@@ -1,0 +1,17 @@
+<div class="card post-card" (mouseover)="setSelectedPost()">
+  <div class="card-header post-card-header">
+    <app-post-header [post]="post"></app-post-header>
+  </div>
+  <div class="card-body post-card-body">
+    <a href="#">
+      <img [src]="firstImage" alt="" style="width: 100%;">
+    </a>
+  </div>
+  <div class="card-footer">
+    <app-post-footer
+      [post]="post"
+      (displayPostLikersEvent)="displayPostLikers($event)"
+      (displayCommentsEvent)="displayComments($event)"
+      (displayPostViewersEvent)="displayViewers($event)"></app-post-footer>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
 import { PostsState, initialPageOfPosts,takeValueOfPosts } from "../app-states";
-import { nextPageOfChildrenSuccess,nextPageOfCommentsSuccess, nextPageOfPostsSuccess, resetPageOfPosts, setSelectedCommentId, setSelectedPostId } from "./actions";
+import { nextPageOfChildrenSuccess,nextPageOfCommentsSuccess, nextPageOfPostLikersSuccess, nextPageOfPostsSuccess, resetPageOfPosts, setSelectedCommentId, setSelectedPostId } from "./actions";
 import { createPostStates, postAdapter } from "../app-adapters";
-import { PostsStateFunctions } from "../app-functions";
+import { PostsStateFunctions } from "../posts-state-functions";
 
 
 export interface HomePageState{
@@ -34,6 +34,7 @@ export const homeReducer = createReducer(
   }),
   on(resetPageOfPosts, (state) : HomePageState => ({...state,posts : {...state.posts,page : {...initialPageOfPosts}}})),
   on(setSelectedPostId,(state,action) : HomePageState =>({...state, selectedPostId : action.postId})),
+
   on(nextPageOfCommentsSuccess,(state,action) : HomePageState => {
     if(state.selectedPostId)
       return {...state, posts : PostsStateFunctions.loadComments(state.posts,action.comments,state.selectedPostId)}
@@ -45,6 +46,15 @@ export const homeReducer = createReducer(
       return {
         ...state,
         posts : PostsStateFunctions.loadChildComments(state.posts,action.comments,state.selectedPostId,state.selectedCommentId)
+      }
+    return state;
+  }),
+
+  on(nextPageOfPostLikersSuccess, (state,action) : HomePageState => {
+    if(state.selectedPostId)
+      return {
+        ...state,
+        posts : PostsStateFunctions.loadLikers(state.posts,action.likers,state.selectedPostId)
       }
     return state;
   })

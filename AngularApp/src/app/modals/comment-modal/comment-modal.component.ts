@@ -3,12 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import * as UserSelector from "src/app/states/user/selector"
-import { Observable, Subscription, filter, first, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
-import { nextPageOfComments } from 'src/app/states/home-page/actions';
-import { HomePageState } from 'src/app/states/home-page/reducer';
-import { selectCommentResponsesOfPostReponse } from 'src/app/states/home-page/selectors';
+import { MappedCommentStateModel } from 'src/app/states/home-page/selectors/comments-selectors';
+
 @Component({
   selector: 'app-comment-modal',
   templateUrl: './comment-modal.component.html',
@@ -16,8 +15,11 @@ import { selectCommentResponsesOfPostReponse } from 'src/app/states/home-page/se
 })
 export class CommentModalComponent implements OnChanges, OnDestroy {
   @Input() post? : PostResponse;
-  @Output() postCommentCountVector = new EventEmitter<number>();
-  comments$? : Observable<CommentResponse[]>
+  @Input() mappedComments? : MappedCommentStateModel[] | null;
+  @Output() nextPageOfCommentsEvent = new EventEmitter<void>();
+  @Output() nextPageOfChildrenEvent = new EventEmitter<void>();
+  @Output() setSelectedCommentEvent = new EventEmitter<CommentResponse>();
+
   respondedComment : CommentResponse | null = null;
   userId? : string;
 
@@ -35,30 +37,20 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
 
   constructor(
     private userStore : Store<UserState>,
-    private homeStore : Store<HomePageState>
   ) {}
 
-  getMore(){
-    this.homeStore.dispatch(nextPageOfComments())
-  }
+  getNextPageOfComments(){ this.nextPageOfCommentsEvent.emit(); }
+  getNextPageOfChildren(){ this.nextPageOfChildrenEvent.emit(); }
+  setSelectedComment(commentResponse : CommentResponse){ this.setSelectedCommentEvent.emit(commentResponse); }
 
-  ngOnInit(){
-  }
   ngOnChanges() {
     if(this.post){
-      this.comments$ = this.homeStore.select(selectCommentResponsesOfPostReponse({postId : this.post.id}))
       this.commentForm.patchValue({
           postId : this.post.id,
           userId : this.userId
       })
     }
   }
-  publishComment(){
-    if(this.commentForm.value.postId) this.postCommentCountVector.emit(1);
-    if(this.post)
-      this.commentForm.patchValue( { postId : this.post.id,parentId : null,content : ''})
-  }
-
   ngOnDestroy(): void {
     this.respondedCommentSubscription?.unsubscribe()
   }

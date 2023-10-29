@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { PostResponse } from 'src/app/models/responses/post-response';
 
 @Component({
@@ -9,13 +9,24 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 export class PostListComponent{
   @Input() posts? : PostResponse[] | undefined | null;
   @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
-  post? : PostResponse;
-  getCommentButtonEvent(post : PostResponse){
-    this.post = post;
-    if(this.commentModalButton) this.commentModalButton.nativeElement.click();
+  @Output() displayLikersEvent = new EventEmitter<PostResponse>();
+  @Output() displayCommentsEvent = new EventEmitter<PostResponse>();
+  @Output() displayViewersEvent = new EventEmitter<PostResponse>();
+  @Output() setSelectedPostEvent = new EventEmitter<PostResponse>();
+
+  displayComments(post : PostResponse){
+    this.displayCommentsEvent.emit(post);
   }
-  getPostCommentCountVector(countVector : number){
-    if(this.post)
-      this.post.countOfComments += countVector;
+
+  displayPostLikers(post : PostResponse){
+    this.displayLikersEvent.emit(post)
+  }
+
+  displayViewers(post : PostResponse){
+    this.displayViewersEvent.emit(post);
+  }
+
+  setSelectedPost(post : PostResponse){
+    this.setSelectedPostEvent.emit(post);
   }
 }

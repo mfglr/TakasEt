@@ -16,8 +16,6 @@ namespace WebApi.Controllers
 			_sender = sender;
 		}
 
-		
-
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-user-by-username/{username}")]
 		public async Task<AppResponseDto> GetUserByUserName(string username)
@@ -37,6 +35,12 @@ namespace WebApi.Controllers
 		public async Task<AppResponseDto> RemoveUser(Guid id)
 		{
 			return await _sender.Send(new RemoveUserRequestDto(id));
+		}
+		[Authorize(Roles = "user")]
+		[HttpGet("user/get-users-who-liked-post/{postId}")]
+		public async Task<AppResponseDto> GetUsersWhoLikedPost(Guid postId)
+		{
+			return await _sender.Send(new GetUsersWhoLikedPost(postId,Request.Query));
 		}
 
 	}

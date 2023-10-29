@@ -7,7 +7,7 @@
         <div>
           <form [formGroup]="commentForm">
             <input formControlName="content" type="text">
-            <button (click)="publishComment()">paylas</button>
+            <button>paylas</button>
           </form>
           <div>
             <ng-container *ngIf="!respondedComment; else template;">
@@ -28,10 +28,13 @@
       </div>
 
       <div class="modal-body">
-        <div class="comment-item" *ngFor="let comment of (comments$ | async)">
-          <app-comment-item [comment]="comment"></app-comment-item>
+        <div class="comment-item" *ngFor="let mappedComment of mappedComments">
+          <app-comment-item
+            (nextPageOfChildrenEvent)="getNextPageOfChildren()"
+            [mappedComment]="mappedComment"
+            (setSelectedCommentEvent)="setSelectedComment($event)"></app-comment-item>
         </div>
-        <button (click)="getMore()">more</button>
+        <button (click)="getNextPageOfComments()">more</button>
       </div>
 
     </div>

@@ -1,26 +1,18 @@
 <div class="root">
 
   <div class="parent">
-    <app-comment-item-content [comment]="comment"></app-comment-item-content>
+    <app-comment-item-content [mappedComment]="mappedComment"></app-comment-item-content>
   </div>
 
-  <div class="children" *ngIf="comment && comment.countOfChildren > 0">
+  <div class="children" *ngIf="mappedComment && mappedComment.comment.countOfChildren > 0">
 
-    <ng-container *ngIf="remainingChildCommentCounts > 0; else template;">
-      <div (click)="loadChildren()" (mouseover)="hover()" class="load-children">
-        <span>{{remainingChildCommentCounts + ' yaniti goster'}}</span>
-      </div>
-    </ng-container>
+    <div (click)="loadChildren()" (mouseover)="hover()" class="load-children">
+      <span>{{'yanitlari goster'}}</span>
+    </div>
 
-    <ng-template #template>
-      <div (click)="mode.next()" (mouseover)="hover()" class="load-children">
-        <span>{{mode.currentIndex ? 'Yanitlari gizle' : comment.countOfChildren + ' yaniti goster'}}</span>
-      </div>
-    </ng-template>
-
-    <ng-container  *ngIf="mode.currentIndex">
-      <div class="child" *ngFor="let child of (children$ | async)">
-        <app-comment-item-content [comment]="child"  [hasChildren]="false"></app-comment-item-content>
+    <ng-container>
+      <div class="child" *ngFor="let child of mappedComment.children">
+        <app-comment-item-content [mappedComment]="child"  [hasChildren]="false"></app-comment-item-content>
       </div>
     </ng-container>
 

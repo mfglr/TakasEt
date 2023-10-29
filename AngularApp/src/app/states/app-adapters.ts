@@ -1,8 +1,9 @@
 import { createEntityAdapter } from "@ngrx/entity";
-import { CommentState, PostState, UserState, initialPageOfComments, initialPageOfPosts, initialPageOfUsers } from "./app-states";
+import { CommentState, CommentsState, PostState, PostsState, UserState, UsersState, initialPageOfComments, initialPageOfPosts, initialPageOfUsers } from "./app-states";
 import { CommentResponse } from "../models/responses/comment-response";
 import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
+import { createSelector } from "@ngrx/store";
 
 export const commentAdapter = createEntityAdapter<CommentState>({
   selectId : state => state.comment.id
@@ -13,6 +14,9 @@ export const postAdapter = createEntityAdapter<PostState>({
 export const userAdapter = createEntityAdapter<UserState>({
   selectId : state => state.user.id
 })
+export const selectAllPostStates = postAdapter.getSelectors((state : PostsState) => state).selectAll
+export const selectAllCommentStates = commentAdapter.getSelectors((state : CommentsState) => state).selectAll
+export const selectAllUserStates = userAdapter.getSelectors((state : UsersState) => state).selectAll
 
 export function createCommentState(commentReponse : CommentResponse) : CommentState{
   return {
@@ -73,7 +77,7 @@ export function createPostState(postResponse : PostResponse) : PostState{
       page : {...initialPageOfPosts},
       status : false
     }),
-    views : userAdapter.getInitialState({
+    viewers : userAdapter.getInitialState({
       page : {...initialPageOfUsers},
       status : false
     })

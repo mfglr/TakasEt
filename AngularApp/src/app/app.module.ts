@@ -34,15 +34,17 @@ import { NotificationsComponent } from './pages/notifications/notifications.comp
 import { SwapProposalsComponent } from './pages/profile/swap-proposals/swap-proposals.component';
 import { SwapRequestsComponent } from './pages/profile/swap-requests/swap-requests.component';
 import { FollowedPostsComponent } from './pages/profile/followed-posts/followed-posts.component';
-import { PostComponent } from './shareds/post/post.component';
-import { PostHeaderComponent } from './shareds/post-header/post-header.component';
-import { PostFooterComponent } from './shareds/post-footer/post-footer.component';
+import { PostComponent } from './shareds/post-list/post/post.component';
+import { PostHeaderComponent } from './shareds/post-list/post-header/post-header.component';
+import { PostFooterComponent } from './shareds/post-list/post-footer/post-footer.component';
 import { CommentModalComponent } from './modals/comment-modal/comment-modal.component';
 import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
 import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { HomeEffect } from './states/home-page/effect';
 import { homeReducer } from './states/home-page/reducer';
+import { UsersListModalComponent } from './modals/users-list-modal/users-list-modal.component';
+import { UserItemComponent } from './modals/users-list-modal/user-item/user-item.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { homeReducer } from './states/home-page/reducer';
     CommentModalComponent,
     CommentItemComponent,
     CommentItemContentComponent,
-    DateFormatPipe
+    DateFormatPipe,
+    UsersListModalComponent,
+    UserItemComponent,
   ],
   imports: [
     BrowserModule,

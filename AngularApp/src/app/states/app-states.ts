@@ -41,7 +41,7 @@ export interface PostState{
   post : PostResponse;
   comments : CommentsState;
   likers : UsersState;
-  views : UsersState;
+  viewers : UsersState;
   requesters : PostsState;
   requesteds : PostsState;
   followers : UsersState;

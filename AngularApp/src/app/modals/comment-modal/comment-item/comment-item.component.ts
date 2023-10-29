@@ -1,13 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Mode } from 'src/app/helpers/mode';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
 import { takeValueOfComments } from 'src/app/states/app-states';
 import { nextPageOfChildren, setSelectedCommentId } from 'src/app/states/home-page/actions';
-import { HomePageState } from 'src/app/states/home-page/reducer';
-import { selectCommentReponsesOfCommentResponse } from 'src/app/states/home-page/selectors';
+import { MappedCommentStateModel } from 'src/app/states/home-page/selectors/comments-selectors';
 
 @Component({
   selector: 'app-comment-item',
@@ -15,34 +13,35 @@ import { selectCommentReponsesOfCommentResponse } from 'src/app/states/home-page
   styleUrls: ['./comment-item.component.scss']
 })
 export class CommentItemComponent {
+  @Input() mappedComment? : MappedCommentStateModel;
   @Input() comment? : CommentResponse;
-  children$? : Observable<CommentResponse[]>
+  @Output() nextPageOfChildrenEvent = new EventEmitter<void>();
+  @Output() setSelectedCommentEvent = new EventEmitter<CommentResponse>();
+
   remainingChildCommentCounts = 0;
   mode : Mode = new Mode(2)
 
   constructor(
     public commentLikingService : UserCommentLikingService,
-    private homeStore : Store<HomePageState>
   ) {}
 
+
   ngOnChanges(){
-    if(this.comment && this.comment.countOfChildren > 0){
-      this.remainingChildCommentCounts = this.comment.countOfChildren
-      this.children$ = this.homeStore.select(
-        selectCommentReponsesOfCommentResponse({postId : this.comment.postId!,commentId : this.comment.id})
-      );
+    if(this.mappedComment && this.mappedComment.comment.countOfChildren > 0){
+      this.remainingChildCommentCounts = this.mappedComment.comment.countOfChildren - this.mappedComment.children!.length
     }
   }
+
   loadChildren(){
-    if(this.comment && this.comment.countOfChildren > 0){
-      this.homeStore.dispatch(nextPageOfChildren())
+    if(this.mappedComment && this.mappedComment.comment.countOfChildren > 0){
+      this.nextPageOfChildrenEvent.emit();
       this.remainingChildCommentCounts = this.remainingChildCommentCounts - takeValueOfComments;
       this.mode = new Mode(2,1);
     }
   }
   hover(){
-    if(this.comment)
-      this.homeStore.dispatch(setSelectedCommentId({ commentId : this.comment.id}))
+    if(this.mappedComment)
+      this.setSelectedCommentEvent.emit(this.mappedComment.comment);
   }
 
   commentToParent(){
