@@ -1,6 +1,6 @@
 <button type="button" style="display:none;" data-toggle="modal" data-target="#commentModal" #commentModalButton></button>
 <app-comment-modal
-  [post]="postForComments"
+  [post]="postForCommentModal"
   (nextPageOfCommentsEvent)="getNextPageOfComments()"
   (nextPageOfChildrenEvent)="getNextPageOfChildren()"
   (setSelectedCommentEvent)="setSelectedComment($event)"
@@ -10,10 +10,14 @@
 <app-users-list-modal
   (nextPageOfPostLikersEvent)="getNextPageOfPostLikers()"
   [users]="postLikers$ | async"></app-users-list-modal>
+
+<button type="button" style="display:none;" data-toggle="modal" data-target="#postDetailModal" #displayPostModalButton></button>
+<app-post-detail-modal  ></app-post-detail-modal>
 <app-post-list
   [posts]="posts$ | async"
   (displayCommentsEvent)="displayComments($event)"
   (displayLikersEvent)="displayPostLikers($event)"
   (displayViewersEvent)="displayViewers($event)"
-  (setSelectedPostEvent)="setSelectedPost($event)"></app-post-list>
+  (setSelectedPostEvent)="setSelectedPost($event)"
+  (displayPostEvent)="displayPost($event)"></app-post-list>
 <button (click)="getMore()">more</button>

@@ -1,6 +1,4 @@
 import { BaseResponse } from "./base-response";
-import { CommentResponse } from "./comment-response";
-import { UserResponse } from "./user-response";
 
 export interface PostResponse extends BaseResponse{
   userName : string;
@@ -9,8 +7,9 @@ export interface PostResponse extends BaseResponse{
   title : string;
   content : string;
   publishDate : Date;
+  countOfImages : number;
   countOfLikes : number;
   countOfViews : number;
   countOfComments : number;
-  images : string[];
+  firtImage : string;
 }

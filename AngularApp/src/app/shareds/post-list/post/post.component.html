@@ -2,7 +2,7 @@
   <div class="card-header post-card-header">
     <app-post-header [post]="post"></app-post-header>
   </div>
-  <div class="card-body post-card-body">
+  <div class="card-body post-card-body" (click)="displayPost()">
     <a href="#">
       <img [src]="firstImage" alt="" style="width: 100%;">
     </a>

@@ -13,7 +13,7 @@ export class PostListComponent{
   @Output() displayCommentsEvent = new EventEmitter<PostResponse>();
   @Output() displayViewersEvent = new EventEmitter<PostResponse>();
   @Output() setSelectedPostEvent = new EventEmitter<PostResponse>();
-
+  @Output() displayPostEvent = new EventEmitter<PostResponse>();
   displayComments(post : PostResponse){
     this.displayCommentsEvent.emit(post);
   }
@@ -26,6 +26,9 @@ export class PostListComponent{
     this.displayViewersEvent.emit(post);
   }
 
+  displayPost(post : PostResponse){
+    this.displayPostEvent.emit(post);
+  }
   setSelectedPost(post : PostResponse){
     this.setSelectedPostEvent.emit(post);
   }

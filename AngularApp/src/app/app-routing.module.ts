@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { HomeComponent } from './pages/home/home.component';
-import { DisplayPostPageComponent } from './pages/display-post-page/display-post-page.component';
 import { SearchComponent } from './pages/search/search.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { MessagesComponent } from './pages/messages/messages.component';
@@ -29,7 +28,6 @@ const routes: Routes = [
         ]
       },
       {path : 'user/:id',component : ProfileComponent},
-      {path : 'display-post/:id',component : DisplayPostPageComponent}
     ]
   },
 ];

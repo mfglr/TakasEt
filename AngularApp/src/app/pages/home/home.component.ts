@@ -5,8 +5,8 @@ import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { nextPageOfChildren, nextPageOfComments, nextPageOfPostLikers, nextPageOfPosts, setSelectedCommentId, setSelectedPostId } from 'src/app/states/home-page/actions';
 import { HomePageState } from 'src/app/states/home-page/reducer';
-import { comments, selectSelectedCommentResponses } from 'src/app/states/home-page/selectors/comments-selectors';
-import { selectPostReponsesOfHomePage, selectSelectedCommentId } from 'src/app/states/home-page/selectors/home-page-selectors';
+import { comments } from 'src/app/states/home-page/selectors/comments-selectors';
+import { selectPostReponsesOfHomePage } from 'src/app/states/home-page/selectors/home-page-selectors';
 import { selectSelectedUserResponsesOfLiker } from 'src/app/states/home-page/selectors/likers-selectors';
 
 @Component({
@@ -17,11 +17,13 @@ import { selectSelectedUserResponsesOfLiker } from 'src/app/states/home-page/sel
 export class HomeComponent implements OnInit {
   @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
   @ViewChild("usersListModalButton",{static : true}) usersListModalButton? : ElementRef;
+  @ViewChild("displayPostModalButton",{static : true}) displayPostModalButton? : ElementRef;
 
   mappedComments$ = this.store.select(comments);
   posts$ = this.store.select(selectPostReponsesOfHomePage)
   postLikers$ = this.store.select(selectSelectedUserResponsesOfLiker)
-  postForComments? : PostResponse;
+  postForCommentModal? : PostResponse;
+  postForPostModal? : PostResponse;
 
   constructor(
     private store : Store<HomePageState>
@@ -43,7 +45,7 @@ export class HomeComponent implements OnInit {
   getNextPageOfPostLikers(){ this.store.dispatch(nextPageOfPostLikers()) }
 
   displayComments(post : PostResponse){
-    this.postForComments = post;
+    this.postForCommentModal = post;
     if(this.commentModalButton) {
       this.commentModalButton.nativeElement.click();
     }
@@ -54,8 +56,13 @@ export class HomeComponent implements OnInit {
       this.usersListModalButton.nativeElement.click();
     }
   }
-
-  displayViewers(post:PostResponse){
+  displayPost(post : PostResponse){
+    this.postForPostModal = post;
+    if(this.displayPostModalButton){
+      this.displayPostModalButton.nativeElement.click()
+    }
+  }
+  displayViewers(post : PostResponse){
 
   }
   setSelectedPost(post : PostResponse){ this.store.dispatch(setSelectedPostId({postId : post.id})) }

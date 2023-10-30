@@ -12,17 +12,16 @@ import { StoreModule } from '@ngrx/store';
 import { userReducer } from './states/user/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffect } from './states/user/effect';
-import { DisplayPostImagesComponent } from './pages/display-post-page/display-post-images/display-post-images.component';
+import { DisplayPostImagesComponent } from './modals/post-detail-modal/display-post-images/display-post-images.component';
 import { DisplayProfileImageComponent } from './shareds/display-profile-image/display-profile-image.component';
 import { AppHubConnectionService } from './services/app-hub-connection.service';
-import { DisplayPostContentComponent } from './pages/display-post-page/display-post-content/display-post-content.component';
+import { DisplayPostContentComponent } from './modals/post-detail-modal/display-post-content/display-post-content.component';
 import { LikeButtonComponent } from './shareds/like-button/like-button.component';
 import { SwapRequestComponent } from './modals/swap-request/swap-request.component';
 import { SwapRequestItemComponent } from './modals/swap-request/swap-request-item/swap-request-item.component';
 import { ProfileHeaderComponent } from './pages/profile/profile-header/profile-header.component';
 import { ProfileContentComponent } from './pages/profile/profile-content/profile-content.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { DisplayPostPageComponent } from './pages/display-post-page/display-post-page.component';
 import { PostListComponent } from './shareds/post-list/post-list.component';
 import { FollowButtonComponent } from './shareds/follow-button/follow-button.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -45,6 +44,7 @@ import { HomeEffect } from './states/home-page/effect';
 import { homeReducer } from './states/home-page/reducer';
 import { UsersListModalComponent } from './modals/users-list-modal/users-list-modal.component';
 import { UserItemComponent } from './modals/users-list-modal/user-item/user-item.component';
+import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail-modal.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +62,6 @@ import { UserItemComponent } from './modals/users-list-modal/user-item/user-item
     ProfileHeaderComponent,
     ProfileContentComponent,
     ProfileComponent,
-    DisplayPostPageComponent,
     PostListComponent,
     FollowButtonComponent,
     HomeComponent,
@@ -83,6 +82,7 @@ import { UserItemComponent } from './modals/users-list-modal/user-item/user-item
     DateFormatPipe,
     UsersListModalComponent,
     UserItemComponent,
+    PostDetailModalComponent,
   ],
   imports: [
     BrowserModule,

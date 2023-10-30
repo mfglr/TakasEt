@@ -1,9 +1,8 @@
 import { createEntityAdapter } from "@ngrx/entity";
-import { CommentState, CommentsState, PostState, PostsState, UserState, UsersState, initialPageOfComments, initialPageOfPosts, initialPageOfUsers } from "./app-states";
+import { CommentState, CommentsState, PostImageState, PostImagesState, PostState, PostsState, UserState, UsersState, initialPageOfComments, initialPageOfPostImages, initialPageOfPosts, initialPageOfUsers } from "./app-states";
 import { CommentResponse } from "../models/responses/comment-response";
 import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
-import { createSelector } from "@ngrx/store";
 
 export const commentAdapter = createEntityAdapter<CommentState>({
   selectId : state => state.comment.id
@@ -14,9 +13,12 @@ export const postAdapter = createEntityAdapter<PostState>({
 export const userAdapter = createEntityAdapter<UserState>({
   selectId : state => state.user.id
 })
+export const postImageAdapter = createEntityAdapter<PostImageState>()
+
 export const selectAllPostStates = postAdapter.getSelectors((state : PostsState) => state).selectAll
 export const selectAllCommentStates = commentAdapter.getSelectors((state : CommentsState) => state).selectAll
 export const selectAllUserStates = userAdapter.getSelectors((state : UsersState) => state).selectAll
+export const selectAllPostImageStates = postImageAdapter.getSelectors((state : PostImagesState) => state).selectAll
 
 export function createCommentState(commentReponse : CommentResponse) : CommentState{
   return {
@@ -57,6 +59,10 @@ export function createUserStates(userResponses : UserResponse[]) : UserState[]{
 export function createPostState(postResponse : PostResponse) : PostState{
   return {
     post : postResponse,
+    postImages : postImageAdapter.getInitialState({
+      status : false,
+      page : {...initialPageOfPostImages}
+    }),
     comments : commentAdapter.getInitialState({
       status : false,
       page : {...initialPageOfComments}

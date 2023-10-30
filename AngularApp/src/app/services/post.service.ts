@@ -40,7 +40,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].images = [image];
+              posts[index].firtImage = image;
               return posts[index];
             }
           ),
@@ -64,7 +64,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].images = [image];
+              posts[index].firtImage = image;
               return posts[index];
             }
           ),

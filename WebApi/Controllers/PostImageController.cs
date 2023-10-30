@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 		[HttpGet("post-image/get-post-images/{postId}")]
 		public async Task GetPostImages(Guid postId)
 		{
-			var bytes = await _sender.Send(new GetPostImages(postId));
+			var bytes = await _sender.Send(new GetPostImages(postId,Request.Query));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 

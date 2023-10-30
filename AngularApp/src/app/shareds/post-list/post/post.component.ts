@@ -13,11 +13,12 @@ export class PostComponent implements OnChanges {
   @Output() displayPostLikersEvent = new EventEmitter<PostResponse>();
   @Output() displayViewersEvent = new EventEmitter<PostResponse>();
   @Output() setSelectedPostEvent = new EventEmitter<PostResponse>();
+  @Output() displayPostEvent = new EventEmitter<PostResponse>();
 
   firstImage? : string;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.post) this.firstImage = this.post.images[0];
+    if(this.post) this.firstImage = this.post.firtImage
   }
 
   displayComments(post : PostResponse){
@@ -30,6 +31,10 @@ export class PostComponent implements OnChanges {
 
   displayViewers(post : PostResponse){
     this.displayViewersEvent.emit(post)
+  }
+
+  displayPost(){
+    if(this.post) this.displayPostEvent.emit(this.post)
   }
 
   setSelectedPost(){

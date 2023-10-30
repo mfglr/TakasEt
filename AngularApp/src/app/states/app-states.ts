@@ -6,10 +6,12 @@ import { UserResponse } from "../models/responses/user-response";
 export const takeValueOfPosts = 1;
 export const takeValueOfComments = 1;
 export const takeValueOfUsers = 1;
+export const takeValueOfPostImages = 1;
 
 export const initialPageOfPosts = { skip : 0, take : takeValueOfPosts,firstQueryDate : Date.now() }
 export const initialPageOfComments = { skip : 0, take : takeValueOfComments,firstQueryDate : Date.now() }
 export const initialPageOfUsers = { skip : 0, take : takeValueOfUsers,firstQueryDate : Date.now() }
+export const initialPageOfPostImages = { skip : 0, take : takeValueOfPostImages,firstQueryDate : Date.now() }
 
 export interface Page{
   skip : number;
@@ -37,8 +39,15 @@ export interface CommentState{
 }
 export interface CommentsState extends AppEntityState<CommentState>{}
 
+export interface PostImageState{
+  url : string;
+}
+
+export interface PostImagesState extends AppEntityState<PostImageState>{}
+
 export interface PostState{
   post : PostResponse;
+  postImages : PostImagesState;
   comments : CommentsState;
   likers : UsersState;
   viewers : UsersState;
