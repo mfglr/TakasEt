@@ -38,7 +38,7 @@ namespace Handler.Queries
 						UpdatedDate = x.UpdatedDate,
 						UserId = x.UserId,
 						UserName = x.User.UserName!,
-						CountOfLikes = x.Children.Count
+						CountOfLikes = x.UsersWhoLiked.Count
 					}
 				)
 				.ToListAsync(cancellationToken);

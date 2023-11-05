@@ -45,6 +45,8 @@ import { UserItemComponent } from './modals/users-list-modal/user-item/user-item
 import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail-modal.component';
 import { appPostReducer } from './states/post_state/reducer';
 import { AppPostsEffect } from './states/post_state/effect';
+import { appCommentReducer } from './states/comment_state/reducer';
+import { AppCommentEffect } from './states/comment_state/effect';
 
 @NgModule({
   declarations: [
@@ -92,9 +94,11 @@ import { AppPostsEffect } from './states/post_state/effect';
     StoreModule.forRoot(),
     StoreModule.forFeature("userStoreSlice" , userReducer),
     StoreModule.forFeature("AppPostState", appPostReducer),
+    StoreModule.forFeature("AppCommentState", appCommentReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([UserEffect]),
-    EffectsModule.forFeature([AppPostsEffect])
+    EffectsModule.forFeature([AppPostsEffect]),
+    EffectsModule.forFeature([AppCommentEffect])
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

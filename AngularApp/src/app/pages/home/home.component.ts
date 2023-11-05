@@ -16,6 +16,8 @@ export class HomeComponent {
 
   postsOfHomePageQueryId = postsOfHomePageQueryId;
 
+  postWithCommentsDisplayed? : PostResponse;
+
   constructor(
     private store : Store<AppPostState>
   ) {}
@@ -27,6 +29,7 @@ export class HomeComponent {
 
   displayComments(post : PostResponse){
     if(this.commentModalButton) {
+      this.postWithCommentsDisplayed = post;
       this.commentModalButton.nativeElement.click();
     }
   }

@@ -3,9 +3,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store} from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import * as UserSelector from "src/app/states/user/selector"
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserState } from 'src/app/states/user/state';
+import { AppCommentState, commentsOfPostsQueryId } from 'src/app/states/comment_state/state';
+import * as appCommentSelectors from 'src/app/states/comment_state/selectors';
+import * as appCommentActions from 'src/app/states/comment_state/actions'
 @Component({
   selector: 'app-comment-modal',
   templateUrl: './comment-modal.component.html',
@@ -13,9 +16,9 @@ import { UserState } from 'src/app/states/user/state';
 })
 export class CommentModalComponent implements OnChanges, OnDestroy {
   @Input() post? : PostResponse;
-  @Output() nextPageOfCommentsEvent = new EventEmitter<void>();
-  @Output() nextPageOfChildrenEvent = new EventEmitter<void>();
-  @Output() setSelectedCommentEvent = new EventEmitter<CommentResponse>();
+  queryId? : string;
+
+  comments$? : Observable<CommentResponse[]>;
 
   respondedComment : CommentResponse | null = null;
   userId? : string;
@@ -34,11 +37,8 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
 
   constructor(
     private userStore : Store<UserState>,
+    private commentStore : Store<AppCommentState>
   ) {}
-
-  getNextPageOfComments(){ this.nextPageOfCommentsEvent.emit(); }
-  getNextPageOfChildren(){ this.nextPageOfChildrenEvent.emit(); }
-  setSelectedComment(commentResponse : CommentResponse){ this.setSelectedCommentEvent.emit(commentResponse); }
 
   ngOnChanges() {
     if(this.post){
@@ -46,8 +46,16 @@ export class CommentModalComponent implements OnChanges, OnDestroy {
           postId : this.post.id,
           userId : this.userId
       })
+      this.queryId = commentsOfPostsQueryId + this.post.id
+      this.comments$ = this.commentStore.select(appCommentSelectors.selectCommentResponses({queryId : this.queryId}))
     }
   }
+
+  getMore(){
+    if(this.queryId && this.post)
+      this.commentStore.dispatch(appCommentActions.nextPageOfComments({queryId : this.queryId,postId : this.post.id}))
+  }
+
   ngOnDestroy(): void {
     this.respondedCommentSubscription?.unsubscribe()
   }

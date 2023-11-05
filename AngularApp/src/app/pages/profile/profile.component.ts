@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { filter, mergeMap } from 'rxjs';
 import { PostService } from 'src/app/services/post.service';
 import { UserService } from 'src/app/services/user.service';
-import { initialPageOfPosts } from 'src/app/states/app_state/app-states';
+import { initialPageOfPosts } from 'src/app/states/app-states';
 import { getLoginResponse } from 'src/app/states/user/selector';
 import { UserState } from 'src/app/states/user/state';
 

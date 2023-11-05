@@ -7,8 +7,8 @@ import { PostResponse } from 'src/app/models/responses/post-response';
   styleUrls: ['./post.component.scss']
 })
 export class PostComponent implements OnChanges {
-
   @Input() post? : PostResponse;
+  @Output() diplayCommentsEvent = new EventEmitter<PostResponse>();
 
   firstImage? : string;
 
@@ -16,4 +16,8 @@ export class PostComponent implements OnChanges {
     if(this.post) this.firstImage = this.post.firtImage
   }
 
+  displayComments(post : PostResponse){
+    if(this.post)
+      this.diplayCommentsEvent.emit(this.post)
+  }
 }

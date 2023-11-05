@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
 
@@ -10,11 +10,17 @@ import { UserPostLikingService } from 'src/app/services/user-post-liking.service
 export class PostFooterComponent {
 
   @Input() post? : PostResponse;
+  @Output() displayCommentsEvent = new EventEmitter<PostResponse>();
 
   constructor(
     public userPostLikingService : UserPostLikingService,
   ) {}
 
+  displayComments(){
+    if(this.post)
+      this.displayCommentsEvent.emit(this.post)
+  }
+  
   getLikeVector(likeVector : number){
     if(this.post) this.post.countOfLikes += likeVector;
   }

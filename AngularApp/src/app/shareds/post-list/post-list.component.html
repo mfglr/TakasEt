@@ -1,6 +1,8 @@
 <div class="row root">
   <div class="col-6 post-item" *ngFor="let post of (posts$ | async)">
-    <app-post [post]="post"></app-post>
+    <app-post (diplayCommentsEvent)="displayComments($event)" [post]="post"></app-post>
   </div>
   <button (click)="getMore()">more</button>
 </div>
+<button type="button" style="display:none;" data-toggle="modal" data-target="#commentModal" #commentModalButton></button>
+<app-comment-modal [post]="postWithCommentDisplayed"></app-comment-modal>

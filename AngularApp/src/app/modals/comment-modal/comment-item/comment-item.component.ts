@@ -1,9 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input }  from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Mode } from 'src/app/helpers/mode';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
-import { takeValueOfComments } from 'src/app/states/app_state/app-states';
+import { takeValueOfComments } from 'src/app/states/app-states';
+import { nextPageOfChildren } from 'src/app/states/comment_state/actions';
+import { selectCommentResponses } from 'src/app/states/comment_state/selectors';
+import { AppCommentState, commentsOfCommentQueryId } from 'src/app/states/comment_state/state';
 
 @Component({
   selector: 'app-comment-item',
@@ -12,25 +15,33 @@ import { takeValueOfComments } from 'src/app/states/app_state/app-states';
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
-  @Output() nextPageOfChildrenEvent = new EventEmitter<void>();
-  @Output() setSelectedCommentEvent = new EventEmitter<CommentResponse>();
-
-  remainingChildCommentCounts = 0;
-  mode : Mode = new Mode(2)
-
+  private queryId? : string; 
+  children$? : Observable<CommentResponse[]>;
+  remainingChildren : number = 0;
+  childrenVisibility : boolean = true;
   constructor(
     public commentLikingService : UserCommentLikingService,
+    private commentStore : Store<AppCommentState>
   ) {}
 
-
   ngOnChanges(){
+    if(this.comment){
+      this.queryId = commentsOfCommentQueryId + this.comment.id;
+      this.children$ = this.commentStore.select(selectCommentResponses({queryId : this.queryId}));
+      this.remainingChildren = this.comment.countOfChildren;
+    }
   }
-
-  loadChildren(){
+  lodChildren(){
+    if(this.comment && this.queryId){
+      this.commentStore.dispatch(nextPageOfChildren({queryId : this.queryId,commentId : this.comment.id}));
+      this.remainingChildren = this.remainingChildren - takeValueOfComments;
+    }
   }
-  hover(){
+  hiddenChildren(){
+    this.childrenVisibility = false;
   }
-
-  commentToParent(){
+  showChildren(){
+    this.childrenVisibility = true;
   }
+  
 }

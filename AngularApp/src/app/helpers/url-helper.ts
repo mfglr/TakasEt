@@ -1,4 +1,4 @@
-import { Page } from "../states/app_state/app-states";
+import { Page } from "../states/app-states";
 
 export class UrlHelper{
   static createPaginationUrl(url : string,page : Page) : string{

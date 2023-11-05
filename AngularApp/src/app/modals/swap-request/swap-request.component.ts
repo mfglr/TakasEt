@@ -5,7 +5,7 @@ import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 import { PostPostRequestingService } from 'src/app/services/post-post-requesting.service';
 import { ObservableHelpers } from 'src/app/helpers/observable-helpers';
-import { initialPageOfPosts } from 'src/app/states/app_state/app-states';
+import { initialPageOfPosts } from 'src/app/states/app-states';
 
 @Component({
   selector: 'app-swap-request',

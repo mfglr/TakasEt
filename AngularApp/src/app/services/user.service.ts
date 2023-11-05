@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { UserResponse } from '../models/responses/user-response';
 import { AppHttpClientService } from './app-http-client.service';
 import { NoContentResponse } from '../models/responses/no-content-response';
-import { Page } from '../states/app_state/app-states';
+import { Page } from '../states/app-states';
 import { UrlHelper } from '../helpers/url-helper';
 
 @Injectable({

@@ -15,7 +15,7 @@
       </span>
     </div>
 
-    <div class="comments">
+    <div class="comments" (click)="displayComments()">
       <span>
         <i class="fa-solid fa-comment"></i>
         {{post?.countOfComments}}
@@ -27,3 +27,4 @@
     <span>{{post?.createdDate | dateFormat}}</span>
   </div>
 </div>
+

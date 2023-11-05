@@ -8,6 +8,6 @@
     </a>
   </div>
   <div class="card-footer">
-    <app-post-footer [post]="post"></app-post-footer>
+    <app-post-footer  (displayCommentsEvent)="displayComments($event)" [post]="post"></app-post-footer>
   </div>
 </div>

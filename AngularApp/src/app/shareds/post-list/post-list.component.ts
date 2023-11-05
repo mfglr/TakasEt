@@ -13,9 +13,11 @@ import { AppPostState } from 'src/app/states/post_state/state';
 })
 export class PostListComponent{
   @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
-
   @Input() queryId? : string;
+
   posts$? : Observable<PostResponse[]>
+  postWithCommentDisplayed? : PostResponse;
+
   constructor(
     private postsStore : Store<AppPostState>
   ) {}
@@ -25,6 +27,14 @@ export class PostListComponent{
       this.posts$ = this.postsStore.select(appPostsSelectors.selectPostResponses({ queryId: this.queryId}));
     }
   }
+
+  displayComments(post : PostResponse){
+    this.postWithCommentDisplayed = post;
+    if(this.commentModalButton)
+      this.commentModalButton.nativeElement.click();
+
+  }
+
   getMore(){
     this.postsStore.dispatch(appPostsActions.nextPageOfPosts())
   }

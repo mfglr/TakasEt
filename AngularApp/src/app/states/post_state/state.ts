@@ -1,12 +1,8 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { PostResponse } from "src/app/models/responses/post-response";
-import { Page, initialPageOfPosts, takeValueOfPosts } from "../app_state/app-states";
-
-export interface AppEntityState<T> extends EntityState<T>{ page : Page; status : boolean; queryId : string; }
-
+import { AppEntityState, initialPageOfPosts, takeValueOfPosts } from "../app-states";
 
 export const postsOfHomePageQueryId = "postsOfHomePageQueryId";
-
 
 export interface ChildState extends AppEntityState<PostResponse>{}
 export interface ParentState extends EntityState<ChildState>{}
@@ -41,8 +37,8 @@ export function addPost(post : PostResponse,queryId : string,parentState : Paren
     return parentAdapter.addOne(childAdapter.addOne(post,childState),parentState);
 }
 export function loadPosts(posts : PostResponse[],queryId : string,parentState : ParentState) : ParentState{
-    let childState : ChildState = parentState.entities[queryId] != undefined ? 
-        parentState.entities[queryId]! : 
-        childAdapter.getInitialState({ status : false,page : {...initialPageOfPosts},queryId : queryId });
-    return parentAdapter.setOne(addPostsToChildState(posts,childState),parentState);
+    return parentAdapter.updateOne(
+        { id : queryId, changes : addPostsToChildState(posts,parentState.entities[queryId]!) },
+        parentState
+    );
 } 

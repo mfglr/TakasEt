@@ -28,12 +28,10 @@
       </div>
 
       <div class="modal-body">
-        <div class="comment-item" >
-          <app-comment-item
-            (nextPageOfChildrenEvent)="getNextPageOfChildren()"
-            (setSelectedCommentEvent)="setSelectedComment($event)"></app-comment-item>
+        <div class="comment-item" *ngFor="let comment of (comments$ | async)" >
+          <app-comment-item [comment]="comment"></app-comment-item>
         </div>
-        <button (click)="getNextPageOfComments()">more</button>
+        <button (click)="getMore()">more</button>
       </div>
 
     </div>
