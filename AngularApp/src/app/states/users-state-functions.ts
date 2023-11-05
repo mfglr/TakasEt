@@ -1,7 +1,7 @@
 import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
-import { createPostState, createPostStates, createUserState, createUserStates, postAdapter, userAdapter } from "./app-adapters";
-import { UsersState, takeValueOfComments, takeValueOfPosts, takeValueOfUsers } from "./app-states";
+import { createPostState, createPostStates, createUserState, createUserStates, postAdapter, userAdapter } from "./app_state/app-adapters";
+import { UsersState, takeValueOfComments, takeValueOfPosts, takeValueOfUsers } from "./app_state/app-states";
 
 export class UsersStateFunctions{
   static addFollower(state : UsersState,follower : UserResponse,userId : string){

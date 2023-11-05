@@ -5,17 +5,17 @@
         [likeable]="userPostLikingService"
         [id]="post?.id"
         (likeVector)="getLikeVector($event)"></app-like-button>
-      <span class="likes-span" (click)="displayPostLikers()">{{post?.countOfLikes + ' begeni'}}</span>
+      <span class="likes-span">{{post?.countOfLikes + ' begeni'}}</span>
     </div>
 
-    <div class="views" (click)="displayPostViewers()">
+    <div class="views">
       <span>
         <i class="fa-solid fa-eye"></i>
         {{post?.countOfViews}}
       </span>
     </div>
 
-    <div class="comments" (click)="displayComments()">
+    <div class="comments">
       <span>
         <i class="fa-solid fa-comment"></i>
         {{post?.countOfComments}}

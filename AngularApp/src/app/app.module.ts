@@ -40,11 +40,11 @@ import { CommentModalComponent } from './modals/comment-modal/comment-modal.comp
 import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
 import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
 import { DateFormatPipe } from './pipes/date-format.pipe';
-import { HomeEffect } from './states/home-page/effect';
-import { homeReducer } from './states/home-page/reducer';
 import { UsersListModalComponent } from './modals/users-list-modal/users-list-modal.component';
 import { UserItemComponent } from './modals/users-list-modal/user-item/user-item.component';
 import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail-modal.component';
+import { appPostReducer } from './states/post_state/reducer';
+import { AppPostsEffect } from './states/post_state/effect';
 
 @NgModule({
   declarations: [
@@ -91,10 +91,10 @@ import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail
     ReactiveFormsModule,
     StoreModule.forRoot(),
     StoreModule.forFeature("userStoreSlice" , userReducer),
-    StoreModule.forFeature("homePageStoreSlice",homeReducer),
+    StoreModule.forFeature("AppPostState", appPostReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([UserEffect]),
-    EffectsModule.forFeature([HomeEffect])
+    EffectsModule.forFeature([AppPostsEffect])
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { CommentResponse } from '../models/responses/comment-response';
 import { AddComment } from '../models/requests/add-comment';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../states/app-states';
+import { Page } from '../states/app_state/app-states';
 
 @Injectable({
   providedIn: 'root'

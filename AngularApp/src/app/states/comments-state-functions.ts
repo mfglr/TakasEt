@@ -1,7 +1,7 @@
 import { CommentResponse } from "../models/responses/comment-response"
 import { UserResponse } from "../models/responses/user-response"
-import { commentAdapter, createCommentState, createCommentStates, createUserState, createUserStates, userAdapter } from "./app-adapters"
-import { CommentsState, takeValueOfComments, takeValueOfUsers } from "./app-states"
+import { commentAdapter, createCommentState, createCommentStates, createUserState, createUserStates, userAdapter } from "./app_state/app-adapters"
+import { CommentsState, takeValueOfComments, takeValueOfUsers } from "./app_state/app-states"
 
 export class CommentsStateFunctions{
 

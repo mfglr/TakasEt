@@ -3,7 +3,7 @@ import { AppHttpClientService } from './app-http-client.service';
 import { Observable } from 'rxjs';
 import { AppFileService } from './app-file.service';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../states/app-states';
+import { Page } from '../states/app_state/app-states';
 
 @Injectable({
   providedIn: 'root'

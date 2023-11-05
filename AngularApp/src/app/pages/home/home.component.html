@@ -1,23 +1,9 @@
 <button type="button" style="display:none;" data-toggle="modal" data-target="#commentModal" #commentModalButton></button>
-<app-comment-modal
-  [post]="postForCommentModal"
-  (nextPageOfCommentsEvent)="getNextPageOfComments()"
-  (nextPageOfChildrenEvent)="getNextPageOfChildren()"
-  (setSelectedCommentEvent)="setSelectedComment($event)"
-  [mappedComments]=" mappedComments$ | async"></app-comment-modal>
+<app-comment-modal></app-comment-modal>
 
 <button type="button" style="display:none;" data-toggle="modal" data-target="#usersListModal" #usersListModalButton></button>
-<app-users-list-modal
-  (nextPageOfPostLikersEvent)="getNextPageOfPostLikers()"
-  [users]="postLikers$ | async"></app-users-list-modal>
+<app-users-list-modal ></app-users-list-modal>
 
 <button type="button" style="display:none;" data-toggle="modal" data-target="#postDetailModal" #displayPostModalButton></button>
 <app-post-detail-modal  ></app-post-detail-modal>
-<app-post-list
-  [posts]="posts$ | async"
-  (displayCommentsEvent)="displayComments($event)"
-  (displayLikersEvent)="displayPostLikers($event)"
-  (displayViewersEvent)="displayViewers($event)"
-  (setSelectedPostEvent)="setSelectedPost($event)"
-  (displayPostEvent)="displayPost($event)"></app-post-list>
-<button (click)="getMore()">more</button>
+<app-post-list [queryId]="postsOfHomePageQueryId"></app-post-list>

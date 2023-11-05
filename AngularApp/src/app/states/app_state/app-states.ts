@@ -1,7 +1,7 @@
 import { EntityState } from "@ngrx/entity";
-import { CommentResponse } from "../models/responses/comment-response";
-import { PostResponse } from "../models/responses/post-response";
-import { UserResponse } from "../models/responses/user-response";
+import { CommentResponse } from "../../models/responses/comment-response";
+import { PostResponse } from "../../models/responses/post-response";
+import { UserResponse } from "../../models/responses/user-response";
 
 export const takeValueOfPosts = 1;
 export const takeValueOfComments = 1;
@@ -18,12 +18,10 @@ export interface Page{
   take : number;
   firstQueryDate : number;
 }
-
 export interface AppEntityState<T> extends EntityState<T>{
   status : boolean;
   page : Page;
 }
-
 export interface UserState{
   user : UserResponse;
   posts : PostsState;
@@ -31,20 +29,16 @@ export interface UserState{
   followeds : UsersState;
 }
 export interface UsersState extends AppEntityState<UserState>{}
-
 export interface CommentState{
   comment : CommentResponse;
   children : CommentsState;
   likers : UsersState;
 }
 export interface CommentsState extends AppEntityState<CommentState>{}
-
 export interface PostImageState{
   url : string;
 }
-
 export interface PostImagesState extends AppEntityState<PostImageState>{}
-
 export interface PostState{
   post : PostResponse;
   postImages : PostImagesState;
@@ -56,4 +50,26 @@ export interface PostState{
   followers : UsersState;
 }
 export interface PostsState extends AppEntityState<PostState>{}
+export interface PageStateThatHasPostsState{
+  posts : PostsState;
+}
+export interface HomePageState extends PageStateThatHasPostsState{
+  selectedCommentId : string | undefined;
+  selectedPostId : string | undefined;
+}
+export interface SearcPageState extends PageStateThatHasPostsState{
+  selectedPostId : string | undefined;
+}
+
+export const HOME_PAGE_STATE = "home_page_state";
+export const SEARCH_PAGE_STATE = "search_page_state";
+
+export interface AppState{
+  activePage : "home_page_state" | "search_page_state";
+  homePageState : HomePageState;
+  searchPageState : SearcPageState;
+}
+
+
+
 

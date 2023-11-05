@@ -1,24 +1,24 @@
 <div class="root">
 
   <div class="header">
-    <app-display-profile-image diameter="32" [userId]="mappedComment?.comment?.userId" ></app-display-profile-image>
+    <app-display-profile-image diameter="32" ></app-display-profile-image>
     <div class="content-wrapper">
 
       <div class="content">
-        <span class="user-name">{{mappedComment?.comment?.userName + "  "}}</span>
-        <span class="content-text">{{mappedComment?.comment?.content}}</span>
+        <span class="user-name"></span>
+        <span class="content-text"></span>
       </div>
 
       <div class="content-info">
-        <ng-container *ngIf="mappedComment && mappedComment.comment.countOfLikes > 0">
-          <span class="count-of-likes">{{mappedComment.comment.countOfLikes + ' begeni'}}</span>
+        <ng-container *ngIf="">
+          <span class="count-of-likes"></span>
         </ng-container>
         <span (click)="replyToComment()" class="reply-to-comment">Yanit ver</span>
-        <span>{{mappedComment?.comment?.createdDate | dateFormat}}</span>
+        <span></span>
       </div>
 
     </div>
-    <app-like-button [likeable]="commentLikingService" [id]="mappedComment?.comment?.id"></app-like-button>
+    <app-like-button [likeable]="commentLikingService"></app-like-button>
   </div>
 
 

@@ -1,7 +1,7 @@
 import { CommentResponse } from "src/app/models/responses/comment-response";
 import { UserResponse } from "../models/responses/user-response";
-import { PostsState, takeValueOfComments, takeValueOfPosts, takeValueOfUsers } from "./app-states";
-import { commentAdapter, createCommentState, createCommentStates, createPostState, createPostStates, createUserState, createUserStates, postAdapter, userAdapter } from "./app-adapters";
+import { PostsState, takeValueOfComments, takeValueOfPosts, takeValueOfUsers } from "./app_state/app-states";
+import { commentAdapter, createCommentState, createCommentStates, createPostState, createPostStates, createUserState, createUserStates, postAdapter, userAdapter } from "./app_state/app-adapters";
 import { CommentsStateFunctions } from "./comments-state-functions";
 import { PostResponse } from "../models/responses/post-response";
 

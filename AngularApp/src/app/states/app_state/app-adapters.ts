@@ -1,8 +1,8 @@
 import { createEntityAdapter } from "@ngrx/entity";
 import { CommentState, CommentsState, PostImageState, PostImagesState, PostState, PostsState, UserState, UsersState, initialPageOfComments, initialPageOfPostImages, initialPageOfPosts, initialPageOfUsers } from "./app-states";
-import { CommentResponse } from "../models/responses/comment-response";
-import { PostResponse } from "../models/responses/post-response";
-import { UserResponse } from "../models/responses/user-response";
+import { CommentResponse } from "../../models/responses/comment-response";
+import { PostResponse } from "../../models/responses/post-response";
+import { UserResponse } from "../../models/responses/user-response";
 
 export const commentAdapter = createEntityAdapter<CommentState>({
   selectId : state => state.comment.id
