@@ -1,13 +1,12 @@
 import { Component, Input }  from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
-import { takeValueOfComments } from 'src/app/states/app-states';
 import { nextPageOfChildren } from 'src/app/states/comment_state/actions';
-import { selectCommentResponses } from 'src/app/states/comment_state/selectors';
-import { AppCommentState, commentsOfCommentQueryId } from 'src/app/states/comment_state/state';
-
+import * as appCommentSelectors from 'src/app/states/comment_state/selectors';
+import * as appCommentState from 'src/app/states/comment_state/state';
+import * as appCommentActions from 'src/app/states/comment_state/actions'
 @Component({
   selector: 'app-comment-item',
   templateUrl: './comment-item.component.html',
@@ -15,33 +14,48 @@ import { AppCommentState, commentsOfCommentQueryId } from 'src/app/states/commen
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
-  private queryId? : string; 
+  private queryId? : string;
+  
   children$? : Observable<CommentResponse[]>;
-  remainingChildren : number = 0;
-  childrenVisibility : boolean = true;
+  subsOfRemaining? : Subscription ;
+  childrenVisibility$? : Observable<boolean>;
+  
+  remainingChildrenCount : number = 0;
+
   constructor(
     public commentLikingService : UserCommentLikingService,
-    private commentStore : Store<AppCommentState>
+    private commentStore : Store<appCommentState.AppCommentState>
   ) {}
 
   ngOnChanges(){
     if(this.comment){
-      this.queryId = commentsOfCommentQueryId + this.comment.id;
-      this.children$ = this.commentStore.select(selectCommentResponses({queryId : this.queryId}));
-      this.remainingChildren = this.comment.countOfChildren;
+      this.queryId = appCommentState.commentsOfCommentQueryId + this.comment.id;
+      this.children$ = this.commentStore.select(appCommentSelectors.selectCommentResponses({queryId : this.queryId}));
+      
+      this.subsOfRemaining = this.commentStore.select(
+        appCommentSelectors.selectRemainingChildrenCount({queryId : this.queryId, parentCommetId : this.comment.id})
+      ).subscribe( x => this.remainingChildrenCount = x);
+
+      this.childrenVisibility$ = this.commentStore.select(
+        appCommentSelectors.selectChildrenVisibility({queryId : this.queryId , parentCommetId : this.comment.id})
+      )
     }
   }
   lodChildren(){
-    if(this.comment && this.queryId){
+    if(this.comment && this.queryId)
       this.commentStore.dispatch(nextPageOfChildren({queryId : this.queryId,commentId : this.comment.id}));
-      this.remainingChildren = this.remainingChildren - takeValueOfComments;
-    }
   }
   hiddenChildren(){
-    this.childrenVisibility = false;
+    if(this.comment && this.queryId)
+      this.commentStore.dispatch(
+        appCommentActions.switchChildrenVisibility({queryId : this.queryId,parentCommentId : this.comment.id})
+      )
   }
   showChildren(){
-    this.childrenVisibility = true;
+    if(this.comment && this.queryId)
+      this.commentStore.dispatch(
+        appCommentActions.switchChildrenVisibility({queryId : this.queryId,parentCommentId : this.comment.id})
+      )
   }
   
 }

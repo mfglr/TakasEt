@@ -8,4 +8,11 @@ export const appCommentReducer = createReducer(
         appCommentActions.nextPageOfCommentsSuccess,
         (state,action) => ({ ...state,parentState : appCommnetState.loadComments(action.payload,action.queryId,state.parentState) })
     ),
+    on(
+        appCommentActions.switchChildrenVisibility,
+        (state,action) => ({
+            ...state,
+            parentState : appCommnetState.switchChildrenVisibility(action.queryId,action.parentCommentId,state.parentState)
+        })
+    )
 )

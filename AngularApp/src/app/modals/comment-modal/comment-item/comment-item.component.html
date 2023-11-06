@@ -1,16 +1,16 @@
 <div class="root">
 
   <div class="parent">
-    <app-comment-item-content [comment]="comment"  ></app-comment-item-content>
+    <app-comment-item-content [comment]="comment"></app-comment-item-content>
   </div>
 
   <div class="children" *ngIf="comment && comment.countOfChildren > 0">
 
-    <ng-container *ngIf="childrenVisibility; else template">
+    <ng-container *ngIf="(childrenVisibility$ | async); else template">
 
-      <ng-container *ngIf="(remainingChildren > 0)">
+      <ng-container *ngIf="remainingChildrenCount > 0">
         <div class="load-children">
-          <span (click)="lodChildren()">{{remainingChildren + ' yaniti goster'}}</span>
+          <span (click)="lodChildren()">{{remainingChildrenCount + ' yaniti goster'}}</span>
         </div>
       </ng-container>
   
@@ -18,14 +18,14 @@
         <app-comment-item-content  [comment]="comment" [hasChildren]="false"></app-comment-item-content>
       </div>
 
-      <ng-container *ngIf="remainingChildren >= 0 && remainingChildren < comment.countOfChildren">
-        <span (click)="hiddenChildren()">{{comment.countOfChildren - remainingChildren + ' yaniti gizle'}}</span>
+      <ng-container *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount < comment.countOfChildren">
+        <span (click)="hiddenChildren()">{{comment.countOfChildren - remainingChildrenCount + ' yaniti gizle'}}</span>
       </ng-container>
     </ng-container>
 
     <ng-template #template>
-      <ng-container *ngIf="remainingChildren >= 0 && remainingChildren <= comment.countOfChildren">
-        <span (click)="showChildren()">{{comment.countOfChildren - remainingChildren + ' yaniti goster'}}</span>
+      <ng-container *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount <= comment.countOfChildren">
+        <span (click)="showChildren()">{{comment.countOfChildren - remainingChildrenCount + ' yaniti goster'}}</span>
       </ng-container>
     </ng-template>
 

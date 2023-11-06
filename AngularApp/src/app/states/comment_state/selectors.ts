@@ -17,9 +17,26 @@ const selectChildState = (props : {queryId : string}) => createSelector(
         })
     }
 )
-export const selectCommentResponses = (props : {queryId : string}) => createSelector(
+const selectCommentStates = (props : {queryId : string}) => createSelector(
     selectChildState(props),
     appCommentState.childAdapter.getSelectors( (state : appCommentState.ChildState) => state ).selectAll
 )
+const selectCommentState = (props : {queryId : string, parentCommetId : string}) => createSelector(
+    selectChildState(props),
+    state => state.entities[props.parentCommetId]!
+)
+export const selectRemainingChildrenCount = (props : {queryId : string, parentCommetId : string}) => createSelector(
+    selectCommentState(props),
+    state => state.countOfRemainingChildComments
+)
+export const selectChildrenVisibility = (props : {queryId : string, parentCommetId : string}) => createSelector(
+    selectCommentState(props),
+    state => state.childrenVisibility
+)
+export const selectCommentResponses = (props : {queryId : string}) => createSelector(
+    selectCommentStates(props),
+    state => state.map(x => x.comment)
+)
 export const selectPageOfComments = (props : {queryId : string}) => createSelector( selectChildState(props), state => state.page )
 export const selectStatusOfComments = (props : {queryId : string}) => createSelector( selectChildState(props), state => state.status )
+
