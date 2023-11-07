@@ -1,42 +1,82 @@
+// .root{
+//   .header{
+//     display: flex;
+//     align-items: center;
+//     margin-bottom : 0.5rem;
+//     .content-wrapper{
+//       display: flex;
+//       flex-direction: column;
+//       .content{
+//         display: flex;
+//         .user-name{
+//           margin-left: 0.5rem;
+//           font-size: 15px;
+//           font: 500;
+//         }
+//         .content-text{
+
+//         }
+//       }
+//       .content-info{
+//         display: flex;
+//         align-items: center;
+//         font-size: 10px;
+//         .count-of-likes{
+//           margin-right: 0.5rem;
+//           text-decoration-line: underline;
+//         }
+//         .line{
+//           width: 1.5rem;
+//           margin-right: 0.5rem;
+//         }
+//         .reply-to-comment{
+//           margin-right: 0.5rem;
+//           text-decoration-line: underline;
+//         }
+//       }
+//     }
+
+//   }
+
+
+// }
+
+
+
 .root{
-  .header{
+  display: flex;
+  justify-content: space-between;
+  .a{
     display: flex;
-    align-items: center;
-    margin-bottom : 0.5rem;
-    .content-wrapper{
-      display: flex;
-      flex-direction: column;
-      .content{
-        display: flex;
+    .content{
+      .info{
+        font-size : 0.75rem;
+        text-decoration: underline;
         .user-name{
           margin-left: 0.5rem;
-          font-size: 15px;
-          font: 500;
         }
-        .content-text{
-
+        .created-date{
+          margin-left: 0.5rem;
         }
-      }
-      .content-info{
-        display: flex;
-        align-items: center;
-        font-size: 10px;
         .count-of-likes{
-          margin-right: 0.5rem;
-          text-decoration-line: underline;
-        }
-        .line{
-          width: 1.5rem;
-          margin-right: 0.5rem;
-        }
-        .reply-to-comment{
-          margin-right: 0.5rem;
-          text-decoration-line: underline;
+          margin-left: 0.5rem;
         }
       }
+      .content-text{
+        font-size: 1rem;
+        margin-left: 0.5rem;
+        margin-top : 0.5rem;
+      }
+      .reply-to-comment{
+        font-size : 0.6rem;
+        margin-left: 0.5rem;
+        text-decoration: underline;
+      }
+      
+      
     }
-
+    
+    
   }
-
-
+  
 }

@@ -47,6 +47,8 @@ import { appPostReducer } from './states/post_state/reducer';
 import { AppPostsEffect } from './states/post_state/effect';
 import { appCommentReducer } from './states/comment_state/reducer';
 import { AppCommentEffect } from './states/comment_state/effect';
+import { appChildCommentReducer } from './states/child_comment_state/reducer';
+import { AppChildCommentEffect } from './states/child_comment_state/effects';
 
 @NgModule({
   declarations: [
@@ -95,10 +97,12 @@ import { AppCommentEffect } from './states/comment_state/effect';
     StoreModule.forFeature("userStoreSlice" , userReducer),
     StoreModule.forFeature("AppPostState", appPostReducer),
     StoreModule.forFeature("AppCommentState", appCommentReducer),
+    StoreModule.forFeature("AppChildCommentState", appChildCommentReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([UserEffect]),
     EffectsModule.forFeature([AppPostsEffect]),
-    EffectsModule.forFeature([AppCommentEffect])
+    EffectsModule.forFeature([AppCommentEffect]),
+    EffectsModule.forFeature([AppChildCommentEffect])
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

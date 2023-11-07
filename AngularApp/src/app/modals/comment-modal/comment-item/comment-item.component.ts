@@ -3,10 +3,10 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
-import { nextPageOfChildren } from 'src/app/states/comment_state/actions';
-import * as appCommentSelectors from 'src/app/states/comment_state/selectors';
-import * as appCommentState from 'src/app/states/comment_state/state';
-import * as appCommentActions from 'src/app/states/comment_state/actions'
+import * as appChildCommentSelectors from 'src/app/states/child_comment_state/selectors';
+import * as appChildCommentActions from 'src/app/states/child_comment_state/actions';
+import { AppChildCommentState } from 'src/app/states/child_comment_state/state';
+
 @Component({
   selector: 'app-comment-item',
   templateUrl: './comment-item.component.html',
@@ -14,48 +14,49 @@ import * as appCommentActions from 'src/app/states/comment_state/actions'
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
-  private queryId? : string;
   
   children$? : Observable<CommentResponse[]>;
-  subsOfRemaining? : Subscription ;
   childrenVisibility$? : Observable<boolean>;
-  
+  displayedCount$? : Observable<number>;
+  subsRemainingChildrenCount? : Subscription;
   remainingChildrenCount : number = 0;
 
   constructor(
     public commentLikingService : UserCommentLikingService,
-    private commentStore : Store<appCommentState.AppCommentState>
+    private commentStore : Store<AppChildCommentState>
   ) {}
 
   ngOnChanges(){
     if(this.comment){
-      this.queryId = appCommentState.commentsOfCommentQueryId + this.comment.id;
-      this.children$ = this.commentStore.select(appCommentSelectors.selectCommentResponses({queryId : this.queryId}));
+      this.children$ = this.commentStore.select(appChildCommentSelectors.selectResponses({parentComment : this.comment}));
       
-      this.subsOfRemaining = this.commentStore.select(
-        appCommentSelectors.selectRemainingChildrenCount({queryId : this.queryId, parentCommetId : this.comment.id})
-      ).subscribe( x => this.remainingChildrenCount = x);
+      this.childrenVisibility$ = this.commentStore.select(appChildCommentSelectors.selectVisibility({parentComment : this.comment}))
+      
+      this.displayedCount$ = this.commentStore.select(appChildCommentSelectors.selectDisplayedCount({parentComment : this.comment}))
+      
+      this.subsRemainingChildrenCount = this.commentStore.select(
+        appChildCommentSelectors.selectRemainingCount({parentComment : this.comment})
+      ).subscribe(x => this.remainingChildrenCount = x);
 
-      this.childrenVisibility$ = this.commentStore.select(
-        appCommentSelectors.selectChildrenVisibility({queryId : this.queryId , parentCommetId : this.comment.id})
-      )
     }
   }
-  lodChildren(){
-    if(this.comment && this.queryId)
-      this.commentStore.dispatch(nextPageOfChildren({queryId : this.queryId,commentId : this.comment.id}));
+
+  loadChildren(){
+    if(this.comment){
+      this.commentStore.dispatch(appChildCommentActions.nextPageAction({parentComment : this.comment}));
+    }
   }
   hiddenChildren(){
-    if(this.comment && this.queryId)
-      this.commentStore.dispatch(
-        appCommentActions.switchChildrenVisibility({queryId : this.queryId,parentCommentId : this.comment.id})
-      )
+    if(this.comment){
+      this.commentStore.dispatch(appChildCommentActions.switchVisibilityAction({parentComentId : this.comment.id}))
+    }
   }
   showChildren(){
-    if(this.comment && this.queryId)
-      this.commentStore.dispatch(
-        appCommentActions.switchChildrenVisibility({queryId : this.queryId,parentCommentId : this.comment.id})
-      )
+    if(this.comment){
+      this.commentStore.dispatch(appChildCommentActions.switchVisibilityAction({parentComentId : this.comment.id}))
+    }
   }
-  
+  ngOnDestroy(){
+    this.subsRemainingChildrenCount?.unsubscribe();
+  }
 }

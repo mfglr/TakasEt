@@ -1,42 +1,29 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import * as appCommentState from "./state";
 import { initialPageOfComments } from "../app-states";
+import { commentsOfPostQueryId } from "./state";
 
 const selectAppCommentState = createFeatureSelector<appCommentState.AppCommentState>("AppCommentState");
 const selectParentState = createSelector(selectAppCommentState,state => state.parentState);
 
-const selectChildState = (props : {queryId : string}) => createSelector(
+const selectChildState = (props : {postId : string}) => createSelector(
     selectParentState,
     (state) : appCommentState.ChildState => {
-        if(state.entities[props.queryId])
-            return state.entities[props.queryId]!
+        let queryId = commentsOfPostQueryId + props.postId;
+        if(state.entities[queryId])
+            return state.entities[queryId]!
         return appCommentState.childAdapter.getInitialState({
-            queryId : props.queryId,
+            queryId : queryId,
             page : {...initialPageOfComments},
             status : false
         })
     }
 )
-const selectCommentStates = (props : {queryId : string}) => createSelector(
+export const selectResponses = (props : {postId : string}) => createSelector(
     selectChildState(props),
-    appCommentState.childAdapter.getSelectors( (state : appCommentState.ChildState) => state ).selectAll
+    appCommentState.childAdapter.getSelectors().selectAll
 )
-const selectCommentState = (props : {queryId : string, parentCommetId : string}) => createSelector(
+export const selectPageAndStatus = (props : {postId : string}) => createSelector(
     selectChildState(props),
-    state => state.entities[props.parentCommetId]!
+    state => ({page : state.page,status : state.status,postId : props.postId})
 )
-export const selectRemainingChildrenCount = (props : {queryId : string, parentCommetId : string}) => createSelector(
-    selectCommentState(props),
-    state => state.countOfRemainingChildComments
-)
-export const selectChildrenVisibility = (props : {queryId : string, parentCommetId : string}) => createSelector(
-    selectCommentState(props),
-    state => state.childrenVisibility
-)
-export const selectCommentResponses = (props : {queryId : string}) => createSelector(
-    selectCommentStates(props),
-    state => state.map(x => x.comment)
-)
-export const selectPageOfComments = (props : {queryId : string}) => createSelector( selectChildState(props), state => state.page )
-export const selectStatusOfComments = (props : {queryId : string}) => createSelector( selectChildState(props), state => state.status )
-

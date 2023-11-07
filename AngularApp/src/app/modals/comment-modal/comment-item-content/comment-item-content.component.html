@@ -1,27 +1,22 @@
 <div class="root">
-
-  <div class="header">
-    <app-display-profile-image diameter="32" [userId]="(user$ | async)?.id" ></app-display-profile-image>
-    <div class="content-wrapper">
-
-      <div class="content">
-        <span class="user-name">{{comment?.userName}}</span>
-        <span class="content-text">{{comment?.content}}</span>
-      </div>
-
-      <div class="content-info">
+  <div class="a">
+    <app-display-profile-image [diameter]="diameter" [userId]="(user$ | async)?.id" ></app-display-profile-image>
+    <div class="content">
+      <div class="info">
+        <a href="#"><span class="user-name">{{'@'+comment?.userName}}</span></a>
         <ng-container *ngIf="comment && comment.countOfLikes > 0">
           <span class="count-of-likes">{{comment.countOfLikes + " begeni"}}</span>
         </ng-container>
-        <span class="reply-to-comment">Yanit ver</span>
-        <span>{{comment?.createdDate | dateFormat}}</span>
+        <span class="created-date">{{comment?.createdDate | dateFormat}}</span>
       </div>
-
+      <div class="content-text">
+        <span>{{comment?.content}}</span>
+      </div>
+      <div>
+        <span class="reply-to-comment">Yanit ver</span>
+      </div>
     </div>
-    <app-like-button [likeable]="commentLikingService"></app-like-button>
   </div>
-
-
-
+  <app-like-button [likeable]="commentLikingService"></app-like-button>
 </div>
 

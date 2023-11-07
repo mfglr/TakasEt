@@ -14,7 +14,7 @@ import { UserState } from 'src/app/states/user/state';
 export class CommentItemContentComponent {
   @Input() hasChildren : boolean = true;
   @Input() comment? : CommentResponse;
-  
+  @Input() diameter : string = '50';
   user$ = this.userStore.select(getLoginResponse)
 
   constructor(

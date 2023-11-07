@@ -1,15 +1,55 @@
 .root{
   .parent{
-
+    margin-bottom: 0.5rem;
   }
   .children{
     display: flex;
     flex-direction: column;
     .load-children{
-
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      text-decoration: underline;
+      cursor : pointer;
+      .line{
+        margin-left: calc(0.5rem + 50px);
+        width: 25px;
+      }
+      .load-children-button{
+        margin-left: 0.5rem;
+      }
     }
     .child{
-      margin-left: 1rem;
+      margin-left: calc(0.5rem + 50px);
+      margin-bottom: 0.5rem;
+    }
+    .show-children{
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      text-decoration: underline;
+      cursor : pointer;
+      .line{
+        margin-left: calc(0.5rem + 50px);
+        width: 25px;
+      }
+      .show-children-button{
+        margin-left: 0.5rem;
+      }
+    }
+    .hide-children{
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      text-decoration: underline;
+      cursor : pointer;
+      .line{
+        margin-left: calc(0.5rem + 50px);
+        width: 25px;
+      }
+      .hide-children-button{
+        margin-left: 0.5rem;
+      }
     }
 
   }

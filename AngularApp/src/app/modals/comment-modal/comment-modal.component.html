@@ -6,8 +6,8 @@
 
         <div>
           <form [formGroup]="commentForm">
-            <input formControlName="content" type="text">
-            <button>paylas</button>
+            <textarea rows="2" formControlName="content" class="span3 form-control" style="width: 100%;"></textarea>
+            <button (click)="shareComment()">paylas</button>
           </form>
           <div>
             <ng-container *ngIf="!respondedComment; else template;">
