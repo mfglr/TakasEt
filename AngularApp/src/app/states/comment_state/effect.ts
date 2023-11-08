@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import { Injectable } from "@angular/core";
 import { selectPageAndStatus } from "./selectors";
 import { AppCommentState } from "./state";
-import { addAction, nextPageAction, nextPageSuccessAction } from "./actions";
+import { addAction, addSuccessAction, nextPageAction, nextPageSuccessAction } from "./actions";
 
 @Injectable()
 export class AppCommentEffect{
@@ -15,11 +15,12 @@ export class AppCommentEffect{
         private store : Store<AppCommentState>,
         private commentService : CommentService
     ) {}
-    
 
-    addComment$ = createEffect(() =>{
+    add$ = createEffect(() =>{
         return this.actions.pipe(
-            ofType(addAction)
+            ofType(addAction),
+            mergeMap(action => this.commentService.addComment(action.request)),
+            mergeMap(response => of(addSuccessAction({payload : response})))
         )
     })
     nextPage$ = createEffect(() =>{

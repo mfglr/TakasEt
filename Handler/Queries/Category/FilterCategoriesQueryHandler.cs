@@ -31,7 +31,7 @@ namespace Handler.Queries
                         c.Name.ToLower().Contains(request.Key.ToLower()) ||
                         c.Description.ToLower().Contains(request.Key.ToLower())
                 )
-                .ToPage(request)
+                .ToPage(x => x.Id, request)
                 .ToListAsync();
             return AppResponseDto.Success(_mapper.Map<IEnumerable<CategoryResponseDto>>(categories));
         }

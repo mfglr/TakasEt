@@ -26,7 +26,7 @@ namespace Handler.Queries
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.ToPage(request)
+				.ToPage(x => x.Id,request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,

@@ -31,7 +31,7 @@ namespace Handler.Queries
 				.Include(x => x.Post)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Post.User.Id == request.UserId)
-                .ToPage(request)
+                .ToPage(x => x.Id, request)
                 .GroupBy(x => x.Post)
                 .Select(x => x.OrderBy(x => x.Id).First())
                 .ToListAsync(cancellationToken);

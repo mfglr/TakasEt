@@ -3,21 +3,27 @@
     <div class="modal-content">
 
       <div class="modal-header">
-
         <div>
-          <form [formGroup]="commentForm">
-            <textarea rows="2" formControlName="content" class="span3 form-control" style="width: 100%;"></textarea>
-            <button (click)="shareComment()">paylas</button>
+          
+          <form [formGroup]="commentForm" >
+            <textarea 
+              rows="2"
+              formControlName="content" 
+              class="span3 form-control">
+            </textarea>
+            <button #shareCommentButton>paylas</button>
           </form>
+
           <div>
-            <ng-container *ngIf="!respondedComment; else template;">
-              <span >{{post?.userName}} un postuna yorum yap</span>
+            <ng-container *ngIf="status$ | async; else template">
+              <span>
+                {{(userName$ | async)}}
+                <i class="fa-regular fa-circle-xmark"></i>
+                {{" kullanicisina yanit ver."}}
+              </span>
             </ng-container>
             <ng-template #template>
-              <button>
-                {{respondedComment!.userName}}
-                <i class="fa-solid fa-x"></i>
-              </button><span> e yanit ver</span>
+              <span>{{post?.userName + " kullanicinin gonderisine yorum yap."}}</span>
             </ng-template>
           </div>
         </div>

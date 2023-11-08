@@ -6,8 +6,8 @@ import { FormDataHelper } from 'src/app/helpers/formData-helpers';
 import { Mode } from 'src/app/helpers/mode';
 import { ContainerName } from 'src/app/models/enums/containerName';
 import { PostService } from 'src/app/services/post.service';
-import { getLoginResponse } from 'src/app/states/user/selector';
-import { UserState } from 'src/app/states/user/state';
+import { selectUserId } from 'src/app/states/login_state/selectors';
+import { AppLoginState } from 'src/app/states/login_state/state';
 
 @Component({
   selector: 'app-create-post',
@@ -31,15 +31,15 @@ export class CreatePostComponent implements OnInit,OnDestroy,AfterContentInit{
   })
 
   constructor(
-    private store: Store<UserState>,
+    private store: Store<AppLoginState>,
     private postService: PostService
   ) {
     this.mode = new Mode(this.files.length + 1);
   }
 
   ngOnInit(): void {
-    this.subscirptionUserId = this.store.select(getLoginResponse).subscribe(loginResponse => {
-      if(loginResponse) this.createPostForm.get('userId')?.setValue(loginResponse.id)
+    this.subscirptionUserId = this.store.select(selectUserId).subscribe(id => {
+      if(id) this.createPostForm.get('userId')?.setValue(id)
     });
   }
 

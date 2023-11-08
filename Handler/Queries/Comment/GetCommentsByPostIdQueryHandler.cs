@@ -25,7 +25,7 @@ namespace Handler.Queries
 				.Include(x => x.Children)
 				.Include(x => x.UsersWhoLiked)
 				.Where(x => x.PostId == request.PostId)
-				.ToPage(request)
+				.ToPage(x => x.Id, request)
 				.Select(
 					x => new CommentResponseDto()
 					{

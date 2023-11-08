@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription, fromEvent, mergeMap, withLatestFrom } from 'rxjs';
 import { AppStringsService } from 'src/app/services/app-strings.service';
-import { login } from 'src/app/states/user/actions';
-import { UserState } from 'src/app/states/user/state';
+import { login } from 'src/app/states/login_state/actions';
+import { AppLoginState } from 'src/app/states/login_state/state';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,7 @@ export class LoginComponent implements OnDestroy, AfterContentInit {
 
   constructor(
     public appStringsService : AppStringsService,
-    private store : Store<UserState>) {
+    private store : Store<AppLoginState>) {
   }
 
   ngAfterContentInit(): void {

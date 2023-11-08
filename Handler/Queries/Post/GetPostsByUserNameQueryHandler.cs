@@ -25,7 +25,7 @@ namespace Handler.Queries
 				.Include(x => x.User)
 				.Include(x => x.Category)
 				.Where(post => post.User.UserName == request.UserName)
-				.ToPage(request)
+				.ToPage(x => x.Id,request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,

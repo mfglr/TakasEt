@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
+import { AppLoginState } from 'src/app/states/login_state/state';
 
 @Component({
   selector: 'app-display-profile-image',
@@ -14,12 +15,14 @@ export class DisplayProfileImageComponent implements OnChanges {
   profileImage$? : Observable<string>;
 
   constructor(
-    private profileImageService : ProfileImageService
+    private profileImageService : ProfileImageService,
   ) {
 
   }
 
   ngOnChanges(){
-    if(this.userId) this.profileImage$ = this.profileImageService.getActiveProfileImage(this.userId);
+    if(this.userId){
+      this.profileImage$ = this.profileImageService.getActiveProfileImage(this.userId);
+    }
   }
 }

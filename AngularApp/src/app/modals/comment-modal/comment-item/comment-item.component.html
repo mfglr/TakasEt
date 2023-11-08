@@ -1,7 +1,10 @@
 <div class="root">
 
   <div class="parent">
-    <app-comment-item-content diameter="50" [comment]="comment"></app-comment-item-content>
+    <app-comment-item-content 
+      diameter="50"
+      [comment]="comment">
+    </app-comment-item-content>
   </div>
 
   <div class="children" *ngIf="comment && comment.countOfChildren > 0">
@@ -15,8 +18,13 @@
         </span>
       </div>
   
-      <div class="child" *ngFor="let comment of (children$ | async)">
-        <app-comment-item-content diameter="40"  [comment]="comment" [hasChildren]="false"></app-comment-item-content>
+      <div class="child" *ngFor="let child of (children$ | async)">
+        <app-comment-item-content 
+          diameter="40" 
+          [comment]="child" 
+          [hasChildren]="false"
+          [parentComment]="comment">
+        </app-comment-item-content>
       </div>
 
       <div *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount < comment.countOfChildren" class="show-children">

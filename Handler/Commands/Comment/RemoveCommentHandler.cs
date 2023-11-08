@@ -20,11 +20,11 @@ namespace Handler.Commands
 
 		public async Task<AppResponseDto> Handle(RemoveComment request, CancellationToken cancellationToken)
 		{
-			var comment = await _comments.DbSet
-				.IncludeChildrenByRecursive(Comment.Depth)
-				.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-			if (comment == null) throw new CommentNotFoundException();
-			_comments.DbSet.RemoveRecursive(comment);
+			//var comment = await _comments.DbSet
+			//	.IncludeChildrenByRecursive(Comment.Depth)
+			//	.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+			//if (comment == null) throw new CommentNotFoundException();
+			//_comments.DbSet.RemoveRecursive(comment);
 			return AppResponseDto.Success();
 		}
 	}

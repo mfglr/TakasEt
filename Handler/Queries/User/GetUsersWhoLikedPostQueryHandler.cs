@@ -26,7 +26,7 @@ namespace Handler.Queries
 				.Include(x => x.Posts)
 				.Include(x => x.LikedPosts)
 				.Where(x => x.LikedPosts.Select(x => x.PostId).Contains(request.PostId))
-				.ToPage(request)
+				.ToPage(x => x.Id, request)
 				.Select(x => new UserResponseDto()
 				{
 					Id = x.Id,

@@ -4,7 +4,7 @@ import { CommentService } from "src/app/services/comment.service";
 import { filter, first, map, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectPageAndStatus } from "./selectors";
-import { nextPageAction, nextPageActionSuccess } from "./actions";
+import { addAction, addSuccessAction, nextPageAction, nextPageActionSuccess } from "./actions";
 import { AppChildCommentState } from "./state";
 
 @Injectable()
@@ -28,5 +28,14 @@ export class AppChildCommentEffect{
                 )
             ),
         )
+    })
+    addAction$ = createEffect (() => {
+        return this.actions.pipe(
+            ofType(addAction),
+            mergeMap(action => this.commentService.addComment(action.request).pipe(
+                mergeMap(response => of(addSuccessAction({payload : response, parentComment : action.parentComment})))
+            ))
+        )
+        
     })
 }

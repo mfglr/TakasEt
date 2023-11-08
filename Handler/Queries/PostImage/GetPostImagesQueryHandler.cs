@@ -29,7 +29,7 @@ namespace Handler.Queries
 				.DbSet
 				.AsNoTracking()
 				.Where(x => x.PostId == request.PostId)
-                .ToPage(request)
+                .ToPage(x => x.Id, request)
                 .ToListAsync();
             foreach (var file in files)
                 await _fileWriterService.WriteFileAsync(

@@ -39,8 +39,8 @@ namespace Handler.Queries
 						!x.Post.Requesteds.Select(r => r.RequestedId).Contains(request.PostId)
 				)
 				.GroupBy(x => x.Post)
+				.ToPage(x => x.Key.Id,request)
 				.Select(x => x.OrderBy(image => image.Id).First())
-				.ToPage(request)
 				.ToListAsync(cancellationToken);
 			
 			foreach (var image in images) {

@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserState } from '../states/user/state';
 import { Store } from '@ngrx/store';
-import { getLoginResponse} from '../states/user/selector';
-import { Observable, from, map, mergeMap, take } from 'rxjs';
+import { Observable, map, mergeMap, take } from 'rxjs';
 import { AppResponse } from '../models/responses/app-response';
 import { NoContentResponse } from '../models/responses/no-content-response';
+import { AppLoginState } from '../states/login_state/state';
+import { selectAccessToken } from '../states/login_state/selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +14,14 @@ export class AppHttpClientService {
 
   constructor(
     private httpClient: HttpClient,
-    private store : Store<UserState>
+    private store : Store<AppLoginState>
   ) { }
 
   private baseUrl : string = 'http://localhost:5027/api'
-  private getHttpHeaders$ = this.store.select(getLoginResponse).pipe(
+  private getHttpHeaders$ = this.store.select(selectAccessToken).pipe(
     take(1),
-    map(loginResponse => {
-      if(loginResponse) return new HttpHeaders( {"Authorization" : `Bearer ${loginResponse.accessToken}`} )
+    map(accessToken => {
+      if(accessToken) return new HttpHeaders( {"Authorization" : `Bearer ${accessToken}`} )
       return undefined;
     })
   );

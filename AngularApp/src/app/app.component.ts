@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { UserState } from './states/user/state';
 import { Store } from '@ngrx/store';
-import { isLogin } from './states/user/selector';
-import { loginByRefreshToken, loginFromLocalStorage } from './states/user/actions';
 import { LoginResponse } from './models/responses/login-response';
+import { isLogin } from './states/login_state/selectors';
+import { AppLoginState } from './states/login_state/state';
+import { loadProfileImage, loginByRefreshToken, loginFromLocalStorage } from './states/login_state/actions';
+import { filter, first, map, skipWhile, takeUntil, takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,20 +12,27 @@ import { LoginResponse } from './models/responses/login-response';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
-  isLogin$ = this.store.select(isLogin)
+  isLogin$ = this.loginStore.select(isLogin)
+  
+  getProfileImage$ = this.isLogin$.pipe(
+    filter(isLogin => isLogin),
+    first(),
+    map( () => this.loginStore.dispatch(loadProfileImage()) )
+  )
 
   constructor(
-    private store : Store<UserState>,
+    private loginStore : Store<AppLoginState>,
   ) {}
 
   ngOnInit(){
-    let data = localStorage.getItem('loginResponse');
+    let data = localStorage.getItem('login_response');
     if(data){
       let loginResponse : LoginResponse = JSON.parse(data);
       if(new Date(loginResponse.expirationDateOfAccessToken).getTime() > Date.now())
-        this.store.dispatch(loginFromLocalStorage());
+        this.loginStore.dispatch(loginFromLocalStorage());
       else
-        this.store.dispatch(loginByRefreshToken({refreshToken : loginResponse.refreshToken}));
+        this.loginStore.dispatch(loginByRefreshToken({refreshToken : loginResponse.refreshToken}));
+      this.getProfileImage$.subscribe();
     }
   }
 

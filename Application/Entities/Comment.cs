@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class Comment : RecursiveEntity<Comment>
+	public class Comment : Entity
 	{
 		public Guid? PostId { get; private set; }
 		public Post? Post { get; }

@@ -6,5 +6,4 @@ export interface LoginResponse{
   id : string;
   userName : string;
   email : string;
-  isLogin : boolean;
 }

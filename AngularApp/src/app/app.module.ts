@@ -9,9 +9,7 @@ import { LoadFilesComponent } from './shareds/load-files/load-files.component';
 import { CategoryInputComponent } from './shareds/category-input/category-input.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { StoreModule } from '@ngrx/store';
-import { userReducer } from './states/user/reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { UserEffect } from './states/user/effect';
 import { DisplayPostImagesComponent } from './modals/post-detail-modal/display-post-images/display-post-images.component';
 import { DisplayProfileImageComponent } from './shareds/display-profile-image/display-profile-image.component';
 import { AppHubConnectionService } from './services/app-hub-connection.service';
@@ -49,6 +47,9 @@ import { appCommentReducer } from './states/comment_state/reducer';
 import { AppCommentEffect } from './states/comment_state/effect';
 import { appChildCommentReducer } from './states/child_comment_state/reducer';
 import { AppChildCommentEffect } from './states/child_comment_state/effects';
+import { appLoginReducer } from './states/login_state/reducer';
+import { AppLoginEffect } from './states/login_state/effect';
+import { repliedCommentReducer } from './states/replied_comment_state/reducer';
 
 @NgModule({
   declarations: [
@@ -94,15 +95,17 @@ import { AppChildCommentEffect } from './states/child_comment_state/effects';
     AppRoutingModule,
     ReactiveFormsModule,
     StoreModule.forRoot(),
-    StoreModule.forFeature("userStoreSlice" , userReducer),
     StoreModule.forFeature("AppPostState", appPostReducer),
     StoreModule.forFeature("AppCommentState", appCommentReducer),
     StoreModule.forFeature("AppChildCommentState", appChildCommentReducer),
+    StoreModule.forFeature("AppLoginState", appLoginReducer),
+    StoreModule.forFeature("RepliedCommentState", repliedCommentReducer),
     EffectsModule.forRoot(),
-    EffectsModule.forFeature([UserEffect]),
     EffectsModule.forFeature([AppPostsEffect]),
     EffectsModule.forFeature([AppCommentEffect]),
-    EffectsModule.forFeature([AppChildCommentEffect])
+    EffectsModule.forFeature([AppChildCommentEffect]),
+    EffectsModule.forFeature([AppLoginEffect])
+
   ],
   providers: [AppHubConnectionService],
   bootstrap: [AppComponent]

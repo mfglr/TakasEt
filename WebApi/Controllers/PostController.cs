@@ -25,13 +25,6 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("post/remove-post")]
-		public async Task<AppResponseDto> RemovePost(RemovePost request)
-		{
-			return await _sender.Send(request);
-		}
-
-		[Authorize(Roles = "user")]
 		[HttpGet("post/get-post/{id}")]
 		public async Task<AppResponseDto> GetPost(Guid id)
 		{

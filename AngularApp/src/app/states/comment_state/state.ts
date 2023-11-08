@@ -20,8 +20,8 @@ function addCommentsToChildState(comments : CommentResponse[],childState : Child
         page : { ...childState.page, skip : childState.page.skip + takeValueOfComments },
     }
 }
-export function addComment(comment : CommentResponse,postId : string,parentState : ParentState) : ParentState{
-    let queryId = commentsOfPostQueryId + postId;
+export function addComment(comment : CommentResponse,parentState : ParentState) : ParentState{
+    let queryId = commentsOfPostQueryId + comment.postId!;
     let childState : ChildState = parentState.entities[queryId] != undefined ? 
         parentState.entities[queryId]! : 
         childAdapter.getInitialState({
@@ -29,7 +29,7 @@ export function addComment(comment : CommentResponse,postId : string,parentState
             page : {...initialPageOfComments},
             queryId : queryId,
         });
-    return parentAdapter.addOne(childAdapter.addOne(comment,childState),parentState);
+    return parentAdapter.setOne(childAdapter.addOne(comment,childState),parentState);
 }
 export function loadComments(comments : CommentResponse[],postId : string,parentState : ParentState) : ParentState{
     let queryId = commentsOfPostQueryId + postId;

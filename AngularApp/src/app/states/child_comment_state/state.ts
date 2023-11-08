@@ -40,7 +40,7 @@ export function addComment(comment : CommentResponse,parentComment: CommentRespo
         });
     return parentAdapter.setOne(childAdapter.addOne(comment,childState),parentState);
 }
-export function loadComments(comments : CommentResponse[],parentComment : CommentResponse,parentState : ParentState) : ParentState{
+export function loadComments(comments : CommentResponse[],parentComment : CommentResponse,parentState : ParentState) : ParentState {
     let queryId = commentsOfCommentQueryId + parentComment.id;
     let childState : ChildState = parentState.entities[queryId] != undefined ? 
         parentState.entities[queryId]! : 
@@ -62,5 +62,4 @@ export function switchVisibility(parentCommentId : string,parentState : ParentSt
             { id : queryId, changes : { visibility : !(parentState.entities[queryId]!.visibility) } },parentState
         )
     return parentState;
-    
 }

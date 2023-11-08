@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { nextPageActionSuccess, switchVisibilityAction } from "./actions";
-import { initialState, loadComments, switchVisibility } from "./state";
+import { addSuccessAction, nextPageActionSuccess, switchVisibilityAction } from "./actions";
+import { addComment, initialState, loadComments, switchVisibility } from "./state";
 
 export const appChildCommentReducer = createReducer(
     initialState,
@@ -11,5 +11,9 @@ export const appChildCommentReducer = createReducer(
     on(
         switchVisibilityAction,
         (state, action) => ({...state,parentState : switchVisibility(action.parentComentId,state.parentState)})
+    ),
+    on(
+        addSuccessAction,
+        (state,action) => ({...state,parentState : addComment(action.payload,action.parentComment,state.parentState)})
     )
 )

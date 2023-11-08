@@ -39,7 +39,7 @@ namespace Handler.Queries
                         x.UserId == _loggedInUser.UserId &&
                         !x.Requesteds.Select(r => r.RequestedId).Contains(request.PostId)
                 )
-				.ToPage(request)
+				.ToPage(x => x.Id,request)
 				.Select(x => new PostResponseDto()
 				{
 					Id = x.Id,

@@ -1,6 +1,6 @@
 <div class="root">
   <div class="a">
-    <app-display-profile-image [diameter]="diameter" [userId]="(user$ | async)?.id" ></app-display-profile-image>
+    <app-display-profile-image [diameter]="diameter" [userId]="(userId$ | async)" ></app-display-profile-image>
     <div class="content">
       <div class="info">
         <a href="#"><span class="user-name">{{'@'+comment?.userName}}</span></a>
@@ -12,8 +12,8 @@
       <div class="content-text">
         <span>{{comment?.content}}</span>
       </div>
-      <div>
-        <span class="reply-to-comment">Yanit ver</span>
+      <div class="reply-comment" (click)="replyComment()">
+        <span>Yanit ver</span>
       </div>
     </div>
   </div>

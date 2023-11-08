@@ -1,4 +1,4 @@
-import { Component, Input }  from '@angular/core';
+import { Component, EventEmitter, Input, Output }  from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
@@ -14,7 +14,6 @@ import { AppChildCommentState } from 'src/app/states/child_comment_state/state';
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
-  
   children$? : Observable<CommentResponse[]>;
   childrenVisibility$? : Observable<boolean>;
   displayedCount$? : Observable<number>;
@@ -28,11 +27,18 @@ export class CommentItemComponent {
 
   ngOnChanges(){
     if(this.comment){
-      this.children$ = this.commentStore.select(appChildCommentSelectors.selectResponses({parentComment : this.comment}));
+
+      this.children$ = this.commentStore.select(
+        appChildCommentSelectors.selectResponses({parentComment : this.comment})
+      );
       
-      this.childrenVisibility$ = this.commentStore.select(appChildCommentSelectors.selectVisibility({parentComment : this.comment}))
+      this.childrenVisibility$ = this.commentStore.select(
+        appChildCommentSelectors.selectVisibility({parentComment : this.comment})
+      )
       
-      this.displayedCount$ = this.commentStore.select(appChildCommentSelectors.selectDisplayedCount({parentComment : this.comment}))
+      this.displayedCount$ = this.commentStore.select(
+        appChildCommentSelectors.selectDisplayedCount({parentComment : this.comment})
+      )
       
       this.subsRemainingChildrenCount = this.commentStore.select(
         appChildCommentSelectors.selectRemainingCount({parentComment : this.comment})
@@ -40,12 +46,13 @@ export class CommentItemComponent {
 
     }
   }
-
+  
   loadChildren(){
     if(this.comment){
       this.commentStore.dispatch(appChildCommentActions.nextPageAction({parentComment : this.comment}));
     }
   }
+
   hiddenChildren(){
     if(this.comment){
       this.commentStore.dispatch(appChildCommentActions.switchVisibilityAction({parentComentId : this.comment.id}))

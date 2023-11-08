@@ -27,7 +27,7 @@ namespace Handler.Queries
 				.DbSet
 				.AsNoTracking()
 				.GroupBy(x => x.Post)
-				.ToPage(request)
+				.ToPage(x => x.Key.Id,request)
 				.Select(x => x.OrderBy(x => x.Id).First())
 				.ToListAsync(cancellationToken);
 			foreach (var image in images)

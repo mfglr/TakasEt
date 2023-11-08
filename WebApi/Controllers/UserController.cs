@@ -31,12 +31,6 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/remove-user/{id}")]
-		public async Task<AppResponseDto> RemoveUser(Guid id)
-		{
-			return await _sender.Send(new RemoveUserRequestDto(id));
-		}
-		[Authorize(Roles = "user")]
 		[HttpGet("user/get-users-who-liked-post/{postId}")]
 		public async Task<AppResponseDto> GetUsersWhoLikedPost(Guid postId)
 		{

@@ -6,8 +6,7 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 import { AppHubConnectionService } from 'src/app/services/app-hub-connection.service';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
-import { getLoginResponse } from 'src/app/states/user/selector';
-import { UserState } from 'src/app/states/user/state';
+import { AppLoginState } from 'src/app/states/login_state/state';
 
 @Component({
   selector: 'app-display-post-content',
@@ -23,8 +22,6 @@ export class DisplayPostContentComponent {
   private source$ : Observable<PostResponse | undefined | null> = this.postSubject.pipe(
     filter(post => post != undefined && post != null)
   );
-
-  public loginResponse$ = this.store.select(getLoginResponse)
 
   profileImage$? : Observable<string> = this.source$.pipe(
     mergeMap( () => this.profileImageService.getActiveProfileImage(this.post!.userId) )
@@ -48,7 +45,6 @@ export class DisplayPostContentComponent {
     public likingService : UserPostLikingService,
     private profileImageService : ProfileImageService,
     private appHubConnection : AppHubConnectionService,
-    private store : Store<UserState>
     ) {
     }
 
