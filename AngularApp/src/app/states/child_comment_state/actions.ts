@@ -8,6 +8,7 @@ export const nextPageActionSuccess = createAction(
     props<{payload : CommentResponse[],parentComment : CommentResponse}>()
 )
 export const switchVisibilityAction = createAction( "[child comment] switchVisibility",props<{parentComentId : string}>())
+export const setVisibileAction = createAction("[child comment] setVisibileAction",props<{parentCommentId : string}>())
 export const addAction = createAction("[child comment] addAction",props<{request : AddComment,parentComment : CommentResponse}>())
 export const addSuccessAction = createAction(
     "[child comment] addSuccessAction",

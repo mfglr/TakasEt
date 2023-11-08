@@ -13,6 +13,8 @@ import { AppLoginState } from 'src/app/states/login_state/state';
 import { AppChildCommentState } from 'src/app/states/child_comment_state/state';
 import { RepliedCommentState } from 'src/app/states/replied_comment_state/state';
 import { selectStatus, selectRepliedCommentState,selecUserName } from 'src/app/states/replied_comment_state/selectors';
+import { resetAction } from 'src/app/states/replied_comment_state/actions';
+import { setVisibileAction } from 'src/app/states/child_comment_state/actions';
 
 @Component({
   selector: 'app-comment-modal',
@@ -45,16 +47,16 @@ export class CommentModalComponent implements OnChanges {
   }
  
   ngAfterContentInit(){
-    if(this.post)
       fromEvent(this.shareCommentButton?.nativeElement,"click").pipe(
         withLatestFrom(
           this.repliedCommentStore.select(selectRepliedCommentState),
           this.loginStore.select(selectUserId),
           this.commentForm.valueChanges
         ),
-        filter(([event,state,userId,form]) => !!userId && !!form.content),
+        filter(([event,state,userId,form]) =>!!userId && !!form.content),
         map(([event,state,userId,form]) => {
-          this.shareComment(form.content!,userId!,this.post!.id,state)
+          if(this.post)
+            this.shareComment(form.content!,userId!,this.post.id,state)
         })
       ).subscribe();
   }
@@ -64,7 +66,9 @@ export class CommentModalComponent implements OnChanges {
       this.commentStore.dispatch(appCommentActions.nextPageAction({postId : this.post.id}))
     }
   }
-
+  resetRepliedCommentState(){
+    this.repliedCommentStore.dispatch(resetAction());
+  }
   shareComment( content : string, userId : string, postId : string, state : RepliedCommentState){
     if(state.parentComment && state.comment){
       this.childCommentStore.dispatch( appChildCommentActions.addAction({
@@ -75,8 +79,9 @@ export class CommentModalComponent implements OnChanges {
     else if(state.comment && !state.parentComment){
       this.childCommentStore.dispatch(appChildCommentActions.addAction({
         request : { content : content,userId : userId, parentId : state.comment.id },
-        parentComment : state.comment!
+        parentComment : state.comment
       }))
+      this.childCommentStore.dispatch(setVisibileAction({parentCommentId : state.comment.id}));
     }
     else if(!state.parentComment && !state.comment){
       this.commentStore.dispatch(appCommentActions.addAction({

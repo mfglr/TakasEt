@@ -18,12 +18,12 @@
             <ng-container *ngIf="status$ | async; else template">
               <span>
                 {{(userName$ | async)}}
-                <i class="fa-regular fa-circle-xmark"></i>
-                {{" kullanicisina yanit ver."}}
+                <i class="fa-regular fa-circle-xmark reset-state-icon" (click)="resetRepliedCommentState()"></i>
+                {{" kullanicisina yanit veriyorsun!."}}
               </span>
             </ng-container>
             <ng-template #template>
-              <span>{{post?.userName + " kullanicinin gonderisine yorum yap."}}</span>
+              <span>{{post?.userName + " kullanicinin gonderisine yorum yapiyorsun."}}</span>
             </ng-template>
           </div>
         </div>

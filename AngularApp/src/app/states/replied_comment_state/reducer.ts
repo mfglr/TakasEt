@@ -16,5 +16,5 @@ export const repliedCommentReducer = createReducer(
             ...state,comment : action.comment,parentComment : action.parentComment,userName : action.userName,status : true
         })
     ),
-    on(resetAction,(state) => ({...state,comment : undefined,parentComment : undefined,status : false})),
+    on(resetAction,(state) => ({comment : undefined,parentComment : undefined,userName : undefined,status : false})),
 )

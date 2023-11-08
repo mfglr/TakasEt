@@ -12,7 +12,10 @@ export interface ChildState extends AppEntityState<CommentResponse>{
 export interface ParentState extends EntityState<ChildState>{}
 export interface AppChildCommentState{ parentState : ParentState }
 
-export const childAdapter = createEntityAdapter<CommentResponse>({ selectId : state => state.id })
+export const childAdapter = createEntityAdapter<CommentResponse>({ 
+    selectId : state => state.id,
+    sortComparer : (x,y) => x.createdDate  < y.createdDate ? 1 : 0
+})
 export const parentAdapter = createEntityAdapter<ChildState> ({ selectId : state => state.queryId })
 
 export const initialState : AppChildCommentState = { parentState : parentAdapter.getInitialState() }
@@ -60,6 +63,15 @@ export function switchVisibility(parentCommentId : string,parentState : ParentSt
     if(parentState.entities[queryId])
         return parentAdapter.updateOne(
             { id : queryId, changes : { visibility : !(parentState.entities[queryId]!.visibility) } },parentState
+        )
+    return parentState;
+}
+
+export function setVisibile(parentCommentId : string,parentState : ParentState) : ParentState{
+    let queryId = commentsOfCommentQueryId + parentCommentId;
+    if(parentState.entities[queryId])
+        return parentAdapter.updateOne(
+            { id : queryId, changes : { visibility : true } },parentState
         )
     return parentState;
 }
