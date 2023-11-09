@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output }  from '@angular/core';
+import { Component, Input }  from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
-import * as appChildCommentSelectors from 'src/app/states/child_comment_state/selectors';
-import * as appChildCommentActions from 'src/app/states/child_comment_state/actions';
-import { AppChildCommentState } from 'src/app/states/child_comment_state/state';
+import { nextPageOfChildren, switchVisibilityAction } from 'src/app/states/comment_modal_state/action';
+import { selectChildComments, selectChildrenRemainingCount, selectDisplayedChildrenCount, selectVisibility } from 'src/app/states/comment_modal_state/selector';
+import { CommentModalState } from 'src/app/states/comment_modal_state/state';
 
 @Component({
   selector: 'app-comment-item',
@@ -14,6 +14,7 @@ import { AppChildCommentState } from 'src/app/states/child_comment_state/state';
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
+  @Input() postId? : string;
   children$? : Observable<CommentResponse[]>;
   childrenVisibility$? : Observable<boolean>;
   displayedCount$? : Observable<number>;
@@ -22,45 +23,45 @@ export class CommentItemComponent {
 
   constructor(
     public commentLikingService : UserCommentLikingService,
-    private commentStore : Store<AppChildCommentState>
+    private commentModalStore : Store<CommentModalState>
   ) {}
 
   ngOnChanges(){
-    if(this.comment){
+    if(this.comment && this.postId){
 
-      this.children$ = this.commentStore.select(
-        appChildCommentSelectors.selectResponses({parentComment : this.comment})
+      this.children$ = this.commentModalStore.select(
+        selectChildComments({postId : this.postId,commentId : this.comment.id})
       );
       
-      this.childrenVisibility$ = this.commentStore.select(
-        appChildCommentSelectors.selectVisibility({parentComment : this.comment})
+      this.childrenVisibility$ = this.commentModalStore.select(
+        selectVisibility({postId : this.postId,commentId : this.comment.id})
       )
       
-      this.displayedCount$ = this.commentStore.select(
-        appChildCommentSelectors.selectDisplayedCount({parentComment : this.comment})
+      this.displayedCount$ = this.commentModalStore.select(
+        selectDisplayedChildrenCount({postId : this.postId,commentId : this.comment.id})
       )
       
-      this.subsRemainingChildrenCount = this.commentStore.select(
-        appChildCommentSelectors.selectRemainingCount({parentComment : this.comment})
+      this.subsRemainingChildrenCount = this.commentModalStore.select(
+        selectChildrenRemainingCount({postId : this.postId,commentId : this.comment.id})
       ).subscribe(x => this.remainingChildrenCount = x);
 
     }
   }
   
   loadChildren(){
-    if(this.comment){
-      this.commentStore.dispatch(appChildCommentActions.nextPageAction({parentComment : this.comment}));
+    if(this.comment && this.postId){
+      this.commentModalStore.dispatch(nextPageOfChildren({postId : this.postId,commentId : this.comment.id}));
     }
   }
 
   hiddenChildren(){
-    if(this.comment){
-      this.commentStore.dispatch(appChildCommentActions.switchVisibilityAction({parentComentId : this.comment.id}))
+    if(this.comment && this.postId){
+      this.commentModalStore.dispatch(switchVisibilityAction({postId : this.postId,commentId : this.comment.id}))
     }
   }
   showChildren(){
-    if(this.comment){
-      this.commentStore.dispatch(appChildCommentActions.switchVisibilityAction({parentComentId : this.comment.id}))
+    if(this.comment && this.postId){
+      this.commentModalStore.dispatch(switchVisibilityAction({postId : this.postId,commentId : this.comment.id}))
     }
   }
   ngOnDestroy(){

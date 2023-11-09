@@ -43,13 +43,10 @@ import { UserItemComponent } from './modals/users-list-modal/user-item/user-item
 import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail-modal.component';
 import { appPostReducer } from './states/post_state/reducer';
 import { AppPostsEffect } from './states/post_state/effect';
-import { appCommentReducer } from './states/comment_state/reducer';
-import { AppCommentEffect } from './states/comment_state/effect';
-import { appChildCommentReducer } from './states/child_comment_state/reducer';
-import { AppChildCommentEffect } from './states/child_comment_state/effects';
 import { appLoginReducer } from './states/login_state/reducer';
 import { AppLoginEffect } from './states/login_state/effect';
-import { repliedCommentReducer } from './states/replied_comment_state/reducer';
+import { commentModalCollectionReducer } from './states/comment_modal_state/reducer';
+import { CommentModalCollectionEffect } from './states/comment_modal_state/effect';
 
 @NgModule({
   declarations: [
@@ -96,15 +93,12 @@ import { repliedCommentReducer } from './states/replied_comment_state/reducer';
     ReactiveFormsModule,
     StoreModule.forRoot(),
     StoreModule.forFeature("AppPostState", appPostReducer),
-    StoreModule.forFeature("AppCommentState", appCommentReducer),
-    StoreModule.forFeature("AppChildCommentState", appChildCommentReducer),
     StoreModule.forFeature("AppLoginState", appLoginReducer),
-    StoreModule.forFeature("RepliedCommentState", repliedCommentReducer),
+    StoreModule.forFeature("CommentModalStateCollection", commentModalCollectionReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([AppPostsEffect]),
-    EffectsModule.forFeature([AppCommentEffect]),
-    EffectsModule.forFeature([AppChildCommentEffect]),
-    EffectsModule.forFeature([AppLoginEffect])
+    EffectsModule.forFeature([AppLoginEffect]),
+    EffectsModule.forFeature([CommentModalCollectionEffect]),
 
   ],
   providers: [AppHubConnectionService],

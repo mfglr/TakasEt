@@ -15,10 +15,10 @@
           </form>
 
           <div>
-            <ng-container *ngIf="status$ | async; else template">
+            <ng-container *ngIf="(replyToCommentState$ | async)?.ownerType == 'comment'; else template">
               <span>
-                {{(userName$ | async)}}
-                <i class="fa-regular fa-circle-xmark reset-state-icon" (click)="resetRepliedCommentState()"></i>
+                {{(replyToCommentState$ | async)?.comment?.userName}}
+                <i class="fa-regular fa-circle-xmark reset-state-icon" (click)="resetCommentToReplyState()"></i>
                 {{" kullanicisina yanit veriyorsun!."}}
               </span>
             </ng-container>
@@ -35,7 +35,7 @@
 
       <div class="modal-body">
         <div class="comment-item" *ngFor="let comment of (comments$ | async)" >
-          <app-comment-item [comment]="comment"></app-comment-item>
+          <app-comment-item  [postId]="post?.id" [comment]="comment"></app-comment-item>
         </div>
         <button (click)="getMore()">more</button>
       </div>

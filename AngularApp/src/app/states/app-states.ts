@@ -15,7 +15,7 @@ export interface Page{
   take : number;
   firstQueryDate : number;
 }
-export interface AppEntityState<T> extends EntityState<T>{ page : Page; status : boolean; queryId : string; }
+export interface AppEntityState<T> extends EntityState<T>{ page : Page; status : boolean;}
 
 
 

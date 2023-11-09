@@ -4,7 +4,9 @@ import { AppEntityState, initialPageOfPosts, takeValueOfPosts } from "../app-sta
 
 export const postsOfHomePageQueryId = "postsOfHomePageQueryId";
 
-export interface ChildState extends AppEntityState<PostResponse>{}
+export interface ChildState extends AppEntityState<PostResponse>{
+    queryId : string;
+}
 export interface ParentState extends EntityState<ChildState>{}
 export interface AppPostState{ parentState : ParentState, selectedQueryId : string | undefined }
 
