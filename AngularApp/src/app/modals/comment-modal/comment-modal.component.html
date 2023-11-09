@@ -3,43 +3,35 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <div>
-          
-          <form [formGroup]="commentForm" >
-            <textarea 
-              rows="2"
-              formControlName="content" 
-              class="span3 form-control">
-            </textarea>
-            <button #shareCommentButton>paylas</button>
-          </form>
-
-          <div>
-            <ng-container *ngIf="(replyToCommentState$ | async)?.ownerType == 'comment'; else template">
-              <span>
-                {{(replyToCommentState$ | async)?.comment?.userName}}
-                <i class="fa-regular fa-circle-xmark reset-state-icon" (click)="resetCommentToReplyState()"></i>
-                {{" kullanicisina yanit veriyorsun!."}}
-              </span>
-            </ng-container>
-            <ng-template #template>
-              <span>{{post?.userName + " kullanicinin gonderisine yorum yapiyorsun."}}</span>
-            </ng-template>
-          </div>
-        </div>
-
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" (scroll)="onScroll($event)">
         <div class="comment-item" *ngFor="let comment of (comments$ | async)" >
           <app-comment-item  [postId]="post?.id" [comment]="comment"></app-comment-item>
         </div>
-        <button (click)="getMore()">more</button>
+        <span class="get-more-button" (click)="getMore()"><i class="fa-solid fa-plus"></i></span>
       </div>
+      <div class="modal-footer">
+          
+        <div class="input-group">
+          <textarea [formControl]="content" class="form-control"></textarea>
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="shareComment()">paylas</button>
+          </div>
+        </div>
 
+        <ng-container *ngIf="(replyToCommentState$ | async)?.ownerType == 'comment'">
+          <span>
+            {{(replyToCommentState$ | async)?.comment?.userName}}
+            <i class="fa-regular fa-circle-xmark reset-state-icon" (click)="resetCommentToReplyState()"></i>
+            {{" kullanicisina yanit veriyorsun!"}}
+          </span>
+        </ng-container>
+
+      </div>
     </div>
   </div>
 </div>

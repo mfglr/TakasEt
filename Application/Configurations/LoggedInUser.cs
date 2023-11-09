@@ -1,4 +1,6 @@
-﻿namespace Application.Configurations
+﻿using Application.Entities;
+
+namespace Application.Configurations
 {
 	public class LoggedInUser
 	{

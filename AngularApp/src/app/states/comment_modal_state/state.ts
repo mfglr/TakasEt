@@ -32,7 +32,7 @@ export const stateAdapter = createEntityAdapter<CommentModalState>({
     selectId : state => state.postId
 })
 
-export const initialState : CommentModalStateCollection = stateAdapter.getInitialState({})
+export const initialState : CommentModalStateCollection = stateAdapter.getInitialState()
 
 function createCommentState(comment : CommentResponse) : CommentState{
     return {
@@ -41,7 +41,7 @@ function createCommentState(comment : CommentResponse) : CommentState{
             page : {...initialPageOfComments}
         }),
         comment : comment,
-        childrenVisibility : false,
+        childrenVisibility : true,
         displayedChildrenCount : 0,
         remainingChildrenCount : comment.countOfChildren
     }
@@ -75,10 +75,12 @@ function addChild(comment : CommentResponse,postId : string,commentId : string,s
 }
 export function add(comment : CommentResponse, postId : string,state : CommentModalStateCollection){
     let c = state.entities[postId]!.commentToReplyState;
-    if(c.ownerType == "post")
-        addComment(comment,postId,state)
-    else
-        addChild(comment,postId,c.ownerId,state)
+    if(c.ownerType === "post"){
+        return addComment(comment,postId,state)
+    }
+    else{
+        return addChild(comment,postId,c.ownerId,state)
+    }
 }
 export function loadChildren(comments : CommentResponse[],postId : string,commentId : string,state : CommentModalStateCollection) : CommentModalStateCollection{
     let commentModalState = state.entities[postId]!
@@ -160,4 +162,22 @@ export function resetCommentToReply(
             }
         }
     },state)
+}
+export function initCommentModalStates(postIds : string[],state : CommentModalStateCollection){
+    return stateAdapter.addMany(
+        postIds.map(
+            (postId) : CommentModalState =>{
+                return commentModalAdapter.getInitialState({
+                    status : false,
+                    postId : postId,
+                    page : {...initialPageOfComments},
+                    commentToReplyState : {
+                        ownerId : postId,
+                        ownerType : "post",
+                        comment : undefined
+                    }
+                })
+            }
+        ),state
+    )
 }

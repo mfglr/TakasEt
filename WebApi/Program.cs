@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Function.Middlewares;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOptions();

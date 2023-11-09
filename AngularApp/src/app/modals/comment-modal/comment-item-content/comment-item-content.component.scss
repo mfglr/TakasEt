@@ -1,53 +1,11 @@
-// .root{
-//   .header{
-//     display: flex;
-//     align-items: center;
-//     margin-bottom : 0.5rem;
-//     .content-wrapper{
-//       display: flex;
-//       flex-direction: column;
-//       .content{
-//         display: flex;
-//         .user-name{
-//           margin-left: 0.5rem;
-//           font-size: 15px;
-//           font: 500;
-//         }
-//         .content-text{
-
-//         }
-//       }
-//       .content-info{
-//         display: flex;
-//         align-items: center;
-//         font-size: 10px;
-//         .count-of-likes{
-//           margin-right: 0.5rem;
-//           text-decoration-line: underline;
-//         }
-//         .line{
-//           width: 1.5rem;
-//           margin-right: 0.5rem;
-//         }
-//         .reply-to-comment{
-//           margin-right: 0.5rem;
-//           text-decoration-line: underline;
-//         }
-//       }
-//     }
-
-//   }
-
-
-// }
-
-
-
 .root{
   display: flex;
   justify-content: space-between;
   .a{
     display: flex;
+    .profile-photo{
+      margin-left: 0.7rem;
+    }
     .content{
       .info{
         font-size : 0.75rem;
@@ -56,9 +14,6 @@
           margin-left: 0.5rem;
         }
         .created-date{
-          margin-left: 0.5rem;
-        }
-        .count-of-likes{
           margin-left: 0.5rem;
         }
       }
@@ -73,11 +28,18 @@
         text-decoration: underline;
         cursor: pointer;
       }
-      
+    }
+  }
+  .like-button{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.85rem;
+    .count-of-likes{
       
     }
-    
-    
+    .hidden{
+      color : white;
+    }
   }
-  
 }

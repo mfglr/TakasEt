@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { CommentService } from "src/app/services/comment.service";
-import { nextPageOfChildren, nextPageOfChildrenSuccess, nextPageOfComments, nextPageOfCommentsSuccess, shareComment, shareCommentSuccess } from "./action";
-import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
+import { nextPageOfChildren, nextPageOfChildrenSuccess, nextPageOfComments, nextPageOfCommentsSuccess, resetCommentToReplyAction, shareComment, shareCommentSuccess } from "./action";
+import { filter, first, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { CommentModalStateCollection } from "./state";
 import { selectCommentToReplyState, selectStatusAndPage, selectStatusAndPageOfChildren } from "./selector";
@@ -32,7 +32,12 @@ export class CommentModalCollectionEffect{
                         if(state.ownerType == "post") request.postId = state.ownerId;
                         else request.parentId = state.ownerId;
                         return this.commentService.addComment(request).pipe(
-                            mergeMap(response => of(shareCommentSuccess({postId : action.postId,response : response})))
+                            mergeMap(
+                                response => of(
+                                    shareCommentSuccess({postId : action.postId,response : response}),
+                                    resetCommentToReplyAction({postId : action.postId})
+                                )
+                            )
                         )
                     })
                 ))

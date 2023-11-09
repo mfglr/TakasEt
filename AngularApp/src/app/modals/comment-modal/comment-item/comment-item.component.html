@@ -3,8 +3,8 @@
   <div class="parent">
     <app-comment-item-content 
       diameter="50"
-      ownerType="post"
-      [ownerId]="postId"
+      ownerType="comment"
+      [ownerId]="comment?.id"
       [comment]="comment"
       [postId]="postId">
     </app-comment-item-content>
@@ -13,13 +13,6 @@
   <div class="children" *ngIf="comment && comment.countOfChildren > 0">
 
     <ng-container *ngIf="childrenVisibility$ | async; else template">
-
-      <div class="load-children">
-        <hr class="line" />
-        <span *ngIf="remainingChildrenCount > 0" (click)="loadChildren()" class="load-children-button">
-          {{remainingChildrenCount + ' yaniti goster'}}
-        </span>
-      </div>
   
       <div class="child" *ngFor="let child of (children$ | async)">
         <app-comment-item-content 
@@ -32,18 +25,24 @@
         </app-comment-item-content>
       </div>
 
-      <div *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount < comment.countOfChildren" class="show-children">
+      <div class="load-children">
         <hr class="line" />
-        <span (click)="hiddenChildren()" class="show-children-button">
-          {{comment.countOfChildren - remainingChildrenCount + ' yaniti gizle'}}
+        <span *ngIf="remainingChildrenCount > 0" (click)="loadChildren()" class="load-children-button">
+          {{remainingChildrenCount + ' yaniti goster'}}
         </span>
+        <ng-container *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount < comment.countOfChildren">
+          <span (click)="hiddenChildren()" class="hide-children-button">
+            {{'yanitlari gizle'}}
+          </span>
+        </ng-container>
       </div>
+
     </ng-container>
 
     <ng-template #template>
-      <div *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount <= comment.countOfChildren" class="hide-children">
+      <div *ngIf="remainingChildrenCount >= 0 && remainingChildrenCount <= comment.countOfChildren" class="show-children">
         <hr class="line" />
-        <span (click)="showChildren()" class="hide-children-button">
+        <span (click)="showChildren()" class="show-children-button">
           {{comment.countOfChildren + ' yaniti goster'}}
         </span>
       </div>

@@ -1,12 +1,13 @@
 <div class="root">
+  
   <div class="a">
-    <app-display-profile-image [diameter]="diameter" [userId]="(userId$ | async)" ></app-display-profile-image>
+    <div class="profile-photo">
+      <app-display-profile-image [diameter]="diameter" [userId]="(userId$ | async)" ></app-display-profile-image>
+    </div>
+    
     <div class="content">
       <div class="info">
         <a href="#"><span class="user-name">{{'@'+comment?.userName}}</span></a>
-        <ng-container *ngIf="comment && comment.countOfLikes > 0">
-          <span class="count-of-likes">{{comment.countOfLikes + " begeni"}}</span>
-        </ng-container>
         <span class="created-date">{{comment?.createdDate | dateFormat}}</span>
       </div>
       <div class="content-text">
@@ -17,6 +18,14 @@
       </div>
     </div>
   </div>
-  <app-like-button [likeable]="commentLikingService"></app-like-button>
+
+  <div class="like-button">
+    <app-like-button [likeable]="commentLikingService"></app-like-button>
+    <ng-container *ngIf="comment && comment.countOfLikes > 0">
+      <span class="count-of-likes">{{comment.countOfLikes}}</span>
+    </ng-container>
+    <span class="hidden">{{"999999"}}</span>
+  </div>
+  
 </div>
 

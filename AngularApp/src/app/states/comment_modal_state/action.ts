@@ -35,3 +35,7 @@ export const resetCommentToReplyAction = createAction(
     "[comment_modal_state] resetCommentToReply",
     props<{postId : string}>()
 )
+export const initCommentModalStatesAction = createAction(
+    "[comment_modal_state] initCommentModalStatesAction",
+    props<{postIds : string[]}>()
+) 

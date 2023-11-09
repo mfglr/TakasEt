@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store} from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
@@ -14,19 +14,18 @@ import * as commentModalActions from 'src/app/states/comment_modal_state/action'
 })
 export class CommentModalComponent implements OnChanges {
   @Input() post? : PostResponse;
-  @ViewChild("shareCommentButton",{static : true}) shareCommentButton? : ElementRef;
-  
   comments$? : Observable<CommentResponse[]>;
   replyToCommentState$? : Observable<commentModalState.CommentToReplyState>
-
-  commentForm = new FormGroup({
-    content : new FormControl<string>('')
-  });
-
+  content = new FormControl<string | null>(null);
+  
   constructor(
     private commentModalStore : Store<commentModalState.CommentModalStateCollection>
   ) {}
 
+  @HostListener('scroll', ['$event'])
+  onScroll(event : any) {
+    console.log(event);
+  }
   ngOnChanges() {
     if(this.post){
       this.comments$ = this.commentModalStore.select(
@@ -35,6 +34,7 @@ export class CommentModalComponent implements OnChanges {
       this.replyToCommentState$ = this.commentModalStore.select(
         commentModalSelectors.selectCommentToReplyState({postId : this.post.id})
       )
+      this.commentModalStore.dispatch(commentModalActions.nextPageOfComments({postId : this.post.id}))
     }
   }
 
@@ -45,15 +45,18 @@ export class CommentModalComponent implements OnChanges {
   }
 
   resetCommentToReplyState(){
-    if(this.post)
+    if(this.post){
       this.commentModalStore.dispatch(commentModalActions.resetCommentToReplyAction({postId : this.post.id}));
+    }
+    this.content.setValue(null)
   }
 
   shareComment(){
-    if(this.post && this.commentForm.value.content)
+    if(this.post && this.content.value)
       this.commentModalStore.dispatch(
-        commentModalActions.shareComment({postId : this.post.id,content : this.commentForm.value.content})
+        commentModalActions.shareComment({postId : this.post.id,content : this.content.value})
       )
+    this.content.setValue(null)
   }
 
 }

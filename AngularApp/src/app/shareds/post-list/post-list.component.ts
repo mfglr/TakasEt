@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
+import { initCommentModalStatesAction } from 'src/app/states/comment_modal_state/action';
+import { CommentModalStateCollection, initCommentModalStates } from 'src/app/states/comment_modal_state/state';
 import * as appPostsActions from 'src/app/states/post_state/actions';
 import * as appPostsSelectors from 'src/app/states/post_state/selectors';
 import { AppPostState } from 'src/app/states/post_state/state';
@@ -19,12 +21,16 @@ export class PostListComponent{
   postWithCommentDisplayed? : PostResponse;
 
   constructor(
-    private postsStore : Store<AppPostState>
+    private postsStore : Store<AppPostState>,
+    private commentModalStore : Store<CommentModalStateCollection>
   ) {}
 
   ngOnChanges(){
     if(this.queryId){
       this.posts$ = this.postsStore.select(appPostsSelectors.selectPostResponses({ queryId: this.queryId}));
+      this.posts$.subscribe(
+        posts => this.commentModalStore.dispatch(initCommentModalStatesAction({postIds : posts.map(post => post.id)}))
+      )
     }
   }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Application.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Application.Interfaces
 {
@@ -6,6 +7,6 @@ namespace Application.Interfaces
 	{
 		IEnumerable<T> GetEntities<T>(Func<EntityEntry<T>, bool> expression) where T : class;
 		bool HasChanges();
-		Task CommitAsync(CancellationToken cancellationToken);
+		Task<DateTime> CommitAsync(CancellationToken cancellationToken);
 	}
 }

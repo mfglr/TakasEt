@@ -1,9 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
-import { initialState, loadChildren, loadComments, resetCommentToReply, setCommentToReply, switchVisibility } from "./state";
-import { nextPageOfChildrenSuccess, nextPageOfCommentsSuccess, resetCommentToReplyAction, setCommentToReplyAction, switchVisibilityAction } from "./action";
+import { add, initCommentModalStates, initialState, loadChildren, loadComments, resetCommentToReply, setCommentToReply, switchVisibility } from "./state";
+import { initCommentModalStatesAction, nextPageOfChildrenSuccess, nextPageOfCommentsSuccess, resetCommentToReplyAction, setCommentToReplyAction, shareCommentSuccess, switchVisibilityAction } from "./action";
 
 export const commentModalCollectionReducer = createReducer(
     initialState,
+    on(
+        shareCommentSuccess,
+        (state,action) => add(action.response,action.postId,state)
+    ),
     on(
         nextPageOfCommentsSuccess,
         (state,action) => loadComments(action.payload,action.postId,state)
@@ -24,5 +28,9 @@ export const commentModalCollectionReducer = createReducer(
     on(
         resetCommentToReplyAction,
         (state,action) => resetCommentToReply(action.postId,state)
+    ),
+    on(
+        initCommentModalStatesAction,
+        (state,action) => initCommentModalStates(action.postIds,state)
     )
 )

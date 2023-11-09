@@ -1,10 +1,12 @@
-﻿using Application.Interfaces;
+﻿using Application.Dtos;
+using Application.Interfaces;
 using FluentValidation;
 using MediatR;
 
 namespace Application.Pipelines
 {
-	public class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+	public class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+		where TRequest : IRequest<TResponse> where TResponse : AppResponseDto
 	{
 
 		private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -28,12 +30,18 @@ namespace Application.Pipelines
 					throw Exceptions.ValidationException.Create(errorMessages, request.GetType());
 				}
 			}
-			
 			var response = await next();
-
-			//Commit the changes if there are changes.
-			if(_unitOfWork.HasChanges()) await _unitOfWork.CommitAsync(cancellationToken);
-
+			//Commit the changes.
+			if (_unitOfWork.HasChanges())
+			{
+				var date = await _unitOfWork.CommitAsync(cancellationToken);
+				if(response.Data is BaseResponseDto)
+				{
+					BaseResponseDto baseResponse = (BaseResponseDto)response.Data;
+					if (baseResponse != null && baseResponse.CreatedDate == default(DateTime))
+						baseResponse.CreatedDate = date;
+				}
+			}
 			return response;
 		}
 	}

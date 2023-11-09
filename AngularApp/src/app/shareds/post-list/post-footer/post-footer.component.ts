@@ -1,7 +1,8 @@
-import { AfterContentInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
-
+import {  CommentModalStateCollection } from 'src/app/states/comment_modal_state/state';
 @Component({
   selector: 'app-post-footer',
   templateUrl: './post-footer.component.html',
@@ -14,11 +15,13 @@ export class PostFooterComponent {
 
   constructor(
     public userPostLikingService : UserPostLikingService,
+    private commentModalStore : Store<CommentModalStateCollection>
   ) {}
 
   displayComments(){
-    if(this.post)
+    if(this.post){
       this.displayCommentsEvent.emit(this.post)
+    }
   }
   
   getLikeVector(likeVector : number){

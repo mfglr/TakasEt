@@ -18,6 +18,9 @@
       .load-children-button{
         margin-left: 0.5rem;
       }
+      .hide-children-button{
+        margin-left: 0.5rem;
+      }
     }
     .child{
       margin-left: calc(0.5rem + 50px);
@@ -37,20 +40,5 @@
         margin-left: 0.5rem;
       }
     }
-    .hide-children{
-      display: flex;
-      align-items: center;
-      font-size: 0.75rem;
-      text-decoration: underline;
-      cursor : pointer;
-      .line{
-        margin-left: calc(0.5rem + 50px);
-        width: 25px;
-      }
-      .hide-children-button{
-        margin-left: 0.5rem;
-      }
-    }
-
   }
 }

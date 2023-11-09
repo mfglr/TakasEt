@@ -16,7 +16,7 @@ namespace Application.Extentions
 			return queryable
 				.OrderByDescending(x => x.CreatedDate)
 				.ThenBy(keySelector)
-				.Where(x => new DateTime(pagination.FirstQueryDate) < x.CreatedDate)
+				.Where(x => x.CreatedDate < pagination.getDateTime())
 				.Skip(pagination.Skip)
 				.Take(pagination.Take);
 		}
@@ -31,7 +31,7 @@ namespace Application.Extentions
 			return queryable
 				.OrderByDescending(x => x.Key.CreatedDate)
 				.ThenBy(keySelector)
-				.Where(x => new DateTime(pagination.FirstQueryDate) < x.Key.CreatedDate)
+				.Where(x => x.Key.CreatedDate < pagination.getDateTime())
 				.Skip(pagination.Skip)
 				.Take(pagination.Take);
 		} 

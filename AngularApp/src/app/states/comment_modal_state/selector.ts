@@ -1,9 +1,11 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { CommentModalStateCollection, childrenAdapter, commentModalAdapter } from "./state";
+import { CommentModalState, CommentModalStateCollection, CommentState, childrenAdapter, commentModalAdapter } from "./state";
+import { initialPageOfComments } from "../app-states";
 
 const selectCommentModalStateCollection = createFeatureSelector<CommentModalStateCollection>("CommentModalStateCollection");
 const selectCommentModalState = (props : {postId : string}) => createSelector(
-    selectCommentModalStateCollection,state => state.entities[props.postId]!
+    selectCommentModalStateCollection,
+    (state) : CommentModalState =>state.entities[props.postId]!
 );
 export const selectCommentToReplyState = (props : {postId : string}) => createSelector(
     selectCommentModalState(props),
@@ -19,7 +21,7 @@ export const selectStatusAndPage = (props : {postId : string}) => createSelector
 );
 const selectCommentState = (props : {postId : string ,commentId : string}) => createSelector(
     selectCommentModalState(props),
-    state => state.entities[props.commentId]!
+    (state) : CommentState =>state.entities[props.commentId]!
 )
 const selectChildren = (props : {postId : string ,commentId : string}) => createSelector(
     selectCommentState(props),
