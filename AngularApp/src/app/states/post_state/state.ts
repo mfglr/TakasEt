@@ -3,7 +3,7 @@ import { PostResponse } from "src/app/models/responses/post-response";
 import { AppEntityState, initialPageOfPosts, takeValueOfPosts } from "../app-states";
 
 export const postsOfHomePageQueryId = "postsOfHomePageQueryId";
-export const postsOfProfilePageQueryId = "postsOfProfilePageQueryId";
+
 export interface ChildState extends AppEntityState<PostResponse>{
     queryId : string;
 }

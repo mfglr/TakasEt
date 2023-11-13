@@ -8,12 +8,6 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<Post> builder)
 		{
-
-			builder.Property(x => x.Title).HasColumnType("varchar(256)");
-			builder.Property(x => x.NormalizedTitle).HasColumnType("varchar(256)");
-			builder.HasIndex(x => x.NormalizedTitle).HasDatabaseName("titleIndexer");
-			builder.HasIndex(x => x.CreatedDate).IsDescending(true).HasDatabaseName("createdDateIndexer");
-
 			builder
 				.HasMany(x => x.Comments)
 				.WithOne(x => x.Post)

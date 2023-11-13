@@ -8,6 +8,7 @@ namespace Application.Validators
         public AddCategoryCommandValidator()
         {
             RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Hata");
+            RuleFor(x => x.Description).NotNull().NotEmpty().WithMessage("Hata");
         }
     }
 }

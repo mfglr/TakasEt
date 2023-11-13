@@ -26,7 +26,6 @@ namespace Repository
 			}).AddEntityFrameworkStores<AppDbContext>();
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-
 		}
 
 	}

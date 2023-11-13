@@ -1,5 +1,3 @@
-using Application.Extentions;
-
 namespace Application.Entities
 {
     public class Category : Entity
@@ -7,13 +5,13 @@ namespace Application.Entities
         private readonly List<Post> _posts = new List<Post>();
         
         public string Name { get; private set; }
-        public string NormalizedName { get; private set; }
+        public string Description {  get; private set; }
         public IReadOnlyCollection<Post> Posts => _posts;
 
-		public Category(string name)
+		public Category(string name, string description)
 		{
 			Name = name;
-            NormalizedName = name.CustomNormalize();
+			Description = description;
 		}
 
 		public void AddArticle(Post article)

@@ -8,7 +8,7 @@
         </button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" (scroll)="onScroll($event)">
         <div class="comment-item" *ngFor="let comment of (comments$ | async)" >
           <app-comment-item  [postId]="post?.id" [comment]="comment"></app-comment-item>
         </div>
@@ -16,12 +16,10 @@
       </div>
       <div class="modal-footer">
           
-        <div class="input-group form">
-          <textarea [formControl]="content" class="form-control textarea" rows="1"></textarea>
+        <div class="input-group">
+          <textarea [formControl]="content" class="form-control"></textarea>
           <div class="input-group-append">
-            <button class="btn btn-primary" (click)="shareComment()">
-              <i class="fa-solid fa-share"></i>
-            </button>
+            <button class="btn btn-outline-secondary" (click)="shareComment()">paylas</button>
           </div>
         </div>
 

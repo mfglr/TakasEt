@@ -19,7 +19,7 @@ namespace Handler.Commands
 
 		public async Task<AppResponseDto> Handle(AddCategory request, CancellationToken cancellationToken)
 		{
-			var category = new Category(request.Name);
+			var category = new Category(request.Name, request.Description);
 			await _categories.DbSet.AddAsync(category, cancellationToken);
 			return AppResponseDto.Success(
 				_mapper.Map<CategoryResponseDto>(category)
