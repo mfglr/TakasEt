@@ -59,6 +59,13 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetPostsExceptRequesters(postId,Request.Query));
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-posts-by-filter/")]
+		public async Task<AppResponseDto> GetPostsByFilter()
+		{
+			return await _sender.Send(new GetPostsByFilter(Request.Query));
+		}
+
 
 
 	}

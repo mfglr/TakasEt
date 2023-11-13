@@ -37,5 +37,15 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetUsersWhoLikedPost(postId,Request.Query));
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("user/get-users-by-filter")]
+		public async Task<AppResponseDto> GetUsersThatByFilter()
+		{
+			return await _sender.Send(new GetUsersByFilter(Request.Query));
+		}
+
+
+
+
 	}
 }

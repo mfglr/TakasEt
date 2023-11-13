@@ -1,6 +1,6 @@
 import { EntityState } from "@ngrx/entity";
 
-export const takeValueOfPosts = 10;
+export const takeValueOfPosts = 5;
 export const takeValueOfComments = 10;
 export const takeValueOfUsers = 1;
 export const takeValueOfPostImages = 1;

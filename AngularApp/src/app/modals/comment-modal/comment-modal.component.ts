@@ -1,8 +1,8 @@
-import { Component, ElementRef, HostListener, Input, OnChanges, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Store} from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { Observable, filter, fromEvent, map, withLatestFrom } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import * as commentModalState from 'src/app/states/comment_modal_state/state';
 import * as commentModalSelectors from 'src/app/states/comment_modal_state/selector';
@@ -22,10 +22,6 @@ export class CommentModalComponent implements OnChanges {
     private commentModalStore : Store<commentModalState.CommentModalStateCollection>
   ) {}
 
-  @HostListener('scroll', ['$event'])
-  onScroll(event : any) {
-    console.log(event);
-  }
   ngOnChanges() {
     if(this.post){
       this.comments$ = this.commentModalStore.select(

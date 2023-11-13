@@ -1,4 +1,6 @@
-﻿namespace Application.Entities
+﻿using Newtonsoft.Json;
+
+namespace Application.Entities
 {
 	public class UserRole : Entity
 	{
@@ -12,5 +14,15 @@
 			UserId = userId;
 			RoleId = roleId;
 		}
+		[JsonConstructor]
+		public UserRole(Guid id, Guid userId, Guid roleId,DateTime createdDate)
+		{
+			Id = id;
+			UserId = userId;
+			RoleId = roleId;
+			CreatedDate = createdDate;
+		}
+
+
 	}
 }

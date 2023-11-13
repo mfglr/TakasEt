@@ -31,6 +31,7 @@ export class PostListComponent{
       this.posts$.subscribe(
         posts => this.commentModalStore.dispatch(initCommentModalStatesAction({postIds : posts.map(post => post.id)}))
       )
+      this.postsStore.dispatch(appPostsActions.nextPageOfPosts())
     }
   }
 

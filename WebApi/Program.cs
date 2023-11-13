@@ -11,6 +11,7 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Function.Middlewares;
+using WebApi.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,8 +68,8 @@ builder.Services.AddCors(
 	}
 );
 
-var context = builder.Services.BuildServiceProvider().GetRequiredService<AppDbContext>();
-await context.Database.MigrateAsync();
+await builder.Services.InitializeDbAsync();
+
 
 var app = builder.Build();
 
