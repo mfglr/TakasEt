@@ -68,11 +68,11 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -82,6 +82,15 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e17dac4e-3930-457e-858b-96de54391aec"),
+                            CreatedDate = new DateTime(2023, 11, 12, 23, 6, 47, 418, DateTimeKind.Local).AddTicks(3691),
+                            Name = "Kitaplar",
+                            NormalizedName = "KITAPLAR"
+                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -170,12 +179,13 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("NormalizedTitle")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -186,6 +196,13 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CreatedDate")
+                        .IsDescending()
+                        .HasDatabaseName("createdDateIndexer");
+
+                    b.HasIndex("NormalizedTitle")
+                        .HasDatabaseName("titleIndexer");
 
                     b.HasIndex("UserId");
 
@@ -243,21 +260,47 @@ namespace Repository.Migrations
                         new
                         {
                             Id = new Guid("9dbcc1a1-2350-4f95-a7a1-3802818843fe"),
-                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1154),
+                            CreatedDate = new DateTime(2023, 11, 12, 20, 6, 47, 418, DateTimeKind.Utc).AddTicks(3796),
                             Name = "client"
                         },
                         new
                         {
                             Id = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
-                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1158),
+                            CreatedDate = new DateTime(2023, 11, 12, 20, 6, 47, 418, DateTimeKind.Utc).AddTicks(3803),
                             Name = "user"
                         },
                         new
                         {
                             Id = new Guid("a1adfeff-b017-4825-a595-1a691fef079a"),
-                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1159),
+                            CreatedDate = new DateTime(2023, 11, 12, 20, 6, 47, 418, DateTimeKind.Utc).AddTicks(3804),
                             Name = "admin"
                         });
+                });
+
+            modelBuilder.Entity("Application.Entities.Searching", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Searching");
                 });
 
             modelBuilder.Entity("Application.Entities.User", b =>
@@ -279,7 +322,7 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -297,13 +340,16 @@ namespace Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("NormalizedFullName")
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -324,34 +370,28 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.HasIndex("CreatedDate")
+                        .IsDescending()
+                        .HasDatabaseName("createdDateIndexer");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "605095b2-c70f-4f4d-b85c-b2adde79c0ec",
-                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1277),
-                            DateOfBirth = new DateTime(1998, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "thenqlv@outlook.com",
-                            EmailConfirmed = false,
-                            Gender = true,
-                            LastName = "Guler",
-                            LockoutEnabled = true,
-                            Name = "Furkan",
-                            NormalizedEmail = "THENQLV@OUTLOOK.COM",
-                            NormalizedUserName = "THENQLV",
-                            PasswordHash = "AQAAAAIAAYagAAAAED6NMviLL2arHtiYhoWGr4sgZ8Fshn5Zle16j09bcR35MFXSGYpE0wskAKdEiV6LYw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "MJ3TWU3F4CA3YUYFWTJMO3GXQUXGWT4F",
-                            TwoFactorEnabled = false,
-                            UserName = "thenqlv"
-                        });
+                    b.HasIndex("NormalizedEmail")
+                        .IsUnique()
+                        .HasDatabaseName("emailIndexer")
+                        .HasFilter("[NormalizedEmail] IS NOT NULL");
+
+                    b.HasIndex("NormalizedFullName")
+                        .HasDatabaseName("fullNameIndexer");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("userNameIndexer")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
@@ -399,16 +439,11 @@ namespace Repository.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("UserPostFollowing");
                 });
@@ -515,15 +550,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRole");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0064a172-4d58-4bdf-a2e7-a9c07928bcc9"),
-                            CreatedDate = new DateTime(2023, 10, 12, 14, 25, 42, 27, DateTimeKind.Utc).AddTicks(1232),
-                            RoleId = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
-                            UserId = new Guid("136cf280-b2d8-4cfe-8245-08dbc4c7a733")
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.UserUserFollowing", b =>
@@ -654,6 +680,17 @@ namespace Repository.Migrations
                     b.Navigation("Requester");
                 });
 
+            modelBuilder.Entity("Application.Entities.Searching", b =>
+                {
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("Searchings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
                 {
                     b.HasOne("Application.Entities.Comment", "Comment")
@@ -686,10 +723,6 @@ namespace Repository.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("Application.Entities.User", null)
-                        .WithMany("TheUserSPostsFollowedByUsers")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Post");
 
@@ -884,7 +917,7 @@ namespace Repository.Migrations
 
                     b.Navigation("Roles");
 
-                    b.Navigation("TheUserSPostsFollowedByUsers");
+                    b.Navigation("Searchings");
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();

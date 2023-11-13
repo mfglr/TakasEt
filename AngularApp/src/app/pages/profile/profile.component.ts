@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { initialPageOfPosts } from 'src/app/states/app-states';
 import { selectUserId } from 'src/app/states/login_state/selectors';
 import { AppLoginState } from 'src/app/states/login_state/state';
+import { postsOfProfilePageQueryId } from 'src/app/states/post_state/state';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,7 @@ import { AppLoginState } from 'src/app/states/login_state/state';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent{
-
+  postsOfProfilePageQueryId = postsOfProfilePageQueryId;
   data$ = this.store.select(selectUserId).pipe(
     filter(id => !(!id)),
     mergeMap(id => this.postService.getPostsWithFirstImagesByUserId(id!,{...initialPageOfPosts}))

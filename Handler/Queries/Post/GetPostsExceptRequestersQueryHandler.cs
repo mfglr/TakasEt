@@ -40,22 +40,7 @@ namespace Handler.Queries
                         !x.Requesteds.Select(r => r.RequestedId).Contains(request.PostId)
                 )
 				.ToPage(x => x.Id,request)
-				.Select(x => new PostResponseDto()
-				{
-					Id = x.Id,
-					CreatedDate = x.CreatedDate,
-					UpdatedDate = x.UpdatedDate,
-					UserId = x.User.Id,
-					UserName = x.User.UserName,
-					CategoryName = x.Category.Name,
-					Title = x.Title,
-					Content = x.Content,
-					PublishedDate = x.PublishedDate,
-					CountOfImages = x.CountOfImages,
-					CountOfLikes = x.UsersWhoLiked.Count,
-					CountOfViews = x.UsersWhoViewed.Count,
-					CountOfComments = x.Comments.Count,
-				})
+				.ToPostResponseDto()
 				.ToListAsync(cancellationToken);
             return AppResponseDto.Success(posts);
         }

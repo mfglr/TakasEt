@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extentions\" />
+    <Folder Include="JsonFiles\" />
   </ItemGroup>
 
 </Project>

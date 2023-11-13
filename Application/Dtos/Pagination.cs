@@ -16,7 +16,7 @@ namespace Application.Dtos
 		public int Second { get; set; }
 		public int Milisecond { get; set; }
 
-		public DateTime getDateTime()
+		public DateTime getQueryDate()
 		{
 			return new DateTime(Year, Month, Day, Hour, Minute, Second,Milisecond);
 		}

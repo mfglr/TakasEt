@@ -28,8 +28,7 @@ namespace Handler.Queries
 				.Where(
                     c =>
                         request.Key == null ||
-                        c.Name.ToLower().Contains(request.Key.ToLower()) ||
-                        c.Description.ToLower().Contains(request.Key.ToLower())
+                        c.Name.ToLower().Contains(request.Key.ToLower())
                 )
                 .ToPage(x => x.Id, request)
                 .ToListAsync();

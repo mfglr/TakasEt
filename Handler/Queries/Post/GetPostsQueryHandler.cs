@@ -37,7 +37,6 @@ namespace Handler.Queries
 					CategoryName = x.Category.Name,
 					Title = x.Title,
 					Content = x.Content,
-					PublishedDate = x.PublishedDate,
 					CountOfImages = x.CountOfImages,
 					CountOfLikes = x.UsersWhoLiked.Count,
 					CountOfViews = x.UsersWhoViewed.Count,
