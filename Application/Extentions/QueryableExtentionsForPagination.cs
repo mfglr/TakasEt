@@ -8,7 +8,7 @@ namespace Application.Extentions
 	{
 		public static IQueryable<TEntity> ToPage<TEntity>(
 			this IQueryable<TEntity> queryable,
-			Expression<Func<TEntity,Guid>> keySelector,
+			Expression<Func<TEntity, int>> keySelector,
 			Pagination pagination
 		)
 			where TEntity : IEntity
@@ -23,7 +23,7 @@ namespace Application.Extentions
 
 		public static IQueryable<IGrouping<TKey, TSource>> ToPage<TKey, TSource>(
 			this IQueryable<IGrouping<TKey, TSource>> queryable,
-			Expression<Func<IGrouping<TKey,TSource>, Guid>> keySelector,
+			Expression<Func<IGrouping<TKey,TSource>, int>> keySelector,
 			Pagination pagination
 		)
 			where TKey : IEntity where TSource : IEntity

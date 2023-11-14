@@ -5,9 +5,9 @@ namespace Application.Dtos
 {
 	public class GetCommentsByPostId : Pagination,IRequest<AppResponseDto>
 	{
-        public Guid PostId { get; private set; }
+        public int PostId { get; private set; }
 
-		public GetCommentsByPostId(Guid postId,IQueryCollection collection) : base(collection)
+		public GetCommentsByPostId(int postId,IQueryCollection collection) : base(collection)
 		{
 			PostId = postId;
 		}

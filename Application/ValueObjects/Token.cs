@@ -1,4 +1,6 @@
-﻿namespace Application.ValueObjects
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Application.ValueObjects
 {
     public class Token
     {

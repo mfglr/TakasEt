@@ -1,16 +1,27 @@
-﻿namespace Application.Entities
+﻿
+using Newtonsoft.Json;
+
+namespace Application.Entities
 {
 	public class UserUserFollowing : Entity
 	{
-		public Guid FollowerId { get; private set; }
+		public int FollowerId { get; private set; }
         public User Follower { get; }
-        public Guid FollowedId { get; private set; }
+        public int FollowedId { get; private set; }
 		public User Followed { get; }
 
-		public UserUserFollowing(Guid followerId,Guid followedId)
+		public UserUserFollowing(int followerId, int followedId)
 		{
 			FollowerId = followerId;
 			FollowedId = followedId;
+		}
+
+		[JsonConstructor]
+		public UserUserFollowing(int followerId, int followedId,DateTime createdDate)
+		{
+			FollowerId = followerId;
+			FollowedId = followedId;
+			CreatedDate = createdDate;
 		}
 	}
 }

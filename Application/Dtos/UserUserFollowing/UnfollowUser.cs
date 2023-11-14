@@ -4,9 +4,9 @@ namespace Application.Dtos
 {
     public class UnfollowUser : IRequest<AppResponseDto>
     {
-        public Guid FollowedId { get; private set; }
+        public int FollowedId { get; private set; }
 
-        public UnfollowUser(Guid followedId)
+        public UnfollowUser(int followedId)
         {
             FollowedId = followedId;
         }

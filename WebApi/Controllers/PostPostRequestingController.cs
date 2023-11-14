@@ -25,7 +25,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("requesting/get-requesters/{postId}")]
-		public async Task<AppResponseDto> GetRequesters(Guid postId)
+		public async Task<AppResponseDto> GetRequesters(int postId)
 		{
 			return await _sender.Send(new GetRequesters(postId));
 		}

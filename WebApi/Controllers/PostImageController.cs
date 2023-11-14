@@ -18,7 +18,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post-image/get-post-images/{postId}")]
-		public async Task GetPostImages(Guid postId)
+		public async Task GetPostImages(int postId)
 		{
 			var bytes = await _sender.Send(new GetPostImages(postId,Request.Query));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
@@ -26,7 +26,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post-image/get-first-images-of-posts-by-user-id/{userId}")]
-		public async Task GetFirstImageOfPostsByUserId(Guid userId)
+		public async Task GetFirstImageOfPostsByUserId(int userId)
 		{
 			var bytes = await _sender.Send(new GetFirstImagesOfPostsByUserId(userId, Request.Query));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post-image/get-first-images-of-posts-except-reuqesters/{postId}")]
-		public async Task GetFirstImageOfPostsExceptReuqesters(Guid postId)
+		public async Task GetFirstImageOfPostsExceptReuqesters(int postId)
 		{
 			var bytes = await _sender.Send(new GetFirstImagesOfPostsExceptRequesters(postId,Request.Query));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);

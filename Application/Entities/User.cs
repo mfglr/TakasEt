@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Application.Entities
 {
-	public class User : IdentityUser<Guid>, IEntity, IEntityDomainEvent
+	public class User : IdentityUser<int>, IEntity, IEntityDomainEvent
     {
 		public string? Name { get; private set; }
 		public string? LastName { get; private set; }
@@ -17,7 +17,6 @@ namespace Application.Entities
 		public DateTime? UpdatedDate { get; private set; }
 		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<UserRole> Roles => _roles;
-		public IReadOnlyCollection<Credit> Credits { get; }
 		public IReadOnlyCollection<Post> Posts => _posts;
 		public IReadOnlyCollection<ProfileImage> ProfileImages { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
@@ -26,7 +25,6 @@ namespace Application.Entities
 		public IReadOnlyCollection<UserPostViewing> ViewedPosts { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
-        public IReadOnlyCollection<UserPostFollowing> PostsFollowedByTheUser { get; }
         public IReadOnlyCollection<Searching>  Searchings{ get;}
 
 		private readonly List<UserRole> _roles = new();
@@ -40,7 +38,7 @@ namespace Application.Entities
         }
 
 		[JsonConstructor]
-		public User(Guid id, string email, string userName,string name, string lastName,DateTime dateOfBirth,bool gender,DateTime createdDate,List<UserRole> roles,List<Post> posts)
+		public User(int id, string email, string userName,string name, string lastName,DateTime dateOfBirth,bool gender,DateTime createdDate,List<UserRole> roles)
 		{
 			Id = id;
 			Email = email;
@@ -51,23 +49,14 @@ namespace Application.Entities
 			Gender = gender;
 			CreatedDate = createdDate;
 			NormalizedFullName = $"{name} {lastName}".CustomNormalize();
-			foreach (var role in roles)
+			foreach(var role in roles)
 				_roles.Add(role);
-			foreach( var post in posts)
-				_posts.Add(post);
 		}
 
         public User()
         {
             
         }
-		
-		public decimal CalculateTotalCredit()
-		{
-			decimal totalCredit = 0;
-			foreach (var credit in Credits) totalCredit += credit.VAmount;
-			return totalCredit;
-		}
 
 		public void SetCreatedDate(DateTime date)
 		{

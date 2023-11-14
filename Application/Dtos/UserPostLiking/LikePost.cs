@@ -4,9 +4,9 @@ namespace Application.Dtos
 {
     public class LikePost : IRequest<AppResponseDto>
     {
-        public Guid PostId { get; private set; }
+        public int PostId { get; private set; }
 
-        public LikePost(Guid postId)
+        public LikePost(int postId)
         {
             PostId = postId;
         }

@@ -4,10 +4,10 @@
 	{
 
         public string Key { get; private set; }
-        public Guid UserId { get; private set; }
+        public int UserId { get; private set; }
         public User User { get; }
 
-        public Searching(Guid userId, string key)
+        public Searching(int userId, string key)
 		{
 			UserId = userId;
 			Key = key;

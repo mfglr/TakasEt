@@ -14,7 +14,7 @@ namespace WebApi.Hubs
 			_posts = posts;
 		}
 
-		public async Task SendCounts(List<Guid> postIds)
+		public async Task SendCounts(List<int> postIds)
 		{
 			var counts = await _posts
 				.DbSet

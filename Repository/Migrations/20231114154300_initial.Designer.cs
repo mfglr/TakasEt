@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231112164453_addIndexersToUserTables")]
-    partial class addIndexersToUserTables
+    [Migration("20231114154300_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.AppFile", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BlobName")
                         .IsRequired()
@@ -64,18 +66,20 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -85,13 +89,73 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5443),
+                            Name = "Kitap",
+                            NormalizedName = "KITAP"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5464),
+                            Name = "Araba",
+                            NormalizedName = "ARABA"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5465),
+                            Name = "Elektronik",
+                            NormalizedName = "ELEKTRONIK"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5465),
+                            Name = "Giyim",
+                            NormalizedName = "GIYIM"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5466),
+                            Name = "Ev Eşyaları",
+                            NormalizedName = "EV ESYALARI"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5467),
+                            Name = "Telefon",
+                            NormalizedName = "TELEFON"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5467),
+                            Name = "Bilgisayar",
+                            NormalizedName = "BILGISAYAR"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedDate = new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5468),
+                            Name = "Motor",
+                            NormalizedName = "MOTOR"
+                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -100,17 +164,17 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -123,45 +187,16 @@ namespace Repository.Migrations
                     b.ToTable("Comment");
                 });
 
-            modelBuilder.Entity("Application.Entities.Credit", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreditType")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("VAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Credit");
-                });
-
             modelBuilder.Entity("Application.Entities.Post", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -173,22 +208,30 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("NormalizedTitle")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CreatedDate")
+                        .IsDescending()
+                        .HasDatabaseName("createdDateIndexer");
+
+                    b.HasIndex("NormalizedTitle")
+                        .HasDatabaseName("titleIndexer");
 
                     b.HasIndex("UserId");
 
@@ -197,18 +240,20 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.PostPostRequesting", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("RequestedId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RequestedId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("RequesterId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RequesterId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -224,9 +269,11 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.Role", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -245,29 +292,31 @@ namespace Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9dbcc1a1-2350-4f95-a7a1-3802818843fe"),
-                            CreatedDate = new DateTime(2023, 11, 12, 16, 44, 53, 9, DateTimeKind.Utc).AddTicks(988),
+                            Id = 1,
+                            CreatedDate = new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5561),
                             Name = "client"
                         },
                         new
                         {
-                            Id = new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"),
-                            CreatedDate = new DateTime(2023, 11, 12, 16, 44, 53, 9, DateTimeKind.Utc).AddTicks(991),
+                            Id = 2,
+                            CreatedDate = new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5563),
                             Name = "user"
                         },
                         new
                         {
-                            Id = new Guid("a1adfeff-b017-4825-a595-1a691fef079a"),
-                            CreatedDate = new DateTime(2023, 11, 12, 16, 44, 53, 9, DateTimeKind.Utc).AddTicks(993),
+                            Id = 3,
+                            CreatedDate = new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5563),
                             Name = "admin"
                         });
                 });
 
             modelBuilder.Entity("Application.Entities.Searching", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -279,8 +328,8 @@ namespace Repository.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -291,9 +340,11 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -312,9 +363,6 @@ namespace Repository.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("varchar(100)");
 
                     b.Property<bool?>("Gender")
                         .HasColumnType("bit");
@@ -364,6 +412,7 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedDate")
+                        .IsDescending()
                         .HasDatabaseName("createdDateIndexer");
 
                     b.HasIndex("NormalizedEmail")
@@ -384,12 +433,14 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -397,8 +448,8 @@ namespace Repository.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -409,50 +460,25 @@ namespace Repository.Migrations
                     b.ToTable("UserCommentLiking");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostFollowing", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserPostFollowing");
-                });
-
             modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -465,21 +491,23 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.UserPostViewing", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -492,18 +520,27 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -515,21 +552,23 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -542,18 +581,20 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Application.Entities.UserUserFollowing", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("FollowedId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FollowedId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("FollowerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -571,8 +612,8 @@ namespace Repository.Migrations
                 {
                     b.HasBaseType("Application.Entities.AppFile");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.HasIndex("PostId");
 
@@ -586,8 +627,8 @@ namespace Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasIndex("UserId");
 
@@ -615,17 +656,6 @@ namespace Repository.Migrations
                     b.Navigation("Parent");
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Application.Entities.Credit", b =>
-                {
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("Credits")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -698,25 +728,6 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostFollowing", b =>
-                {
-                    b.HasOne("Application.Entities.Post", "Post")
-                        .WithMany("UsersFollowingThePost")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("PostsFollowedByTheUser")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Application.Entities.UserPostLiking", b =>
                 {
                     b.HasOne("Application.Entities.Post", "Post")
@@ -761,31 +772,6 @@ namespace Repository.Migrations
                         .WithOne("UserRefreshToken")
                         .HasForeignKey("Application.Entities.UserRefreshToken", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("Application.ValueObjects.Token", "Token", b1 =>
-                        {
-                            b1.Property<Guid>("UserRefreshTokenId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime>("ExpirationDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("exprationDateOfRefreshToken");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("refreshToken");
-
-                            b1.HasKey("UserRefreshTokenId");
-
-                            b1.ToTable("UserRefreshToken");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserRefreshTokenId");
-                        });
-
-                    b.Navigation("Token")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -871,8 +857,6 @@ namespace Repository.Migrations
 
                     b.Navigation("Requesters");
 
-                    b.Navigation("UsersFollowingThePost");
-
                     b.Navigation("UsersWhoLiked");
 
                     b.Navigation("UsersWhoViewed");
@@ -887,8 +871,6 @@ namespace Repository.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Credits");
-
                     b.Navigation("Followeds");
 
                     b.Navigation("Followers");
@@ -898,8 +880,6 @@ namespace Repository.Migrations
                     b.Navigation("LikedPosts");
 
                     b.Navigation("Posts");
-
-                    b.Navigation("PostsFollowedByTheUser");
 
                     b.Navigation("ProfileImages");
 

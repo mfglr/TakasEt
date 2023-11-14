@@ -6,7 +6,7 @@ namespace Application.Dtos
 {
 	public class AddPost : IRequest<AppResponseDto>
 	{
-		public Guid CategoryId { get; private set; }
+		public int CategoryId { get; private set; }
 		public string Title { get; private set; }
 		public string Content { get; private set; }
 		public string Extentions { get; private set; }
@@ -20,7 +20,7 @@ namespace Application.Dtos
 			Extentions = parser.GetParameterValue("extentions");
 			Title = parser.GetParameterValue("title");
 			Content = parser.GetParameterValue("content");
-			CategoryId = Guid.Parse( parser.GetParameterValue("categoryId"));
+			CategoryId = int.Parse( parser.GetParameterValue("categoryId"));
 			CountOfImages = int.Parse(parser.GetParameterValue("countOfImages"));
 		}
 
@@ -29,7 +29,7 @@ namespace Application.Dtos
 			foreach(var file in form.Files)
 				_streams.Add(file.OpenReadStream());
 			Extentions = form.Where(x => x.Key == "extentions").Select(x => x.Value).FirstOrDefault().ToString();
-			CategoryId = Guid.Parse(form.Where(x => x.Key == "categoryId").Select(x => x.Value).FirstOrDefault().ToString());
+			CategoryId = int.Parse(form.Where(x => x.Key == "categoryId").Select(x => x.Value).FirstOrDefault().ToString());
 			Title = form.Where(x => x.Key == "title").Select(x => x.Value).FirstOrDefault().ToString();
 			Content = form.Where(x => x.Key == "content").Select(x => x.Value).FirstOrDefault().ToString();
 			CountOfImages = int.Parse(

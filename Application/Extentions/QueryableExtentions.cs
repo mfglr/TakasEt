@@ -90,7 +90,7 @@ namespace Application.Extentions
 		public static async Task<int> FindParentDepthAsync<TRecursiveEntity>(
 			this IQueryable<TRecursiveEntity> queryable,
 			int maxDepth,
-			Guid? parentId,
+			int? parentId,
 			CancellationToken cancellationToken
 		)
 			where TRecursiveEntity : RecursiveEntity<TRecursiveEntity>

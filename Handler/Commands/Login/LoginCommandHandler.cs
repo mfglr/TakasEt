@@ -38,10 +38,10 @@ namespace Handler.Commands
 			var accessToken = _tokenService.CreateAccessTokenByUser(user);
 			if (user.UserRefreshToken == null)
 				await _userRefreshTokens.DbSet.AddAsync(
-					new UserRefreshToken(user.Id, refreshToken),
+					new UserRefreshToken(user.Id, refreshToken.Value,refreshToken.ExpirationDate),
 					cancellationToken
 				);
-			else user.UserRefreshToken.UpdateToken(refreshToken);
+			else user.UserRefreshToken.UpdateToken(refreshToken.Value,refreshToken.ExpirationDate);
 			var loginResponse = new LoginResponseDto(
 				accessToken.Value,
 				accessToken.ExpirationDate,

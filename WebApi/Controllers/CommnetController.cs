@@ -18,14 +18,14 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("comment/get-comments-by-post-id/{postId}")]
-		public async Task<AppResponseDto> GetCommentsByPostId(Guid postId)
+		public async Task<AppResponseDto> GetCommentsByPostId(int postId)
 		{
 			return await _sender.Send(new GetCommentsByPostId(postId,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("comment/get-children/{id}")]
-		public async Task<AppResponseDto> GetChildren(Guid id)
+		public async Task<AppResponseDto> GetChildren(int id)
 		{
 			return await _sender.Send(new GetChildren(id,Request.Query));
 		}

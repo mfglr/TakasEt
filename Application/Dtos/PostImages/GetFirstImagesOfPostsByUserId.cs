@@ -5,9 +5,9 @@ namespace Application.Dtos
 {
     public class GetFirstImagesOfPostsByUserId : Pagination, IRequest<byte[]>
     {
-        public Guid UserId { get; private set; }
+        public int UserId { get; private set; }
 
-        public GetFirstImagesOfPostsByUserId(Guid userId,IQueryCollection collection) : base(collection)
+        public GetFirstImagesOfPostsByUserId(int userId,IQueryCollection collection) : base(collection)
         { UserId = userId; }
     }
 }

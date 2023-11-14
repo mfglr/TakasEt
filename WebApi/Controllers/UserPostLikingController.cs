@@ -25,14 +25,14 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpDelete("user-post-liking/unlike-post/{postId}")]
-		public async Task<AppResponseDto> UnlikePost(Guid postId)
+		public async Task<AppResponseDto> UnlikePost(int postId)
 		{
 			return await _sender.Send(new UnLikePost(postId));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user-post-liking/is-liked/{postId}")]
-		public async Task<AppResponseDto> IsLiked(Guid postId)
+		public async Task<AppResponseDto> IsLiked(int postId)
 		{
 			return await _sender.Send(new IsPostLiked(postId));
 		}

@@ -2,12 +2,12 @@
 {
 	public class UserCommentLiking : Entity
 	{
-        public Guid UserId { get; private set; }
+        public int UserId { get; private set; }
         public User User { get; }
-        public Guid CommentId { get; private set; }
+        public int CommentId { get; private set; }
         public Comment Comment { get; }
 
-		public UserCommentLiking(Guid userId, Guid commentId)
+		public UserCommentLiking(int userId, int commentId)
 		{
 			UserId = userId;
 			CommentId = commentId;

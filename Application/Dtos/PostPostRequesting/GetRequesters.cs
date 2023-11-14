@@ -5,8 +5,8 @@ namespace Application.Dtos
 	//Belirli bir postun requester postlarini verir.
 	public class GetRequesters : IRequest<AppResponseDto>
     {
-        public Guid PostId { get; private set; }
+        public int PostId { get; private set; }
 
-        public GetRequesters(Guid postId){ PostId = postId; }
+        public GetRequesters(int postId){ PostId = postId; }
     }
 }

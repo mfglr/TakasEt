@@ -17,9 +17,10 @@ namespace Repository.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -32,7 +33,8 @@ namespace Repository.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -46,17 +48,19 @@ namespace Repository.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedFullName = table.Column<string>(type: "varchar(100)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Gender = table.Column<bool>(type: "bit", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(100)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "varchar(100)", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -74,38 +78,16 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Credit",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreditType = table.Column<int>(type: "int", nullable: false),
-                    VAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Credit", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Credit_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Post",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "varchar(256)", nullable: false),
+                    NormalizedTitle = table.Column<string>(type: "varchar(256)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PublishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CountOfImages = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -130,9 +112,10 @@ namespace Repository.Migrations
                 name: "Searching",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -150,10 +133,11 @@ namespace Repository.Migrations
                 name: "UserRefreshToken",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    refreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    exprationDateOfRefreshToken = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -172,9 +156,10 @@ namespace Repository.Migrations
                 name: "UserRole",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -197,9 +182,10 @@ namespace Repository.Migrations
                 name: "UserUserFollowing",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FollowerId = table.Column<int>(type: "int", nullable: false),
+                    FollowedId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -222,14 +208,15 @@ namespace Repository.Migrations
                 name: "AppFile",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BlobName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContainerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Extention = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PostId = table.Column<int>(type: "int", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -252,11 +239,12 @@ namespace Repository.Migrations
                 name: "Comment",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ParentId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -284,9 +272,10 @@ namespace Repository.Migrations
                 name: "PostPostRequesting",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RequesterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RequestedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RequesterId = table.Column<int>(type: "int", nullable: false),
+                    RequestedId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -306,37 +295,13 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserPostFollowing",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserPostFollowing", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserPostFollowing_Post_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Post",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UserPostFollowing_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserPostLiking",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -359,9 +324,10 @@ namespace Repository.Migrations
                 name: "UserPostViewing",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -384,9 +350,10 @@ namespace Repository.Migrations
                 name: "UserCommentLiking",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CommentId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -406,13 +373,28 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "CreatedDate", "Name", "NormalizedName", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5443), "Kitap", "KITAP", null },
+                    { 2, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5464), "Araba", "ARABA", null },
+                    { 3, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5465), "Elektronik", "ELEKTRONIK", null },
+                    { 4, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5465), "Giyim", "GIYIM", null },
+                    { 5, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5466), "Ev Eşyaları", "EV ESYALARI", null },
+                    { 6, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5467), "Telefon", "TELEFON", null },
+                    { 7, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5467), "Bilgisayar", "BILGISAYAR", null },
+                    { 8, new DateTime(2023, 11, 14, 18, 43, 0, 22, DateTimeKind.Local).AddTicks(5468), "Motor", "MOTOR", null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "CreatedDate", "Name", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { new Guid("4dec4e47-9808-4fea-b6e9-a54b2da571cf"), new DateTime(2023, 11, 11, 19, 35, 34, 257, DateTimeKind.Utc).AddTicks(3892), "user", null },
-                    { new Guid("9dbcc1a1-2350-4f95-a7a1-3802818843fe"), new DateTime(2023, 11, 11, 19, 35, 34, 257, DateTimeKind.Utc).AddTicks(3887), "client", null },
-                    { new Guid("a1adfeff-b017-4825-a595-1a691fef079a"), new DateTime(2023, 11, 11, 19, 35, 34, 257, DateTimeKind.Utc).AddTicks(3893), "admin", null }
+                    { 1, new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5561), "client", null },
+                    { 2, new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5563), "user", null },
+                    { 3, new DateTime(2023, 11, 14, 15, 43, 0, 22, DateTimeKind.Utc).AddTicks(5563), "admin", null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -441,9 +423,10 @@ namespace Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Credit_UserId",
-                table: "Credit",
-                column: "UserId");
+                name: "createdDateIndexer",
+                table: "Post",
+                column: "CreatedDate",
+                descending: new bool[0]);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_CategoryId",
@@ -454,6 +437,11 @@ namespace Repository.Migrations
                 name: "IX_Post_UserId",
                 table: "Post",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "titleIndexer",
+                table: "Post",
+                column: "NormalizedTitle");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostPostRequesting_RequestedId",
@@ -471,6 +459,31 @@ namespace Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "createdDateIndexer",
+                table: "User",
+                column: "CreatedDate",
+                descending: new bool[0]);
+
+            migrationBuilder.CreateIndex(
+                name: "emailIndexer",
+                table: "User",
+                column: "NormalizedEmail",
+                unique: true,
+                filter: "[NormalizedEmail] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "fullNameIndexer",
+                table: "User",
+                column: "NormalizedFullName");
+
+            migrationBuilder.CreateIndex(
+                name: "userNameIndexer",
+                table: "User",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserCommentLiking_CommentId",
                 table: "UserCommentLiking",
                 column: "CommentId");
@@ -478,16 +491,6 @@ namespace Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserCommentLiking_UserId",
                 table: "UserCommentLiking",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserPostFollowing_PostId",
-                table: "UserPostFollowing",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserPostFollowing_UserId",
-                table: "UserPostFollowing",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -544,9 +547,6 @@ namespace Repository.Migrations
                 name: "AppFile");
 
             migrationBuilder.DropTable(
-                name: "Credit");
-
-            migrationBuilder.DropTable(
                 name: "PostPostRequesting");
 
             migrationBuilder.DropTable(
@@ -554,9 +554,6 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserCommentLiking");
-
-            migrationBuilder.DropTable(
-                name: "UserPostFollowing");
 
             migrationBuilder.DropTable(
                 name: "UserPostLiking");

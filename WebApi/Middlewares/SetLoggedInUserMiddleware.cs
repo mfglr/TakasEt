@@ -21,7 +21,7 @@ namespace Function.Middlewares
 			var accessToken = context.Request.Headers.Authorization.ToString();
 			if (accessToken != null && accessToken != "") { 
 				var id = context.User.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-				if (id != null) _loggedInUser.SetUserId(Guid.Parse(id));
+				if (id != null) _loggedInUser.SetUserId(int.Parse(id));
 			}
 			await _next.Invoke(context);
 		}

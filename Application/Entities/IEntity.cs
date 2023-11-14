@@ -2,7 +2,7 @@
 {
 	public interface IEntity
 	{
-        Guid Id { get; }
+        int Id { get; }
 		DateTime CreatedDate { get; }
 		DateTime? UpdatedDate { get; }
 

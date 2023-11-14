@@ -4,9 +4,9 @@ namespace Application.Dtos
 {
 	public class UnlikeComment : IRequest<AppResponseDto>
 	{
-        public Guid CommentId { get; private set; }
+        public int CommentId { get; private set; }
 
-		public UnlikeComment(Guid commentId)
+		public UnlikeComment(int commentId)
 		{
 			CommentId = commentId;
 		}

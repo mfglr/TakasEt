@@ -8,12 +8,6 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<UserRefreshToken> builder)
 		{
-			builder.OwnsOne(x => x.Token, t =>
-			{
-				t.Property(p => p.Value).HasColumnName("refreshToken");
-				t.Property(p => p.ExpirationDate).HasColumnName("exprationDateOfRefreshToken");
-
-			});
 		}
 	}
 }

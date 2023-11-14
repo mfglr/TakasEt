@@ -4,8 +4,8 @@ namespace Application.Dtos
 {
     public class GetFollowers : IRequest<AppResponseDto>
     {
-        public Guid UserId { get; private set; }
-        public GetFollowers(Guid userId)
+        public int UserId { get; private set; }
+        public GetFollowers(int userId)
         {
             UserId = userId;
         }

@@ -4,10 +4,10 @@ namespace Application.Dtos
 {
 	public class AddRequestings : IRequest<AppResponseDto>
 	{
-		public Guid RequestedId { get; private set; }
-        public List<Guid> RequesterIds { get; private set; }
+		public int RequestedId { get; private set; }
+        public List<int> RequesterIds { get; private set; }
 
-		public AddRequestings(Guid requestedId, List<Guid> requesterIds)
+		public AddRequestings(int requestedId, List<int> requesterIds)
 		{
 			RequestedId = requestedId;
 			RequesterIds = requesterIds;

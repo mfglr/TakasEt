@@ -2,9 +2,9 @@
 {
 	public class RemoveFollower
 	{
-        public Guid FollowerId { get; private set; }
+        public int FollowerId { get; private set; }
 
-        public RemoveFollower(Guid followerId)
+        public RemoveFollower(int followerId)
         {
             FollowerId = followerId;
         }

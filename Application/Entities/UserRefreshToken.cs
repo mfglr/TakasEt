@@ -1,24 +1,22 @@
-﻿using Application.ValueObjects;
-
-namespace Application.Entities
+﻿namespace Application.Entities
 {
     public class UserRefreshToken : Entity
 	{
-        public Guid UserId { get; private set; }
+        public int UserId { get; private set; }
         public User User { get; private set; }
-        public Token Token { get; private set; }
+        public string Token { get; private set; }   
+        public DateTime ExpirationDate { get; private set; }
 
-        public UserRefreshToken()
-        {
-            
-        }
-        public UserRefreshToken(Guid userId,Token token)
+        public UserRefreshToken(int userId,string token,DateTime expirationDate)
         {
             UserId = userId;
             Token = token;
+            ExpirationDate = expirationDate;
         }
-        public void UpdateToken(Token token) {
+
+        public void UpdateToken(string token,DateTime expirationDate) {
             Token = token;
+            ExpirationDate = expirationDate;
         }
     }
 }

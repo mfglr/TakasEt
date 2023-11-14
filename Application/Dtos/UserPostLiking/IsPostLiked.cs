@@ -4,9 +4,9 @@ namespace Application.Dtos
 {
 	public class IsPostLiked : IRequest<AppResponseDto>
 	{
-        public Guid PostId { get; private set; }
+        public int PostId { get; private set; }
 
-		public IsPostLiked(Guid postId)
+		public IsPostLiked(int postId)
 		{
 			PostId = postId;
 		}

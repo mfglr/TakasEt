@@ -27,10 +27,8 @@ namespace Handler.Commands
             User user = new User(request.Email, request.UserName);
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors.Select(x => x.Description)));
-            await _userRoles.DbSet.AddAsync(new UserRole(user.Id, Guid.Parse(_configuration.Roles.User.Id)));
-            return AppResponseDto.Success(
-                _mapper.Map<UserResponseDto>(user)
-                );
+            await _userRoles.DbSet.AddAsync(new UserRole(user.Id, _configuration.Roles.User.Id));
+            return AppResponseDto.Success(_mapper.Map<UserResponseDto>(user));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-post/{id}")]
-		public async Task<AppResponseDto> GetPost(Guid id)
+		public async Task<AppResponseDto> GetPost(int id)
 		{
 			return await _sender.Send(new GetPost(id));
 		}
@@ -40,7 +40,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-user-id/{userId}")]
-		public async Task<AppResponseDto> GetPostsByUserId(Guid userId)
+		public async Task<AppResponseDto> GetPostsByUserId(int userId)
 		{
 			return await _sender.Send(new GetPostsByUserId(userId,Request.Query));
 		}
@@ -54,7 +54,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-except-requesters/{postId}")]
-		public async Task<AppResponseDto> GetPostsExceptRequesters(Guid postId)
+		public async Task<AppResponseDto> GetPostsExceptRequesters(int postId)
 		{
 			return await _sender.Send(new GetPostsExceptRequesters(postId,Request.Query));
 		}
@@ -66,7 +66,12 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetPostsByFilter(Request.Query));
 		}
 
-
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-posts-by-followed-users")]
+		public async Task<AppResponseDto> GetPostsByFollowedUsers(int userId)
+		{
+			return await _sender.Send(new GetPostsByFollowedUsers(Request.Query));
+		}
 
 	}
 }

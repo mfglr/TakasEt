@@ -25,7 +25,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("profile-image/get-active-profile-image/{userId}")]
-		public async Task GetActiveProfileImage(Guid userId)
+		public async Task GetActiveProfileImage(int userId)
 		{
 			var bytes = await _sender.Send(new GetActiveProfileImage(userId));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);

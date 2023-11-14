@@ -2,13 +2,13 @@
 {
 	public class PostPostRequesting : Entity
 	{
-		public Guid RequesterId { get; private set; }
+		public int RequesterId { get; private set; }
 		public Post Requester { get; } // isteyen
-		public Guid RequestedId { get; private set; }
+		public int RequestedId { get; private set; }
         public Post Requested { get; } // istenilen
         
 
-		public PostPostRequesting(Guid requesterId, Guid requestedId)
+		public PostPostRequesting(int requesterId, int requestedId)
 		{
 			RequesterId = requesterId;
 			RequestedId = requestedId;

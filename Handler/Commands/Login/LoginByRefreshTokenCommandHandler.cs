@@ -28,7 +28,7 @@ namespace Handler.Commands
 				.ThenInclude(x => x.Role)
 				.Include(x => x.UserRefreshToken)
 				.SingleOrDefaultAsync(
-					x => x.UserRefreshToken.Token.Value == request.RefreshToken,
+					x => x.UserRefreshToken.Token == request.RefreshToken,
 					cancellationToken
 				);
 

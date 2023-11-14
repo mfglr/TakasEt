@@ -4,8 +4,8 @@ namespace Application.Configurations
 {
 	public class LoggedInUser
 	{
-        public Guid UserId { get; private set; }
-        public void SetUserId(Guid userId)
+        public int UserId { get; private set; }
+        public void SetUserId(int userId)
         {
             UserId = userId;
         }

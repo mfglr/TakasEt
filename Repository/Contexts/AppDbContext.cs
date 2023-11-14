@@ -6,17 +6,17 @@ namespace Repository.Contexts
 {
     public class AppDbContext : DbContext
 	{
- 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-		{
-		}
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
 
-		protected override void OnModelCreating(ModelBuilder builder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-			base.OnModelCreating(builder);
+			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+			base.OnModelCreating(modelBuilder);
 		}
-
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			base.OnConfiguring(optionsBuilder);
+		}
 	}
 	
 	public class SqlContextFactory : IDesignTimeDbContextFactory<AppDbContext>

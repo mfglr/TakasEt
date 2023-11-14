@@ -5,7 +5,7 @@
         public class Role
         {
 			public string Name { get; set; }
-			public string Id { get; set; }
+			public int Id { get; set; }
 		}
 		public Role Client { get; set; }
 		public Role User { get; set; }

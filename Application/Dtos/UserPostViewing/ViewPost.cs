@@ -4,9 +4,9 @@ namespace Application.Dtos
 {
 	public class ViewPost : IRequest<AppResponseDto>
 	{
-        public Guid PostId { get; private set; }
+        public int PostId { get; private set; }
 
-		public ViewPost(Guid postId)
+		public ViewPost(int postId)
 		{
 			PostId = postId;
 		}

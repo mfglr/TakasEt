@@ -4,8 +4,8 @@ namespace Application.Dtos
 {
 	public class IsFollowed : IRequest<AppResponseDto>
 	{
-        public Guid UserId { get; private set; }
+        public int UserId { get; private set; }
 
-		public IsFollowed(Guid userId){ UserId = userId; }
+		public IsFollowed(int userId){ UserId = userId; }
 	}
 }

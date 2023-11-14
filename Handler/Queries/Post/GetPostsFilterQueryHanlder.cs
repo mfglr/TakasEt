@@ -25,6 +25,7 @@ namespace Handler.Queries
 				.Include(x => x.Comments)
 				.Include(x => x.Category)
 				.Include(x => x.User)
+				.ThenInclude(x => x.Followeds)
 				.Where(x => x.CreatedDate < request.getQueryDate());
 
 			if (request.UserId != null)

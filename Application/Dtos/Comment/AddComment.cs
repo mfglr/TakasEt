@@ -4,12 +4,12 @@ namespace Application.Dtos
 {
 	public class AddComment : IRequest<AppResponseDto>
 	{
-        public Guid? ParentId { get; private set; }
-        public Guid? PostId { get; private set; }
-		public Guid UserId { get; private set; }
+        public int? ParentId { get; private set; }
+        public int? PostId { get; private set; }
+		public int UserId { get; private set; }
 		public string Content { get; private set; }
 
-		public AddComment(Guid? parentId,Guid? postId, Guid userId, string content)
+		public AddComment(int? parentId,int? postId, int userId, string content)
 		{
 			ParentId = parentId;
 			PostId = postId;

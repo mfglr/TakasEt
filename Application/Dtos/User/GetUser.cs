@@ -4,8 +4,8 @@ namespace Application.Dtos
 {
     public class GetUser : IRequest<AppResponseDto>
     {
-        public Guid UserId { get; private set; }
-        public GetUser(Guid userId)
+        public int UserId { get; private set; }
+        public GetUser(int userId)
         {
             UserId = userId;
         }

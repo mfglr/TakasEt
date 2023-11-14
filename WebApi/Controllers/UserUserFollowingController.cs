@@ -25,28 +25,28 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpDelete("following/unfollow-user/{followedId}")]
-		public async Task<AppResponseDto> UnfollowUser(Guid followedId)
+		public async Task<AppResponseDto> UnfollowUser(int followedId)
 		{
 			return await _sender.Send(new UnfollowUser(followedId));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("following/get-followeds/{userId}")]
-		public async Task<AppResponseDto> GetFolloweds(Guid userId)
+		public async Task<AppResponseDto> GetFolloweds(int userId)
 		{
 			return await _sender.Send(new GetFolloweds(userId));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("following/get-followers/{userId}")]
-		public async Task<AppResponseDto> GetFollowers(Guid userId)
+		public async Task<AppResponseDto> GetFollowers(int userId)
 		{
 			return await _sender.Send(new GetFollowers(userId));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("following/is-followed/{userId}")]
-		public async Task<AppResponseDto> IsFollowed(Guid userId)
+		public async Task<AppResponseDto> IsFollowed(int userId)
 		{
 			return await _sender.Send(new IsFollowed(userId));
 		}

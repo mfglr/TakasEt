@@ -25,14 +25,14 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-user/{userId}")]
-		public async Task<AppResponseDto> GetUser(Guid userId)
+		public async Task<AppResponseDto> GetUser(int userId)
 		{
 			return await _sender.Send(new GetUser(userId));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-users-who-liked-post/{postId}")]
-		public async Task<AppResponseDto> GetUsersWhoLikedPost(Guid postId)
+		public async Task<AppResponseDto> GetUsersWhoLikedPost(int postId)
 		{
 			return await _sender.Send(new GetUsersWhoLikedPost(postId,Request.Query));
 		}

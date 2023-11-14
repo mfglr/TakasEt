@@ -20,7 +20,7 @@ namespace Handler.DomainEventHandlers
 
 		public async Task Handle(UserDomainEvent notification, CancellationToken cancellationToken)
 		{
-			await _userRoles.DbSet.AddAsync(new UserRole(notification.User.Id, Guid.Parse(_configuration.Roles.User.Id)));
+			await _userRoles.DbSet.AddAsync(new UserRole(notification.User.Id, _configuration.Roles.User.Id));
 		}
 	}
 }
