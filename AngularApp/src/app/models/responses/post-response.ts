@@ -2,7 +2,7 @@ import { BaseResponse } from "./base-response";
 
 export interface PostResponse extends BaseResponse{
   userName : string;
-  userId : string;
+  userId : number;
   categoryName : string;
   title : string;
   content : string;
@@ -11,5 +11,5 @@ export interface PostResponse extends BaseResponse{
   countOfLikes : number;
   countOfViews : number;
   countOfComments : number;
-  firtImage : string;
+  firstImage : string;
 }

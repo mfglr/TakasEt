@@ -25,22 +25,11 @@ namespace Handler.Queries
 				.DbSet
 				.Include(x => x.User)
 				.Include(x => x.UsersWhoLiked)
-				.Where(x => x.ParentId == request.ParentId)
-				.ToPage(x => x.Id, request)
-				.Select(
-					x => new CommentResponseDto()
-					{
-						Content = x.Content,
-						CountOfLikes = x.UsersWhoLiked.Count,
-						CreatedDate = x.CreatedDate,
-						Id = x.Id,
-						ParentId = x.ParentId,
-						PostId = x.PostId,
-						UpdatedDate = x.UpdatedDate,
-						UserId = x.UserId,
-						UserName = x.User.UserName!
-					}
-				)
+				.Where(x => x.ParentId == request.ParentId && x.CreatedDate < request.getQueryDate())
+				.OrderByDescending(x => x.CreatedDate)
+				.Skip(request.Skip)
+				.Take(request.Take)
+				.ToCommentResponseDto()
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(_mapper.Map<List<CommentResponseDto>>(comments));
 		}

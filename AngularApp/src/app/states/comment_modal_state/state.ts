@@ -3,7 +3,7 @@ import { AppEntityState, initialPageOfComments, takeValueOfComments } from "../a
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 
 export interface CommentToReplyState{
-    ownerId : string;
+    ownerId : number;
     ownerType : "post" | "comment";
     comment : CommentResponse | undefined;
 }
@@ -15,7 +15,7 @@ export interface CommentState{
     childrenVisibility : boolean;
 }
 export interface CommentModalState extends AppEntityState<CommentState>{
-    postId : string;
+    postId : number;
     commentToReplyState : CommentToReplyState;
 }
 export interface CommentModalStateCollection extends EntityState<CommentModalState>{}
@@ -49,14 +49,14 @@ function createCommentState(comment : CommentResponse) : CommentState{
 function createCommentStates(comments : CommentResponse[]) : CommentState[]{
     return comments.map(x => createCommentState(x));
 }
-function addComment(comment : CommentResponse,postId : string,state : CommentModalStateCollection){
+function addComment(comment : CommentResponse,postId : number,state : CommentModalStateCollection){
     let commentModalState = state.entities[postId]!;
     return stateAdapter.updateOne({
         id : postId,
         changes : commentModalAdapter.addOne(createCommentState(comment),commentModalState)
     },state)
 }
-function addChild(comment : CommentResponse,postId : string,commentId : string,state : CommentModalStateCollection){
+function addChild(comment : CommentResponse,postId : number,commentId : number,state : CommentModalStateCollection){
     let commentModalState = state.entities[postId]!
     let commentState = commentModalState.entities[commentId]!
     let children = commentState.children
@@ -73,7 +73,7 @@ function addChild(comment : CommentResponse,postId : string,commentId : string,s
         },commentModalState)
     },state)
 }
-export function add(comment : CommentResponse, postId : string,state : CommentModalStateCollection){
+export function add(comment : CommentResponse, postId : number,state : CommentModalStateCollection){
     let c = state.entities[postId]!.commentToReplyState;
     if(c.ownerType === "post"){
         return addComment(comment,postId,state)
@@ -82,7 +82,7 @@ export function add(comment : CommentResponse, postId : string,state : CommentMo
         return addChild(comment,postId,c.ownerId,state)
     }
 }
-export function loadChildren(comments : CommentResponse[],postId : string,commentId : string,state : CommentModalStateCollection) : CommentModalStateCollection{
+export function loadChildren(comments : CommentResponse[],postId : number,commentId : number,state : CommentModalStateCollection) : CommentModalStateCollection{
     let commentModalState = state.entities[postId]!
     let commentState = commentModalState.entities[commentId]!
     let children = commentState.children
@@ -105,7 +105,7 @@ export function loadChildren(comments : CommentResponse[],postId : string,commen
     },state)
 
 }
-export function loadComments(comments : CommentResponse[],postId : string,state : CommentModalStateCollection){
+export function loadComments(comments : CommentResponse[],postId : number,state : CommentModalStateCollection){
     let commentModalState : CommentModalState = state.entities[postId]!;
     return stateAdapter.updateOne(
         {
@@ -119,7 +119,7 @@ export function loadComments(comments : CommentResponse[],postId : string,state 
         state
     );
 }
-export function switchVisibility(postId : string,commentId : string, state : CommentModalStateCollection) : CommentModalStateCollection{
+export function switchVisibility(postId : number,commentId : number, state : CommentModalStateCollection) : CommentModalStateCollection{
     let commentModelState = state.entities[postId]!;
     let commentState = commentModelState.entities[commentId]!;
     return stateAdapter.updateOne({
@@ -131,8 +131,8 @@ export function switchVisibility(postId : string,commentId : string, state : Com
     },state);
 }
 export function setCommentToReply(
-    postId : string,
-    ownerId : string,
+    postId : number,
+    ownerId : number,
     ownerType : "post" | "comment",
     comment : CommentResponse,
     state : CommentModalStateCollection
@@ -149,7 +149,7 @@ export function setCommentToReply(
     },state)
 }
 export function resetCommentToReply(
-    postId : string,
+    postId : number,
     state : CommentModalStateCollection
 ){
     return stateAdapter.updateOne({
@@ -163,11 +163,11 @@ export function resetCommentToReply(
         }
     },state)
 }
-export function initCommentModalStates(postIds : string[],state : CommentModalStateCollection){
+export function initCommentModalStates(postIds : number[],state : CommentModalStateCollection){
     return stateAdapter.addMany(
         postIds.map(
-            (postId) : CommentModalState =>{
-                return commentModalAdapter.getInitialState({
+            postId =>
+                commentModalAdapter.getInitialState({
                     status : false,
                     postId : postId,
                     page : {...initialPageOfComments},
@@ -177,7 +177,6 @@ export function initCommentModalStates(postIds : string[],state : CommentModalSt
                         comment : undefined
                     }
                 })
-            }
         ),state
     )
 }

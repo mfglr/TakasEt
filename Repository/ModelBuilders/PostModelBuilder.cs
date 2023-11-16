@@ -14,6 +14,11 @@ namespace Repository.ModelBuilders
 			builder.HasIndex(x => x.NormalizedTitle).HasDatabaseName("titleIndexer");
 			builder.HasIndex(x => x.CreatedDate).IsDescending(true).HasDatabaseName("createdDateIndexer");
 
+			builder.Ignore(x => x.CountOfComments);
+			builder.Ignore(x => x.CountOfLikes);
+			builder.Ignore(x => x.CountOfViewings);
+
+
 			builder
 				.HasMany(x => x.Comments)
 				.WithOne(x => x.Post)

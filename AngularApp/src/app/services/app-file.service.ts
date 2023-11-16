@@ -3,6 +3,7 @@ import { Observable, first, from, map, mergeMap, toArray } from 'rxjs';
 import { AppFileReaderService } from './app-file-reader.service';
 import { BlobTypesService } from './blob-types.service';
 import { AppHttpClientService } from './app-http-client.service';
+import { PostResponse } from '../models/responses/post-response';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,26 @@ export class AppFileService {
             file => URL.createObjectURL(
               new Blob([file.file],{type : this.blobTypes.getBlobTypeByExtention(file.extention)})
             )
+          ),
+          toArray()
+        )
+      )
+    )
+  }
+
+  createPostsFromBlob(source : Observable<Blob>) : Observable<PostResponse[]>{
+    return source.pipe(
+      mergeMap(blob => from(blob.arrayBuffer())),
+      map(arrayBuffer => this.appFileReader.getPosts(new Uint8Array(arrayBuffer))),
+      mergeMap(
+        posts => from(posts).pipe(
+          map(
+            post => {
+              post.post.firstImage = URL.createObjectURL(
+                new Blob([post.file],{type : this.blobTypes.getBlobTypeByExtention(post.extention)})
+              )
+              return post.post;
+            }
           ),
           toArray()
         )

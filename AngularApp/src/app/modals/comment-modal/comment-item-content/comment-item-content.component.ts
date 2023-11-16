@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { CommentResponse } from 'src/app/models/responses/comment-response';
 import { UserCommentLikingService } from 'src/app/services/user-comment-liking.service';
 import { setCommentToReplyAction } from 'src/app/states/comment_modal_state/action';
-import { CommentModalState, setCommentToReply } from 'src/app/states/comment_modal_state/state';
+import { CommentModalState } from 'src/app/states/comment_modal_state/state';
 import { selectUserId } from 'src/app/states/login_state/selectors';
 import { AppLoginState } from 'src/app/states/login_state/state';
 
@@ -13,9 +13,8 @@ import { AppLoginState } from 'src/app/states/login_state/state';
   styleUrls: ['./comment-item-content.component.scss']
 })
 export class CommentItemContentComponent {
-  @Input() postId? : string;
-  @Input() ownerId? : string;
-  @Input() ownerType? : "post" | "comment";
+  @Input() postId? : number;
+  @Input() ownerId? : number;
   @Input() hasChildren : boolean = true;
   @Input() comment? : CommentResponse;
   @Input() diameter : string = '50';
@@ -29,9 +28,12 @@ export class CommentItemContentComponent {
   ) {}
 
   replyComment(){
-    if(this.ownerId && this.ownerType && this.comment && this.postId){
+    console.log(this.ownerId)
+    console.log(this.comment)
+    console.log(this.postId)
+    if(this.ownerId && this.comment && this.postId){
       this.commentModalStore.dispatch(setCommentToReplyAction({
-        postId : this.postId, ownerId : this.ownerId, ownerType : this.ownerType,comment : this.comment
+        postId : this.postId, ownerId : this.ownerId, ownerType : "comment",comment : this.comment
       }))
     }
   }

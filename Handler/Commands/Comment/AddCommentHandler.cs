@@ -27,10 +27,7 @@ namespace Handler.Commands
 		{
 			var comment = new Comment(request.ParentId,request.PostId, request.UserId, request.Content);
 			await _comments.DbSet.AddAsync(comment,cancellationToken);
-			var user = await _users.DbSet.FindAsync(_loggedInUser.UserId);
-			var dto = _mapper.Map<CommentResponseDto>(comment);
-			dto.UserName = user.UserName!;
-			return AppResponseDto.Success(dto);
+			return AppResponseDto.Success(_mapper.Map<CommentResponseDto>(comment));
 		}
 	}
 }

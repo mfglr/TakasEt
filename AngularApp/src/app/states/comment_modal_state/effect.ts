@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { CommentService } from "src/app/services/comment.service";
 import { nextPageOfChildren, nextPageOfChildrenSuccess, nextPageOfComments, nextPageOfCommentsSuccess, resetCommentToReplyAction, shareComment, shareCommentSuccess } from "./action";
-import { filter, first, mergeMap, of } from "rxjs";
+import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { CommentModalStateCollection } from "./state";
 import { selectCommentToReplyState, selectStatusAndPage, selectStatusAndPageOfChildren } from "./selector";
 import { AppLoginState } from "../login_state/state";
-import { selectUserId } from "../login_state/selectors";
+import { selectProfileImage, selectUserId, selectUserName } from "../login_state/selectors";
 import { AddComment } from "src/app/models/requests/add-comment";
 
 
@@ -32,11 +32,19 @@ export class CommentModalCollectionEffect{
                         if(state.ownerType == "post") request.postId = state.ownerId;
                         else request.parentId = state.ownerId;
                         return this.commentService.addComment(request).pipe(
+                            withLatestFrom(
+                                this.loginStore.select(selectProfileImage),
+                                this.loginStore.select(selectUserName)
+                            ),
                             mergeMap(
-                                response => of(
-                                    shareCommentSuccess({postId : action.postId,response : response}),
-                                    resetCommentToReplyAction({postId : action.postId})
-                                )
+                                ([response,profileImage,userName]) => {
+                                    response.userName = userName!
+                                    response.profileImage = profileImage!
+                                    return of(
+                                        shareCommentSuccess({postId : action.postId,response : response}),
+                                        resetCommentToReplyAction({postId : action.postId})
+                                    )
+                                }
                             )
                         )
                     })

@@ -20,11 +20,11 @@ export class UserService {
     return this.appHttpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
   }
 
-  getUser(userId : string) : Observable<UserResponse>{
+  getUser(userId : number) : Observable<UserResponse>{
     return this.appHttpClient.get<UserResponse>(`user/get-user/${userId}`);
   }
 
-  getUsersWhoLikedPost(postId : string,page : Page) : Observable<UserResponse[]>{
+  getUsersWhoLikedPost(postId : number,page : Page) : Observable<UserResponse[]>{
     return this.appHttpClient.get<UserResponse[]>(
       UrlHelper.createPaginationUrl(`user/get-users-who-liked-post/${postId}`,page)
     )

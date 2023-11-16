@@ -11,13 +11,13 @@ export class UserCommentLikingService implements Likeable {
   constructor(
     private appHttpClient : AppHttpClientService
   ) { }
-  like(commentId : string) : Observable<NoContentResponse>{
+  like(commentId : number) : Observable<NoContentResponse>{
     return this.appHttpClient.post<NoContentResponse>("user-comment-liking/like-comment",{commentId : commentId});
   }
-  unlike(commentId : string) : Observable<NoContentResponse>{
+  unlike(commentId : number) : Observable<NoContentResponse>{
     return this.appHttpClient.delete(`user-comment-liking/unlike-comment/${commentId}`);
   }
-  isLiked(commentId: string): Observable<boolean> {
+  isLiked(commentId: number): Observable<boolean> {
     return this.appHttpClient.get<boolean>(`user-comment-liking/is-comment-liked/${commentId}`)
   }
 }

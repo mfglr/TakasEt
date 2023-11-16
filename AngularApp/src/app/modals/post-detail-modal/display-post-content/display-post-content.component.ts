@@ -29,7 +29,7 @@ export class DisplayPostContentComponent {
 
   private triggerGetCountOfLikesAndView : Subscription = this.source$.pipe(
     mergeMap(() => interval(5000)),
-    map(() => this.appHubConnection.invoke<string>("SendCountOfViewsAndLikes",this.post!.id))
+    map(() => this.appHubConnection.invoke<number>("SendCountOfViewsAndLikes",this.post!.id))
   ).subscribe();
 
   countsSubscription = this.source$.pipe(
@@ -50,7 +50,7 @@ export class DisplayPostContentComponent {
 
   ngOnChanges(){
     this.postSubject.next(this.post);
-    if(this.post)this.appHubConnection.invoke<string>("SendCountOfViewsAndLikes",this.post!.id)
+    if(this.post)this.appHubConnection.invoke<number>("SendCountOfViewsAndLikes",this.post!.id)
   }
 
   ngOnInit(): void {

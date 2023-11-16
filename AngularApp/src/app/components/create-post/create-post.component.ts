@@ -61,7 +61,7 @@ export class CreatePostComponent implements OnInit,OnDestroy,AfterContentInit{
     return this.files && this.files.length != 0
   }
 
-  getCategoryId(categoryId : string){
+  getCategoryId(categoryId : number){
     this.createPostForm.get('categoryId')?.setValue(categoryId);
   }
 

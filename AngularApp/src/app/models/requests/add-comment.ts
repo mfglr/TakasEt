@@ -1,6 +1,6 @@
 export interface AddComment{
-  postId? : string;
-  parentId? : string;
-  userId : string;
+  postId? : number;
+  parentId? : number;
+  userId : number;
   content : string;
 }

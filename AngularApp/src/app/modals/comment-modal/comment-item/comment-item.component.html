@@ -3,7 +3,6 @@
   <div class="parent">
     <app-comment-item-content 
       diameter="50"
-      ownerType="comment"
       [ownerId]="comment?.id"
       [comment]="comment"
       [postId]="postId">
@@ -20,7 +19,6 @@
           [comment]="child" 
           [hasChildren]="false"
           [ownerId]="comment.id"
-          ownerType="comment"
           [postId]="postId">
         </app-comment-item-content>
       </div>

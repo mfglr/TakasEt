@@ -14,7 +14,7 @@ export class ProfileImageService {
     private appFileService : AppFileService
     ) { }
 
-    getActiveProfileImage(userId : string) : Observable<string>{
+    getActiveProfileImage(userId : number) : Observable<string>{
       return this.appFileService.createUrlsFromBlob(
         this.appHttpClient.getBlob(`profile-image/get-active-profile-image/${userId}`)
       ).pipe(

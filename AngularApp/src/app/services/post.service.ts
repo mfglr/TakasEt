@@ -6,6 +6,7 @@ import { PostResponse } from '../models/responses/post-response';
 import { PostImageService } from './post-image.service';
 import { UrlHelper } from '../helpers/url-helper';
 import { Page } from '../states/app-states';
+import { AppFileService } from './app-file.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class PostService {
 
   constructor(
     private appHttpClient: AppHttpClientService,
-    private postImageService : PostImageService
+    private postImageService : PostImageService,
+    private appFileService : AppFileService
   ) { }
 
   addPost(formData : FormData) : Observable<NoContentResponse>{
@@ -31,6 +33,13 @@ export class PostService {
     );
   }
 
+  getPostsByFollowedUsers(page : Page) : Observable<PostResponse[]>{
+    return this.appFileService.createPostsFromBlob(
+      this.appHttpClient.getBlob( UrlHelper.createPaginationUrl("post/get-posts-by-followed-users",page) )
+    )
+  }
+
+
   getPostsWithFirstImages(page : Page) : Observable<PostResponse[]>{
     return this.appHttpClient.get<PostResponse[]>(
       UrlHelper.createPaginationUrl("post/get-posts",page)
@@ -40,7 +49,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].firtImage = image;
+              posts[index].firstImage = image;
               return posts[index];
             }
           ),
@@ -54,7 +63,7 @@ export class PostService {
     return this.appHttpClient.get<PostResponse[]>(`post/get-posts-by-user-id/${userId}`);
   }
 
-  getPostsWithFirstImagesByUserId(userId : string,page : Page) : Observable<PostResponse[]>{
+  getPostsWithFirstImagesByUserId(userId : number,page : Page) : Observable<PostResponse[]>{
     return this.appHttpClient.get<PostResponse[]>
       (
         UrlHelper.createPaginationUrl(`post/get-posts-by-user-id/${userId}`,page)
@@ -64,7 +73,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].firtImage = image;
+              posts[index].firstImage = image;
               return posts[index];
             }
           ),
@@ -77,7 +86,7 @@ export class PostService {
     return this.appHttpClient.get<PostResponse[]>(`post/get-posts-by-user-name/${userName}`);
   }
 
-  getPostsExceptRequesters(postId : string) : Observable<PostResponse[]>{
+  getPostsExceptRequesters(postId : number) : Observable<PostResponse[]>{
     return this.appHttpClient.get<PostResponse[]>(`post/get-posts-except-requesters/${postId}`);
   }
 }

@@ -8,4 +8,5 @@ export interface CommentResponse extends BaseResponse{
   content : string;
   countOfChildren : number;
   countOfLikes : number;
+  profileImage : string;
 }

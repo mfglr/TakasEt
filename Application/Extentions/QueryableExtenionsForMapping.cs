@@ -1,4 +1,6 @@
 ﻿using Application.Dtos;
+using Application.Dtos.PostImages;
+using Application.Dtos.ProfileImage;
 using Application.Entities;
 
 namespace Application.Extentions
@@ -23,9 +25,52 @@ namespace Application.Extentions
 						CountOfLikes = x.UsersWhoLiked.Count,
 						CountOfViews = x.UsersWhoViewed.Count,
 						CountOfComments = x.Comments.Count,
+						PostImages = x.PostImages.Select(image => new PostImageResponseDto()
+						{
+							Id = image.Id,
+							CreatedDate = image.CreatedDate,
+							UpdatedDate = image.UpdatedDate,
+							BlobName = image.BlobName,
+							ContainerName = image.ContainerName,
+							Extention = image.Extention,
+						}) 
 					}
 				);
 		}
 		
+		public static IQueryable<CommentResponseDto> ToCommentResponseDto(this IQueryable<Comment> queryable)
+		{
+			return queryable.Select(
+				x => new CommentResponseDto()
+				{
+					Content = x.Content,
+					CountOfChildren = x.Children.Count,
+					CreatedDate = x.CreatedDate,
+					Id = x.Id,
+					PostId = x.PostId,
+					ParentId = x.ParentId,
+					UpdatedDate = x.UpdatedDate,
+					UserId = x.UserId,
+					UserName = x.User.UserName!,
+					CountOfLikes = x.UsersWhoLiked.Count,
+					ProfileImage = x
+						.User
+						.ProfileImages
+						.Where(x => x.IsActive)
+						.Select(
+							x => new ProfileImageReponseDto()
+							{
+								Id = x.Id,
+								CreatedDate = x.CreatedDate,
+								UpdatedDate = x.UpdatedDate,
+								UserId = x.UserId,
+								BlobName = x.BlobName,
+								ContainerName = x.ContainerName,
+								Extention = x.Extention
+							}
+						).First()
+				}
+			);
+		}
 	}
 }

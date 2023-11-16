@@ -11,9 +11,9 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class CategoryInputComponent {
 
-  categoryIdFormControl = new FormControl<string | null>(null);
+  categoryIdFormControl = new FormControl<number | null>(null);
   categoryNameFormControl = new FormControl<string | null>(null);
-  @Output() categoryIdEvent = new EventEmitter<string>();
+  @Output() categoryIdEvent = new EventEmitter<number>();
 
   namesOfCategories$ = ObservableHelpers.getImprovedPerformanceInput(this.categoryNameFormControl.valueChanges).pipe(
     mergeMap(
@@ -27,7 +27,7 @@ export class CategoryInputComponent {
 
   constructor(private categoryService : CategoryService) {}
 
-  setCategory(category : {name : string,id : string}){
+  setCategory(category : {name : string,id : number}){
     this.categoryNameFormControl.setValue(category.name);
     this.categoryIdFormControl.setValue(category.id);
     this.categoryIdEvent.emit(category.id);

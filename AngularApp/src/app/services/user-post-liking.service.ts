@@ -13,15 +13,15 @@ export class UserPostLikingService implements Likeable {
     private appHttpClient : AppHttpClientService
   ) { }
 
-  like(postId : string) : Observable<NoContentResponse>{
+  like(postId : number) : Observable<NoContentResponse>{
     return this.appHttpClient.post<NoContentResponse>("user-post-liking/like-post",{postId : postId});
   }
 
-  unlike(postId : string) : Observable<NoContentResponse>{
+  unlike(postId : number) : Observable<NoContentResponse>{
     return this.appHttpClient.delete(`user-post-liking/unlike-post/${postId}`);
   }
 
-  isLiked(postId: string): Observable<boolean> {
+  isLiked(postId: number): Observable<boolean> {
     return this.appHttpClient.get<boolean>(`user-post-liking/is-liked/${postId}`)
   }
 }

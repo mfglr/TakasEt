@@ -11,7 +11,7 @@ import { AppLoginState } from 'src/app/states/login_state/state';
 export class DisplayProfileImageComponent implements OnChanges {
 
   @Input() diameter : string = '75';
-  @Input() userId : string | null | undefined = null;
+  @Input() userId : number | null | undefined = null;
   profileImage$? : Observable<string>;
 
   constructor(

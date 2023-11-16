@@ -68,9 +68,10 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-followed-users")]
-		public async Task<AppResponseDto> GetPostsByFollowedUsers(int userId)
+		public async Task GetPostsByFollowedUsers()
 		{
-			return await _sender.Send(new GetPostsByFollowedUsers(Request.Query));
+			var bytes = await _sender.Send(new GetPostsByFollowedUsers(Request.Query));
+			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 
 	}

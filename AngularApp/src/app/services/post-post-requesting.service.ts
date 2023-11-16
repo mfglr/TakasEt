@@ -10,7 +10,7 @@ export class PostPostRequestingService {
     private appHttpClient : AppHttpClientService
   ) { }
 
-  addRequestings(requestedId : string, requesterIds : string[]){
+  addRequestings(requestedId : number, requesterIds : number[]){
     return this.appHttpClient.post(
       "requesting/add-requestings",
       {requestedId : requestedId , requesterIds : requesterIds}

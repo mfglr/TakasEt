@@ -18,12 +18,12 @@ export class CommentService {
   addComment(request : AddComment ) : Observable<CommentResponse>{
     return this.appHttpClient.post<CommentResponse>("comment/add-comment",request);
   }
-  getCommnetsByPostId(postId : string,page : Page) : Observable<CommentResponse[]>{
+  getCommnetsByPostId(postId : number,page : Page) : Observable<CommentResponse[]>{
     return this.appHttpClient.get<CommentResponse[]>(
       UrlHelper.createPaginationUrl(`comment/get-comments-by-post-id/${postId}`,page)
     );
   }
-  getChildren(id : string,page:Page) : Observable<CommentResponse[]>{
+  getChildren(id : number,page:Page) : Observable<CommentResponse[]>{
     return this.appHttpClient.get<CommentResponse[]>(
       UrlHelper.createPaginationUrl(`comment/get-children/${id}`,page)
     );

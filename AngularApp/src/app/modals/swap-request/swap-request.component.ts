@@ -14,14 +14,14 @@ import { initialPageOfPosts } from 'src/app/states/app-states';
 })
 export class SwapRequestComponent implements OnChanges,OnDestroy,AfterContentInit{
 
-  @Input() requestedId : string | null | undefined = null;
+  @Input() requestedId : number | null | undefined = null;
   @ViewChild("requestingButton",{static: true}) swapRequestButton? : ElementRef;
   @ViewChild("closeButton",{static: true}) closeButton? : ElementRef;
 
   data? : {x : PostResponse,y : string}[];
   dataSubscription? : Subscription;
   swapRequestButtonSubscription? : Subscription;
-  private requesterIds : string[] = [];
+  private requesterIds : number[] = [];
   constructor(
     private postService : PostService,
     private postImageService : PostImageService,

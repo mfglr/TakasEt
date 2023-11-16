@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Dtos;
+using Application.Interfaces.Services;
 using Azure.Storage.Blobs;
 
 namespace Service

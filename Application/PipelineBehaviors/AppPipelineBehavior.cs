@@ -5,8 +5,7 @@ using MediatR;
 
 namespace Application.Pipelines
 {
-	public class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-		where TRequest : IRequest<TResponse> where TResponse : AppResponseDto
+	public class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 	{
 
 		private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -35,11 +34,15 @@ namespace Application.Pipelines
 			if (_unitOfWork.HasChanges())
 			{
 				var date = await _unitOfWork.CommitAsync(cancellationToken);
-				if(response.Data is BaseResponseDto)
+				if (response is AppResponseDto)
 				{
-					BaseResponseDto baseResponse = (BaseResponseDto)response.Data;
-					if (baseResponse != null && baseResponse.CreatedDate == default(DateTime))
-						baseResponse.CreatedDate = date;
+					var appResponseDto = response as AppResponseDto;
+					if (appResponseDto.Data is BaseResponseDto)
+					{
+						BaseResponseDto baseResponse = (BaseResponseDto)appResponseDto.Data;
+						if (baseResponse != null && baseResponse.CreatedDate == default(DateTime))
+							baseResponse.CreatedDate = date;
+					}
 				}
 			}
 			return response;

@@ -3,8 +3,8 @@
 	public class ProfileImage : AppFile
 	{
 		public bool IsActive { get; private set; }
-		public int? UserId { get; private set; }
-		public User? User { get; }
+		public int UserId { get; private set; }
+		public User User { get; }
 
 		public ProfileImage() { }
 

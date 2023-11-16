@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import * as appPostActions from 'src/app/states/post_state/actions';
-import { AppPostState, postsOfHomePageQueryId } from 'src/app/states/post_state/state';
+import { nextPageOfPosts } from 'src/app/states/home_page_state/actions';
+import { HomePageState } from 'src/app/states/home_page_state/reducer';
+import { selectPostResponses } from 'src/app/states/home_page_state/selectors';
 
 @Component({
   selector: 'app-home',
@@ -10,27 +11,19 @@ import { AppPostState, postsOfHomePageQueryId } from 'src/app/states/post_state/
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
-  @ViewChild("usersListModalButton",{static : true}) usersListModalButton? : ElementRef;
   @ViewChild("displayPostModalButton",{static : true}) displayPostModalButton? : ElementRef;
-
-  postsOfHomePageQueryId = postsOfHomePageQueryId;
-
+  post$ = this.homePageStore.select(selectPostResponses)
   postWithCommentsDisplayed? : PostResponse;
 
   constructor(
-    private store : Store<AppPostState>
+    private homePageStore : Store<HomePageState>
   ) {}
 
-
   ngOnInit(){
-    this.store.dispatch(appPostActions.setSelectedQueryId({queryId : this.postsOfHomePageQueryId}))
+    this.homePageStore.dispatch(nextPageOfPosts())
   }
 
-  displayComments(post : PostResponse){
-    if(this.commentModalButton) {
-      this.postWithCommentsDisplayed = post;
-      this.commentModalButton.nativeElement.click();
-    }
+  getNextPageOfPosts(){
+    this.homePageStore.dispatch(nextPageOfPosts())
   }
 }

@@ -13,7 +13,7 @@ export class PostComponent implements OnChanges {
   firstImage? : string;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.post) this.firstImage = this.post.firtImage
+    if(this.post) this.firstImage = this.post.firstImage
   }
 
   displayComments(post : PostResponse){

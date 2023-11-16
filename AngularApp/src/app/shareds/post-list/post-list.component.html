@@ -1,5 +1,5 @@
 <div class="row root">
-  <div class="col-6 post-item" *ngFor="let post of (posts$ | async)">
+  <div class="col-6 post-item" *ngFor="let post of posts">
     <app-post (diplayCommentsEvent)="displayComments($event)" [post]="post"></app-post>
   </div>
   <button (click)="getMore()">more</button>

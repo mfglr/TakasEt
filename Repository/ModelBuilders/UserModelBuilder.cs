@@ -22,6 +22,7 @@ namespace Repository.ModelBuilders
 			builder.HasIndex(x => x.NormalizedFullName).HasDatabaseName("fullNameIndexer");
 			builder.HasIndex(x => x.CreatedDate).IsDescending(true).HasDatabaseName("createdDateIndexer");
 
+
 			builder
 				.HasMany(x => x.Posts)
 				.WithOne(x => x.User)

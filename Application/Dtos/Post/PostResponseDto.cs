@@ -1,4 +1,6 @@
-﻿namespace Application.Dtos
+﻿using Application.Dtos.PostImages;
+
+namespace Application.Dtos
 {
 	public class PostResponseDto : BaseResponseDto
 	{
@@ -7,10 +9,10 @@
 		public string CategoryName { get; set; }
 		public string Title { get;  set; }
         public string Content { get; set; }
-        public DateTime PublishedDate { get; set; }
         public int CountOfImages { get; set; }
         public int CountOfLikes { get; set; }
 		public int CountOfViews { get; set; }
 		public int CountOfComments { get; set; }
-	}
+        public IEnumerable<PostImageResponseDto> PostImages { get; set; }
+    }
 }

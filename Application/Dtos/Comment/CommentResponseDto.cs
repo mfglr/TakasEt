@@ -1,4 +1,7 @@
-﻿namespace Application.Dtos
+﻿using Application.Dtos.ProfileImage;
+using Application.Entities;
+
+namespace Application.Dtos
 {
 	public class CommentResponseDto : BaseResponseDto
 	{
@@ -9,5 +12,6 @@
 		public string Content { get; set; }
         public int CountOfChildren { get; set; }
 		public int CountOfLikes {  get; set; }
+		public ProfileImageReponseDto ProfileImage { get; set; }
     }
 }

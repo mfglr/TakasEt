@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-	public class GetPostsByFollowedUsers : Pagination, IRequest<AppResponseDto>
+	public class GetPostsByFollowedUsers : Pagination, IRequest<byte[]>
 	{
         public GetPostsByFollowedUsers(IQueryCollection collection) : base(collection)
 		{

@@ -36,6 +36,7 @@ namespace Repository.UnitOfWorks
 			return date;
 		}
 
+
 		public bool HasChanges()
 		{
 			return _context.ChangeTracker.HasChanges();

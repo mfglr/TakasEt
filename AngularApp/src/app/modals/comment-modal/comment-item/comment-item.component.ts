@@ -14,7 +14,7 @@ import { CommentModalState } from 'src/app/states/comment_modal_state/state';
 })
 export class CommentItemComponent {
   @Input() comment? : CommentResponse;
-  @Input() postId? : string;
+  @Input() postId? : number;
   children$? : Observable<CommentResponse[]>;
   childrenVisibility$? : Observable<boolean>;
   displayedCount$? : Observable<number>;

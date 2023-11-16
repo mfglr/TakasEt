@@ -11,12 +11,12 @@ import { NoContentResponse } from 'src/app/models/responses/no-content-response'
 })
 export class LikeButtonComponent implements OnChanges,AfterContentInit{
 
-  @Input() id? : string;
+  @Input() id? : number;
   @Input() likeable? : Likeable;
   @Output() likeVector = new EventEmitter<number>();
   @ViewChild("likeButton",{static : true}) likeButton? : ElementRef;
   mode? : Mode;
-  private methods? : ((x:string) => Observable<NoContentResponse>)[];
+  private methods? : ((x:number) => Observable<NoContentResponse>)[];
   classes = ['fa-regular fa-heart unlike','fa-solid fa-heart like']
 
   ngOnChanges(){

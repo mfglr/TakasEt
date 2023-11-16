@@ -30,6 +30,7 @@ export class CommentModalComponent implements OnChanges {
       this.replyToCommentState$ = this.commentModalStore.select(
         commentModalSelectors.selectCommentToReplyState({postId : this.post.id})
       )
+      this.replyToCommentState$.subscribe(x => console.log(x));
       this.commentModalStore.dispatch(commentModalActions.nextPageOfComments({postId : this.post.id}))
     }
   }

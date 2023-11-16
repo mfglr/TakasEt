@@ -41,12 +41,12 @@ import { DateFormatPipe } from './pipes/date-format.pipe';
 import { UsersListModalComponent } from './modals/users-list-modal/users-list-modal.component';
 import { UserItemComponent } from './modals/users-list-modal/user-item/user-item.component';
 import { PostDetailModalComponent } from './modals/post-detail-modal/post-detail-modal.component';
-import { appPostReducer } from './states/post_state/reducer';
-import { AppPostsEffect } from './states/post_state/effect';
 import { appLoginReducer } from './states/login_state/reducer';
 import { AppLoginEffect } from './states/login_state/effect';
 import { commentModalCollectionReducer } from './states/comment_modal_state/reducer';
 import { CommentModalCollectionEffect } from './states/comment_modal_state/effect';
+import { homePageReducer } from './states/home_page_state/reducer';
+import { HomePageEffect } from './states/home_page_state/effect';
 
 @NgModule({
   declarations: [
@@ -92,13 +92,13 @@ import { CommentModalCollectionEffect } from './states/comment_modal_state/effec
     AppRoutingModule,
     ReactiveFormsModule,
     StoreModule.forRoot(),
-    StoreModule.forFeature("AppPostState", appPostReducer),
+    StoreModule.forFeature("HomePageState",homePageReducer),
     StoreModule.forFeature("AppLoginState", appLoginReducer),
     StoreModule.forFeature("CommentModalStateCollection", commentModalCollectionReducer),
     EffectsModule.forRoot(),
-    EffectsModule.forFeature([AppPostsEffect]),
     EffectsModule.forFeature([AppLoginEffect]),
     EffectsModule.forFeature([CommentModalCollectionEffect]),
+    EffectsModule.forFeature([HomePageEffect])
 
   ],
   providers: [AppHubConnectionService],

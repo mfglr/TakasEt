@@ -3,7 +3,7 @@ export interface LoginResponse{
   expirationDateOfAccessToken : Date;
   refreshToken : string;
   expirationDateOfRefreshToken : Date;
-  id : string;
+  id : number;
   userName : string;
   email : string;
 }

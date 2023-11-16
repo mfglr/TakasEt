@@ -29,7 +29,7 @@ export class PostImageService {
     )
   }
 
-  getFirstImagesOfPostsByUserId(userId : string,page : Page) : Observable<string[]>{
+  getFirstImagesOfPostsByUserId(userId : number,page : Page) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
       this.appHttpClient.getBlob(
         UrlHelper.createPaginationUrl(`post-image/get-first-images-of-posts-by-user-id/${userId}`,page))
@@ -46,7 +46,7 @@ export class PostImageService {
     )
   }
 
-  getFirstImageOfPostsExceptReuqesters(postId : string,page : Page) : Observable<string[]>{
+  getFirstImageOfPostsExceptReuqesters(postId : number,page : Page) : Observable<string[]>{
     return this.appFileService.createUrlsFromBlob(
       this.appHttpClient.getBlob(
         UrlHelper.createPaginationUrl(
