@@ -20,7 +20,6 @@ import { SwapRequestItemComponent } from './modals/swap-request/swap-request-ite
 import { ProfileHeaderComponent } from './pages/profile/profile-header/profile-header.component';
 import { ProfileContentComponent } from './pages/profile/profile-content/profile-content.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { PostListComponent } from './shareds/post-list/post-list.component';
 import { FollowButtonComponent } from './shareds/follow-button/follow-button.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
@@ -31,9 +30,6 @@ import { NotificationsComponent } from './pages/notifications/notifications.comp
 import { SwapProposalsComponent } from './pages/profile/swap-proposals/swap-proposals.component';
 import { SwapRequestsComponent } from './pages/profile/swap-requests/swap-requests.component';
 import { FollowedPostsComponent } from './pages/profile/followed-posts/followed-posts.component';
-import { PostComponent } from './shareds/post-list/post/post.component';
-import { PostHeaderComponent } from './shareds/post-list/post-header/post-header.component';
-import { PostFooterComponent } from './shareds/post-list/post-footer/post-footer.component';
 import { CommentModalComponent } from './modals/comment-modal/comment-modal.component';
 import { CommentItemComponent } from './modals/comment-modal/comment-item/comment-item.component';
 import { CommentItemContentComponent } from './modals/comment-modal/comment-item-content/comment-item-content.component';
@@ -47,6 +43,11 @@ import { commentModalCollectionReducer } from './states/comment_modal_state/redu
 import { CommentModalCollectionEffect } from './states/comment_modal_state/effect';
 import { homePageReducer } from './states/home_page_state/reducer';
 import { HomePageEffect } from './states/home_page_state/effect';
+import { PostListComponent } from './pages/home/post-list/post-list.component';
+import { PostComponent } from './pages/home/post-list/post/post.component';
+import { PostImageSliderComponent } from './shareds/post-image-slider/post-image-slider.component';
+import { PostHeaderComponent } from './pages/home/post-list/post-header/post-header.component';
+import { PostFooterComponent } from './pages/home/post-list/post-footer/post-footer.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { HomePageEffect } from './states/home_page_state/effect';
     UsersListModalComponent,
     UserItemComponent,
     PostDetailModalComponent,
+    PostImageSliderComponent,
   ],
   imports: [
     BrowserModule,

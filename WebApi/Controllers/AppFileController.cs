@@ -17,10 +17,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("app-file/get-app-file/{containerName}/{blobName}")]
-		public async Task GetAppFile(string containerName,string blobName)
+		[HttpGet("app-file/get-app-file/{id}")]
+		public async Task GetAppFile(int id)
 		{
-			var bytes = await _sender.Send(new GetAppFile(blobName, containerName));
+			var bytes = await _sender.Send(new GetAppFile(id));
 			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
 		}
 	}

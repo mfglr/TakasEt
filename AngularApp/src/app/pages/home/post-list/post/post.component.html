@@ -1,0 +1,18 @@
+<div class="card post-card">
+  <div class="card-header post-card-header">
+    <app-post-header [post]="post"></app-post-header>
+  </div>
+  <div class="card-body post-card-body">
+    <a>
+      <app-post-image-slider
+        [post]="post"
+        [urls]="(urls$ | async)"
+        [currentIndex]="(currentIndex$ | async)"
+        (loadImageEvent)="loadImage($event)"
+        (changeIndexEvent)="setCurrentIndex($event)"></app-post-image-slider>
+    </a>
+  </div>
+  <div class="card-footer">
+    <app-post-footer (displayCommentsEvent)="displayComments($event)" [post]="post"></app-post-footer>
+  </div>
+</div>

@@ -1,20 +1,23 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
-import { filter, mergeMap, of, withLatestFrom } from "rxjs";
+import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
-import { HomePageState } from "./reducer";
-import { selectPageOfPosts, selectStatusOfPosts } from "./selectors";
-import { nextPageOfPosts, nextPageOfPostsSuccess } from "./actions";
+import { selectIsLoad, selectPageOfPosts, selectPostImageId, selectStatusOfPosts } from "./selectors";
+import { loadImage,loadImageSuccess,nextPageOfPosts, nextPageOfPostsSuccess } from "./actions";
 import { initCommentModalStatesAction } from "../comment_modal_state/action";
+import { AppFileService } from "src/app/services/app-file.service";
+import { HomePageState } from "./state";
 
 @Injectable()
 export class HomePageEffect{
     constructor(
         private actions : Actions,
         private postService : PostService,
-        private store : Store<HomePageState>
+        private store : Store<HomePageState>,
+        private appfileService : AppFileService
     ) {}
+
     nextPageOfPosts$ = createEffect(() =>{
         return this.actions.pipe(
             ofType(nextPageOfPosts),
@@ -31,6 +34,24 @@ export class HomePageEffect{
                     )
                 )
             ))
+        )
+    })
+
+    loadImage$ = createEffect(() =>{
+        return this.actions.pipe(
+            ofType(loadImage),
+            mergeMap(
+                action => this.store.select(selectIsLoad({postId : action.postId,index : action.index})).pipe(
+                    first(),
+                    filter(isLoad => !isLoad),
+                    mergeMap(
+                        isLoad => this.store.select(selectPostImageId({postId : action.postId,index : action.index})).pipe(
+                        first(),
+                        mergeMap((id) => this.appfileService.getAppFile(id)),
+                        mergeMap( url => of( loadImageSuccess({postId : action.postId,index : action.index,url : url}) ) )
+                    ))
+                )
+            ),
         )
     })
 }

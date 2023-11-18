@@ -20,6 +20,7 @@ namespace Handler.Queries
 		{
 			var queryable = _posts.DbSet
 				.AsNoTracking()
+				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
@@ -37,7 +38,6 @@ namespace Handler.Queries
 
 			var posts = await queryable
 				.OrderByDescending(x => x.CreatedDate)
-				.ThenBy(x => x.Id)
 				.Skip(request.Skip)
 				.Take(request.Take)
 				.ToPostResponseDto()

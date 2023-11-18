@@ -21,12 +21,13 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
+				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.Where(post => post.UserId == request.UserId && post.CreatedDate < request.getQueryDate())
+				.Where(post => post.CreatedDate < request.getQueryDate() && post.UserId == request.UserId)
 				.OrderByDescending(x => x.CreatedDate)
 				.ThenBy(x => x.Id)
 				.Skip(request.Skip)

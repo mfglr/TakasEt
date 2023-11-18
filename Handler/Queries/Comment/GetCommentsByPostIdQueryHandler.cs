@@ -8,18 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostId, byte[]>
+	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostId, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
-		private readonly IFileWriterService _writeService;
 
-		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments, IFileWriterService writeService)
+		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments)
 		{
 			_comments = comments;
-			_writeService = writeService;
 		}
 
-		public async Task<byte[]> Handle(GetCommentsByPostId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetCommentsByPostId request, CancellationToken cancellationToken)
 		{
 			var comments = await _comments
 				.DbSet
@@ -34,8 +32,7 @@ namespace Handler.Queries
 				.Take(request.Take)
 				.ToCommentResponseDto()
 				.ToListAsync(cancellationToken);
-			await _writeService.WriteCommentsAsync(comments, cancellationToken);
-			return _writeService.Bytes;
+			return AppResponseDto.Success(comments);
 		}
 	}
 }

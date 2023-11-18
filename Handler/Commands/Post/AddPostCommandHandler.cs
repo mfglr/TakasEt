@@ -27,13 +27,15 @@ namespace Handler.Commands
 			var result = await _posts.DbSet.AddAsync(post,cancellationToken);
 			var extentions = request.Extentions.Split(',');
 			var list = extentions.Zip(request.Streams, (extention, stream) => new { extention, stream });
+			int index = 0;
 			foreach (var iter in list)
 			{
 				var fileName = CreateUniqFileName.RunHelper(result.Entity.Id,iter.extention);
-				post.AddImage(new PostImage(result.Entity.Id,fileName,iter.extention));
+				post.AddImage(new PostImage(result.Entity.Id,fileName,iter.extention,index));
 				await _blobService.UploadAsync(iter.stream,fileName,ContainerName.PostImage.Value, cancellationToken);
+				index++;
 			}
-			return  AppResponseDto.Success();
+			return AppResponseDto.Success();
 		}
 	}
 }

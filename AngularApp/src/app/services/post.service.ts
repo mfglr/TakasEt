@@ -34,8 +34,8 @@ export class PostService {
   }
 
   getPostsByFollowedUsers(page : Page) : Observable<PostResponse[]>{
-    return this.appFileService.createPostsFromBlob(
-      this.appHttpClient.getBlob( UrlHelper.createPaginationUrl("post/get-posts-by-followed-users",page) )
+    return this.appHttpClient.get<PostResponse[]>(
+      UrlHelper.createPaginationUrl("post/get-posts-by-followed-users",page)
     )
   }
 
@@ -49,7 +49,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].firstImage = image;
+              // posts[index].firstImage = image;
               return posts[index];
             }
           ),
@@ -73,7 +73,7 @@ export class PostService {
           mergeMap( images => from(images) ),
           map(
             (image,index) => {
-              posts[index].firstImage = image;
+              // posts[index].firstImage = image;
               return posts[index];
             }
           ),

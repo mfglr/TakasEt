@@ -4,6 +4,7 @@ using Application.Interfaces.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Text;
+using System.Threading;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Service
@@ -47,16 +48,26 @@ namespace Service
 			await _writer.WriteAsync(lengthOfFile, cancellationToken);
 			await _writer.WriteAsync(file, cancellationToken);
 		}
-
-		private async Task WritePostAsync(PostResponseDto post,CancellationToken cancellationToken)
+		public async Task WriteFileAsync(FileResponseDto files,CancellationToken cancellationToken)
 		{
-			var postBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(post,_jsonSerializerSettings));
-			await _writer.WriteAsync(BitConverter.GetBytes(postBytes.Length), cancellationToken);
-			await _writer.WriteAsync(postBytes, cancellationToken);
-			var firstImage = post.PostImages.OrderBy(x => x.Id).First();
-			var bytesOfFirtsImage = await _blobService.DownloadAsync(firstImage.BlobName, firstImage.ContainerName, cancellationToken);
-			await WriteFileAsync(bytesOfFirtsImage,firstImage.Extention, cancellationToken);
+			var jsonBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(files, _jsonSerializerSettings));
+			await _writer.WriteAsync(BitConverter.GetBytes(jsonBytes.Length), cancellationToken);
+			await _writer.WriteAsync(jsonBytes, cancellationToken);
+			foreach (var file in files.AppFiles)
+			{
+				var fileBytes = await _blobService.DownloadAsync(file.BlobName, file.ContainerName, cancellationToken);
+				await WriteFileAsync(fileBytes, file.Extention, cancellationToken);
+			}
 		}
+		//private async Task WritePostAsync(PostResponseDto post,CancellationToken cancellationToken)
+		//{
+		//	var postBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(post,_jsonSerializerSettings));
+		//	await _writer.WriteAsync(BitConverter.GetBytes(postBytes.Length), cancellationToken);
+		//	await _writer.WriteAsync(postBytes, cancellationToken);
+		//	var firstImage = post.AppFiles.OrderBy(x => x.Id).First();
+		//	var bytesOfFirtsImage = await _blobService.DownloadAsync(firstImage.BlobName, firstImage.ContainerName, cancellationToken);
+		//	await WriteFileAsync(bytesOfFirtsImage,firstImage.Extention, cancellationToken);
+		//}
 
 		private async Task WriteCommentAsync(CommentResponseDto comment,CancellationToken cancellationToken)
 		{
@@ -67,10 +78,21 @@ namespace Service
 			await WriteFileAsync(bytesOfProfileImage, comment.ProfileImage.Extention, cancellationToken);
 		}
 
-		public async Task WritePostListAsync(List<PostResponseDto> posts,CancellationToken cancellationToken)
-		{
-			foreach (var post in posts) await WritePostAsync(post,cancellationToken);
-		}
+		//public async Task WriteFileResponsesAsync(List<FileResponseDto> files,CancellationToken cancellationToken)
+		//{
+		//	var postBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(post, _jsonSerializerSettings));
+		//	await _writer.WriteAsync(BitConverter.GetBytes(postBytes.Length), cancellationToken);
+		//	await _writer.WriteAsync(postBytes, cancellationToken);
+		//	var firstImage = post.AppFiles.OrderBy(x => x.Id).First();
+		//	var bytesOfFirtsImage = await _blobService.DownloadAsync(firstImage.BlobName, firstImage.ContainerName, cancellationToken);
+		//	await WriteFileAsync(bytesOfFirtsImage, firstImage.Extention, cancellationToken);
+		//}
+
+
+		//public async Task WritePostListAsync(List<PostResponseDto> posts,CancellationToken cancellationToken)
+		//{
+		//	foreach (var post in posts) await WritePostAsync(post,cancellationToken);
+		//}
 
 		public async Task WriteCommentsAsync(List<CommentResponseDto> comments,CancellationToken cancellationToken)
 		{

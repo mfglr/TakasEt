@@ -1,0 +1,51 @@
+.slider-wrapper{
+    .image-wrapper{
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .image{
+            width: 100%;
+        }
+        .prev{
+            cursor: pointer;
+            position: absolute;
+            left : 1rem;
+            font-size : 2.5rem;
+            color : black;
+            opacity: 0.1;
+        }
+        .prev:hover{
+            opacity: 0.5;
+        }
+        .next{
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            font-size : 2.5rem;
+            color : black;
+            opacity: 0.1;
+        }
+        .next:hover{
+            opacity: 0.5;
+        }
+        .indexer{
+            position: absolute;
+            bottom: 1rem;
+            display: flex;
+            .circle{
+                cursor: pointer;
+                margin: 0.1rem;
+                width: 0.6rem;
+                height: 0.6rem;
+                border-radius: 100%;
+                background-color : black;
+                opacity: 0.1;
+            }
+            .active{
+                opacity: 0.5;
+            }
+        }
+        
+    }
+}

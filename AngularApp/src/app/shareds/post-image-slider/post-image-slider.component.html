@@ -1,0 +1,22 @@
+<div class="slider-wrapper">
+  <div class="image-wrapper">
+    <img [src]="urls![currentIndex!]" alt="" class="image">
+
+    <div class="prev" (click)="prev()" (mouseover)="publishIndexOnIcon(-1)">
+      <i class="fa-solid fa-angle-left"></i>
+    </div>
+
+    <div class="next" (click)="next()" (mouseover)="publishIndexOnIcon(1)">
+      <i class="fa-solid fa-angle-right"></i>
+    </div>
+    
+    <div class="indexer">
+      <div
+        class="circle"
+        *ngFor="let url of urls;let i = index;" [ngClass]="{active : i == currentIndex }"
+        (click)="random(i)"
+        (mouseover)="publishIndexOnCircles(i)"></div>
+    </div>
+
+  </div>
+</div>

@@ -32,32 +32,32 @@ export class AppFileService {
     )
   }
 
-  createPostsFromBlob(source : Observable<Blob>) : Observable<PostResponse[]>{
-    return source.pipe(
-      mergeMap(blob => from(blob.arrayBuffer())),
-      map(arrayBuffer => this.appFileReader.getPosts(new Uint8Array(arrayBuffer))),
-      mergeMap(
-        posts => from(posts).pipe(
-          map(
-            post => {
-              post.post.firstImage = URL.createObjectURL(
-                new Blob([post.file],{type : this.blobTypes.getBlobTypeByExtention(post.extention)})
-              )
-              return post.post;
-            }
-          ),
-          toArray()
-        )
-      )
-    )
-  }
+  // createPostsFromBlob(source : Observable<Blob>) : Observable<PostResponse[]>{
+  //   return source.pipe(
+  //     mergeMap(blob => from(blob.arrayBuffer())),
+  //     map(arrayBuffer => this.appFileReader.getPosts(new Uint8Array(arrayBuffer))),
+  //     mergeMap(
+  //       posts => from(posts).pipe(
+  //         map(
+  //           post => {
+  //             post.post.firstImage = URL.createObjectURL(
+  //               new Blob([post.file],{type : this.blobTypes.getBlobTypeByExtention(post.extention)})
+  //             )
+  //             return post.post;
+  //           }
+  //         ),
+  //         toArray()
+  //       )
+  //     )
+  //   )
+  // }
 
-  getAppFile(containerName : string,blobName : string) : Observable<string>{
+  getAppFile(id : number) : Observable<string>{
     return this.createUrlsFromBlob(
-      this.appHttpClient.getBlob(`app-file/get-app-file/${containerName}/${blobName}`)
+      this.appHttpClient.getBlob(`app-file/get-app-file/${id}`)
     ).pipe(
-      mergeMap( (urls) => from(urls) ),
-      first()
+      map(x => x[0])
     );
   }
+
 }

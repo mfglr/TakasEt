@@ -1,3 +1,4 @@
+import { AppFileResponse } from "./app-file-response";
 import { BaseResponse } from "./base-response";
 
 export interface PostResponse extends BaseResponse{
@@ -6,10 +7,9 @@ export interface PostResponse extends BaseResponse{
   categoryName : string;
   title : string;
   content : string;
-  publishDate : Date;
   countOfImages : number;
   countOfLikes : number;
   countOfViews : number;
   countOfComments : number;
-  firstImage : string;
+  postImages : AppFileResponse[];
 }

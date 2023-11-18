@@ -1,6 +1,6 @@
-﻿namespace Application.Dtos.PostImages
+﻿namespace Application.Dtos.AppFile
 {
-	public class PostImageResponseDto : BaseResponseDto
+	public class AppFileResponseDto : BaseResponseDto
 	{
 		public string BlobName { get; set; }
 		public string ContainerName { get; set; }

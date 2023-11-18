@@ -1,8 +1,8 @@
 ﻿using Application.Dtos;
 using Application.Entities;
 using Application.Exceptions;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,26 +22,13 @@ namespace Handler.Queries
 			var post = await _posts
 				.DbSet
 				.AsNoTracking()
+				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.Select(x => new PostResponseDto()
-				{
-					Id = x.Id,
-					CreatedDate = x.CreatedDate,
-					UpdatedDate = x.UpdatedDate,
-					UserId = x.User.Id,
-					UserName = x.User.UserName,
-					CategoryName = x.Category.Name,
-					Title = x.Title,
-					Content = x.Content,
-					CountOfImages = x.CountOfImages,
-					CountOfLikes = x.UsersWhoLiked.Count,
-					CountOfViews = x.UsersWhoViewed.Count,
-					CountOfComments = x.Comments.Count,
-				})
+				.ToPostResponseDto()
 				.FirstOrDefaultAsync(post => post.Id == request.PostId, cancellationToken);
 			if (post == null) throw new PostNotFoundException();
 			return AppResponseDto.Success(post);

@@ -19,28 +19,17 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
+				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.Where(post => post.User.UserName == request.UserName)
-				.ToPage(x => x.Id,request)
-				.Select(x => new PostResponseDto()
-				{
-					Id = x.Id,
-					CreatedDate = x.CreatedDate,
-					UpdatedDate = x.UpdatedDate,
-					UserId = x.User.Id,
-					UserName = x.User.UserName,
-					CategoryName = x.Category.Name,
-					Title = x.Title,
-					Content = x.Content,
-					CountOfImages = x.CountOfImages,
-					CountOfLikes = x.UsersWhoLiked.Count,
-					CountOfViews = x.UsersWhoViewed.Count,
-					CountOfComments = x.Comments.Count,
-				})
+				.Where(x => x.CreatedDate < request.getQueryDate() && x.User.UserName == request.UserName)
+				.OrderByDescending(x => x.CreatedDate)
+				.Skip(request.Skip)
+				.Take(request.Take)
+				.ToPostResponseDto()
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

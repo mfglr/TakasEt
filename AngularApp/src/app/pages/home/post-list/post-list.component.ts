@@ -1,5 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
+import { nextPageOfPosts } from 'src/app/states/home_page_state/actions';
+import { selectPostResponses } from 'src/app/states/home_page_state/selectors';
+import { HomePageState } from 'src/app/states/home_page_state/state';
 
 @Component({
   selector: 'app-post-list',
@@ -8,13 +12,17 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 })
 export class PostListComponent{
   @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
-  @Output() nextPageOfPosts = new EventEmitter<void>();
 
-  @Input() posts : PostResponse[] | null = null
+  posts$? = this.homePageStore.select(selectPostResponses);
   postWithCommentDisplayed? : PostResponse;
 
   constructor(
+    private homePageStore : Store<HomePageState>
   ) {}
+
+  ngOnInit(){
+    this.homePageStore.dispatch(nextPageOfPosts())
+  }
 
   displayComments(post : PostResponse){
     this.postWithCommentDisplayed = post;
@@ -23,7 +31,7 @@ export class PostListComponent{
   }
 
   getMore(){
-    this.nextPageOfPosts.emit();
+    this.homePageStore.dispatch(nextPageOfPosts())
   }
 
 }

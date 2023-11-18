@@ -9,20 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-	public class GetPostsByFollowedUsersQueryHandler : IRequestHandler<GetPostsByFollowedUsers, byte[]>
+	public class GetPostsByFollowedUsersQueryHandler : IRequestHandler<GetPostsByFollowedUsers, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
 		private readonly LoggedInUser _loggedInUser;
-		private readonly IFileWriterService _writerService;
 
-		public GetPostsByFollowedUsersQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser, IFileWriterService writerService)
+		public GetPostsByFollowedUsersQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
 		{
 			_posts = posts;
 			_loggedInUser = loggedInUser;
-			_writerService = writerService;
 		}
 
-		public async Task<byte[]> Handle(GetPostsByFollowedUsers request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetPostsByFollowedUsers request, CancellationToken cancellationToken)
 		{
 			var posts = await _posts
 				.DbSet
@@ -44,8 +42,8 @@ namespace Handler.Queries
 				.Take(request.Take)
 				.ToPostResponseDto()
 				.ToListAsync(cancellationToken);
-			await _writerService.WritePostListAsync(posts, cancellationToken);
-			return _writerService.Bytes;
+
+			return AppResponseDto.Success(posts);
 		}
 	}
 }

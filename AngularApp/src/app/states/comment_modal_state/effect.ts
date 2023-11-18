@@ -68,7 +68,7 @@ export class CommentModalCollectionEffect{
     nextPageOfChildren = createEffect(() =>{
         return this.actions.pipe(
             ofType(nextPageOfChildren),
-            mergeMap(
+            mergeMap(   
                 action => this.commentModalState.select(
                     selectStatusAndPageOfChildren({postId : action.postId,commentId : action.commentId})
                 ).pipe(

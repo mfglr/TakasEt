@@ -26,22 +26,11 @@ namespace Handler.Queries
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.ToPage(x => x.Id,request)
-				.Select(x => new PostResponseDto()
-				{
-					Id = x.Id,
-					CreatedDate = x.CreatedDate,
-					UpdatedDate = x.UpdatedDate,
-					UserId = x.User.Id,
-					UserName = x.User.UserName,
-					CategoryName = x.Category.Name,
-					Title = x.Title,
-					Content = x.Content,
-					CountOfImages = x.CountOfImages,
-					CountOfLikes = x.UsersWhoLiked.Count,
-					CountOfViews = x.UsersWhoViewed.Count,
-					CountOfComments = x.Comments.Count,
-				})
+				.Where(x => x.CreatedDate < request.getQueryDate())
+				.OrderByDescending(x => x.CreatedDate)
+				.Skip(request.Skip)
+				.Take(request.Take)
+				.ToPostResponseDto()
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

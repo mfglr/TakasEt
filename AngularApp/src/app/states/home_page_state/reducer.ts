@@ -1,21 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
-import { PostResponse } from "src/app/models/responses/post-response";
-import { AppEntityState, initialPageOfPosts, takeValueOfPosts } from "../app-states";
-import { createEntityAdapter } from "@ngrx/entity";
-import { nextPageOfPostsSuccess } from "./actions";
+import { initialPageOfPosts, takeValueOfPosts } from "../app-states";
+import { nextPageOfPostsSuccess, loadImageSuccess,setCurrentIndex} from "./actions";
+import { HomePageState, createPostStates, postStateAdapter } from "./state";
 
-export interface HomePageState{
-    posts : AppEntityState<PostResponse>;
-}
-export const postAdapter = createEntityAdapter<PostResponse>({
-    selectId : state => state.id
-})
 
 const initialState : HomePageState = {
-    posts : postAdapter.getInitialState({
+    posts : postStateAdapter.getInitialState({
         page : {...initialPageOfPosts},
         status : false
-    })
+    }),
 }
 
 export const homePageReducer = createReducer(
@@ -25,7 +18,7 @@ export const homePageReducer = createReducer(
         (state,action) =>({
             ...state,
             posts : {
-                ...postAdapter.addMany(action.posts,state.posts),
+                ...postStateAdapter.addMany(createPostStates(action.posts),state.posts),
                 page : {
                     ...state.posts.page,
                     skip : state.posts.page.skip + takeValueOfPosts,
@@ -33,5 +26,26 @@ export const homePageReducer = createReducer(
                 status : action.posts.length < takeValueOfPosts
             }
         })
-    )
+    ),
+    on(
+        loadImageSuccess,
+        (state,action) => {
+            let urls = [...state.posts.entities[action.postId]!.urls]
+            urls[action.index] = { url : action.url,isLoad : true};
+            return {
+                ...state,
+                posts : postStateAdapter.updateOne({ id : action.postId,changes : { urls : urls } },state.posts)
+            }
+        }
+    ),
+    on(
+        setCurrentIndex,
+        (state,action) => {
+            return {
+                ...state,
+                posts : postStateAdapter.updateOne({id : action.postId,changes : {currentIndex : action.index}},state.posts)
+            }
+            
+        }
+    ),
 )

@@ -22,18 +22,13 @@ namespace Handler.Queries
 
 		public async Task<byte[]> Handle(GetAppFile request, CancellationToken cancellationToken)
 		{
-			var record = await _appFiles
+			var appFile = await _appFiles
 				.DbSet
 				.AsNoTracking()
-				.FirstOrDefaultAsync(
-					appFile =>
-						appFile.BlobName == request.BlobName &&
-						appFile.ContainerName == request.ContainerName,
-					cancellationToken
-				);
-			if (record == null) throw new AppFileNotFoundException();
-			var data = await _blobService.DownloadAsync(request.BlobName, request.ContainerName, cancellationToken);
-			await _writerService.WriteFileAsync(data, record.Extention, cancellationToken);
+				.FirstOrDefaultAsync(appFile => appFile.Id == request.Id,cancellationToken);
+			if (appFile == null) throw new AppFileNotFoundException();
+			var data = await _blobService.DownloadAsync(appFile.BlobName, appFile.ContainerName, cancellationToken);
+			await _writerService.WriteFileAsync(data, appFile.Extention, cancellationToken);
 			return _writerService.Bytes;
 		}
 	}

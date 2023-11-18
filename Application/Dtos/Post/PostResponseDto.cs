@@ -1,4 +1,4 @@
-﻿using Application.Dtos.PostImages;
+﻿using Application.Dtos.AppFile;
 
 namespace Application.Dtos
 {
@@ -13,6 +13,6 @@ namespace Application.Dtos
         public int CountOfLikes { get; set; }
 		public int CountOfViews { get; set; }
 		public int CountOfComments { get; set; }
-        public IEnumerable<PostImageResponseDto> PostImages { get; set; }
+		public IEnumerable<AppFileResponseDto> PostImages { get; set; }
     }
 }

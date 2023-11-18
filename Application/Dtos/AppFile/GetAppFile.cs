@@ -4,13 +4,11 @@ namespace Application.Dtos
 {
 	public class GetAppFile : IRequest<byte[]>
 	{
-        public string BlobName { get; private set; }
-        public string ContainerName { get; private set; }
+        public int Id { get; set; }
 
-		public GetAppFile(string blobName, string containerName)
-		{
-			BlobName = blobName;
-			ContainerName = containerName;
-		}
-	}
+        public GetAppFile(int id)
+        {
+            Id = id;
+        }
+    }
 }
