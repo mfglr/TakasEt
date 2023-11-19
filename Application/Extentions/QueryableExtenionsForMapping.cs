@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
-using Application.Dtos.AppFile;
+using Application.Dtos.PostImages;
+using Application.Dtos.ProfileImage;
 using Application.Entities;
 
 namespace Application.Extentions
@@ -24,14 +25,32 @@ namespace Application.Extentions
 						CountOfLikes = x.UsersWhoLiked.Count,
 						CountOfViews = x.UsersWhoViewed.Count,
 						CountOfComments = x.Comments.Count,
+						ProfileImage = x
+							.User
+							.ProfileImages
+							.Where(x => x.IsActive)
+							.Select(
+								x => new ProfileImageResponseDto() {
+									Id = x.Id,
+									CreatedDate = x.CreatedDate,
+									UpdatedDate = x.UpdatedDate,
+									UserId = x.Id,
+									BlobName = x.BlobName,
+									ContainerName = x.ContainerName,
+									Extention = x.Extention
+								}
+							)
+							.First(),
 						PostImages = x
 							.PostImages
 							.Select(
-								image => new AppFileResponseDto()
+								image => new PostImageResponseDto()
 								{
 									Id = image.Id,
 									CreatedDate = image.CreatedDate,
 									UpdatedDate = image.UpdatedDate,
+									PostId = image.PostId,
+									Index = image.Index,
 									BlobName = image.BlobName,
 									ContainerName = image.ContainerName,
 									Extention = image.Extention,
@@ -61,11 +80,12 @@ namespace Application.Extentions
 						.ProfileImages
 						.Where(x => x.IsActive)
 						.Select(
-							x => new AppFileResponseDto()
+							x => new ProfileImageResponseDto()
 							{
 								Id = x.Id,
 								CreatedDate = x.CreatedDate,
 								UpdatedDate = x.UpdatedDate,
+								UserId = x.UserId,
 								BlobName = x.BlobName,
 								ContainerName = x.ContainerName,
 								Extention = x.Extention

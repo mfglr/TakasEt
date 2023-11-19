@@ -7,21 +7,9 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
   templateUrl: './display-profile-image.component.html',
   styleUrls: ['./display-profile-image.component.scss']
 })
-export class DisplayProfileImageComponent implements OnChanges {
+export class DisplayProfileImageComponent{
 
   @Input() diameter : string = '75';
-  @Input() userId : number | null | undefined = null;
-  profileImage$? : Observable<string>;
+  @Input() url? : string | null;
 
-  constructor(
-    private profileImageService : ProfileImageService,
-  ) {
-
-  }
-
-  ngOnChanges(){
-    if(this.userId){
-      this.profileImage$ = this.profileImageService.getActiveProfileImage(this.userId);
-    }
-  }
 }

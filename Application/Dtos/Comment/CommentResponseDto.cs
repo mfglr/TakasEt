@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.AppFile;
+using Application.Dtos.ProfileImage;
 
 namespace Application.Dtos
 {
@@ -11,6 +12,6 @@ namespace Application.Dtos
 		public string Content { get; set; }
         public int CountOfChildren { get; set; }
 		public int CountOfLikes {  get; set; }
-		public AppFileResponseDto ProfileImage { get; set; }
+		public ProfileImageResponseDto ProfileImage { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, first, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { loadImage, setCurrentIndex } from 'src/app/states/home_page_state/actions';
+import { loadPostImage, setCurrentIndex } from 'src/app/states/home_page_state/actions';
 import { selectCurrentIndex, selectUrls } from 'src/app/states/home_page_state/selectors';
 import { HomePageState } from 'src/app/states/home_page_state/state';
 
@@ -28,21 +28,17 @@ export class PostComponent implements OnChanges {
       this.currentIndex$ = this.homePageStore.select(selectCurrentIndex({postId : this.post.id}))
     }
   }
-
   displayComments(post : PostResponse){
     if(this.post)
       this.diplayCommentsEvent.emit(this.post)
   }
-
   setCurrentIndex(index : number){
     if(this.post)
       this.homePageStore.dispatch(setCurrentIndex({postId : this.post.id, index : index}))
   }
-
-
   loadImage(index : number){
     if(this.post)
-      this.homePageStore.dispatch(loadImage({postId : this.post.id, index : index}))
+      this.homePageStore.dispatch(loadPostImage({postId : this.post.id, index : index}))
   }
 
 }

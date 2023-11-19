@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
 import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectIsLoad, selectPageOfPosts, selectPostImageId, selectStatusOfPosts } from "./selectors";
-import { loadImage,loadImageSuccess,nextPageOfPosts, nextPageOfPostsSuccess } from "./actions";
+import { selectPostImageStatus, selectPageOfPosts, selectPostImageId, selectStatusOfPosts, selectProfileImageStatus, selectProfileImageId } from "./selectors";
+import { loadPostImage,loadPostImageSuccess,loadProfileImage,loadProfileImageSuccess,nextPageOfPosts, nextPageOfPostsSuccess } from "./actions";
 import { initCommentModalStatesAction } from "../comment_modal_state/action";
 import { AppFileService } from "src/app/services/app-file.service";
 import { HomePageState } from "./state";
@@ -37,21 +37,40 @@ export class HomePageEffect{
         )
     })
 
-    loadImage$ = createEffect(() =>{
+    loadPostImage$ = createEffect(() =>{
         return this.actions.pipe(
-            ofType(loadImage),
+            ofType(loadPostImage),
             mergeMap(
-                action => this.store.select(selectIsLoad({postId : action.postId,index : action.index})).pipe(
+                action => this.store.select(selectPostImageStatus({postId : action.postId,index : action.index})).pipe(
                     first(),
-                    filter(isLoad => !isLoad),
+                    filter(status => !status),
                     mergeMap(
-                        isLoad => this.store.select(selectPostImageId({postId : action.postId,index : action.index})).pipe(
+                        status => this.store.select(selectPostImageId({postId : action.postId,index : action.index})).pipe(
                         first(),
                         mergeMap((id) => this.appfileService.getAppFile(id)),
-                        mergeMap( url => of( loadImageSuccess({postId : action.postId,index : action.index,url : url}) ) )
+                        mergeMap( url => of( loadPostImageSuccess({postId : action.postId,index : action.index,url : url}) ) )
                     ))
                 )
             ),
+        )
+    })
+
+    loadProfileImage$ = createEffect(() =>{
+        return this.actions.pipe(
+            ofType(loadProfileImage),
+            mergeMap(
+                action => this.store.select(selectProfileImageStatus({postId : action.postId})).pipe(
+                    first(),
+                    filter(status => !status),
+                    mergeMap(
+                        status => this.store.select(selectProfileImageId({postId : action.postId})).pipe(
+                            first(),
+                            mergeMap((id) => this.appfileService.getAppFile(id)),
+                            mergeMap( url => of( loadProfileImageSuccess({postId : action.postId,url : url})))
+                        )
+                    )
+                )
+            )
         )
     })
 }

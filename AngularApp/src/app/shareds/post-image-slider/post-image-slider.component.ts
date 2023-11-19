@@ -20,7 +20,7 @@ export class PostImageSliderComponent {
   publishIndexOnCircles(index : number){
     this.loadImageEvent.emit(index);
   }
-  publishIndexOnIcon(vector : -1 | 1){
+  publishIndexOnIcons(vector : -1 | 1){
     if(this.currentIndex != undefined && this.urls)
       this.loadImageEvent.emit((this.currentIndex + this.urls.length + vector) % this.urls.length)
   }

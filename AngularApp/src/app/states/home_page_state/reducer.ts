@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialPageOfPosts, takeValueOfPosts } from "../app-states";
-import { nextPageOfPostsSuccess, loadImageSuccess,setCurrentIndex} from "./actions";
+import { nextPageOfPostsSuccess, loadPostImageSuccess,setCurrentIndex, loadProfileImageSuccess} from "./actions";
 import { HomePageState, createPostStates, postStateAdapter } from "./state";
 
 
@@ -28,13 +28,16 @@ export const homePageReducer = createReducer(
         })
     ),
     on(
-        loadImageSuccess,
+        loadPostImageSuccess,
         (state,action) => {
-            let urls = [...state.posts.entities[action.postId]!.urls]
+            let urls = [...state.posts.entities[action.postId]!.postImages]
             urls[action.index] = { url : action.url,isLoad : true};
             return {
                 ...state,
-                posts : postStateAdapter.updateOne({ id : action.postId,changes : { urls : urls } },state.posts)
+                posts : postStateAdapter.updateOne({
+                    id : action.postId,
+                    changes : { postImages : urls }
+                },state.posts)
             }
         }
     ),
@@ -43,9 +46,23 @@ export const homePageReducer = createReducer(
         (state,action) => {
             return {
                 ...state,
-                posts : postStateAdapter.updateOne({id : action.postId,changes : {currentIndex : action.index}},state.posts)
+                posts : postStateAdapter.updateOne({
+                    id : action.postId,
+                    changes : {currentIndex : action.index}
+                },state.posts)
             }
-            
         }
     ),
+    on(
+        loadProfileImageSuccess,
+        (state,action) => {
+            return {
+                ...state,
+                posts : postStateAdapter.updateOne({
+                    id : action.postId,
+                    changes : { profileImage : { url : action.url,isLoad : true} }
+                },state.posts)
+            }
+        }
+    )
 )

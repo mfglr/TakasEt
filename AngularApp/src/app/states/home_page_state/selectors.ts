@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { AppEntityState } from "../app-states";
-import { HomePageState, PostState, noImageUrl, postStateAdapter } from "./state";
+import { HomePageState, PostState, postStateAdapter } from "./state";
 
 const selectHomePageState = createFeatureSelector<HomePageState>("HomePageState");
 const selectPosts = createSelector(selectHomePageState,(state : HomePageState ) => state.posts)
@@ -15,12 +15,16 @@ export const selectPostImageId = (props : {postId : number,index : number}) => c
     selectPosts,
     state => state.entities[props.postId]!.post.postImages[props.index].id
 )
-const selectImageState = (props : {postId : number}) => createSelector(
+const selectPostImageState = (props : {postId : number}) => createSelector(
     selectPosts,
-    state => state.entities[props.postId]!.urls
+    state => state.entities[props.postId]!.postImages
+)
+const selectProfileImageState = (props : {postId : number}) => createSelector(
+    selectPosts,
+    state => state.entities[props.postId]!.profileImage
 )
 export const selectUrls = (props : {postId : number}) => createSelector(
-    selectImageState(props),
+    selectPostImageState(props),
     state => state.map(x => x.url)
 )
 export const selectUrl = (props : {postId : number,index : number}) => createSelector(
@@ -31,7 +35,19 @@ export const selectCurrentIndex = (props : {postId : number}) => createSelector(
     selectPosts,
     state => state.entities[props.postId]!.currentIndex
 )
-export const selectIsLoad = (props : {postId : number,index : number}) => createSelector(
-    selectImageState(props),
+export const selectPostImageStatus = (props : {postId : number,index : number}) => createSelector(
+    selectPostImageState(props),
     state => state[props.index].isLoad
+)
+export const selectProfileImageStatus = (props : {postId : number}) => createSelector(
+    selectProfileImageState(props),
+    state => state.isLoad
+)
+export const selectProfileImageId = (props : {postId : number}) => createSelector(
+    selectPosts,
+    state => state.entities[props.postId]!.post.profileImage.id
+)
+export const selectProfileImage = (props : {postId : number}) => createSelector(
+    selectProfileImageState(props),
+    state => state.url
 )

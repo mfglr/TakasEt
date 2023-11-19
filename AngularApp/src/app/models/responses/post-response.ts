@@ -1,5 +1,6 @@
-import { AppFileResponse } from "./app-file-response";
 import { BaseResponse } from "./base-response";
+import { PostImageResponse } from "./post-image-response";
+import { ProfileImageResponse } from "./profile-image-response";
 
 export interface PostResponse extends BaseResponse{
   userName : string;
@@ -11,5 +12,6 @@ export interface PostResponse extends BaseResponse{
   countOfLikes : number;
   countOfViews : number;
   countOfComments : number;
-  postImages : AppFileResponse[];
+  postImages : PostImageResponse[];
+  profileImage : ProfileImageResponse
 }
