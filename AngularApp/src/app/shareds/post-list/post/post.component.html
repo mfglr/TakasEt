@@ -1,5 +1,6 @@
-<div class="root-wrapper">
+<div class="root">
     <div class="image-wrapper">
-        <img src="" alt="">
+        <img [src]="firstPostImage$ | async" [alt]="" class="image">
+        <div class="info"></div>
     </div>
 </div>

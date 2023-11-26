@@ -1,27 +1,27 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { nextPageOfPosts } from 'src/app/states/home_page_state/actions';
-import { selectPostResponses } from 'src/app/states/home_page_state/selectors';
-import { HomePageState } from 'src/app/states/home_page_state/state';
+import { nextPageAction } from 'src/app/states/post-state/actions';
+import { selectPostResponses } from 'src/app/states/post-state/selectors';
+import { PagePostState, homePagePostList } from 'src/app/states/post-state/state';
 
 @Component({
-  selector: 'app-post-list',
+  selector: 'home-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
 })
-export class PostListComponent{
+export class HomePostListComponent{
   @ViewChild("commentModalButton",{static : true}) commentModalButton? : ElementRef;
 
-  posts$? = this.homePageStore.select(selectPostResponses);
+  posts$? = this.pagePostStore.select(selectPostResponses({pageId : homePagePostList}));
   postWithCommentDisplayed? : PostResponse;
 
   constructor(
-    private homePageStore : Store<HomePageState>
+    private pagePostStore : Store<PagePostState>
   ) {}
 
   ngOnInit(){
-    this.homePageStore.dispatch(nextPageOfPosts())
+    this.pagePostStore.dispatch(nextPageAction({pageId : homePagePostList}))
   }
 
   displayComments(post : PostResponse){
@@ -31,7 +31,7 @@ export class PostListComponent{
   }
 
   getMore(){
-    this.homePageStore.dispatch(nextPageOfPosts())
+    this.pagePostStore.dispatch(nextPageAction({pageId : homePagePostList}))
   }
 
 }

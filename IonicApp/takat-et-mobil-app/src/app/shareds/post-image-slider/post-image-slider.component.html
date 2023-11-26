@@ -1,0 +1,5 @@
+<swiper-container (slidenexttransitionstart)="onSlidechangetransitionstart()" class="slide">
+  <swiper-slide *ngFor="let url of urls; let i = index;" class="slide-item">
+    <img [src]="url" [alt]="post?.title + '-i'" class="img">
+  </swiper-slide>
+</swiper-container>

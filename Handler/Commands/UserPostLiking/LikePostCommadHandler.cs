@@ -10,16 +10,16 @@ namespace Handler.Commands
     public class LikePostCommadHandler : IRequestHandler<LikePost, AppResponseDto>
     {
         private readonly IRepository<UserPostLiking> _likes;
-        private readonly LoggedInUser _user;
-        public LikePostCommadHandler(IRepository<UserPostLiking> likes, LoggedInUser user)
+        private readonly LoggedInUser _loggedInUser;
+        public LikePostCommadHandler(IRepository<UserPostLiking> likes, LoggedInUser loggedInUser)
         {
             _likes = likes;
-            _user = user;
+			_loggedInUser = loggedInUser;
         }
         public async Task<AppResponseDto> Handle(LikePost request, CancellationToken cancellationToken)
         {
-            if (!await _likes.DbSet.AnyAsync(x => x.UserId == _user.UserId && x.PostId == request.PostId, cancellationToken))
-                await _likes.DbSet.AddAsync(new UserPostLiking(_user.UserId, request.PostId), cancellationToken);
+            if (!await _likes.DbSet.AnyAsync(x => x.UserId == _loggedInUser.UserId && x.PostId == request.PostId, cancellationToken))
+                await _likes.DbSet.AddAsync(new UserPostLiking(_loggedInUser.UserId, request.PostId), cancellationToken);
             return AppResponseDto.Success();
         }
     }

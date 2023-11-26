@@ -41,13 +41,15 @@ import { appLoginReducer } from './states/login_state/reducer';
 import { AppLoginEffect } from './states/login_state/effect';
 import { commentModalCollectionReducer } from './states/comment_modal_state/reducer';
 import { CommentModalCollectionEffect } from './states/comment_modal_state/effect';
-import { homePageReducer } from './states/home_page_state/reducer';
-import { HomePageEffect } from './states/home_page_state/effect';
-import { PostListComponent } from './pages/home/post-list/post-list.component';
-import { PostComponent } from './pages/home/post-list/post/post.component';
+import { HomePostListComponent } from './pages/home/post-list/post-list.component';
+import { HomePostComponent } from './pages/home/post-list/post/post.component';
 import { PostImageSliderComponent } from './shareds/post-image-slider/post-image-slider.component';
-import { PostHeaderComponent } from './pages/home/post-list/post-header/post-header.component';
-import { PostFooterComponent } from './pages/home/post-list/post-footer/post-footer.component';
+import { HomePostHeaderComponent } from './pages/home/post-list/post-header/post-header.component';
+import { HomePostFooterComponent } from './pages/home/post-list/post-footer/post-footer.component';
+import { pagePostReducer } from './states/post-state/reducer';
+import { PagePostEffect } from './states/post-state/effect';
+import { PostComponent } from './shareds/post-list/post/post.component';
+import { PostListComponent } from './shareds/post-list/post-list.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,7 @@ import { PostFooterComponent } from './pages/home/post-list/post-footer/post-foo
     ProfileHeaderComponent,
     ProfileContentComponent,
     ProfileComponent,
-    PostListComponent,
+    HomePostListComponent,
     FollowButtonComponent,
     HomeComponent,
     AppLayoutComponent,
@@ -76,9 +78,9 @@ import { PostFooterComponent } from './pages/home/post-list/post-footer/post-foo
     SwapProposalsComponent,
     SwapRequestsComponent,
     FollowedPostsComponent,
-    PostComponent,
-    PostHeaderComponent,
-    PostFooterComponent,
+    HomePostComponent,
+    HomePostHeaderComponent,
+    HomePostFooterComponent,
     CommentModalComponent,
     CommentItemComponent,
     CommentItemContentComponent,
@@ -87,6 +89,8 @@ import { PostFooterComponent } from './pages/home/post-list/post-footer/post-foo
     UserItemComponent,
     PostDetailModalComponent,
     PostImageSliderComponent,
+    PostComponent,
+    PostListComponent
   ],
   imports: [
     BrowserModule,
@@ -94,13 +98,13 @@ import { PostFooterComponent } from './pages/home/post-list/post-footer/post-foo
     AppRoutingModule,
     ReactiveFormsModule,
     StoreModule.forRoot(),
-    StoreModule.forFeature("HomePageState",homePageReducer),
     StoreModule.forFeature("AppLoginState", appLoginReducer),
     StoreModule.forFeature("CommentModalStateCollection", commentModalCollectionReducer),
+    StoreModule.forFeature("PagePostStore",pagePostReducer),
     EffectsModule.forRoot(),
     EffectsModule.forFeature([AppLoginEffect]),
     EffectsModule.forFeature([CommentModalCollectionEffect]),
-    EffectsModule.forFeature([HomePageEffect])
+    EffectsModule.forFeature([PagePostEffect])
 
   ],
   providers: [AppHubConnectionService],

@@ -1,1 +1,5 @@
-<div></div>
+<div class="row post-list-wrapper">
+    <div *ngFor="let post of posts$ | async" class="col-4 post-wrapper">
+        <app-post [pageId]="pageId" [post]="post"></app-post>
+    </div>
+</div>

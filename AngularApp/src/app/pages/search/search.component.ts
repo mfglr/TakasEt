@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { PostService } from 'src/app/services/post.service';
+import { initSearchPageAction } from 'src/app/states/post-state/actions';
+import { PagePostState, searchPagePostList } from 'src/app/states/post-state/state';
 
 @Component({
   selector: 'app-search',
@@ -9,11 +11,15 @@ import { PostService } from 'src/app/services/post.service';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-
+  searchPagePostList = searchPagePostList
   posts$? : Observable<PostResponse[]>
 
   constructor(
-    private postService : PostService
+    private pagePostStore : Store<PagePostState>
   ) {}
-
+  
+  ngOnInit(){
+    this.pagePostStore.dispatch(initSearchPageAction())
+  }
+  
 }

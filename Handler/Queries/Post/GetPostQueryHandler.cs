@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Exceptions;
 using Application.Extentions;
@@ -11,10 +12,11 @@ namespace Handler.Queries
     public class GetPostQueryHandler : IRequestHandler<GetPost, AppResponseDto>
     {
 		private readonly IRepository<Post> _posts;
-
-		public GetPostQueryHandler(IRepository<Post> posts)
+		private readonly LoggedInUser _loggedInUser;
+		public GetPostQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
 		{
 			_posts = posts;
+			_loggedInUser = loggedInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(GetPost request, CancellationToken cancellationToken)
@@ -27,9 +29,10 @@ namespace Handler.Queries
 				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
+				.ThenInclude(x => x.ProfileImages)
 				.Include(x => x.Category)
-				.ToPostResponseDto()
-				.FirstOrDefaultAsync(post => post.Id == request.PostId, cancellationToken);
+				.ToPostResponseDto(_loggedInUser.UserId)
+				.SingleOrDefaultAsync(post => post.Id == request.PostId, cancellationToken);
 			if (post == null) throw new PostNotFoundException();
 			return AppResponseDto.Success(post);
         }

@@ -42,7 +42,7 @@ namespace Handler.Queries
 				.OrderByDescending(x => x.CreatedDate)
 				.Skip(request.Skip)
 				.Take(request.Take)
-				.ToPostResponseDto()
+				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 
 			return AppResponseDto.Success(posts);

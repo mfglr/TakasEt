@@ -4,11 +4,11 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 import { UserPostLikingService } from 'src/app/services/user-post-liking.service';
 import {  CommentModalStateCollection } from 'src/app/states/comment_modal_state/state';
 @Component({
-  selector: 'app-post-footer',
+  selector: 'home-post-footer',
   templateUrl: './post-footer.component.html',
   styleUrls: ['./post-footer.component.scss']
 })
-export class PostFooterComponent {
+export class HomePostFooterComponent {
 
   @Input() post? : PostResponse;
   @Output() displayCommentsEvent = new EventEmitter<PostResponse>();

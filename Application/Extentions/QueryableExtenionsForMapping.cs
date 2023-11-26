@@ -7,7 +7,7 @@ namespace Application.Extentions
 {
 	public static class QueryableExtenionsForMapping
 	{
-		public static IQueryable<PostResponseDto> ToPostResponseDto(this IQueryable<Post> queryable)
+		public static IQueryable<PostResponseDto> ToPostResponseDto(this IQueryable<Post> queryable,int? loggedInUserId)
 		{
 			return queryable
 				.Select(
@@ -25,6 +25,7 @@ namespace Application.Extentions
 						CountOfLikes = x.UsersWhoLiked.Count,
 						CountOfViews = x.UsersWhoViewed.Count,
 						CountOfComments = x.Comments.Count,
+						LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),
 						ProfileImage = x
 							.User
 							.ProfileImages
@@ -34,13 +35,13 @@ namespace Application.Extentions
 									Id = x.Id,
 									CreatedDate = x.CreatedDate,
 									UpdatedDate = x.UpdatedDate,
-									UserId = x.Id,
+									UserId = x.UserId,
 									BlobName = x.BlobName,
 									ContainerName = x.ContainerName,
 									Extention = x.Extention
 								}
 							)
-							.First(),
+							.FirstOrDefault(),
 						PostImages = x
 							.PostImages
 							.Select(
@@ -90,7 +91,7 @@ namespace Application.Extentions
 								ContainerName = x.ContainerName,
 								Extention = x.Extention
 							}
-						).First()
+						).FirstOrDefault()
 				}
 			);
 		}

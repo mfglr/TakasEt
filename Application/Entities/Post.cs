@@ -11,22 +11,18 @@ namespace Application.Entities
         public string NormalizedTitle { get; private set; }
         public string Content { get; private set; }
         public int CountOfImages { get; private set; }
-        
-        public int CountOfComments { get; private set; }
-        public int CountOfLikes { get; private set; }
-        public int CountOfViewings { get; private set; }
-
         public User User { get; }
         public Category Category { get; }
 		public IReadOnlyCollection<Comment> Comments { get; }
         public IReadOnlyCollection<UserPostLiking> UsersWhoLiked { get; }
-        public IReadOnlyCollection<UserPostViewing> UsersWhoViewed { get; }
+		public IReadOnlyCollection<UserPostViewing> UsersWhoViewed { get; }
         public IReadOnlyCollection<PostImage> PostImages => _images;
 		public IReadOnlyCollection<PostPostRequesting> Requesteds { get; }//talep ettikleri
 		public IReadOnlyCollection<PostPostRequesting> Requesters { get; }//telap edenler
 
 
         private readonly List<PostImage> _images = new();
+
 
         public Post(int userId, string title, string content, int categoryId,int countOfImages)
         {

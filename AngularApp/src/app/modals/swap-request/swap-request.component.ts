@@ -1,11 +1,8 @@
 import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription, filter, fromEvent, mergeMap } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 import { PostPostRequestingService } from 'src/app/services/post-post-requesting.service';
-import { ObservableHelpers } from 'src/app/helpers/observable-helpers';
-import { initialPageOfPosts } from 'src/app/states/app-states';
 
 @Component({
   selector: 'app-swap-request',
@@ -24,7 +21,6 @@ export class SwapRequestComponent implements OnChanges,OnDestroy,AfterContentIni
   private requesterIds : number[] = [];
   constructor(
     private postService : PostService,
-    private postImageService : PostImageService,
     private requestingService : PostPostRequestingService
   ) {}
 
@@ -45,10 +41,6 @@ export class SwapRequestComponent implements OnChanges,OnDestroy,AfterContentIni
 
   ngOnChanges() : void{
     if(this.requestedId){
-      this.dataSubscription = ObservableHelpers.mergeArrays(
-        this.postService.getPostsExceptRequesters(this.requestedId),
-        this.postImageService.getFirstImageOfPostsExceptReuqesters(this.requestedId,{...initialPageOfPosts})
-      ).subscribe(x => this.data = x)
     }
   }
 

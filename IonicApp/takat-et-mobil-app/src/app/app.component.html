@@ -1,0 +1,10 @@
+<ng-container *ngIf="!(isLogin$ | async); else template;">
+  <app-login></app-login>
+</ng-container>
+
+<ng-template #template>
+  <ion-app>
+    <ion-router-outlet></ion-router-outlet>
+  </ion-app>
+</ng-template>
+

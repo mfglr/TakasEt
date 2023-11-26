@@ -10,11 +10,11 @@ export const selectPostResponses = (props : { pageId : string}) => createSelecto
     selectPosts(props),
     state => entityPostAdapter.getSelectors().selectAll(state).map(x => x.post)
 )
-export const selectPageOfPosts = (props : { pageId : string }) => createSelector(
+export const selectFilter = (props : { pageId : string }) => createSelector(
     selectPosts(props),
-    state => state.page
+    state => state.filter
 )
-export const selectStatusOfPosts = (props : { pageId : string }) => createSelector(
+export const selectStatus = (props : { pageId : string }) => createSelector(
     selectPosts(props),
     state => state.status
 )

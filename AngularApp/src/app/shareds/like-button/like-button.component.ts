@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged, filter, fromEvent, mergeMap, of, skip } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged, filter, fromEvent, mergeMap, of} from 'rxjs';
 import { Mode } from 'src/app/helpers/mode';
 import { Likeable } from 'src/app/interfaces/likeable';
 import { NoContentResponse } from 'src/app/models/responses/no-content-response';

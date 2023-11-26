@@ -1,0 +1,70 @@
+.card{
+    margin: 0;
+    border-radius: 0;
+    .header{
+        padding: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top : 1rem;
+        margin-bottom: 0.5rem;
+        .profile-info{
+            display: flex;
+            align-items: center;
+            .profile-image{
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 100%;
+            }
+            .username-link{
+                .username{
+                    font-size: 1rem;
+                    margin-left: 0.25rem;
+                }
+            }
+        }
+    }
+    .content{
+        padding: 0;
+        .img{
+        }
+    }
+    .footer{
+        display: flex;
+        justify-content: space-between;
+        font-size : 1.25rem;
+        margin-top: 0.5rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        .counts{
+            display: flex;
+            .likes{
+                display: flex;
+                align-items: center;
+                .likes-count{
+                    font-size: 1rem;
+                } 
+            }
+            .views{
+                display: flex;
+                align-items: center;
+                margin-left: 0.5rem;
+                .views-count{
+                    font-size: 1rem;
+                }
+            }
+            .comments{
+                display: flex;
+                align-items: center;
+                margin-left: 0.5rem;
+                .comments-count{
+                    font-size: 1rem;
+                }
+            }
+        }
+        .date{
+            font-size: 1rem;
+        }
+        
+    }
+}
+

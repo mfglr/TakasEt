@@ -1,19 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { createPostStates, entityPostAdapter, homePagePostList, pagePostAdapter, profilePagePostList, searchPagePostList } from "./state";
-import { loadPostImageSuccessAction, loadProfileImageSuccessAction, nextPageSuccessAction, setCurrentIndexOfPostImagesAction } from "./actions";
-import { initialPageOfPosts, takeValueOfPosts } from "../app-states";
+import { createPostStates, entityPostAdapter, homePagePostList, pagePostAdapter, searchPagePostList} from "./state";
+import { initHomePageAction, initSearchPageAction, loadPostImageSuccessAction, loadProfileImageSuccessAction, nextPageSuccessAction, setCurrentIndexOfPostImagesAction } from "./actions";
+import { createPostFilterForHomePage, createPostFilterForSearchingPage, takeValueOfPosts } from "../app-states";
 
-const initialState = pagePostAdapter.addMany(
-    [
-        entityPostAdapter.getInitialState({ pageId : homePagePostList, page : {...initialPageOfPosts}, status : false }),
-        entityPostAdapter.getInitialState({ pageId : searchPagePostList, page : {...initialPageOfPosts}, status : false }),
-        entityPostAdapter.getInitialState({ pageId : profilePagePostList, page : {...initialPageOfPosts}, status : false }),
-    ],
-    pagePostAdapter.getInitialState()
-)
 
-export const collectionPostReducer = createReducer(
-    initialState,
+export const pagePostReducer = createReducer(
+    pagePostAdapter.getInitialState(),
     on(
         nextPageSuccessAction,
         (state,action) => pagePostAdapter.updateOne(
@@ -22,9 +14,9 @@ export const collectionPostReducer = createReducer(
                 changes : {
                     ...entityPostAdapter.addMany(createPostStates(action.payload),state.entities[action.pageId]!),
                     status : action.payload.length < takeValueOfPosts,
-                    page : {
-                        ...state.entities[action.pageId]!.page,
-                        skip : state.entities[action.pageId]!.page.take + takeValueOfPosts
+                    filter : {
+                        ...state.entities[action.pageId]!.filter,
+                        skip : state.entities[action.pageId]!.filter.take + takeValueOfPosts
                     }
                 }
             },
@@ -64,5 +56,27 @@ export const collectionPostReducer = createReducer(
                 changes : { currentPostImageIndex : action.index }
             },state.entities[action.pageId]!)
         },state)
+    ),
+    on(
+        initHomePageAction,
+        (state) => pagePostAdapter.addOne(
+            entityPostAdapter.getInitialState({
+                pageId : homePagePostList,
+                filter : createPostFilterForHomePage(),
+                status : false
+            }),
+            state
+        )
+    ),
+    on(
+        initSearchPageAction,
+        (state) => pagePostAdapter.addOne(
+            entityPostAdapter.getInitialState({
+                pageId : searchPagePostList,
+                status : false,
+                filter : createPostFilterForSearchingPage()
+            }),
+            state
+        )
     )
 )

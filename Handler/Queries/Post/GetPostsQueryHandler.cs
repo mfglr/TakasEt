@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -10,10 +11,11 @@ namespace Handler.Queries
 	public class GetPostsQueryHandler : IRequestHandler<GetPosts,AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
-
-		public GetPostsQueryHandler(IRepository<Post> posts)
+		private readonly LoggedInUser _loggedInUser;
+		public GetPostsQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
 		{
 			_posts = posts;
+			_loggedInUser = loggedInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(GetPosts request, CancellationToken cancellationToken)
@@ -30,7 +32,7 @@ namespace Handler.Queries
 				.OrderByDescending(x => x.CreatedDate)
 				.Skip(request.Skip)
 				.Take(request.Take)
-				.ToPostResponseDto()
+				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

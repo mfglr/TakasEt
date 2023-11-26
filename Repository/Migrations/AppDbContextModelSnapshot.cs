@@ -91,56 +91,56 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3860),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6834),
                             Name = "Kitap",
                             NormalizedName = "KITAP"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3876),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6848),
                             Name = "Araba",
                             NormalizedName = "ARABA"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3876),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6849),
                             Name = "Elektronik",
                             NormalizedName = "ELEKTRONIK"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3877),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6849),
                             Name = "Giyim",
                             NormalizedName = "GIYIM"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3878),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6850),
                             Name = "Ev Eşyaları",
                             NormalizedName = "EV ESYALARI"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3878),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6851),
                             Name = "Telefon",
                             NormalizedName = "TELEFON"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3879),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6851),
                             Name = "Bilgisayar",
                             NormalizedName = "BILGISAYAR"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3879),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6852),
                             Name = "Motor",
                             NormalizedName = "MOTOR"
                         });
@@ -290,19 +290,19 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3941),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7078),
                             Name = "client"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3944),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7082),
                             Name = "user"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 11, 19, 19, 22, 33, 186, DateTimeKind.Local).AddTicks(3945),
+                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7083),
                             Name = "admin"
                         });
                 });
@@ -319,6 +319,10 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizeKey")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

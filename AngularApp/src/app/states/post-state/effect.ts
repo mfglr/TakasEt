@@ -4,10 +4,11 @@ import { PostService } from "src/app/services/post.service";
 import { loadPostImageAction, loadPostImageSuccessAction, loadProfileImageAction, loadProfileImageSuccessAction, nextPageAction, nextPageSuccessAction } from "./actions";
 import { filter, first, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectPageOfPosts, selectPostImageId, selectPostImageStatus, selectProfileImageId, selectProfileImageStatus, selectStatusOfPosts } from "./selectors";
+import { selectFilter, selectPostImageId, selectPostImageStatus, selectProfileImageId, selectProfileImageStatus, selectStatus } from "./selectors";
 import { initCommentModalStatesAction } from "../comment_modal_state/action";
 import { PagePostState } from "./state";
-
+import { Injectable } from "@angular/core";
+@Injectable()
 export class PagePostEffect{
 
     constructor(
@@ -21,14 +22,14 @@ export class PagePostEffect{
         return this.actions.pipe(
             ofType(nextPageAction),
             mergeMap(
-                action => this.store.select(selectStatusOfPosts({ pageId :action.pageId})).pipe(
+                action => this.store.select(selectStatus({ pageId :action.pageId})).pipe(
                     first(),
                     mergeMap(
-                        status => this.store.select(selectPageOfPosts({pageId : action.pageId})).pipe(
+                        status => this.store.select(selectFilter({pageId : action.pageId})).pipe(
                             first(),
-                            filter( page => !status ),
+                            filter( filter => !status ),
                             mergeMap(
-                                page => this.postService.getPostsByFollowedUsers(page)
+                                filter => this.postService.getPostsByFilter(filter)
                             ),
                             mergeMap(
                                 response => of(

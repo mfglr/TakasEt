@@ -12,6 +12,6 @@ namespace Application.Dtos
 		public string Content { get; set; }
         public int CountOfChildren { get; set; }
 		public int CountOfLikes {  get; set; }
-		public ProfileImageResponseDto ProfileImage { get; set; }
+		public ProfileImageResponseDto? ProfileImage { get; set; }
     }
 }

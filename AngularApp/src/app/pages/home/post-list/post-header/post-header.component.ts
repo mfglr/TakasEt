@@ -2,32 +2,32 @@ import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { loadProfileImage } from 'src/app/states/home_page_state/actions';
-import { selectProfileImage } from 'src/app/states/home_page_state/selectors';
-import { HomePageState } from 'src/app/states/home_page_state/state';
+import { loadProfileImageAction } from 'src/app/states/post-state/actions';
+import { selectProfileImage } from 'src/app/states/post-state/selectors';
+import { PagePostState, homePagePostList } from 'src/app/states/post-state/state';
 
 @Component({
-  selector: 'app-post-header',
+  selector: 'home-post-header',
   templateUrl: './post-header.component.html',
   styleUrls: ['./post-header.component.scss']
 })
-export class PostHeaderComponent {
+export class HomePostHeaderComponent {
   
   @Input() post? : PostResponse;
   
   profileImage$? : Observable<string>;
 
   constructor(
-    private homePageStore : Store<HomePageState>
+    private pagePostStore : Store<PagePostState>
   ) {}
 
   ngOnInit(){
     if(this.post)
-      this.homePageStore.dispatch(loadProfileImage({postId : this.post.id}))
+      this.pagePostStore.dispatch(loadProfileImageAction({ pageId : homePagePostList,postId : this.post.id}))
   }
 
   ngOnChanges(){
     if(this.post)
-      this.profileImage$ = this.homePageStore.select(selectProfileImage({postId : this.post.id}))
+      this.profileImage$ = this.pagePostStore.select(selectProfileImage({ pageId : homePagePostList,postId : this.post.id}))
   }  
 }

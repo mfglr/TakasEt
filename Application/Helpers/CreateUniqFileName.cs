@@ -4,7 +4,7 @@
 	{
 		public static string RunHelper(int ownerId,string extention)
 		{
-			return $"{ownerId}-{DateTime.UtcNow.ToString("dddd dd MMMM hh:mm:ss.FFFFFFF")}-{Guid.NewGuid()}.{extention}";
+			return $"{ownerId}-{DateTime.UtcNow.Ticks}-{Guid.NewGuid()}.{extention}";
 		}
 	}
 }

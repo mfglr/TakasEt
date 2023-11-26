@@ -13,8 +13,7 @@
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Memory.Data" Version="1.0.2" />
   </ItemGroup>
 
@@ -32,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Validators\AppFile\" />
+    <Folder Include="Validators\PostImage\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { PostImageService } from 'src/app/services/post-image.service';
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
@@ -11,7 +10,6 @@ export class ProfileContentComponent {
 
 
   constructor(
-    private postImageService : PostImageService,
     private postService : PostService
   ) {
 

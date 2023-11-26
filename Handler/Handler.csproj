@@ -10,6 +10,7 @@
     <Folder Include="Commands\PostImage\" />
     <Folder Include="Commands\User\" />
     <Folder Include="DomainEventHandlers\" />
+    <Folder Include="Queries\PostImage\" />
   </ItemGroup>
 
   <ItemGroup>

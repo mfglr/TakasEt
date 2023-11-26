@@ -1,0 +1,7 @@
+{
+  "name": "takat-et-mobil-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
