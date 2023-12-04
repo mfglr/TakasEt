@@ -1,4 +1,6 @@
-﻿namespace Application.Dtos
+﻿using Application.Dtos;
+
+namespace Application.Dtos
 {
 	public class UserResponseDto : BaseResponseDto
 	{
@@ -9,5 +11,8 @@
 		public int CountOfFolloweds { get; set; }
 		public int CountOfFollowers { get; set; }
 		public int CountOfPosts { get; set; }
+		public bool IsFollowed { get; set; }
+		public bool IsFollower { get; set; }
+		public ProfileImageResponseDto? ProfileImage { get; set; }
     }
 }

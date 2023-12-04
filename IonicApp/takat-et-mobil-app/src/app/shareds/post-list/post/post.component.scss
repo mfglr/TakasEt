@@ -1,0 +1,96 @@
+.card{
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top : 1rem;
+    border-radius: 0;
+    .header{
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .header-left{
+            display: flex;
+            align-items: center;
+            .username{
+                margin-left: 0.25rem;
+                text-decoration: underline;
+            }
+            .date{
+                margin-left: 0.25rem;
+                text-decoration: underline;
+            }
+        }
+        .header-right{
+            .swap-button{
+                .swap-icon{
+
+                }
+                .text{
+                    margin-left: 0.25rem;
+                }
+            }
+        }
+    }
+    .content{
+        padding: 0;
+    }
+    .footer{
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        .row1{
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .counts{
+                display: flex;
+                align-items: center;
+                .comments{
+                    display: flex;
+                    align-items: center;
+                    margin-left: 0.5rem;
+                    .comment-icon{
+                        font-size: 1.4rem;
+                    }
+                    .comments-count{
+                        font-size: 1.15rem;
+                        text-decoration: underline;
+                        color : blue;
+                    }
+                }
+            }
+            .post-category-link{
+                display: flex;
+                align-items: center;
+                .category-icon{
+                    font-size: 1.4rem;
+                }
+                .post-category{
+                    font-size: 1.15rem;
+                    margin-left: 0.25rem;
+                    text-decoration: underline;
+                }
+            }
+        }
+        .row2{
+            .title{
+                font-size: 1.15rem;
+                font-weight: bold;
+                .load-content-button{
+                    font-size: 1rem;
+                    font-weight: 400;
+                    color: blue;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

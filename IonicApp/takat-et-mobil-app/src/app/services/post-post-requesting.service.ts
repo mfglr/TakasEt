@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppHttpClientService } from './app-http-client.service';
+import { NativeHttpClientService } from './native-http-client.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +7,11 @@ import { AppHttpClientService } from './app-http-client.service';
 export class PostPostRequestingService {
 
   constructor(
-    private appHttpClient : AppHttpClientService
+    private httpClient : NativeHttpClientService
   ) { }
 
   addRequestings(requestedId : number, requesterIds : number[]){
-    return this.appHttpClient.post(
+    return this.httpClient.post(
       "requesting/add-requestings",
       {requestedId : requestedId , requesterIds : requesterIds}
     );

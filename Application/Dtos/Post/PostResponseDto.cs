@@ -1,7 +1,4 @@
-﻿using Application.Dtos.PostImages;
-using Application.Dtos.ProfileImage;
-
-namespace Application.Dtos
+﻿namespace Application.Dtos
 {
 	public class PostResponseDto : BaseResponseDto
 	{
@@ -15,7 +12,7 @@ namespace Application.Dtos
 		public int CountOfViews { get; set; }
 		public int CountOfComments { get; set; }
 		public bool LikeStatus { get; set; }
-		public IEnumerable<PostImageResponseDto> PostImages { get; set; }
 		public ProfileImageResponseDto? ProfileImage { get; set; }
+		public IEnumerable<PostImageResponseDto> PostImages { get; set; }
     }
 }

@@ -1,0 +1,7 @@
+<div *ngFor="let post of posts">
+  <app-post [post]="post"></app-post>
+</div>
+<app-post-detail-modal
+  [post]="postOfModal$ | async"
+  [isModalOpen]="isModalOpen$ | async"
+  (closeModalEvent)="closeModal()"></app-post-detail-modal>

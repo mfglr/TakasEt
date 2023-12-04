@@ -25,15 +25,12 @@ namespace Handler.Queries
 				.AsNoTracking()
 				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
-				.Where(post => post.CreatedDate < request.getQueryDate() && post.UserId == request.UserId)
-				.OrderByDescending(x => x.CreatedDate)
-				.ThenBy(x => x.Id)
-				.Skip(request.Skip)
-				.Take(request.Take)
+				.Include(x => x.PostImages)
+				.Where(post => post.UserId == request.UserId)
+				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);

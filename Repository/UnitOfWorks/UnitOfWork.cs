@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Repository.Contexts;
+using System.Data;
 
 namespace Repository.UnitOfWorks
 {
@@ -35,7 +36,6 @@ namespace Repository.UnitOfWorks
 			await _context.SaveChangesAsync(cancellationToken);
 			return date;
 		}
-
 
 		public bool HasChanges()
 		{

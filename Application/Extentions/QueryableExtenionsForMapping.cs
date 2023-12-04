@@ -1,6 +1,4 @@
 ﻿using Application.Dtos;
-using Application.Dtos.PostImages;
-using Application.Dtos.ProfileImage;
 using Application.Entities;
 
 namespace Application.Extentions
@@ -23,7 +21,6 @@ namespace Application.Extentions
 						Content = x.Content,
 						CountOfImages = x.CountOfImages,
 						CountOfLikes = x.UsersWhoLiked.Count,
-						CountOfViews = x.UsersWhoViewed.Count,
 						CountOfComments = x.Comments.Count,
 						LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),
 						ProfileImage = x
@@ -33,11 +30,6 @@ namespace Application.Extentions
 							.Select(
 								x => new ProfileImageResponseDto() {
 									Id = x.Id,
-									CreatedDate = x.CreatedDate,
-									UpdatedDate = x.UpdatedDate,
-									UserId = x.UserId,
-									BlobName = x.BlobName,
-									ContainerName = x.ContainerName,
 									Extention = x.Extention
 								}
 							)
@@ -45,23 +37,17 @@ namespace Application.Extentions
 						PostImages = x
 							.PostImages
 							.Select(
-								image => new PostImageResponseDto()
+								x => new PostImageResponseDto()
 								{
-									Id = image.Id,
-									CreatedDate = image.CreatedDate,
-									UpdatedDate = image.UpdatedDate,
-									PostId = image.PostId,
-									Index = image.Index,
-									BlobName = image.BlobName,
-									ContainerName = image.ContainerName,
-									Extention = image.Extention,
+									Id = x.Id,
+									Extention = x.Extention,
 								}
 							)
 					}
-				);
+				) ;
 		}
 		
-		public static IQueryable<CommentResponseDto> ToCommentResponseDto(this IQueryable<Comment> queryable)
+		public static IQueryable<CommentResponseDto> ToCommentResponseDto(this IQueryable<Comment> queryable,int? loggedInUserId)
 		{
 			return queryable.Select(
 				x => new CommentResponseDto()
@@ -76,6 +62,7 @@ namespace Application.Extentions
 					UserId = x.UserId,
 					UserName = x.User.UserName!,
 					CountOfLikes = x.UsersWhoLiked.Count,
+					LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),
 					ProfileImage = x
 						.User
 						.ProfileImages
@@ -84,16 +71,47 @@ namespace Application.Extentions
 							x => new ProfileImageResponseDto()
 							{
 								Id = x.Id,
-								CreatedDate = x.CreatedDate,
-								UpdatedDate = x.UpdatedDate,
-								UserId = x.UserId,
-								BlobName = x.BlobName,
-								ContainerName = x.ContainerName,
 								Extention = x.Extention
 							}
 						).FirstOrDefault()
 				}
 			);
 		}
+	
+		public static IQueryable<UserResponseDto> ToUserResponseDto(this IQueryable<User> queryable,int? loggedInUserId)
+		{
+			return
+				queryable.Select(
+					x =>
+						new UserResponseDto()
+						{
+							Id = x.Id,
+							CreatedDate = x.CreatedDate,
+							UpdatedDate = x.UpdatedDate,
+							Name = x.Name,
+							LastName = x.LastName,
+							UserName = x.UserName!,
+							Email = x.Email!,
+							CountOfPosts = x.CountOfPost,
+							CountOfFolloweds = x.Followeds.Count,
+							CountOfFollowers = x.Followers.Count,
+							IsFollowed = x.Followers.Any(x => loggedInUserId != null && x.FollowerId == loggedInUserId),
+							IsFollower = x.Followeds.Any(x => loggedInUserId != null && x.FollowedId == loggedInUserId),
+							ProfileImage = x
+								.ProfileImages
+								.Where(x => x.IsActive)
+								.Select(
+									image => new ProfileImageResponseDto()
+									{
+										Id = image.Id,
+										Extention = image.Extention
+									}
+								)
+								.FirstOrDefault()
+						}
+				);
+
+		}
+	
 	}
 }

@@ -1,0 +1,21 @@
+<swiper-container
+  [pagination]="true"
+  class="slide"
+  (swipersliderfirstmove)="loadImage($event)">
+  
+  <swiper-slide
+    *ngFor="let postImageState of (postImageStates$ | async);let i = index;"
+    class="slide-item"
+    (click)="displayPostDetail()">
+    
+    <ng-container *ngIf="postImageState.loadStatus else template">
+      <img [src]="postImageState.url" [alt]="post?.title + '-' + i" class="img">
+    </ng-container>
+
+    <ng-template #template>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    </ng-template>
+  
+  </swiper-slide>
+  
+</swiper-container>

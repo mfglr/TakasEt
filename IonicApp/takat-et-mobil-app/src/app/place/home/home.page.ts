@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { HomePageState } from './state/reducer';
 import { Store } from '@ngrx/store';
-import { initHomePageAction } from 'src/app/states/post-state/actions';
-import { PagePostState } from 'src/app/states/post-state/state';
+import { Observable } from 'rxjs';
+import { PostResponse } from 'src/app/models/responses/post-response';
+import { selectPostResponses } from './state/selectors';
+import { nextPageAction } from './state/actions';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +13,15 @@ import { PagePostState } from 'src/app/states/post-state/state';
 })
 export class HomePage implements OnInit {
 
+  posts$? : Observable<PostResponse[]>;
+
   constructor(
-    private pagePostStore : Store<PagePostState>
+    private homePageStore : Store<HomePageState>
   ) { }
 
   ngOnInit() {
-    this.pagePostStore.dispatch(initHomePageAction())
+    this.posts$ = this.homePageStore.select(selectPostResponses);
+    this.homePageStore.dispatch(nextPageAction())
   }
 
 }

@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -11,10 +12,12 @@ namespace Handler.Queries
 	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostId, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
+		private readonly LoggedInUser _loggeddInUser;
 
-		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments)
+		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments, LoggedInUser loggeddInUser)
 		{
 			_comments = comments;
+			_loggeddInUser = loggeddInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(GetCommentsByPostId request, CancellationToken cancellationToken)
@@ -26,11 +29,9 @@ namespace Handler.Queries
 				.ThenInclude(x => x.ProfileImages)
 				.Include(x => x.Children)
 				.Include(x => x.UsersWhoLiked)
-				.Where(x => x.PostId == request.PostId && x.CreatedDate < request.getQueryDate())
-				.OrderByDescending(x => x.CreatedDate)
-				.Skip(request.Skip)
-				.Take(request.Take)
-				.ToCommentResponseDto()
+				.Where(x => x.PostId == request.PostId)
+				.ToPage(request)
+				.ToCommentResponseDto(_loggeddInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(comments);
 		}

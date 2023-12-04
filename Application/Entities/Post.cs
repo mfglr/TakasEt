@@ -15,7 +15,6 @@ namespace Application.Entities
         public Category Category { get; }
 		public IReadOnlyCollection<Comment> Comments { get; }
         public IReadOnlyCollection<UserPostLiking> UsersWhoLiked { get; }
-		public IReadOnlyCollection<UserPostViewing> UsersWhoViewed { get; }
         public IReadOnlyCollection<PostImage> PostImages => _images;
 		public IReadOnlyCollection<PostPostRequesting> Requesteds { get; }//talep ettikleri
 		public IReadOnlyCollection<PostPostRequesting> Requesters { get; }//telap edenler

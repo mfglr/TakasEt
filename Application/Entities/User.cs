@@ -15,21 +15,23 @@ namespace Application.Entities
         public bool? Gender { get; private set; }
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
+		public int CountOfPost {  get; private set; }
 		public UserRefreshToken UserRefreshToken { get; }
+
 		public IReadOnlyCollection<UserRole> Roles => _roles;
 		public IReadOnlyCollection<Post> Posts => _posts;
 		public IReadOnlyCollection<ProfileImage> ProfileImages { get; }
         public IReadOnlyCollection<Comment> Comments { get; }
         public IReadOnlyCollection<UserCommentLiking> LikedComments { get; }
-        public IReadOnlyCollection<UserPostLiking> LikedPosts { get; }
-		public IReadOnlyCollection<UserPostViewing> ViewedPosts { get; }
+        public IReadOnlyCollection<UserPostLiking> LikedPosts => _likedPosts;
 		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
         public IReadOnlyCollection<Searching>  Searchings{ get;}
 
 		private readonly List<UserRole> _roles = new();
 		private readonly List<Post> _posts = new();
-        
+        private readonly List<UserPostLiking> _likedPosts = new();
+
 		public User(string email,string userName)
         {
 			UserName = userName;
@@ -58,6 +60,25 @@ namespace Application.Entities
             
         }
 
+		public void AddPost(Post post)
+		{
+			_posts.Add(post);
+			CountOfPost++;
+		}
+		public void RemovePost(Post post)
+		{
+			_posts.Remove(post);
+		}
+
+		public void LikePost(int userId, int postId) {
+			_likedPosts.Add(new UserPostLiking(userId, postId));
+		}
+		public void UnlikePost(UserPostLiking liking) {
+			_likedPosts.Remove(liking);
+		}
+
+
+		//IEntity
 		public void SetCreatedDate(DateTime date)
 		{
 			CreatedDate = date;
@@ -67,6 +88,7 @@ namespace Application.Entities
 			UpdatedDate = date;
 		}
 
+		//IDomainEvent
 		private List<INotification> _domainEvents = new List<INotification>();
 		public void AddDomainEvent(INotification domainEvent)
 		{

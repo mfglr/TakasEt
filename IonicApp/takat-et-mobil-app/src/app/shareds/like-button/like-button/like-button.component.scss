@@ -1,0 +1,55 @@
+.position-top{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .icon{
+    }
+    .active-icon{
+        color : red;
+    }
+    .count-of-likes{
+        text-decoration: underline;
+        color: blue;
+    }
+}
+.position-bottom{
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    .icon{
+    }
+    .active-icon{
+        color : red;
+    }
+    .count-of-likes{
+        text-decoration: underline;
+        color: blue;
+    }
+}
+.position-right{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    .active-icon{
+        color : red;
+    }
+    .count-of-likes{
+        text-decoration: underline;
+        color: blue;
+    }
+}
+.position-left{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .active-icon{
+        color : red;
+    }
+    .count-of-likes{
+        text-decoration: underline;
+        color: blue;
+    }
+}

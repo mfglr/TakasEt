@@ -1,10 +1,10 @@
 ﻿using Application.Dtos.AppFile;
 
-namespace Application.Dtos.PostImages
+namespace Application.Dtos
 {
-	public class PostImageResponseDto : AppFileResponseDto
+	public class PostImageResponseDto
 	{
-        public int PostId { get; set; }
-		public int Index { get; set;}
+        public int Id { get; set; }
+        public string Extention { get; set; }
     }
 }

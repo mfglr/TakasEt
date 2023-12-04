@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-    public class LoginByRefreshToken : IRequest<AppResponseDto>
+	public class LoginByRefreshToken : IRequest<AppResponseDto>
 	{
         public string RefreshToken { get; private set; }
 

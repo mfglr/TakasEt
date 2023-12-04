@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-	public class GetAppFile : IRequest<byte[]>
+	public class GetAppFile : IRequest<Stream>
 	{
         public int Id { get; set; }
 

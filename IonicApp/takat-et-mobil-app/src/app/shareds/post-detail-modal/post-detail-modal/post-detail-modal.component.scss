@@ -1,0 +1,53 @@
+.root{
+    .header{
+        .toolbar{
+            padding: 0;
+            .toolbar-header{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+                .user-info{
+                    display: flex;
+                    align-items: center;
+                    .username{
+                        margin-left: 0.25rem;
+                    }
+                }
+                .close-modal-button-wrapper{
+                    .close-modal-button{
+
+                    }
+                }
+            }
+            
+        }
+    }
+    .content{
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        .content-wrapper{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .title{
+                font-size: 1.8rem;
+                text-align: center;
+                margin-top: 0.5rem;
+                margin-bottom: 1rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            .content{
+            }
+        }
+    }
+    .footer{
+        
+    }
+}

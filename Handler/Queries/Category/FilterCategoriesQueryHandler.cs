@@ -30,7 +30,7 @@ namespace Handler.Queries
                         request.Key == null ||
                         c.Name.ToLower().Contains(request.Key.ToLower())
                 )
-                .ToPage(x => x.Id, request)
+                .ToPage(request)
                 .ToListAsync();
             return AppResponseDto.Success(_mapper.Map<IEnumerable<CategoryResponseDto>>(categories));
         }

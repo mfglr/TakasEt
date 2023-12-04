@@ -91,56 +91,56 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6834),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6428),
                             Name = "Kitap",
                             NormalizedName = "KITAP"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6848),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6443),
                             Name = "Araba",
                             NormalizedName = "ARABA"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6849),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6444),
                             Name = "Elektronik",
                             NormalizedName = "ELEKTRONIK"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6849),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6444),
                             Name = "Giyim",
                             NormalizedName = "GIYIM"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6850),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6445),
                             Name = "Ev Eşyaları",
                             NormalizedName = "EV ESYALARI"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6851),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6446),
                             Name = "Telefon",
                             NormalizedName = "TELEFON"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6851),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6446),
                             Name = "Bilgisayar",
                             NormalizedName = "BILGISAYAR"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(6852),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6447),
                             Name = "Motor",
                             NormalizedName = "MOTOR"
                         });
@@ -290,19 +290,19 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7078),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6494),
                             Name = "client"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7082),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6496),
                             Name = "user"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 11, 23, 17, 17, 4, 562, DateTimeKind.Local).AddTicks(7083),
+                            CreatedDate = new DateTime(2023, 12, 3, 4, 54, 1, 609, DateTimeKind.Local).AddTicks(6497),
                             Name = "admin"
                         });
                 });
@@ -339,6 +339,26 @@ namespace Repository.Migrations
                     b.ToTable("Searching");
                 });
 
+            modelBuilder.Entity("Application.Entities.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Counter")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tests");
+                });
+
             modelBuilder.Entity("Application.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -352,6 +372,9 @@ namespace Repository.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountOfPost")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -488,35 +511,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPostLiking");
-                });
-
-            modelBuilder.Entity("Application.Entities.UserPostViewing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserPostViewing");
                 });
 
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
@@ -751,25 +745,6 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Entities.UserPostViewing", b =>
-                {
-                    b.HasOne("Application.Entities.Post", "Post")
-                        .WithMany("UsersWhoViewed")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Application.Entities.User", "User")
-                        .WithMany("ViewedPosts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Application.Entities.UserRefreshToken", b =>
                 {
                     b.HasOne("Application.Entities.User", "User")
@@ -864,8 +839,6 @@ namespace Repository.Migrations
                     b.Navigation("Requesters");
 
                     b.Navigation("UsersWhoLiked");
-
-                    b.Navigation("UsersWhoViewed");
                 });
 
             modelBuilder.Entity("Application.Entities.Role", b =>
@@ -895,8 +868,6 @@ namespace Repository.Migrations
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();
-
-                    b.Navigation("ViewedPosts");
                 });
 #pragma warning restore 612, 618
         }

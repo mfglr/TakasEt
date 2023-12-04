@@ -10,7 +10,6 @@ export interface PostResponse extends BaseResponse{
   content : string;
   countOfImages : number;
   countOfLikes : number;
-  countOfViews : number;
   countOfComments : number;
   likeStatus : boolean;
   postImages : PostImageResponse[];

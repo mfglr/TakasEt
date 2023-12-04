@@ -27,12 +27,6 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UsersWhoViewed)
-				.WithOne(x => x.Post)
-				.HasForeignKey(x => x.PostId)
-				.OnDelete(DeleteBehavior.NoAction);
-
-			builder
 				.HasMany(x => x.PostImages)
 				.WithOne(x => x.Post)
 				.HasForeignKey(x => x.PostId)

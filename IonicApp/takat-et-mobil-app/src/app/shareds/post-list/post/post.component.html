@@ -1,0 +1,53 @@
+<ion-card class="card">
+  <ion-card-header class="header">
+    <div class="header-left">
+      <app-profile-image [diameter]="3" [id]="this.post?.profileImage?.id"></app-profile-image>
+      <a href="" class="username">
+        <span>{{post?.userName}}</span>
+      </a>
+      <span class="date">{{ post?.createdDate | dateFormat }}</span>
+    </div>
+
+    <div class="header-right">
+      <button class="btn btn-outline-primary swap-button">
+        <i class="fa-regular fa-handshake" clas="swap-icon"></i>
+        <span class="text">teklif yap</span>
+      </button>
+    </div>
+    
+  </ion-card-header>
+
+  <ion-card-content class="content">
+    <app-post-image-slider [post]="post"  (displayPostDetailEvent)="displayPostDetail($event)" ></app-post-image-slider>
+  </ion-card-content>
+
+  <div class="footer">
+    
+    <div class="row1">
+      <div class="counts">
+        
+        <app-post-like-button [post]="post" ></app-post-like-button>
+
+        <div class="comments">
+          <i class="fa-regular fa-comment comment-icon"></i>
+          <span class="comments-count">{{post?.countOfComments}} yorum</span>
+        </div>
+
+      </div>
+      
+      <a class="post-category-link" href="">
+        <i class="fa-solid fa-book-open category-icon"></i>
+        <span class="post-category">{{post?.categoryName}}</span>
+      </a>
+    </div>
+
+    <div class="row2">
+      <span class="title">
+        {{((post?.title | toShortText) | toUpperFirstLetterOfAllWords) + "..."}}
+        <span class="load-content-button" (click)="loadContent()">devami</span>
+      </span>
+    </div>
+    
+    
+  </div>
+</ion-card>

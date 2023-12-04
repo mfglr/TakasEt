@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
-import { AppHttpClientService } from './app-http-client.service';
-import { Likeable } from '../interfaces/likeable';
 import { Observable } from 'rxjs';
 import { NoContentResponse } from '../models/responses/no-content-response';
+import { NativeHttpClientService } from './native-http-client.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserCommentLikingService implements Likeable {
+export class UserCommentLikingService {
   constructor(
-    private appHttpClient : AppHttpClientService
+    private httpClient : NativeHttpClientService
   ) { }
   like(commentId : number) : Observable<NoContentResponse>{
-    return this.appHttpClient.post<NoContentResponse>("user-comment-liking/like-comment",{commentId : commentId});
+    return this.httpClient.post<NoContentResponse>("user-comment-liking/like-comment",{commentId : commentId});
   }
   unlike(commentId : number) : Observable<NoContentResponse>{
-    return this.appHttpClient.delete(`user-comment-liking/unlike-comment/${commentId}`);
+    return this.httpClient.delete(`user-comment-liking/unlike-comment/${commentId}`);
   }
   isLiked(commentId: number): Observable<boolean> {
-    return this.appHttpClient.get<boolean>(`user-comment-liking/is-comment-liked/${commentId}`)
+    return this.httpClient.get<boolean>(`user-comment-liking/is-comment-liked/${commentId}`)
   }
 }

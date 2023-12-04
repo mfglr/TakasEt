@@ -32,25 +32,27 @@ namespace Handler.Commands
 				.SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
 			if (user == null) throw new UserNotFoundException();
+			
 			var result = await _users.CheckPasswordAsync(user, request.Password);
 			if (!result) throw new FailedLoginException();
+			
 			var refreshToken = _tokenService.CreateRefreshToken();
 			var accessToken = _tokenService.CreateAccessTokenByUser(user);
+			
 			if (user.UserRefreshToken == null)
 				await _userRefreshTokens.DbSet.AddAsync(
 					new UserRefreshToken(user.Id, refreshToken.Value,refreshToken.ExpirationDate),
 					cancellationToken
 				);
 			else user.UserRefreshToken.UpdateToken(refreshToken.Value,refreshToken.ExpirationDate);
-			var loginResponse = new LoginResponseDto(
-				accessToken.Value,
-				accessToken.ExpirationDate,
-				refreshToken.Value,
-				refreshToken.ExpirationDate,
-				user.Id,
-				user.UserName,
-				user.Email
-			);
+
+			var loginResponse = new LoginResponseDto() {
+				UserId = user.Id,
+				AccessToken = accessToken.Value,
+				ExpirationDateOfAccessToken = accessToken.ExpirationDate,
+				RefreshToken = refreshToken.Value,
+				ExpirationDateOfRefreshToken = refreshToken.ExpirationDate,
+			};
 			return AppResponseDto.Success(loginResponse);
         }
     }

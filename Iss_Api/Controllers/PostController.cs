@@ -25,17 +25,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post/get-post/{id}")]
-		public async Task<AppResponseDto> GetPost(int id)
+		[HttpGet("post/get-home-posts")]
+		public async Task<AppResponseDto> GetHomePosts()
 		{
-			return await _sender.Send(new GetPost(id));
-		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("post/get-posts")]
-		public async Task<AppResponseDto> GetPosts()
-		{
-			return await _sender.Send(new GetPosts(Request.Query));
+			return await _sender.Send(new GetHomePosts(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
@@ -46,32 +39,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post/get-posts-by-user-name/{userName}")]
-		public async Task<AppResponseDto> GetPostsByUserName(string userName)
-		{
-			return await _sender.Send(new GetPostsByUserName(userName,Request.Query));
-		}
-
-		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-except-requesters/{postId}")]
 		public async Task<AppResponseDto> GetPostsExceptRequesters(int postId)
 		{
 			return await _sender.Send(new GetPostsExceptRequesters(postId,Request.Query));
 		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("post/get-posts-by-filter")]
-		public async Task<AppResponseDto> GetPostsByFilter()
-		{
-			return await _sender.Send(new GetPostsByFilter(Request.Query));
-		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("post/get-posts-by-followed-users")]
-		public async Task<AppResponseDto> GetPostsByFollowedUsers()
-		{
-			return await _sender.Send(new GetPostsByFollowedUsers(Request.Query));
-		}
-
 	}
 }

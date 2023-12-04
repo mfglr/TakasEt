@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-    public class GetFolloweds : IRequest<AppResponseDto>
+	public class GetFolloweds : IRequest<AppResponseDto>
     {
         public int UserId { get; private set; }
 

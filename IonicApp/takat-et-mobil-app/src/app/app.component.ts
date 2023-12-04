@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { register } from 'swiper/element/bundle';
-import { AppLoginState } from './states/login_state/state';
 import { Store } from '@ngrx/store';
-import { isLogin } from './states/login_state/selectors';
-import { login, loginFromLocalStorage } from './states/login_state/actions';
+import { LoginState } from './shareds/login/login_state/reducer';
+import { Observable } from 'rxjs';
+import { isLogin } from './shareds/login/login_state/selectors';
+import { loginFromLocalStorage } from './shareds/login/login_state/actions';
+
+import { register } from 'swiper/element/bundle';
 register();
 
 @Component({
@@ -14,21 +15,11 @@ register();
 })
 export class AppComponent {
   
-  loginForm = new FormGroup({
-    email : new FormControl<string>(""),
-    password : new FormControl<string>("")
-  })
-  isLogin$ = this.loginStore.select(isLogin);
+  isLogin$? : Observable<boolean> = this.loginStore.select(isLogin);
   
   constructor(
-    private loginStore : Store<AppLoginState>
+    private loginStore : Store<LoginState>
   ) {}
-
-  login(){
-    const formData = this.loginForm.value;
-    this.loginStore.dispatch(login({email : formData.email!, password : formData.password! }))
-    console.log("a")
-  }
 
   ngOnInit() {
     this.loginStore.dispatch(loginFromLocalStorage())

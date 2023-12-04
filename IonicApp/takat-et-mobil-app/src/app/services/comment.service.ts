@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AppHttpClientService } from './app-http-client.service';
 import { Observable } from 'rxjs';
 import { CommentResponse } from '../models/responses/comment-response';
 import { AddComment } from '../models/requests/add-comment';
 import { UrlHelper } from '../helpers/url-helper';
 import { Page } from '../models/requests/page';
+import { NativeHttpClientService } from './native-http-client.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,19 +12,19 @@ import { Page } from '../models/requests/page';
 export class CommentService {
 
   constructor(
-    private appHttpClient : AppHttpClientService
+    private httpClient : NativeHttpClientService
   ) { }
 
   addComment(request : AddComment ) : Observable<CommentResponse>{
-    return this.appHttpClient.post<CommentResponse>("comment/add-comment",request);
+    return this.httpClient.post<CommentResponse>("comment/add-comment",request);
   }
   getCommnetsByPostId(postId : number,page : Page) : Observable<CommentResponse[]>{
-    return this.appHttpClient.get<CommentResponse[]>(
+    return this.httpClient.get<CommentResponse[]>(
       `comment/get-comments-by-post-id/${postId}?${UrlHelper.createPaginationQueryString(page)}`
     );
   }
   getChildren(id : number,page:Page) : Observable<CommentResponse[]>{
-    return this.appHttpClient.get<CommentResponse[]>(
+    return this.httpClient.get<CommentResponse[]>(
       `comment/get-children/${id}?${UrlHelper.createPaginationQueryString(page)}`
     );
   }

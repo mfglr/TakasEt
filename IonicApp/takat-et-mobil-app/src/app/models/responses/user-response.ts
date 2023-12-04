@@ -1,4 +1,5 @@
 import { BaseResponse } from "./base-response";
+import { ProfileImageResponse } from "./profile-image-response";
 
 export interface UserResponse extends BaseResponse{
     userName : string;
@@ -8,5 +9,5 @@ export interface UserResponse extends BaseResponse{
 	countOfFolloweds : number;
 	countOfFollowers : number;
     countOfPosts : number;
-	profileImage : string;
+	profileImage : ProfileImageResponse;
 }

@@ -20,8 +20,18 @@ const routes: Routes = [
         path: 'search',
         loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
       },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+      },
+      {
+        path: 'create-post',
+        loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule)
+      },
     ]
   },
+  
+  
   
   
 ];

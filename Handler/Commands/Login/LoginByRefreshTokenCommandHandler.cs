@@ -35,15 +35,13 @@ namespace Handler.Commands
 			if (user == null) throw new InValidRefreshTokenException();
 			Token accessToken = _tokenService.CreateAccessTokenByUser(user);
 			Token refreshToken = _tokenService.CreateRefreshToken();
-			var loginResponse = new LoginResponseDto(
-				accessToken.Value,
-				accessToken.ExpirationDate,
-				refreshToken.Value,
-				refreshToken.ExpirationDate,
-				user.Id,
-				user.UserName,
-				user.Email
-			);
+			var loginResponse = new LoginResponseDto() {
+				UserId = user.Id,
+				AccessToken = accessToken.Value,
+				ExpirationDateOfAccessToken = accessToken.ExpirationDate,
+				RefreshToken = refreshToken.Value,
+				ExpirationDateOfRefreshToken = refreshToken.ExpirationDate,
+			};
 			return AppResponseDto.Success(loginResponse);
 		}
 	}

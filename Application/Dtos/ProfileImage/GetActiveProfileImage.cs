@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-    public class GetActiveProfileImage : IRequest<byte[]>
+    public class GetActiveProfileImage : IRequest<Stream>
     {
         public int UserId { get; private set; }
 

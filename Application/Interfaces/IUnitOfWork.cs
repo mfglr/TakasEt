@@ -1,5 +1,5 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Data;
 
 namespace Application.Interfaces
 {

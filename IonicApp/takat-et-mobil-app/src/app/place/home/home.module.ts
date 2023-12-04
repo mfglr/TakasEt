@@ -7,10 +7,11 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { HomePostComponent } from './home-post/home-post.component';
-import { HomePostListComponent } from './home-post-list/home-post-list.component';
-import { SharedsModule } from 'src/app/shareds/shareds.module';
-import { DateFormatPipe } from 'src/app/pipes/date-format.pipe';
+import { PostListModule } from 'src/app/shareds/post-list/post-list.module';
+import { StoreModule } from '@ngrx/store';
+import { homePageReducer } from './state/reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { HomePageEffect } from './state/effect';
 
 @NgModule({
   imports: [
@@ -18,14 +19,13 @@ import { DateFormatPipe } from 'src/app/pipes/date-format.pipe';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    SharedsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PostListModule,
+    StoreModule.forFeature("HomePageState",homePageReducer),
+    EffectsModule.forFeature([HomePageEffect])
   ],
   declarations: [
     HomePage,
-    HomePostComponent,
-    HomePostListComponent,
-    DateFormatPipe
-  ],
+  ]
 })
 export class HomePageModule {}

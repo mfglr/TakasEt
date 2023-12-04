@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-    public class AddProfileImage : IRequest<AppResponseDto>
+	public class AddProfileImage : IRequest<AppResponseDto>
     {
         public string Extention { get; private set; }
         public Stream Stream { get; private set; }

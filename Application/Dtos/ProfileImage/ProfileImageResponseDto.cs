@@ -1,9 +1,10 @@
 ﻿using Application.Dtos.AppFile;
 
-namespace Application.Dtos.ProfileImage
+namespace Application.Dtos
 {
-	public class ProfileImageResponseDto : AppFileResponseDto
+	public class ProfileImageResponseDto
 	{
-		public int UserId {  get; set; }
+		public int Id { get; set; }
+		public string Extention { get; set; }
 	}
 }

@@ -1,0 +1,39 @@
+<ion-modal [isOpen]="isModalOpen" class="root">
+  <ng-template>
+    <ion-header class="header">
+      <ion-toolbar class="toolbar">
+        
+        <div class="toolbar-header">
+
+          <div class="user-info">
+            <app-profile-image [diameter]="3" [id]="post?.profileImage?.id"></app-profile-image>
+            <a href="" class="username">
+              <span>{{this.post?.userName}}</span>
+            </a>
+          </div>
+  
+          <div class="close-modal-button-wrapper">
+            <ion-button (click)="closeModal()" class="close-modal-button">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        
+        </div>
+        
+
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="content">
+      <app-post-image-slider [post]="post" ></app-post-image-slider>
+      <div class="content-wrapper">
+        <span class="title">{{post?.title | toUpperFirstLetterOfAllWords}}</span>
+        <span class="content">{{ post?.content }}</span>
+      </div>
+    </ion-content>
+
+
+
+
+  </ng-template>
+</ion-modal>

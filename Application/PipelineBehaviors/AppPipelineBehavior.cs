@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using FluentValidation;
 using MediatR;
+using System.Data;
 
 namespace Application.Pipelines
 {
@@ -29,8 +30,9 @@ namespace Application.Pipelines
 					throw Exceptions.ValidationException.Create(errorMessages, request.GetType());
 				}
 			}
+
 			var response = await next();
-			//Commit the changes.
+
 			if (_unitOfWork.HasChanges())
 			{
 				var date = await _unitOfWork.CommitAsync(cancellationToken);

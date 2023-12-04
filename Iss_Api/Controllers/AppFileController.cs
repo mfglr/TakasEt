@@ -16,12 +16,12 @@ namespace WebApi.Controllers
 			_sender = sender;
 		}
 
-		[Authorize(Roles = "user")]
+		//[Authorize(Roles = "user")]
 		[HttpGet("app-file/get-app-file/{id}")]
-		public async Task GetAppFile(int id)
+		public async Task<IActionResult> GetAppFile(int id)
 		{
-			var bytes = await _sender.Send(new GetAppFile(id));
-			await Response.Body.WriteAsync(bytes, 0, bytes.Length);
+			var stream = await _sender.Send(new GetAppFile(id));
+			return File(stream, "application/octet-stream");	
 		}
 	}
 }

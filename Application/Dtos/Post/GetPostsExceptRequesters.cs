@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos.Post
 {
-    public class GetPostsExceptRequesters : Pagination, IRequest<AppResponseDto>
+	public class GetPostsExceptRequesters : Pagination, IRequest<AppResponseDto>
     {
         public int PostId { get; private set; }
 

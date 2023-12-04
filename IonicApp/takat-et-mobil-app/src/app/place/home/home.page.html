@@ -12,6 +12,6 @@
     </ion-toolbar>
   </ion-header>
 
-  <home-post-list></home-post-list>
+  <app-post-list [posts]="posts$ | async" ></app-post-list>
 
 </ion-content>

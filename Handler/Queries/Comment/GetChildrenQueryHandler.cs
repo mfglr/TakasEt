@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -12,11 +13,13 @@ namespace Handler.Queries
 	{
 		private readonly IRepository<Comment> _comments;
 		private readonly IMapper _mapper;
+		private readonly LoggedInUser _loggedInUser;
 
-		public GetChildrenQueryHandler(IRepository<Comment> comments, IMapper mapper)
+		public GetChildrenQueryHandler(IRepository<Comment> comments, IMapper mapper, LoggedInUser loggedInUser)
 		{
 			_comments = comments;
 			_mapper = mapper;
+			_loggedInUser = loggedInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(GetChildren request, CancellationToken cancellationToken)
@@ -25,11 +28,9 @@ namespace Handler.Queries
 				.DbSet
 				.Include(x => x.User)
 				.Include(x => x.UsersWhoLiked)
-				.Where(x => x.ParentId == request.ParentId && x.CreatedDate < request.getQueryDate())
-				.OrderByDescending(x => x.CreatedDate)
-				.Skip(request.Skip)
-				.Take(request.Take)
-				.ToCommentResponseDto()
+				.Where(x => x.ParentId == request.ParentId)
+				.ToPage(request)
+				.ToCommentResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(_mapper.Map<List<CommentResponseDto>>(comments));
 		}

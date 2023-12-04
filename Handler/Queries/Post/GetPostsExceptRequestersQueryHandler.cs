@@ -9,10 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-    //*Belirli bir posta !!!herhangi bir post degil!!!, giris yapmis kullanicinin postlari
-    // arasindaki, requester olmayan postlari verir.
-    //*Post u id si ile belirler.
-
     public class GetPostsExceptRequestersQueryHandler : IRequestHandler<GetPostsExceptRequesters, AppResponseDto>
     {
         private readonly IRepository<Post> _posts;
@@ -31,19 +27,16 @@ namespace Handler.Queries
                 .Include(x => x.PostImages)
 				.Include(x => x.Requesteds)
 				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.UsersWhoViewed)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
 				.Include(x => x.Category)
+				.Include(x => x.PostImages)
 				.Where(
                     x =>
-						x.CreatedDate < request.getQueryDate() &&
 						x.UserId == _loggedInUser.UserId &&
                         !x.Requesteds.Select(r => r.RequestedId).Contains(request.PostId)
                 )
-				.OrderByDescending(x => x.CreatedDate)
-                .Skip(request.Skip)
-                .Take(request.Take)
+				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
             return AppResponseDto.Success(posts);

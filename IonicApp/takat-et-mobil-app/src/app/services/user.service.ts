@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserResponse } from '../models/responses/user-response';
-import { AppHttpClientService } from './app-http-client.service';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../models/requests/page';
+import { NativeHttpClientService } from './native-http-client.service';
+import { Page } from '../states/app-states';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +12,25 @@ import { Page } from '../models/requests/page';
 export class UserService {
 
   constructor(
-    private appHttpClient: AppHttpClientService,
-    ) {
+    private httpClient: NativeHttpClientService,
+  ) {
   }
 
   getUserByUserName(userName : string) : Observable<UserResponse>{
-    return this.appHttpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
+    return this.httpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
   }
 
   getUser(userId : number) : Observable<UserResponse>{
-    return this.appHttpClient.get<UserResponse>(`user/get-user/${userId}`);
+    return this.httpClient.get<UserResponse>(`user/get-user/${userId}`);
   }
 
   getUsersWhoLikedPost(postId : number,page : Page) : Observable<UserResponse[]>{
-    return this.appHttpClient.get<UserResponse[]>(
+    return this.httpClient.get<UserResponse[]>(
       `user/get-users-who-liked-post/${postId}?${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 
   addProfileImage(formData:FormData) : Observable<NoContentResponse> {
-    return this.appHttpClient.post<NoContentResponse>('user/add-profile-image',formData);
+    return this.httpClient.post<NoContentResponse>('user/add-profile-image',formData);
   }
 }

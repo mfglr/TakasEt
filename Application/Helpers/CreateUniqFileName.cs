@@ -2,9 +2,9 @@
 {
 	public static class CreateUniqFileName
 	{
-		public static string RunHelper(int ownerId,string extention)
+		public static string RunHelper(string extention)
 		{
-			return $"{ownerId}-{DateTime.UtcNow.Ticks}-{Guid.NewGuid()}.{extention}";
+			return $"{DateTime.UtcNow.Ticks}-{Guid.NewGuid()}.{extention}";
 		}
 	}
 }

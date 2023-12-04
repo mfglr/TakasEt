@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -13,7 +15,12 @@ namespace WebApi.Controllers
 		{
 			_sender = sender;
 		}
-		
 
+		[Authorize(Roles = "user")]
+		[HttpGet("post-image/get-post-images/{postId}")]
+		public async Task<AppResponseDto> GetPostImage(int postId)
+		{
+			return await _sender.Send(new GetPostImages(Request.Query,postId));
+		}
 	}
 }
