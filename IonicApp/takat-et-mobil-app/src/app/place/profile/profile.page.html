@@ -10,4 +10,46 @@
       <ion-title size="large">profile</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-content>
+    <ng-container *ngIf="(user$ | async) as user">
+      <div class="header">
+        <app-profile-image [diameter]="6" [id]="user.profileImage.id"></app-profile-image>
+        <div class="counts">
+
+          <div class="post">
+            <span class="post-counts" >{{user.countOfPosts}}</span>
+            <span class="post-text">Gönderi</span>
+          </div>
+
+          <div class="follower">
+            <span class="follower-counts">{{user.countOfFollowers}}</span>
+            <span class="follower-text">Takipçi</span>
+          </div>
+
+          <div class="followed">
+            <span class="followed-counts">{{user.countOfFolloweds}}</span>
+            <span class="followed-text">Takip</span>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="content">
+        <swiper-container>
+          
+          <swiper-slide>
+            <app-abstract-post-list [postIds]="postIds$ | async"></app-abstract-post-list>
+          </swiper-slide>
+          
+          <swiper-slide>
+
+          </swiper-slide>
+        </swiper-container>
+      </div>
+
+
+    </ng-container>
+  </ion-content>
 </ion-content>

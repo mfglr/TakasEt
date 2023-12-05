@@ -44,10 +44,22 @@
                 margin-right: 1rem;
             }
             .content{
+                margin-top: 0.5rem;
+                margin-bottom: 1rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
             }
         }
     }
     .footer{
-        
+        display: flex;
+        justify-content: center;
+        .swap-button{
+            width: 4rem;
+            height: 4rem;
+            font-size: 1.5rem;
+            border-radius: 100%;
+        }
+
     }
 }

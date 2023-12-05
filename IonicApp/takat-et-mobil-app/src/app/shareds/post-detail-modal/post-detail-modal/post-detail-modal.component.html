@@ -1,5 +1,6 @@
 <ion-modal [isOpen]="isModalOpen" class="root">
   <ng-template>
+    
     <ion-header class="header">
       <ion-toolbar class="toolbar">
         
@@ -32,8 +33,29 @@
       </div>
     </ion-content>
 
+    <ion-fab slot="fixed" horizontal="center" vertical="bottom">
+      
+      <ion-fab-button color="secondary">
+        <i class="fa-regular fa-handshake" clas="swap-icon"></i>
+      </ion-fab-button>
+
+      
+
+      <ion-fab-list side="end">
+        <ion-fab-button color="tertiary">
+          <i class="fa-solid fa-share-from-square"></i>
+        </ion-fab-button>
+      </ion-fab-list>
+      
+      
+      <ion-fab-list side="start">
+        <ion-fab-button color="danger">
+          <i class="fa-solid fa-plus"></i>
+        </ion-fab-button>
+      </ion-fab-list>
 
 
+    </ion-fab>
 
   </ng-template>
 </ion-modal>

@@ -6,6 +6,9 @@ import { Store } from "@ngrx/store";
 import { selectStatusAndPage } from "./selectors";
 import { Injectable } from "@angular/core";
 import { HomePageState } from "./reducer";
+import { addPostsAction } from "src/app/states/post-state/actions";
+import { addProfileImagesAction } from "src/app/states/profile-image-state/actions";
+import { addPostImagesAction } from "src/app/states/post-image-state/actions";
 
 @Injectable()
 export class HomePageEffect{
@@ -22,7 +25,14 @@ export class HomePageEffect{
             withLatestFrom(this.homePageStore.select(selectStatusAndPage)),
             filter(([action,x]) => !x.status),
             mergeMap(([action,x]) => this.postService.getHomePosts(x.page)),
-            mergeMap(response => of(nextPageSuccessAction({payload : response})))
+            mergeMap(
+                response => of(
+                    nextPageSuccessAction({payload : response}),
+                    addPostsAction({payload : response}),
+                    addPostImagesAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
+                    addProfileImagesAction({images : response.map(x => x.profileImage)})
+                )
+            )
         )
     })
    

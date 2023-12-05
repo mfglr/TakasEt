@@ -1,6 +1,8 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Exceptions;
+using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,12 @@ namespace Handler.Queries
     public class GetUserQueryHandler : IRequestHandler<GetUser,AppResponseDto>
 	{
 		private readonly IRepository<User> _users;
+		private readonly LoggedInUser _loggedInUser;
 
-		public GetUserQueryHandler(IRepository<User> users)
+		public GetUserQueryHandler(IRepository<User> users, LoggedInUser loggedInUser)
 		{
 			_users = users;
+			_loggedInUser = loggedInUser;
 		}
 
 		public async Task<AppResponseDto> Handle(GetUser request, CancellationToken cancellationToken)
@@ -23,20 +27,8 @@ namespace Handler.Queries
 				.AsNoTracking()
 				.Include(x => x.Followers)
 				.Include(x => x.Followeds)
-				.Include(x => x.Posts)
-				.Select(x => new UserResponseDto()
-				{
-					Id = x.Id,
-					CreatedDate = x.CreatedDate,
-					UpdatedDate = x.UpdatedDate,
-					Name = x.Name,
-					LastName = x.LastName,
-					Email = x.Email!,
-					UserName = x.UserName!,
-					CountOfFolloweds = x.Followeds.Count(),
-					CountOfFollowers = x.Followers.Count(),
-					CountOfPosts = x.Posts.Count(),
-				})
+				.Include(x => x.ProfileImages)
+				.ToUserResponseDto(_loggedInUser.UserId)
 				.SingleOrDefaultAsync(x => x.Id == request.UserId);
 			if (user == null) throw new UserNotFoundException();
 			return AppResponseDto.Success(user);

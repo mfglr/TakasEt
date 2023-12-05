@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HomePageState } from './state/reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { PostResponse } from 'src/app/models/responses/post-response';
-import { selectPostResponses } from './state/selectors';
 import { nextPageAction } from './state/actions';
+import { selectPostIds } from './state/selectors';
 
 @Component({
   selector: 'app-home',
@@ -13,14 +12,14 @@ import { nextPageAction } from './state/actions';
 })
 export class HomePage implements OnInit {
 
-  posts$? : Observable<PostResponse[]>;
+  postIds$? : Observable<number[]>;
 
   constructor(
-    private homePageStore : Store<HomePageState>
+    private homePageStore : Store<HomePageState>,
   ) { }
 
   ngOnInit() {
-    this.posts$ = this.homePageStore.select(selectPostResponses);
+    this.postIds$ = this.homePageStore.select(selectPostIds);
     this.homePageStore.dispatch(nextPageAction())
   }
 

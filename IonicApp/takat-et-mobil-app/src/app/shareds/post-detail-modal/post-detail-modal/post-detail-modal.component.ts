@@ -11,7 +11,6 @@ export class PostDetailModalComponent{
   
   @ViewChild(IonModal) modal?: IonModal;
   @Input() post? : PostResponse | null;
-  
   @Input() isModalOpen : boolean | null = null;
   @Output() closeModalEvent = new EventEmitter();
   constructor(

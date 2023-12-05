@@ -5,11 +5,11 @@ import { PostDetailModalModule } from '../post-detail-modal/post-detail-modal.mo
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { PostComponent } from './post/post.component';
 import { IonicModule } from '@ionic/angular';
-import { PostImageSliderModule } from '../post-image-slider/post-image-slider.module';
 import { PostLikeButtonModule } from '../post-like-button/post-like-button.module';
 import { ProfileImageModule } from '../profile-image/profile-image.module';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/reducer';
+import { PostImageModule } from '../post-image/post-image.module';
 
 @NgModule({
   declarations: [
@@ -23,9 +23,9 @@ import { reducer } from './state/reducer';
     StoreModule.forFeature("PostListStore",reducer),
     PostDetailModalModule,
     ProfileImageModule,
-    PostImageSliderModule,
     PostLikeButtonModule,
-    PostDetailModalModule
+    PostDetailModalModule,
+    PostImageModule
   ],
   exports : [
     PostListComponent

@@ -1,10 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { HomePageState, selectAll } from "./reducer";
+import { HomePageState } from "./reducer";
 
-const selectPagePost = createFeatureSelector<HomePageState>("HomePageState");
-const selectPosts = createSelector(selectPagePost,state => state.posts)
-export const selectPostResponses = createSelector( selectPosts, state => selectAll(state) )
-export const selectStatusAndPage = createSelector(
-    selectPosts,
-    state => ({ status : state.status,page : state.page})
-)
+const selectStore = createFeatureSelector<HomePageState>("HomePageStore");
+export const selectPostIds = createSelector(selectStore,state => state.postIds);
+export const selectStatusAndPage = createSelector( selectStore, state => ({ status : state.status,page : state.page }) )

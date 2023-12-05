@@ -1,8 +1,5 @@
-<div [class]="positions[countOfLikesPosition]">
-    <span class="count-of-likes" [style]="'font-size : '+ likeCountsFontSize + 'rem'">{{countOfLikes}} begeni</span>
-    <i  
-        [class]="likeStatus ? 'fa-solid fa-heart icon active-icon' : 'fa-regular fa-heart icon'"
-        [style]="'font-size:'+ iconFontSize + 'rem'"
-        (click)="switchLikeStatus()">
-    </i>
-</div>
+<i  
+    [class]="likeStatus ? 'fa-solid fa-heart active-icon' : 'fa-regular fa-heart icon'"
+    [style]="'font-size:'+ iconFontSize + 'rem'"
+    (click)="switchLikeStatus()">
+</i>

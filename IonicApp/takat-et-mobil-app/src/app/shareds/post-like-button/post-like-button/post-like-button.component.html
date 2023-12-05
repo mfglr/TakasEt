@@ -1,10 +1,6 @@
 <app-like-button
     [likeStatus]="likeStatus$ | async"
-    [iconFontSize]="1.4"
-    [likeCountsFontSize]="1.15"
+    [iconFontSize]="1.7"
     (commitEvent)="commit()"
-    (switchEvent)="switch()"
-    [countOfLikes]="countOfLikes$ | async"
-    [displayCountOfLikes]="true"
-    [countOfLikesPosition]="'right'">
+    (switchEvent)="switch()">
 </app-like-button>

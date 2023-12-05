@@ -4,6 +4,7 @@
     margin-right: 0;
     margin-top : 1rem;
     border-radius: 0;
+    background-color: black;
     .header{
         margin-left: 1rem;
         margin-right: 1rem;
@@ -19,7 +20,8 @@
             align-items: center;
             .username{
                 margin-left: 0.25rem;
-                text-decoration: underline;
+                color: white;
+                font-size : 1.15rem;
             }
             .date{
                 margin-left: 0.25rem;
@@ -27,13 +29,9 @@
             }
         }
         .header-right{
-            .swap-button{
-                .swap-icon{
-
-                }
-                .text{
-                    margin-left: 0.25rem;
-                }
+            .swap-icon{
+                color : white;
+                font-size: 1.7rem;
             }
         }
     }
@@ -50,33 +48,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            .counts{
+            .left{
                 display: flex;
                 align-items: center;
-                .comments{
-                    display: flex;
-                    align-items: center;
+                .comment-icon{
                     margin-left: 0.5rem;
-                    .comment-icon{
-                        font-size: 1.4rem;
-                    }
-                    .comments-count{
-                        font-size: 1.15rem;
-                        text-decoration: underline;
-                        color : blue;
-                    }
+                    font-size: 1.7rem;
+                    color: white;
                 }
             }
-            .post-category-link{
-                display: flex;
-                align-items: center;
-                .category-icon{
-                    font-size: 1.4rem;
-                }
-                .post-category{
-                    font-size: 1.15rem;
-                    margin-left: 0.25rem;
-                    text-decoration: underline;
+            .right{
+                .post-category-link{
+                    display: flex;
+                    align-items: center;
+                    .category-icon{
+                        font-size: 1.7rem;
+                        color: white;
+                    }
+                    .post-category{
+                        font-size: 1.15rem;
+                        margin-left: 0.25rem;
+                        color: white;
+                    }
                 }
             }
         }
@@ -84,11 +77,11 @@
             .title{
                 font-size: 1.15rem;
                 font-weight: bold;
+                color: white;
                 .load-content-button{
                     font-size: 1rem;
                     font-weight: 400;
-                    color: blue;
-                    text-decoration: underline;
+                    color : gray
                 }
             }
         }

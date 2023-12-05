@@ -1,0 +1,5 @@
+<ng-container *ngIf="(post$ | async) as post">
+  <ng-container *ngIf="(postImageState$ | async) as postImageState">
+    <img [src]="postImageState.url" [alt]="post.title" class="img">
+  </ng-container>
+</ng-container>

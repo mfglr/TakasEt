@@ -3,6 +3,9 @@ import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { State } from '../state/reducer';
 import { openModalAction } from '../state/actions';
+import { Observable } from 'rxjs';
+import { PostState } from 'src/app/states/post-state/reducer';
+import { selectPostResponse } from 'src/app/states/post-state/selectors';
 
 @Component({
   selector: 'app-post',
@@ -11,20 +14,26 @@ import { openModalAction } from '../state/actions';
 })
 export class PostComponent{
   
-  @Input() post? : PostResponse;
-
+  @Input() postId? : number;
+  post$? : Observable<PostResponse | undefined>;
 
   constructor(
-    private postListStore : Store<State>
+    private postListStore : Store<State>,
+    private postStore : Store<PostState>
   ) {}
+
+  ngOnInit(){
+    if(this.postId){
+      this.post$ = this.postStore.select(selectPostResponse({postId : this.postId}))
+    }
+  }
 
   displayPostDetail(post : PostResponse){
     this.postListStore.dispatch(openModalAction({post : post}))
   }
   
-  loadContent(){
-    if(this.post)
-      this.postListStore.dispatch(openModalAction({post : this.post}))
+  loadContent(post : PostResponse){
+      this.postListStore.dispatch(openModalAction({post : post}))
   }
 
 }

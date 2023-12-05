@@ -16,7 +16,7 @@ export class PostLikeButtonComponent  implements OnInit {
   @Input() post? : PostResponse;
   @Input() iconFontSize? : number;
   @Input() countOfLikesFontSize? : number;
-
+  
   likeStatus$? : Observable<boolean>
   countOfLikes$? : Observable<number>
 

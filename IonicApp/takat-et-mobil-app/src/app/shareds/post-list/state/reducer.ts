@@ -1,18 +1,18 @@
 import { createReducer, on } from "@ngrx/store";
 import { PostResponse } from "src/app/models/responses/post-response";
-import { closeModalAction, openModalAction } from "./actions";
+import { openModalAction, closeModalAction } from "./actions";
 
 export interface State{
     postOfModal : PostResponse | undefined;
-    isOpenModal : boolean
+    isModalOpen : boolean
 }
 const initialState : State = {
     postOfModal : undefined,
-    isOpenModal : false
+    isModalOpen : false
 }
 
 export const reducer = createReducer(
     initialState,
-    on( openModalAction, (state,action) => ({ postOfModal : action.post,isOpenModal : true}) ),
-    on( closeModalAction, (state) => ({isOpenModal : false,postOfModal : undefined}))
+    on( openModalAction, (state,action) => ({ postOfModal : action.post,isModalOpen : true}) ),
+    on( closeModalAction, (state) => ({postOfModal : undefined,isModalOpen : false}))
 )

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProfileImageState } from '../state/reducer';
 import { Store } from '@ngrx/store';
-import { loadProfileImageAction } from '../state/actions';
 import { Observable } from 'rxjs';
-import { selectLoadStatus,selectUrl } from '../state/selectors';
+import { loadProfileImageAction } from 'src/app/states/profile-image-state/actions';
+import { ProfileImageState } from 'src/app/states/profile-image-state/reducer';
+import { selectLoadStatus, selectUrl } from 'src/app/states/profile-image-state/selectors';
 
 @Component({
   selector: 'app-profile-image',
@@ -26,7 +26,7 @@ export class ProfileImageComponent implements OnInit {
   
   ngOnInit() {
     if(this.id){
-      this.profileImageStore.dispatch(loadProfileImageAction({id : this.id!}))
+      this.profileImageStore.dispatch(loadProfileImageAction({id : this.id}))
       this.loadStatus$ = this.profileImageStore.select(selectLoadStatus({ id : this.id}))    
       this.url$ = this.profileImageStore.select(selectUrl({id : this.id}))
     }

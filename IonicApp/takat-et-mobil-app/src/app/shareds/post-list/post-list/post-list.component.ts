@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { PostResponse } from 'src/app/models/responses/post-response';
-import { selectIsModalOpen,selectPostOfModal } from '../state/selectors';
 import { Store } from '@ngrx/store';
+import { selectIsModalOpen, selectPostOfModal } from '../state/selectors';
 import { State } from '../state/reducer';
 import { closeModalAction } from '../state/actions';
 
@@ -12,17 +11,16 @@ import { closeModalAction } from '../state/actions';
 })
 export class PostListComponent {
   
-  @Input() posts? : PostResponse[] | null;
-  
-  postOfModal$ = this.postListStore.select(selectPostOfModal);
-  isModalOpen$ = this.postListStore.select(selectIsModalOpen);
+  @Input() postIds? : number[] | null;
 
   constructor(
     private postListStore : Store<State>
   ) {}
-  
+
+  postOfModal$ = this.postListStore.select(selectPostOfModal);
+  isModalOpen$ = this.postListStore.select(selectIsModalOpen);
+
   closeModal(){
     this.postListStore.dispatch(closeModalAction())  
   }
-
 }

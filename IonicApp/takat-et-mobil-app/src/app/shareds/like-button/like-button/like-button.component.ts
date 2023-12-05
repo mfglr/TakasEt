@@ -9,11 +9,8 @@ import { Subject, Subscription, debounceTime } from 'rxjs';
 export class LikeButtonComponent{
   
   @Input() iconFontSize? : number;
-  @Input() likeCountsFontSize? : number
   @Input() likeStatus : boolean | null = null;
-  @Input() countOfLikes : number | null = 0;
-  @Input() displayCountOfLikes : boolean = true;
-  @Input() countOfLikesPosition : "top" | "bottom" | "right" | "left" = "right";
+  
   @Output() commitEvent = new EventEmitter()
   @Output() switchEvent = new EventEmitter()
 

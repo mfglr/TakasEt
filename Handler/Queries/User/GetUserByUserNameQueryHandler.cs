@@ -1,6 +1,8 @@
-﻿using Application.Dtos;
+﻿using Application.Configurations;
+using Application.Dtos;
 using Application.Entities;
 using Application.Exceptions;
+using Application.Extentions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,33 +12,23 @@ namespace Handler.Queries
     public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserName, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
+        private readonly LoggedInUser _loggedInUser;
 
-        public GetUserByUserNameQueryHandler(UserManager<User> userManager)
-        {
+		public GetUserByUserNameQueryHandler(UserManager<User> userManager, LoggedInUser loggedInUser)
+		{
 			_userManager = userManager;
-        }
+			_loggedInUser = loggedInUser;
+		}
 
-        public async Task<AppResponseDto> Handle(GetUserByUserName request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetUserByUserName request, CancellationToken cancellationToken)
         {
             var user = await _userManager
                 .Users
 				.AsNoTracking()
 				.Include (x => x.Followers)
                 .Include(x => x.Followeds)
-				.Include(x => x.Posts)
-				.Select(x => new UserResponseDto()
-                {
-                    Id = x.Id,
-                    CreatedDate = x.CreatedDate,
-                    UpdatedDate = x.UpdatedDate,
-                    Name = x.Name,
-                    LastName = x.LastName,
-                    Email = x.Email!,
-                    UserName = x.UserName!,
-                    CountOfFolloweds = x.Followeds.Count(),
-                    CountOfFollowers = x.Followers.Count(),
-                    CountOfPosts = x.Posts.Count()
-                })
+				.Include(x => x.ProfileImages)
+				.ToUserResponseDto(_loggedInUser.UserId)
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
             if (user == null) throw new UserNotFoundException();
             return AppResponseDto.Success(user);

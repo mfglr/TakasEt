@@ -21,7 +21,7 @@ import { HomePageEffect } from './state/effect';
     HomePageRoutingModule,
     ReactiveFormsModule,
     PostListModule,
-    StoreModule.forFeature("HomePageState",homePageReducer),
+    StoreModule.forFeature("HomePageStore",homePageReducer),
     EffectsModule.forFeature([HomePageEffect])
   ],
   declarations: [

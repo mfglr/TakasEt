@@ -1,0 +1,7 @@
+<swiper-container [pagination]="true" class="slide" (swipersliderfirstmove)="loadImage($event)">
+  
+  <swiper-slide *ngFor="let postImage of post?.postImages" class="slide-item" (click)="displayPostDetail()">
+    <app-post-image-slider-item [id]="postImage.id" [post]="post"></app-post-image-slider-item>
+  </swiper-slide>
+  
+</swiper-container>

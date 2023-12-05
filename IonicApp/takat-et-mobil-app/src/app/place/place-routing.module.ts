@@ -28,8 +28,13 @@ const routes: Routes = [
         path: 'create-post',
         loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule)
       },
+      {
+        path: 'messages',
+        loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
+      },
     ]
   },
+ 
   
   
   
