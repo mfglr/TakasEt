@@ -29,8 +29,10 @@ namespace Handler.Queries
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.Comments)
 				.Include(x => x.User)
+                .ThenInclude(x => x.ProfileImages)
 				.Include(x => x.Category)
-				.Include(x => x.PostImages)
+				.Include(x => x.Tags)
+				.ThenInclude(x => x.Tag)
 				.Where(
                     x =>
 						x.UserId == _loggedInUser.UserId &&

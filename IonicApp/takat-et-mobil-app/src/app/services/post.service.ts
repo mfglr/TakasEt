@@ -30,11 +30,17 @@ export class PostService {
       `post/get-search-posts?${UrlHelper.createPaginationQueryString(page)}`
     )
   }
-  
+
   getPostsByUserId(userId : number,page : Page) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
       `post/get-posts-by-user-id/${userId}?${UrlHelper.createPaginationQueryString(page)}`
     );
+  }
+
+  getExplorePagePosts(tags : string[], categoryId : number,page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-explore-page-posts?categoryId=${categoryId}&tags=${tags.join(",")}&${UrlHelper.createPaginationQueryString(page)}`
+    )
   }
 
   getPostsExceptRequesters(postId : number) : Observable<PostResponse[]>{

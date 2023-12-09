@@ -13,12 +13,13 @@ namespace Application.Entities
         public int CountOfImages { get; private set; }
         public User User { get; }
         public Category Category { get; }
+
 		public IReadOnlyCollection<Comment> Comments { get; }
         public IReadOnlyCollection<UserPostLiking> UsersWhoLiked { get; }
         public IReadOnlyCollection<PostImage> PostImages => _images;
 		public IReadOnlyCollection<PostPostRequesting> Requesteds { get; }//talep ettikleri
 		public IReadOnlyCollection<PostPostRequesting> Requesters { get; }//telap edenler
-
+        public IReadOnlyCollection<PostTag> Tags { get; }
 
         private readonly List<PostImage> _images = new();
 

@@ -28,8 +28,16 @@ namespace WebApi.Controllers
 		[HttpGet("post/get-home-posts")]
 		public async Task<AppResponseDto> GetHomePosts()
 		{
-			return await _sender.Send(new GetHomePosts(Request.Query));
+			return await _sender.Send(new GetHomePagePosts(Request.Query));
 		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-explore-page-posts")]
+		public async Task<AppResponseDto> GetExplorePagePosts()
+		{
+			return await _sender.Send(new GetExplorePagePosts(Request.Query));
+		}
+
 
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-user-id/{userId}")]

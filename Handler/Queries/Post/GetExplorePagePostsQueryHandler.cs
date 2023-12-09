@@ -8,34 +8,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-	public class GetPostsByUserIdQueryHandler : IRequestHandler<GetPostsByUserId, AppResponseDto>
+	public class GetExplorePagePostsQueryHandler : IRequestHandler<GetExplorePagePosts, AppResponseDto>
 	{
-		private readonly IRepository<Post> _posts;
 		private readonly LoggedInUser _loggedInUser;
-		public GetPostsByUserIdQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
+		private IRepository<Post> _posts;
+
+		public GetExplorePagePostsQueryHandler(LoggedInUser loggedInUser, IRepository<Post> posts)
 		{
-			_posts = posts;
 			_loggedInUser = loggedInUser;
+			_posts = posts;
 		}
 
-		public async Task<AppResponseDto> Handle(GetPostsByUserId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetExplorePagePosts request, CancellationToken cancellationToken)
 		{
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.Comments)
-				.Include(x => x.User)
 				.Include(x => x.Category)
+				.Include(x => x.User)
+				.ThenInclude(x => x.ProfileImages)
+				.Include(x => x.User)
+				.ThenInclude(x => x.Followers)
 				.Include(x => x.PostImages)
 				.Include(x => x.Tags)
 				.ThenInclude(x => x.Tag)
-				.Where(post => post.UserId == request.UserId)
+				.Where(
+					x =>
+						(request.CategoryId == null || x.CategoryId == request.CategoryId) &&
+						(
+							request.Tags == null || 
+							x.Tags.Any( pt => request.Tags.Any( tag => pt.Tag.NormalizeName.Contains(tag) ) )
+						)
+				)
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
+
 		}
 	}
 }

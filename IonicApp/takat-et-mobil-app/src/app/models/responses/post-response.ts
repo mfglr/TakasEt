@@ -5,6 +5,7 @@ import { ProfileImageResponse } from "./profile-image-response";
 export interface PostResponse extends BaseResponse{
   userName : string;
   userId : number;
+  categoryId : number,
   categoryName : string;
   title : string;
   content : string;
@@ -13,5 +14,6 @@ export interface PostResponse extends BaseResponse{
   countOfComments : number;
   likeStatus : boolean;
   postImages : PostImageResponse[];
-  profileImage : ProfileImageResponse
+  profileImage : ProfileImageResponse;
+  tags : string[];
 }

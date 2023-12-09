@@ -6,6 +6,7 @@ export interface ProfilePageState{
     postIds : number[];
     page : Page;
     status : boolean;
+    activeTab : 0 | 1 | 2;
 }
 
 const initialState : ProfilePageState = {
@@ -15,7 +16,8 @@ const initialState : ProfilePageState = {
         take : takeValueOfPosts
     },
     postIds : [],
-    status : false
+    status : false,
+    activeTab : 0
 }
 
 export const profilePageReducer = createReducer(
@@ -23,6 +25,7 @@ export const profilePageReducer = createReducer(
     on(
         nextPageSuccessAction,
         (state,action) => ({
+            ...state,
             postIds : [...state.postIds,...action.payload.map(x => x.id)],
             status : action.payload.length < takeValueOfPosts,
             page : {

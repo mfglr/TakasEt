@@ -24,4 +24,6 @@ export class AppComponent {
   ngOnInit() {
     this.loginStore.dispatch(loginFromLocalStorage())
   }
+
+  
 }

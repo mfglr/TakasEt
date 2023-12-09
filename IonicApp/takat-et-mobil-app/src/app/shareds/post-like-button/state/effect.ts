@@ -11,7 +11,7 @@ import { selectPostLikeState } from "./selectors";
 export class PostLikeEffect{
     constructor(
         private actions : Actions,
-        private pagePostLikeStore : Store<PostLikeState>,
+        private postLikeStore : Store<PostLikeState>,
         private likingService : UserPostLikingService
     ) {}
 
@@ -19,9 +19,7 @@ export class PostLikeEffect{
         return this.actions.pipe(
             ofType(commitAction),
             mergeMap(
-                action => this.pagePostLikeStore.select(selectPostLikeState({
-                    postId : action.postId
-                })).pipe(
+                action => this.postLikeStore.select(selectPostLikeState({postId : action.postId})).pipe(
                     first(),
                     filter(x => x.lastComittedValue != x.likeStatus),
                     mergeMap(

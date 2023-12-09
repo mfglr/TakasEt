@@ -38,7 +38,6 @@ import { PostImageEffect } from './states/post-image-state/effect';
     EffectsModule.forFeature([LoginEffect]),
     EffectsModule.forFeature([ProfileImageEffect]),
     EffectsModule.forFeature([PostImageEffect]),
-
     LoginModule,
   ],
   providers: [

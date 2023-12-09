@@ -21,10 +21,6 @@ const routes: Routes = [
         loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
       },
       {
-        path: 'profile',
-        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
-      },
-      {
         path: 'create-post',
         loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule)
       },
@@ -32,13 +28,17 @@ const routes: Routes = [
         path: 'messages',
         loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
       },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+      },
+      {
+        path: 'explore',
+        loadChildren: () => import('./explore/explore.module').then( m => m.ExplorePageModule)
+      }
     ]
   },
- 
-  
-  
-  
-  
+
 ];
 
 @NgModule({

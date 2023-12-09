@@ -2,8 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin: 1rem;
+    padding: 0.5rem;
+    background-color: #222428;
     
     .counts{
         display: flex;
@@ -12,21 +13,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            color : white;
             .post-counts{
-                font-size: 1.6rem;
+                font-size: 1.3rem;
                 font-weight: bold;
             }
             .post-text{
                 font-weight: 600;
+                
             }
         }
         .follower{
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-left: 2rem;
+            margin-left: 1rem;
+            color : white;
             .follower-counts{
-                font-size: 1.6rem;
+                font-size: 1.3rem;
                 font-weight: bold;
             }
             .follower-text{
@@ -37,14 +41,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-left: 2rem;
+            margin-left: 1rem;
+            color : white;
             .followed-counts{
-                font-size: 1.6rem;
+                font-size: 1.3rem;
                 font-weight: bold;
             }
             .followed-text{
                 font-weight: 600;
             }
         }
+    }
+}
+.content{
+    background-color: #222428;
+    .index{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-top : 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .index i{
+        font-size: 1.7rem;
     }
 }

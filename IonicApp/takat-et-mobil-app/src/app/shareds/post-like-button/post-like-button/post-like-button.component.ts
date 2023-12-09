@@ -21,23 +21,23 @@ export class PostLikeButtonComponent  implements OnInit {
   countOfLikes$? : Observable<number>
 
   constructor(
-    private pagePostLikeStore : Store<EntityPostLikeState>
+    private postLikeStore : Store<EntityPostLikeState>
   ) { }
 
   ngOnInit() {
     if(this.post){
       
-      this.pagePostLikeStore.dispatch(initStateAction({
+      this.postLikeStore.dispatch(initStateAction({
         postId : this.post.id,
         countOfLikes : this.post.countOfLikes,
         likeStatus : this.post.likeStatus,
       }))
       
-      this.likeStatus$ = this.pagePostLikeStore.select(selectLikeStatus({
+      this.likeStatus$ = this.postLikeStore.select(selectLikeStatus({
         postId : this.post.id
       }))
 
-      this.countOfLikes$ = this.pagePostLikeStore.select(selectCountOfLikes({
+      this.countOfLikes$ = this.postLikeStore.select(selectCountOfLikes({
         postId : this.post.id
       }))
 
@@ -46,13 +46,13 @@ export class PostLikeButtonComponent  implements OnInit {
 
   commit(){
     if(this.post){
-      this.pagePostLikeStore.dispatch(commitAction({postId : this.post.id}))
+      this.postLikeStore.dispatch(commitAction({postId : this.post.id}))
     }
   }
 
   switch(){
     if(this.post){
-      this.pagePostLikeStore.dispatch(switchAction({postId : this.post.id}))
+      this.postLikeStore.dispatch(switchAction({postId : this.post.id}))
     }
   }
 

@@ -16,6 +16,7 @@ namespace Application.Extentions
 						UpdatedDate = x.UpdatedDate,
 						UserId = x.User.Id,
 						UserName = x.User.UserName!,
+						CategoryId = x.CategoryId,
 						CategoryName = x.Category.Name,
 						Title = x.Title,
 						Content = x.Content,
@@ -42,7 +43,8 @@ namespace Application.Extentions
 									Id = x.Id,
 									Extention = x.Extention,
 								}
-							)
+							),
+						Tags = x.Tags.Select(pt => pt.Tag.Name)
 					}
 				) ;
 		}

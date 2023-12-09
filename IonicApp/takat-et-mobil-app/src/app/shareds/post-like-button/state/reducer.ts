@@ -39,7 +39,7 @@ export const postLikeReducer = createReducer(
         commitSuccessAction,
         (state,action) => adapter.updateOne({
             id : action.postId,
-            changes : { lastComittedValue : action.value}
+            changes : { lastComittedValue : action.value }
         },state)
     ),
 )

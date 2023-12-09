@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Contexts;
 
@@ -11,9 +12,11 @@ using Repository.Contexts;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231209094200_addTagEntity")]
+    partial class addTagEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,56 +94,56 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1582),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1508),
                             Name = "Kitap",
                             NormalizedName = "KITAP"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1599),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1520),
                             Name = "Araba",
                             NormalizedName = "ARABA"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1599),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1521),
                             Name = "Elektronik",
                             NormalizedName = "ELEKTRONIK"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1600),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1521),
                             Name = "Giyim",
                             NormalizedName = "GIYIM"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1601),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1522),
                             Name = "Ev Eşyaları",
                             NormalizedName = "EV ESYALARI"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1601),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1523),
                             Name = "Telefon",
                             NormalizedName = "TELEFON"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1602),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1523),
                             Name = "Bilgisayar",
                             NormalizedName = "BILGISAYAR"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1602),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1524),
                             Name = "Motor",
                             NormalizedName = "MOTOR"
                         });
@@ -319,19 +322,19 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1665),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1580),
                             Name = "client"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1667),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1581),
                             Name = "user"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1667),
+                            CreatedDate = new DateTime(2023, 12, 9, 12, 42, 0, 146, DateTimeKind.Local).AddTicks(1582),
                             Name = "admin"
                         });
                 });
@@ -380,10 +383,6 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

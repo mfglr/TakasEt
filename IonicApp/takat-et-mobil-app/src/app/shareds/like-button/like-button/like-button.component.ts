@@ -14,18 +14,11 @@ export class LikeButtonComponent{
   @Output() commitEvent = new EventEmitter()
   @Output() switchEvent = new EventEmitter()
 
-  positions = {
-    'top' : 'position-top',
-    'right' : 'position-right',
-    'bottom' : 'position-bottom',
-    'left' : 'position-left'
-  }
-
   subject? : Subject<void>
   subs? : Subscription
   
   ngOnInit(){
-    if(this.likeStatus){
+    if(this.likeStatus != null){
       this.subject = new Subject<void>()
       this.subs = this.subject.pipe(
         debounceTime(500)

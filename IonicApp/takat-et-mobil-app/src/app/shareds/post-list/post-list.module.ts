@@ -10,6 +10,7 @@ import { ProfileImageModule } from '../profile-image/profile-image.module';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/reducer';
 import { PostImageModule } from '../post-image/post-image.module';
+import { RouterLink } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PostImageModule } from '../post-image/post-image.module';
     ProfileImageModule,
     PostLikeButtonModule,
     PostDetailModalModule,
-    PostImageModule
+    PostImageModule,
+    RouterLink
   ],
   exports : [
     PostListComponent
