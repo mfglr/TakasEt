@@ -4,7 +4,7 @@ import { initPageState, nextPageSuccessAction } from "./actions";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 
-export interface ExplorePageState{
+interface ExplorePageState{
   postIds : number[];
   page : Page;
   status : boolean;

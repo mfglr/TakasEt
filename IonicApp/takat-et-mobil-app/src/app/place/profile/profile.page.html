@@ -1,4 +1,3 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>profile</ion-title>
@@ -14,54 +13,15 @@
 
   <ion-content>
     <ng-container *ngIf="(user$ | async) as user">
-      
-      <ion-card class="header">
-        <app-profile-image [diameter]="6" [id]="user.profileImage.id"></app-profile-image>
-        <div class="counts">
 
-          <div class="post">
-            <span class="post-counts" >{{user.countOfPosts}}</span>
-            <span class="post-text">Gönderi</span>
-          </div>
+      <app-user-info-header [user]="user"></app-user-info-header>
 
-          <div class="follower">
-            <span class="follower-counts">{{user.countOfFollowers}}</span>
-            <span class="follower-text">Takipçi</span>
-          </div>
-
-          <div class="followed">
-            <span class="followed-counts">{{user.countOfFolloweds}}</span>
-            <span class="followed-text">Takip</span>
-          </div>
-
-
-        </div>
-      </ion-card>
-      
-
-      <ion-card class="content">
-        <div class="index">
-          <i class="fa-solid fa-table-cells-large" (click)="slideTo(0)"></i>
-          <i class="fa-solid fa-handshake-simple" (click)="slideTo(1)"></i>
-          <i class="fa-solid fa-handshake-simple-slash" (click)="slideTo(2)"></i>
-        </div>
-
-        <swiper-container #swiperContainer>
-          
-          <swiper-slide >
-            <app-abstract-post-list [postIds]="postIds$ | async"></app-abstract-post-list>
-          </swiper-slide>
-          
-          <swiper-slide>
-
-          </swiper-slide>
-
-          <swiper-slide>
-
-          </swiper-slide>
-
-        </swiper-container>
-      </ion-card>
+      <app-user-info-content
+        [user]="user"
+        [postIds]="postIds$ | async"
+        (changeActiveTabEvent)="changeActiveTab($event)"
+        [activeTab]="activeTab$ | async">
+      </app-user-info-content>
 
     </ng-container>
   </ion-content>

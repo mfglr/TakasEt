@@ -3,19 +3,19 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
 import { nextPageAction, nextPageSuccessAction } from "./actions";
 import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
-import { ExplorePageState } from "./reducer";
 import { Store } from "@ngrx/store";
 import { selectExplorePageState } from "./selectors";
 import { addPostsAction } from "src/app/states/post-state/actions";
 import { addPostImagesAction } from "src/app/states/post-image-state/actions";
 import { addProfileImagesAction } from "src/app/states/profile-image-state/actions";
+import { State } from "./reducer";
 
 @Injectable()
 export class ExplorePageEffect{
   constructor(
     private actions : Actions,
     private postService : PostService,
-    private explorePageStore : Store<ExplorePageState>,
+    private explorePageStore : Store<State>,
   ) {}
 
   nextPage$ = createEffect(() =>{

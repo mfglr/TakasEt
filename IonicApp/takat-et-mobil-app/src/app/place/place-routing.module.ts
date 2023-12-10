@@ -35,9 +35,14 @@ const routes: Routes = [
       {
         path: 'explore',
         loadChildren: () => import('./explore/explore.module').then( m => m.ExplorePageModule)
-      }
+      },
+      {
+        path: 'user',
+        loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
+      },
     ]
   },
+
 
 ];
 

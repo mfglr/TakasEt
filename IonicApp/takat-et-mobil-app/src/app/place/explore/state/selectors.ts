@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { ExplorePageState, State } from "./reducer";
+import { State } from "./reducer";
 
 const selectStore = createFeatureSelector<State>("ExplorePagesStore");
 export const selectExplorePageState = (props : {postId : number}) => createSelector(

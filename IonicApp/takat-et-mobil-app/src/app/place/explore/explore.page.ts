@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { ExplorePageState } from './state/reducer';
+import { State } from './state/reducer';
 import { initPageState, nextPageAction } from './state/actions';
 import { Observable } from 'rxjs';
 import { selectPostIds } from './state/selectors';
@@ -17,7 +17,7 @@ export class ExplorePage implements OnInit {
   postIds$?: Observable<number[] | undefined>
 
   constructor(
-    private explorePageStore : Store<ExplorePageState>
+    private explorePageStore : Store<State>
   ) {}
 
   ngOnInit(){

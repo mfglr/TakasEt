@@ -1,0 +1,23 @@
+<ion-card class="content">
+  <div class="index">
+    <i class="fa-solid fa-table-cells-large" (click)="slideTo(0)"></i>
+    <i class="fa-solid fa-handshake-simple" (click)="slideTo(1)"></i>
+    <i class="fa-solid fa-handshake-simple-slash" (click)="slideTo(2)"></i>
+  </div>
+
+  <swiper-container #swiperContainer (swiperactiveindexchange)="changeActiveTab($event)">
+
+    <swiper-slide >
+      <app-abstract-post-list [postIds]="postIds"></app-abstract-post-list>
+    </swiper-slide>
+
+    <swiper-slide>
+
+    </swiper-slide>
+
+    <swiper-slide>
+
+    </swiper-slide>
+
+  </swiper-container>
+</ion-card>

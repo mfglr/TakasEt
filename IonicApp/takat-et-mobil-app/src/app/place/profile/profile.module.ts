@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { profilePageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { ProfilePageEffect } from './state/effect';
+import { UserInfoModule } from 'src/app/shareds/user-info/user-info.module';
 
 @NgModule({
   imports: [
@@ -21,8 +22,8 @@ import { ProfilePageEffect } from './state/effect';
     FormsModule,
     IonicModule,
     ProfilePageRoutingModule,
-    ProfileImageModule,
     PipesModule,
+    UserInfoModule,
     AbstractPostListModule,
     StoreModule.forFeature("ProfilePageStore",profilePageReducer),
     EffectsModule.forFeature([ProfilePageEffect])

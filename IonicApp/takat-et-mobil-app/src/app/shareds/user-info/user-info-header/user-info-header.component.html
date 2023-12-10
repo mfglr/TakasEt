@@ -1,0 +1,21 @@
+<ion-card class="root">
+  <app-profile-image [diameter]="6" [id]="user?.profileImage?.id"></app-profile-image>
+  <div class="counts">
+
+    <div class="post">
+      <span class="post-counts" >{{user?.countOfPosts}}</span>
+      <span class="post-text">Gönderi</span>
+    </div>
+
+    <div class="follower">
+      <span class="follower-counts">{{user?.countOfFollowers}}</span>
+      <span class="follower-text">Takipçi</span>
+    </div>
+
+    <div class="followed">
+      <span class="followed-counts">{{user?.countOfFolloweds}}</span>
+      <span class="followed-text">Takip</span>
+    </div>
+
+  </div>
+</ion-card>
