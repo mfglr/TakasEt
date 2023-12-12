@@ -20,8 +20,6 @@ namespace Repository.ModelBuilders
 			builder.HasIndex(x => x.NormalizedEmail).IsUnique().HasDatabaseName("emailIndexer");
 			builder.HasIndex(x => x.NormalizedUserName).IsUnique().HasDatabaseName("userNameIndexer");
 			builder.HasIndex(x => x.NormalizedFullName).HasDatabaseName("fullNameIndexer");
-			builder.HasIndex(x => x.CreatedDate).IsDescending(true).HasDatabaseName("createdDateIndexer");
-
 
 			builder
 				.HasMany(x => x.Posts)

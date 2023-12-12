@@ -1,7 +1,6 @@
 import { createReducer,on } from "@ngrx/store";
 import { loginFailedFromLocalStorage, loginSuccess} from "./actions";
 import { LoginResponse } from "src/app/models/responses/login-response";
-import { UserResponse } from "src/app/models/responses/user-response";
 
 export interface LoginState{
   loginResponse : LoginResponse | undefined;

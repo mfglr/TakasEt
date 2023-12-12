@@ -11,14 +11,4 @@ export class ObservableHelpers{
     )
   }
 
-  static mergeArrays<X,Y>(x : Observable<X[]>,y : Observable<Y[]>) : Observable<{x : X,y : Y}[]>{
-    return x.pipe(
-      mergeMap( xs => y.pipe(
-        mergeMap(ys => from(xs).pipe(
-          map((x,index) => ({x:x,y : ys[index]})),
-          toArray()
-        )),
-      ))
-    )
-  }
 }

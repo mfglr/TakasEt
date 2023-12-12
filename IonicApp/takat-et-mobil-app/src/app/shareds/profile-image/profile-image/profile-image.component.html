@@ -1,12 +1,11 @@
 <div class="root-wrapper" [style]='style'>
-  
+
   <ng-container *ngIf="loadStatus$ | async; else loadingTemplate">
     <img class="image" [src]="url$ | async" [alt]="userName">
   </ng-container>
-  
+
   <ng-template #loadingTemplate>
     <ion-item class="loading" [lines]="false">
-      <ion-label>loading</ion-label>
       <ion-spinner name="circular"></ion-spinner>
     </ion-item>
   </ng-template>

@@ -37,11 +37,16 @@ const routes: Routes = [
         loadChildren: () => import('./explore/explore.module').then( m => m.ExplorePageModule)
       },
       {
-        path: 'user',
+        path: 'user/:id',
         loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
+      },
+      {
+        path: 'user-posts/:id',
+        loadChildren: () => import('./user-posts/user-posts.module').then( m => m.UserPostsPageModule)
       },
     ]
   },
+
 
 
 ];

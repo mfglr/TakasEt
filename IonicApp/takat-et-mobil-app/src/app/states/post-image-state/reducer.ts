@@ -1,6 +1,6 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { addPostImage, addPostImagesAction, loadPostImageSuccessAction } from "./actions";
+import { loadPostImageSuccessAction, loadPostImagesSuccessAction, loadPostImageUrlSuccessAction } from "./actions";
 import { PostImageResponse } from "src/app/models/responses/post-image-response";
 
 export interface PostImageState{
@@ -15,30 +15,30 @@ const adapter = createEntityAdapter<PostImageState>({selectId : state => state.p
 export const postImageReducer = createReducer(
     adapter.getInitialState(),
     on(
-        addPostImagesAction,
-        (state,action) => adapter.addMany( 
-            action.postImages.map(
-                (postImage) : PostImageState => ({
-                    postImage : postImage,
-                    loadStatus : false,
-                    url : undefined
-                })
-            ),state
-        )
-    ),
-    on(
-        addPostImage,
-        (state,action) => adapter.addOne({
-            postImage : action.postImage,
+      loadPostImagesSuccessAction,
+      (state,action) => adapter.addMany(
+        action.postImages.map(
+          (postImage) : PostImageState => ({
+            postImage : postImage,
             loadStatus : false,
             url : undefined
-        },state)
+          })
+        ),state
+      )
     ),
     on(
-        loadPostImageSuccessAction,
-        (state,action) => adapter.updateOne({
-            id : action.id,
-            changes : { loadStatus : true, url : action.url }
-        },state)
+      loadPostImageSuccessAction,
+      (state,action) => adapter.addOne({
+        postImage : action.postImage,
+        loadStatus : false,
+        url : undefined
+      },state)
+    ),
+    on(
+      loadPostImageUrlSuccessAction,
+      (state,action) => adapter.updateOne({
+        id : action.id,
+        changes : { loadStatus : true, url : action.url }
+      },state)
     )
 )

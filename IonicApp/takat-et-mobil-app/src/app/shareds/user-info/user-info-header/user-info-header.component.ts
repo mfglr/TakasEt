@@ -12,6 +12,7 @@ export class UserInfoHeaderComponent  implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

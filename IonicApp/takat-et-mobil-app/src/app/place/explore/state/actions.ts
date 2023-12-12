@@ -2,14 +2,14 @@ import { createAction, props } from "@ngrx/store";
 import { PostResponse } from "src/app/models/responses/post-response";
 
 export const initPageState = createAction(
-  "[Explore Page Store] initPageState",
+  "[Explore Page Store] init page state",
   props<{post : PostResponse}>()
 )
-export const nextPageAction = createAction(
-  "[Explore Page Store] nextPageAction",
+export const nextPostsAction = createAction(
+  "[Explore Page Store] next posts",
   props<{postId : number}>()
 );
-export const nextPageSuccessAction = createAction(
-  "[Explore Page Store] nextPageSuccessAction",
+export const nextPostsSuccessAction = createAction(
+  "[Explore Page Store] next posts success",
   props<{postId : number,payload : PostResponse[]}>()
 )

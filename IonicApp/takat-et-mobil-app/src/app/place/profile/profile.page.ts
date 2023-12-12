@@ -1,13 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, mergeMap } from 'rxjs';
 import { LoginState } from 'src/app/states/login_state/reducer';
-import { selectUserId } from 'src/app/states/login_state/selectors';
 import { UserState } from 'src/app/states/user-state/reducer';
-import { selectUser } from 'src/app/states/user-state/selectors';
 import { ProfilePageState } from './state/reducer';
 import { changeActiveTabAction, nextPageAction } from './state/actions';
 import { selectActiveTab, selectPostIds } from './state/selectors';
+import { UserResponse } from 'src/app/models/responses/user-response';
+import { selectUserId } from 'src/app/states/login_state/selectors';
+import { selectUser } from 'src/app/states/user-state/selectors';
+import { Subscription, filter, mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -16,13 +17,9 @@ import { selectActiveTab, selectPostIds } from './state/selectors';
 })
 export class ProfilePage implements OnInit{
 
-  user$ = this.loginStore.select(selectUserId).pipe(
-    filter(userId => userId != undefined),
-    mergeMap(userId => this.userStore.select(selectUser({id : userId!})))
-  )
+  subs? : Subscription;
+  user? : UserResponse;
   activeTab$? = this.profilePageStore.select(selectActiveTab);
-
-  @ViewChild("swiperContainer") swiperContainer? : ElementRef;
   postIds$ = this.profilePageStore.select(selectPostIds)
 
   constructor(
@@ -33,18 +30,18 @@ export class ProfilePage implements OnInit{
 
   ngOnInit() {
     this.profilePageStore.dispatch(nextPageAction())
-  }
 
-  ngAfterContentInit(){
-    this.activeTab$?.subscribe(
-      x => this.slideTo(x)
-    )
-  }
-  slideTo(index : number){
-    this.swiperContainer?.nativeElement.swiper.slideTo(index)
+    this.subs = this.loginStore.select(selectUserId).pipe(
+      filter(userId => userId != undefined),
+      mergeMap(userId => this.userStore.select(selectUser({id : userId!})))
+    ).subscribe( response => this.user = response )
   }
 
   changeActiveTab(activeTab : number){
     this.profilePageStore.dispatch(changeActiveTabAction({activeTab : activeTab}))
+  }
+
+  ngOnDestroy(){
+    this.subs?.unsubscribe();
   }
 }

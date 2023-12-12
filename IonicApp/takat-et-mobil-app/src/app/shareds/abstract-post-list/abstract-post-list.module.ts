@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractPostComponent } from './abstract-post/abstract-post.component';
 import { AbstractPostListComponent } from './abstract-post-list/abstract-post-list.component';
 import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -13,7 +14,8 @@ import { IonicModule } from '@ionic/angular';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    RouterModule
   ],
   exports : [
     AbstractPostListComponent

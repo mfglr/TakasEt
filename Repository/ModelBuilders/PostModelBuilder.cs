@@ -12,7 +12,6 @@ namespace Repository.ModelBuilders
 			builder.Property(x => x.Title).HasColumnType("varchar(256)");
 			builder.Property(x => x.NormalizedTitle).HasColumnType("varchar(256)");
 			builder.HasIndex(x => x.NormalizedTitle).HasDatabaseName("titleIndexer");
-			builder.HasIndex(x => x.CreatedDate).IsDescending(true).HasDatabaseName("createdDateIndexer");
 
 			builder
 				.HasMany(x => x.Comments)
@@ -50,6 +49,16 @@ namespace Repository.ModelBuilders
 				.HasForeignKey(x => x.PostId)
 				.OnDelete(DeleteBehavior.NoAction);
 
+			builder
+				.HasOne(x => x.Swapping)
+				.WithOne(x => x.Post1)
+				.HasForeignKey<Swapping>(x => x.PostId1)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.HasOne(x => x.Swapping)
+				.WithOne(x => x.Post2)
+				.HasForeignKey<Swapping>(y => y.PostId2)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

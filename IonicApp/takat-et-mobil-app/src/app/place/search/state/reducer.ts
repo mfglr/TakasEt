@@ -1,34 +1,21 @@
 import { createReducer, on } from "@ngrx/store";
-import { Page, takeValueOfPosts } from "src/app/states/app-states";
-import { nextPageSuccessAction } from "./actions";
+import { takeValueOfPosts } from "src/app/states/app-states";
+import { nextPostsSuccessAction } from "./actions";
+import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
 
 export interface SearchPageState{
-    postIds : number[];
-    page : Page;
-    status : boolean;
+  posts : AppEntityState
 }
 
 const initialState : SearchPageState = {
-    postIds : [],
-    status : false,
-    page : {
-        skip : 0,
-        take : takeValueOfPosts,
-        lastId : undefined
-    }
+  posts : init(takeValueOfPosts)
 }
 export const searchPageReducer = createReducer(
-    initialState,
-    on(
-        nextPageSuccessAction,
-        (state,action) => ({
-            postIds : [...state.postIds,...action.payload.map(x => x.id)],
-            status : action.payload.length < takeValueOfPosts,
-            page : {
-                ...state.page,
-                skip : state.page.skip + takeValueOfPosts,
-                lastId : action.payload.length ? action.payload[action.payload.length - 1].id : undefined
-            }
-        })
-    ),
+  initialState,
+  on(
+    nextPostsSuccessAction,
+    (state,action) => ({
+      posts : addMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts)
+    })
+  )
 )

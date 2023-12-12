@@ -8,6 +8,6 @@ export const selectExplorePageState = (props : {postId : number}) => createSelec
 )
 export const selectPostIds = (props : {postId : number}) => createSelector(
   selectExplorePageState(props),
-  state => state?.postIds
+  state => state?.posts.entityIds
 );
 

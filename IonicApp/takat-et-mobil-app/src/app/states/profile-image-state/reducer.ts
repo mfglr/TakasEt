@@ -1,47 +1,42 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { loadProfileImageSuccessAction, addProfileImageAction, addProfileImagesAction } from "./actions";
+import { loadProfileImageUrlSuccessAction, loadProfileImageSuccessAction, loadProfileImagesSuccessAction } from "./actions";
 import { ProfileImageResponse } from "src/app/models/responses/profile-image-response";
 
-export interface ProfileImageState{
+interface ProfileImage{
     profileImage : ProfileImageResponse;
     loadStatus : boolean;
     url : string | undefined;
 }
-export interface EntityProfileImageState extends EntityState<ProfileImageState>{}
-const adapter = createEntityAdapter<ProfileImageState>({
-    selectId : state => state.profileImage.id
-})
+export interface ProfileImageState extends EntityState<ProfileImage>{}
+
+const adapter = createEntityAdapter<ProfileImage>({ selectId : x => x.profileImage.id })
 
 export const profileImageReducer = createReducer(
-    adapter.getInitialState(),
-    on(
-        loadProfileImageSuccessAction,
-        (state,action) => adapter.updateOne({
-            id : action.id,
-            changes : { loadStatus : true, url : action.url }
-        },state)
-    ),
-    on(
-        addProfileImageAction,
-        (state,action) => {
-            if(action.image)
-                return adapter.addOne({
-                    profileImage : action.image,
-                    loadStatus : false,
-                    url : undefined
-                },state)
-            return state
-        }
-    ),
-    on(
-        addProfileImagesAction,
-        (state,action) => adapter.addMany(
-            action.images.filter(x => !(!x)).map( (x) : ProfileImageState => ({
-                profileImage : x!,
-                loadStatus : false,
-                url : undefined
-            })),state
-        )
+  adapter.getInitialState(),
+  on(
+    loadProfileImageUrlSuccessAction,
+    (state,action) => adapter.updateOne({
+      id : action.id,
+      changes : { loadStatus : true, url : action.url }
+    },state)
+  ),
+  on(
+    loadProfileImageSuccessAction,
+    (state,action) => {
+      if(action.image)
+        return adapter.addOne({ profileImage : action.image, loadStatus : false, url : undefined },state)
+      return state
+    }
+  ),
+  on(
+    loadProfileImagesSuccessAction,
+    (state,action) => adapter.addMany(
+      action.images.filter(x => !(!x)).map( (x) : ProfileImage => ({
+        profileImage : x!,
+        loadStatus : false,
+        url : undefined
+      })),state
     )
+  )
 )

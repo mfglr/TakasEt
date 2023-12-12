@@ -1,10 +1,11 @@
-<ion-card class="card">
-  <ng-container *ngIf="(post$ | async) as post;">
+<ng-container *ngIf="(post$ | async) as post;">
+  <a [name]="post.id" class="pointer-link"></a>
+  <ion-card class="card">
 
     <ion-card-header class="header">
       <div class="header-left">
         <app-profile-image [diameter]="3" [id]="post?.profileImage?.id"></app-profile-image>
-        <a routerLink="" class="username">
+        <a [routerLink]="'/place/user/' + post.userId" class="username">
           <span>{{post?.userName}}</span>
         </a>
         <span class="date">{{ post?.createdDate | dateFormat }}</span>
@@ -46,7 +47,5 @@
       </div>
 
     </div>
-
-  </ng-container>
-
-</ion-card>
+  </ion-card>
+</ng-container>
