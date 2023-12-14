@@ -91,56 +91,56 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1582),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5177),
                             Name = "Kitap",
                             NormalizedName = "KITAP"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1599),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5190),
                             Name = "Araba",
                             NormalizedName = "ARABA"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1599),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5190),
                             Name = "Elektronik",
                             NormalizedName = "ELEKTRONIK"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1600),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5191),
                             Name = "Giyim",
                             NormalizedName = "GIYIM"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1601),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5192),
                             Name = "Ev Eşyaları",
                             NormalizedName = "EV ESYALARI"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1601),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5192),
                             Name = "Telefon",
                             NormalizedName = "TELEFON"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1602),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5193),
                             Name = "Bilgisayar",
                             NormalizedName = "BILGISAYAR"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1602),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5193),
                             Name = "Motor",
                             NormalizedName = "MOTOR"
                         });
@@ -209,6 +209,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(256)");
 
+                    b.Property<int?>("SwappingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("varchar(256)");
@@ -222,10 +225,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CreatedDate")
-                        .IsDescending()
-                        .HasDatabaseName("createdDateIndexer");
 
                     b.HasIndex("NormalizedTitle")
                         .HasDatabaseName("titleIndexer");
@@ -319,19 +318,19 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1665),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5246),
                             Name = "client"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1667),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5247),
                             Name = "user"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 12, 9, 16, 18, 9, 606, DateTimeKind.Local).AddTicks(1667),
+                            CreatedDate = new DateTime(2023, 12, 13, 4, 17, 52, 216, DateTimeKind.Local).AddTicks(5248),
                             Name = "admin"
                         });
                 });
@@ -366,6 +365,89 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Searching");
+                });
+
+            modelBuilder.Entity("Application.Entities.Swapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DestinationPostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationPostId")
+                        .IsUnique();
+
+                    b.ToTable("Swapping");
+                });
+
+            modelBuilder.Entity("Application.Entities.SwappingComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SwappingCommentContentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SwappingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SwappingCommentContentId");
+
+                    b.HasIndex("SwappingId");
+
+                    b.ToTable("SwappingComment");
+                });
+
+            modelBuilder.Entity("Application.Entities.SwappingCommentContent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SwappingCommentContent");
                 });
 
             modelBuilder.Entity("Application.Entities.Tag", b =>
@@ -490,10 +572,6 @@ namespace Repository.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedDate")
-                        .IsDescending()
-                        .HasDatabaseName("createdDateIndexer");
 
                     b.HasIndex("NormalizedEmail")
                         .IsUnique()
@@ -782,6 +860,36 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Application.Entities.Swapping", b =>
+                {
+                    b.HasOne("Application.Entities.Post", "DestinationPost")
+                        .WithOne("Swapping")
+                        .HasForeignKey("Application.Entities.Swapping", "DestinationPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("DestinationPost");
+                });
+
+            modelBuilder.Entity("Application.Entities.SwappingComment", b =>
+                {
+                    b.HasOne("Application.Entities.SwappingCommentContent", "SwappingCommentContent")
+                        .WithMany("SwappingComments")
+                        .HasForeignKey("SwappingCommentContentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.Swapping", "Swapping")
+                        .WithMany("SwappingComments")
+                        .HasForeignKey("SwappingId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Swapping");
+
+                    b.Navigation("SwappingCommentContent");
+                });
+
             modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
                 {
                     b.HasOne("Application.Entities.Comment", "Comment")
@@ -913,6 +1021,8 @@ namespace Repository.Migrations
 
                     b.Navigation("Requesters");
 
+                    b.Navigation("Swapping");
+
                     b.Navigation("Tags");
 
                     b.Navigation("UsersWhoLiked");
@@ -921,6 +1031,16 @@ namespace Repository.Migrations
             modelBuilder.Entity("Application.Entities.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Application.Entities.Swapping", b =>
+                {
+                    b.Navigation("SwappingComments");
+                });
+
+            modelBuilder.Entity("Application.Entities.SwappingCommentContent", b =>
+                {
+                    b.Navigation("SwappingComments");
                 });
 
             modelBuilder.Entity("Application.Entities.Tag", b =>

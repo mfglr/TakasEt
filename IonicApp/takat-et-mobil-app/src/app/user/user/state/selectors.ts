@@ -1,14 +1,9 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { State } from "./reducer";
+import { UserPageCollectionState } from "./reducer";
 
-const selectStore = createFeatureSelector<State>("UserPageStore");
-
-export const selectPosts = (props : {userId : number}) => createSelector(
+const selectStore = createFeatureSelector<UserPageCollectionState>("UserPageCollectionStore");
+export const selectActiveTab = (props : ({userId : number})) => createSelector(
   selectStore,
-  state => state.entities[props.userId]?.posts
+  state => state.entities[props.userId]?.activeTab
 )
-export const selectPostIds = (props : {userId : number}) => createSelector(
-  selectPosts(props),
-  state => state?.entityIds
-);
 

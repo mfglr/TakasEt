@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HomePageState } from './state/reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { nextPageAction } from './state/actions';
+import { nextPostsAction } from './state/actions';
 import { selectPostIds } from './state/selectors';
 
 @Component({
@@ -20,7 +20,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.postIds$ = this.homePageStore.select(selectPostIds);
-    this.homePageStore.dispatch(nextPageAction())
+    this.homePageStore.dispatch(nextPostsAction())
   }
 
 }

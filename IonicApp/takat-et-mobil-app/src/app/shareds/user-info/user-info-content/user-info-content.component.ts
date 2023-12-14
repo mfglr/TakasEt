@@ -7,10 +7,12 @@ import { UserResponse } from 'src/app/models/responses/user-response';
   styleUrls: ['./user-info-content.component.scss'],
 })
 export class UserInfoContentComponent  implements OnInit {
-
-  @Input() user? : UserResponse;
+  @Input() postsUrl? : string;
+  @Input() user? : UserResponse | null;
   @Input() activeTab? : number | null;
   @Input() postIds? : number[] | null;
+  @Input() swappedPostIds? : number[] | null;
+  @Input() notSwappedPostIds? : number[] | null;
   @Output() changeActiveTabEvent = new EventEmitter<number>();
   @ViewChild("swiperContainer") swiperContainer? : ElementRef;
 
@@ -20,13 +22,13 @@ export class UserInfoContentComponent  implements OnInit {
   }
 
   ngAfterContentInit(){
-    if(this.activeTab)
+    if(this.activeTab){
       this.slideTo(this.activeTab)
+    }
   }
 
   slideTo(index : number){
     this.swiperContainer?.nativeElement.swiper.slideTo(index)
-    this.changeActiveTabEvent.emit(index)
   }
 
   changeActiveTab(e : any){

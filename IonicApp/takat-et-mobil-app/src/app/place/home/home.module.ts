@@ -7,11 +7,11 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { PostListModule } from 'src/app/shareds/post-list/post-list.module';
 import { StoreModule } from '@ngrx/store';
 import { homePageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HomePageEffect } from './state/effect';
+import { PostListModule } from 'src/app/post-list/post-list.module';
 
 @NgModule({
   imports: [

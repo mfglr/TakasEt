@@ -1,8 +1,12 @@
-import { createAction, props } from "@ngrx/store";
-import { PostResponse } from "src/app/models/responses/post-response";
+import { createAction, props } from "@ngrx/store"
+import { PostResponse } from "src/app/models/responses/post-response"
 
-export const nextPostsActions = createAction(
-  "[User Modal Store] next posts action",
+export const initUserModuleAction = createAction(
+  "[User Modal Store] init user modal",
+  props<{userId : number}>()
+)
+export const nextPostsAction = createAction(
+  "[User Modal Store] next posts",
   props<{userId : number}>()
 )
 export const nextPostsSuccessAction = createAction(

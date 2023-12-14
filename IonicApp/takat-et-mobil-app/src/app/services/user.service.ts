@@ -4,7 +4,7 @@ import { UserResponse } from '../models/responses/user-response';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { UrlHelper } from '../helpers/url-helper';
 import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../states/app-states';
+import { Page } from '../states/app-entity-state';
 
 @Injectable({
   providedIn: 'root'

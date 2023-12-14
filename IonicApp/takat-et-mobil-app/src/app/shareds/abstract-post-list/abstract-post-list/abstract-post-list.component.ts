@@ -6,9 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./abstract-post-list.component.scss'],
 })
 export class AbstractPostListComponent  implements OnInit {
-
   @Input() postIds? : number[] | null;
-
+  @Input() url? : string;
   constructor() { }
 
   ngOnInit() {}

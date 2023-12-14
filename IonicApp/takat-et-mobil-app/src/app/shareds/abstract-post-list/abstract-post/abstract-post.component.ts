@@ -16,7 +16,7 @@ import { selectPostResponse } from 'src/app/states/post-state/selectors';
 export class AbstractPostComponent  implements OnInit {
 
   @Input() postId? : number;
-
+  @Input() url? : string;
   post$? : Observable<PostResponse | undefined>;
   postImageState$? : Observable<PostImageState | undefined>
 

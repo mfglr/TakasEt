@@ -30,25 +30,18 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+        loadChildren: () => import('src/app/profile/profile.module').then( m => m.ProfileModule )
       },
       {
         path: 'explore',
         loadChildren: () => import('./explore/explore.module').then( m => m.ExplorePageModule)
       },
       {
-        path: 'user/:id',
-        loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
-      },
-      {
-        path: 'user-posts/:id',
-        loadChildren: () => import('./user-posts/user-posts.module').then( m => m.UserPostsPageModule)
+        path: 'category/:categoryId',
+        loadChildren: () => import('./category/category.module').then( m => m.CategoryPageModule)
       },
     ]
   },
-
-
-
 ];
 
 @NgModule({

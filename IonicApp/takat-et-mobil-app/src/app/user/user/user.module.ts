@@ -9,20 +9,17 @@ import { UserPageRoutingModule } from './user-routing.module';
 import { UserPage } from './user.page';
 import { UserInfoModule } from 'src/app/shareds/user-info/user-info.module';
 import { StoreModule } from '@ngrx/store';
-import { userPageReducer } from './state/reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { UserPageEffect } from './state/effect';
+import { userPageCollectionReducer } from './state/reducer';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StoreModule.forFeature("UserPageStore",userPageReducer),
-    EffectsModule.forFeature([UserPageEffect]),
+    StoreModule.forFeature("UserPageCollectionStore",userPageCollectionReducer),
     UserPageRoutingModule,
     UserInfoModule
   ],
-  declarations: [UserPage]
+  declarations: [UserPage],
 })
 export class UserPageModule {}

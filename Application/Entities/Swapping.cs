@@ -2,20 +2,29 @@
 {
 	public class Swapping : Entity
 	{
-        public int PostId1 { get; private set; }
-		public Post Post1 { get; }
-        public int PostId2 { get; private set; }
-        public Post Post2 { get; }
+        public int DestinationPostId { get; private set; }
+        public Post DestinationPost { get; }
 		public int Rate {  get; private set; }
-        public IReadOnlyCollection<SwappingComment> SwappingComments { get; }
+		public IReadOnlyCollection<SwappingComment> SwappingComments => _swappingComments;
 
-        public Swapping(int postId1, int postId2, int rate)
+		private List<SwappingComment> _swappingComments = new();
+
+        public Swapping(int destinationPostId, int rate)
 		{
-			PostId1 = postId1;
-			PostId2 = postId2;
+			DestinationPostId = destinationPostId;
 			Rate = rate;
 		}
 
+		public void addSWappingComment(int userId,int swappingCommentContentId)
+		{
+			_swappingComments.Add(new SwappingComment(userId, swappingCommentContentId));
+		}
+
+		public void addSwappingComments(int userId,List<int> swappingCommentContentIds)
+		{
+			foreach(var swappingCommentContentId in swappingCommentContentIds)
+				_swappingComments.Add(new SwappingComment(userId, swappingCommentContentId));
+		}
 
 	}
 }

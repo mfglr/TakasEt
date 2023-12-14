@@ -1,13 +1,16 @@
 .content{
   background-color: #222428;
   .index{
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      margin-top : 1rem;
-      margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top : 1rem;
+    margin-bottom: 0.5rem;
+    .active{
+      color: white;
+    }
   }
   .index i{
-      font-size: 1.7rem;
+    font-size: 1.7rem;
   }
 }

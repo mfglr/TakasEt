@@ -10,7 +10,6 @@
         public string Content { get; set; }
         public int CountOfImages { get; set; }
         public int CountOfLikes { get; set; }
-		public int CountOfViews { get; set; }
 		public int CountOfComments { get; set; }
 		public bool LikeStatus { get; set; }
 		public ProfileImageResponseDto? ProfileImage { get; set; }

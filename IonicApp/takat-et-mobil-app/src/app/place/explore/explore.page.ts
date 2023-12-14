@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { State } from './state/reducer';
-import { initPageState, nextPageAction } from './state/actions';
+import { initPageState, nextPostsAction } from './state/actions';
 import { Observable } from 'rxjs';
 import { selectPostIds } from './state/selectors';
 
@@ -23,7 +23,7 @@ export class ExplorePage implements OnInit {
   ngOnInit(){
     if(this.initialPost){
       this.explorePageStore.dispatch(initPageState({post : this.initialPost}));
-      this.explorePageStore.dispatch(nextPageAction({postId : this.initialPost.id}));
+      this.explorePageStore.dispatch(nextPostsAction({postId : this.initialPost.id}));
       this.postIds$ = this.explorePageStore.select(selectPostIds({postId : this.initialPost.id}));
     }
   }

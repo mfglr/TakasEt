@@ -13,7 +13,7 @@ import { PlacePage } from './place.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    PlacePageRoutingModule
+    PlacePageRoutingModule,
   ],
   declarations: [PlacePage]
 })

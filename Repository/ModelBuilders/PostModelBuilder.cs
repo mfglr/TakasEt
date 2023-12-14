@@ -8,7 +8,6 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<Post> builder)
 		{
-
 			builder.Property(x => x.Title).HasColumnType("varchar(256)");
 			builder.Property(x => x.NormalizedTitle).HasColumnType("varchar(256)");
 			builder.HasIndex(x => x.NormalizedTitle).HasDatabaseName("titleIndexer");
@@ -51,13 +50,8 @@ namespace Repository.ModelBuilders
 
 			builder
 				.HasOne(x => x.Swapping)
-				.WithOne(x => x.Post1)
-				.HasForeignKey<Swapping>(x => x.PostId1)
-				.OnDelete(DeleteBehavior.NoAction);
-
-			builder.HasOne(x => x.Swapping)
-				.WithOne(x => x.Post2)
-				.HasForeignKey<Swapping>(y => y.PostId2)
+				.WithOne(x => x.DestinationPost)
+				.HasForeignKey<Swapping>(x => x.DestinationPostId)
 				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}

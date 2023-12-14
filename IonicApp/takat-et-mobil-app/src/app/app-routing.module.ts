@@ -11,12 +11,11 @@ const routes: Routes = [
     path: 'place',
     loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule)
   },
-  
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules,anchorScrolling : "enabled"})
   ],
   exports: [RouterModule]
 })

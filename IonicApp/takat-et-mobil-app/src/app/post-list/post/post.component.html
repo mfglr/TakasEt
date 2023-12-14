@@ -1,0 +1,49 @@
+<ng-container *ngIf="(post$ | async) as post;">
+  <ion-card class="card">
+    <ion-card-header class="header">
+      <div class="header-left">
+        <app-profile-image [diameter]="3" [id]="post?.profileImage?.id"></app-profile-image>
+        <a [routerLink]="'/place/user/' + post.userId" class="username">
+          <span>{{post?.userName}}</span>
+        </a>
+        <span class="date">{{ post?.createdDate | dateFormat }}</span>
+      </div>
+
+      <div class="header-right">
+        <i class="fa-solid fa-handshake-simple swap-icon"></i>
+      </div>
+
+    </ion-card-header>
+
+    <ion-card-content class="content">
+      <app-post-image-slider [post]="post" (displayPostDetailEvent)="displayPostDetail($event)" ></app-post-image-slider>
+    </ion-card-content>
+
+    <div class="footer">
+
+      <div class="row1">
+
+        <div class="left">
+          <app-post-like-button [post]="post" ></app-post-like-button>
+          <i class="fa-regular fa-comment comment-icon"></i>
+        </div>
+
+        <div class="right">
+          <a class="post-category-link" [routerLink]="'/place/category/'+post.categoryId">
+            <i class="fa-solid fa-book category-icon"></i>
+            <span class="post-category">{{post?.categoryName}}</span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="row2">
+        <span class="title">
+          {{((post?.title | toShortText) | toUpperFirstLetterOfAllWords)}}
+          <span class="load-content-button" (click)="loadContent(post)">...devami</span>
+        </span>
+      </div>
+
+    </div>
+  </ion-card>
+</ng-container>

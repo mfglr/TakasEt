@@ -23,7 +23,6 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.PostImages)
 				.Include(x => x.UsersWhoLiked)
 				.Include(x => x.Comments)
 				.Include(x => x.User)

@@ -4,7 +4,7 @@ import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { UrlHelper } from '../helpers/url-helper';
 import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../states/app-states';
+import { Page } from '../states/app-entity-state';
 
 @Injectable({
   providedIn: 'root'
@@ -46,4 +46,23 @@ export class PostService {
   getPostsExceptRequesters(postId : number) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(`post/get-posts-except-requesters/${postId}`);
   }
+
+  getSwappedPosts(userId : number,page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-swapped-posts/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+    );
+  }
+
+  getNotSwappedPosts(userId : number,page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-not-swapped-posts/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+    )
+  }
+
+  getPostsByCategoryId(categoryId : number,page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-posts-by-category-id/${categoryId}?${UrlHelper.createPaginationQueryString(page)}`
+    )
+  }
+
 }

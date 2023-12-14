@@ -38,7 +38,6 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetExplorePagePosts(Request.Query));
 		}
 
-
 		[Authorize(Roles = "user")]
 		[HttpGet("post/get-posts-by-user-id/{userId}")]
 		public async Task<AppResponseDto> GetPostsByUserId(int userId)
@@ -52,5 +51,27 @@ namespace WebApi.Controllers
 		{
 			return await _sender.Send(new GetPostsExceptRequesters(postId,Request.Query));
 		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-swapped-posts/{userId}")]
+		public async Task<AppResponseDto> GetSwappedPosts(int userId)
+		{
+			return await _sender.Send(new GetSwappedPosts(Request.Query) { UserId = userId});
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-not-swapped-posts/{userId}")]
+		public async Task<AppResponseDto> GetNotSwappedPosts(int userId)
+		{
+			return await _sender.Send(new GetNotSwappedPosts(Request.Query) { UserId = userId });
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-posts-by-category-id/{categoryId}")]
+		public async Task<AppResponseDto> GetPostsByCategoryId(int categoryId)
+		{
+			return await _sender.Send(new GetPostsByCategoryId(Request.Query) { CategoryId = categoryId });
+		}
+
 	}
 }

@@ -17,13 +17,7 @@ export function init(take : number) : AppEntityState{
     page : { lastId : undefined, skip : 0, take : take }
   }
 }
-export function initWith(entityIds : number[],page : Page,isLastEntities : boolean) : AppEntityState{
-  return {
-    entityIds : [...entityIds],
-    isLastEntities : isLastEntities,
-    page : {...page}
-  }
-}
+
 export function addOne(entityId : number,state : AppEntityState) : AppEntityState{
   return { ...state, entityIds : [entityId,...state.entityIds] }
 }

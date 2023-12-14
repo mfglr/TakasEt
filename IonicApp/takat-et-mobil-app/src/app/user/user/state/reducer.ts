@@ -1,21 +1,18 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { takeValueOfPosts } from "src/app/states/app-states";
-import { changeActiveTabAction, initUserPageStateAction, nextPostsSuccessAction } from "./actions";
-import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
+import { changeActiveTabAction, initUserPageStateAction } from "./actions";
 
 interface UserPageState{
   userId : number;
-  posts : AppEntityState;
   activeTab : number;
 }
-export interface State extends EntityState<UserPageState>{}
+export interface UserPageCollectionState extends EntityState<UserPageState>{}
 
 const adapter = createEntityAdapter<UserPageState>({
   selectId : x => x.userId
 })
 
-export const userPageReducer = createReducer(
+export const userPageCollectionReducer = createReducer(
   adapter.getInitialState(),
   on(
     changeActiveTabAction,
@@ -26,20 +23,6 @@ export const userPageReducer = createReducer(
     (state,action) => adapter.addOne({
       userId : action.userId,
       activeTab : 0,
-      posts : init(takeValueOfPosts)
     },state)
   ),
-  on(
-    nextPostsSuccessAction,
-    (state,action) => adapter.updateOne({
-      id : action.userId,
-      changes : {
-        posts : addMany(
-          action.payload.map(x => x.id),
-          takeValueOfPosts,
-          state.entities[action.userId]!.posts
-        )
-      }
-    },state)
-  )
 )
