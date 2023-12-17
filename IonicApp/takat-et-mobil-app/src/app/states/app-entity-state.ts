@@ -34,4 +34,11 @@ export function addMany(entityIds : number[],take : number,state : AppEntityStat
   }
 }
 
+export function removeOne(entityId : number,state : AppEntityState) : AppEntityState{
+  let indexOfId = state.entityIds.findIndex(x => x == entityId);
+  if(indexOfId != -1)
+    return { ...state, entityIds : [...state.entityIds].splice(indexOfId,1) }
+  return state;
+}
+
 

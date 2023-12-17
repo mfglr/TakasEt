@@ -1,31 +1,45 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
-import { takeValueOfPosts } from "src/app/states/app-states";
-import { initUserModuleAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction } from "./actions";
+import { takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-states";
+import { initUserModuleStateAction, initUserModuleStatesAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction } from "./actions";
+import { UserResponse } from "src/app/models/responses/user-response";
 
 interface UserModuleState{
   userId : number;
   posts : AppEntityState;
   swappedPosts : AppEntityState;
   notSwappedPosts : AppEntityState;
+  followers : AppEntityState;
+  followeds : AppEntityState;
 }
-export interface UserModuleCollectionState extends EntityState<UserModuleState>{}
 
-const adapter = createEntityAdapter<UserModuleState>({
-  selectId : x => x.userId
-})
+export interface UserModuleCollectionState extends EntityState<UserModuleState>{}
+const adapter = createEntityAdapter<UserModuleState>({selectId : x => x.userId})
 
 export const userModuleCollectionReducer = createReducer(
   adapter.getInitialState(),
   on(
-    initUserModuleAction,
+    initUserModuleStateAction,
     (state,action) => adapter.addOne({
       userId : action.userId,
       posts : init(takeValueOfPosts),
       swappedPosts : init(takeValueOfPosts),
-      notSwappedPosts : init(takeValueOfPosts)
+      notSwappedPosts : init(takeValueOfPosts),
+      followers : init(takeValueOfUsers),
+      followeds : init(takeValueOfUsers)
     },state)
+  ),
+  on(
+    initUserModuleStatesAction,
+    (state,action) => adapter.addMany(action.users.map(user => ({
+      userId : user.id,
+      posts : init(takeValueOfPosts),
+      swappedPosts : init(takeValueOfPosts),
+      notSwappedPosts : init(takeValueOfPosts),
+      followers : init(takeValueOfUsers),
+      followeds : init(takeValueOfUsers)
+    })),state)
   ),
   on(
     nextPostsSuccessAction,
@@ -65,6 +79,31 @@ export const userModuleCollectionReducer = createReducer(
         )
       }
     },state)
-  )
-
+  ),
+  on(
+    nextFollowersSuccessAction,
+    (state,action) => adapter.updateOne({
+      id : action.userId,
+      changes : {
+        followers : addMany(
+          action.payload.map(x => x.id),
+          takeValueOfUsers,
+          state.entities[action.userId]!.followers
+        )
+      }
+    },state)
+  ),
+  on(
+    nextFollowedsSuccessAction,
+    (state,action) => adapter.updateOne({
+      id : action.userId,
+      changes : {
+        followeds : addMany(
+          action.payload.map(x => x.id),
+          takeValueOfUsers,
+          state.entities[action.userId]!.followeds
+        )
+      }
+    },state)
+  ),
 )

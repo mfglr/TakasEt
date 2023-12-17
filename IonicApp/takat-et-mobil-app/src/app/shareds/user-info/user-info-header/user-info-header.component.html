@@ -8,12 +8,12 @@
     </div>
 
     <div class="follower">
-      <span class="follower-counts">{{user?.countOfFollowers}}</span>
+      <span class="follower-counts">{{numberOfFollowers$ | async}}</span>
       <span class="follower-text">Takipçi</span>
     </div>
 
     <div class="followed">
-      <span class="followed-counts">{{user?.countOfFolloweds}}</span>
+      <span class="followed-counts">{{numberOfFolloweds$ | async}}</span>
       <span class="followed-text">Takip</span>
     </div>
 

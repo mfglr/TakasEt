@@ -4,7 +4,6 @@ using Application.Entities;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Handler.Queries
 {

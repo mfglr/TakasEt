@@ -1,12 +1,9 @@
-﻿namespace Application.Dtos
-{
-	public class RemoveFollower
-	{
-        public int FollowerId { get; private set; }
+﻿using MediatR;
 
-        public RemoveFollower(int followerId)
-        {
-            FollowerId = followerId;
-        }
+namespace Application.Dtos
+{
+	public class RemoveFollower : IRequest<AppResponseDto>
+	{
+        public int FollowerId { get; set; }
     }
 }

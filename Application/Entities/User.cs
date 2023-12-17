@@ -16,8 +16,8 @@ namespace Application.Entities
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
 		public int CountOfPost {  get; private set; }
-		public UserRefreshToken UserRefreshToken { get; }
 
+		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<UserRole> Roles => _roles;
 		public IReadOnlyCollection<Post> Posts => _posts;
 		public IReadOnlyCollection<ProfileImage> ProfileImages { get; }
@@ -26,7 +26,7 @@ namespace Application.Entities
         public IReadOnlyCollection<UserPostLiking> LikedPosts => _likedPosts;
 		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
-        public IReadOnlyCollection<Searching>  Searchings{ get;}
+        public IReadOnlyCollection<Searching> Searchings { get;}
 
 		private readonly List<UserRole> _roles = new();
 		private readonly List<Post> _posts = new();

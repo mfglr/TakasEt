@@ -27,4 +27,19 @@ export const selectNotSwappedPostIds = (props : {userId : number}) => createSele
   selectNotSwappedPosts(props),
   state => state?.entityIds
 )
-
+export const selectFollowers = (props : {userId : number}) => createSelector(
+  selectStore,
+  state => state.entities[props.userId]?.followers
+)
+export const selectFollowerIds = (props : {userId : number}) => createSelector(
+  selectFollowers(props),
+  state => state?.entityIds
+)
+export const selectFolloweds = (props : {userId : number}) => createSelector(
+  selectStore,
+  state => state.entities[props.userId]?.followeds
+)
+export const selectFollowedIds = (props : {userId : number}) => createSelector(
+  selectFolloweds(props),
+  state => state?.entityIds
+)

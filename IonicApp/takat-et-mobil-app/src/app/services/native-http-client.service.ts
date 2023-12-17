@@ -11,13 +11,13 @@ import { selectAccessToken } from '../states/login_state/selectors';
   providedIn: 'root'
 })
 export class NativeHttpClientService {
-  
+
   private baseUrl : string = 'https://localhost:7160/api'
 
   constructor(
     private loginStore : Store<LoginState>
   ) { }
-  
+
   private getHttpHeaders$ : Observable<any> = this.loginStore.select(selectAccessToken).pipe(
     first(),
     map(accessToken => {

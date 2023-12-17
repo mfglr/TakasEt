@@ -4,7 +4,7 @@ import { filter, map, mergeMap, of, withLatestFrom} from "rxjs";
 import { Injectable } from "@angular/core";
 import { LoginService } from "src/app/services/login.service";
 import { LoginResponse } from "src/app/models/responses/login-response";
-import { loadUserAction } from "../user-state/actions";
+import { loadUserAction } from "../user-entity-state/actions";
 
 @Injectable()
 export class LoginEffect{

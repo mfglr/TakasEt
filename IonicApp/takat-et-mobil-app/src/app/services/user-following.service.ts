@@ -12,15 +12,19 @@ export class UserFollowingService{
     private httpClient : NativeHttpClientService
   ) { }
 
-  follow(followedId : string) : Observable<NoContentResponse>{
-    return this.httpClient.post<NoContentResponse>("following/follow-user",{followedId : followedId});
+  follow(userId : number) : Observable<NoContentResponse>{
+    return this.httpClient.post<NoContentResponse>("following/follow-user",{followedId : userId});
   }
 
-  unfollow(followedId : string) : Observable<NoContentResponse>{
-    return this.httpClient.delete(`following/unfollow-user/${followedId}`);
+  unfollow(userId : number) : Observable<NoContentResponse>{
+    return this.httpClient.delete(`following/unfollow-user/${userId}`);
   }
 
-  isFollowed(userId : string) : Observable<boolean>{
-    return this.httpClient.get<boolean>(`following/is-followed/${userId}`)
+  removeFollower(userId : number) : Observable<NoContentResponse>{
+    return this.httpClient.delete(`following/remove-follower/${userId}`);
   }
+
+
+
+
 }

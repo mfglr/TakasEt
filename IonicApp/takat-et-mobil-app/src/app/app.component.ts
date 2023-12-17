@@ -14,9 +14,9 @@ register();
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  
+
   isLogin$? : Observable<boolean> = this.loginStore.select(isLogin);
-  
+
   constructor(
     private loginStore : Store<LoginState>,
   ) {}
@@ -25,5 +25,4 @@ export class AppComponent {
     this.loginStore.dispatch(loginFromLocalStorage())
   }
 
-  
 }

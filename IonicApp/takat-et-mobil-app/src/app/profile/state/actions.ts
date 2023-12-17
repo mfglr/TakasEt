@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store"
 import { PostResponse } from "src/app/models/responses/post-response"
+import { UserResponse } from "src/app/models/responses/user-response"
 export const nextPostsAction = createAction("[Profile Modal Store] next posts")
 export const nextPostsSuccessAction = createAction(
   "[Profile Modal Store] next posts success",
@@ -12,8 +13,34 @@ export const nextSwappedPostsSuccessAction = createAction(
   props<{payload : PostResponse[]}>()
 )
 
-export const nextNotSwappedPostsAction = createAction("[Profile Modal Store] next not swapped posts",)
+export const nextNotSwappedPostsAction = createAction("[Profile Modal Store] next not swapped posts")
 export const nextNotSwappedPostsSuccessAction = createAction(
   "[Profile Modal Store] next not swapped posts success",
   props<{payload : PostResponse[]}>()
+)
+
+export const nextFollowedsAction = createAction("[Profile Modal Store] next followeds");
+export const nextFollowedsSuccessAction = createAction(
+  "[Profile Modal Store] next followeds success",
+  props<{payload : UserResponse[]}>()
+)
+
+export const nextFollowersAction = createAction("[Profile Modal Store] next followers")
+export const nextFollowersSuccessAction = createAction(
+  "[Profile Modal Store] next followers success",
+  props<{payload : UserResponse[]}>()
+)
+
+export const addFollowedAction = createAction(
+  "[Profile Modal Store] add followed",
+  props<{followedId : number}>()
+)
+export const removeFollowedAction = createAction(
+  "[Profile Modal Store] remove followed",
+  props<{followedId : number}>()
+)
+
+export const removeFollowerAction = createAction(
+  "[Profile Modal Store] remove follower",
+  props<{followerId : number}>()
 )

@@ -3,14 +3,16 @@ import { Store } from '@ngrx/store';
 import { filter, map, mergeMap, take } from 'rxjs';
 import { LoginState } from 'src/app/states/login_state/reducer';
 import { selectUserId } from 'src/app/states/login_state/selectors';
-import { UserState } from 'src/app/states/user-state/reducer';
-import { selectUser } from 'src/app/states/user-state/selectors';
+import { UserState } from 'src/app/states/user-entity-state/reducer';
+import { selectUser } from 'src/app/states/user-entity-state/selectors';
 import { ProfilePageState } from './state/reducer';
 import { selectActiveTab } from './state/selectors';
 import { ProfileModuleState } from '../state/reducer';
 import { selectNotSwappedPostIds, selectPostIds, selectSwappedPostIds } from '../state/selectors';
 import { nextNotSwappedPostsAction, nextPostsAction, nextSwappedPostsAction } from '../state/actions';
 import { changeActiveTabAction } from './state/actions';
+import { EntityFollowingState } from 'src/app/states/following-state/reducer';
+import { initFollowingStateAction } from 'src/app/states/following-state/actions';
 
 @Component({
   selector: 'app-profile-page',
@@ -36,12 +38,17 @@ export class ProfilePage implements OnInit {
     private loginStore : Store<LoginState>,
     private userStore : Store<UserState>,
     private profilePageStore : Store<ProfilePageState>,
-    private profileModuleStore : Store<ProfileModuleState>
+    private profileModuleStore : Store<ProfileModuleState>,
+    private entityFollowingState : Store<EntityFollowingState>
   ) { }
 
 
   ngOnInit(){
     this.nextPosts();
+    this.user$.pipe(filter(x => x != undefined)).subscribe(
+      user => this.entityFollowingState.dispatch(initFollowingStateAction({user : user!}))
+    )
+
   }
 
   nextPosts(){

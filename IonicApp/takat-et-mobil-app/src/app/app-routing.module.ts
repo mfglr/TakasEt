@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'place',
     loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule)
   },
+  {
+    path: 'following',
+    loadChildren: () => import('./user/following/following.module').then( m => m.FollowingPageModule)
+  },
 ];
 
 @NgModule({

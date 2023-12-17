@@ -40,6 +40,10 @@ const routes: Routes = [
         path: 'category/:categoryId',
         loadChildren: () => import('./category/category.module').then( m => m.CategoryPageModule)
       },
+      {
+        path : 'user/:userId',
+        loadChildren : () => import('src/app/user/user.module').then( m => m.UserModule)
+      }
     ]
   },
 ];

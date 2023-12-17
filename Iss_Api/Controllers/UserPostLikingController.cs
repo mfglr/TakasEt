@@ -29,12 +29,5 @@ namespace WebApi.Controllers
 		{
 			return await _sender.Send(new UnLikePost(postId));
 		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("user-post-liking/is-liked/{postId}")]
-		public async Task<AppResponseDto> IsLiked(int postId)
-		{
-			return await _sender.Send(new IsPostLiked(postId));
-		}
 	}
 }

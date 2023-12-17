@@ -30,6 +30,18 @@ export class UserService {
     )
   }
 
+  getFollowers(userId : number,page : Page) : Observable<UserResponse[]>{
+    return this.httpClient.get<UserResponse[]>(
+      `user/get-followers/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+    )
+  }
+
+  getFolloweds(userId : number,page : Page) : Observable<UserResponse[]>{
+    return this.httpClient.get<UserResponse[]>(
+      `user/get-followeds/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+    )
+  }
+
   addProfileImage(formData:FormData) : Observable<NoContentResponse> {
     return this.httpClient.post<NoContentResponse>('user/add-profile-image',formData);
   }

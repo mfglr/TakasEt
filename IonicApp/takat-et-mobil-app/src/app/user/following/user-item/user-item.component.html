@@ -1,0 +1,19 @@
+<div class="user-item">
+
+  <div class="user-info">
+    <app-profile-image [diameter]="3" [id]="user?.id"></app-profile-image>
+    <div class="name">
+      <span class="full-name">{{user?.name + ' ' + user?.lastName}}</span>
+      <span class="user-name">{{user?.userName}}</span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="user?.isFollower">
+    <ion-button>takipten cikar</ion-button>
+  </ng-container>
+
+  <ion-button>{{user?.isFollowed ? 'takibi birak' : 'takip et'}}</ion-button>
+
+
+
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, map, mergeMap, toArray } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { UrlHelper } from '../helpers/url-helper';

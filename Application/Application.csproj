@@ -33,6 +33,7 @@
     <Folder Include="Attributes\" />
     <Folder Include="Validators\AppFile\" />
     <Folder Include="Validators\PostImage\" />
+    <Folder Include="Validators\User\" />
   </ItemGroup>
 
 </Project>
