@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { searchPageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { SearchPageEffect } from './state/effect';
+import { SearchBoxModule } from 'src/app/shareds/search-box/search-box.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SearchPageEffect } from './state/effect';
     FormsModule,
     IonicModule,
     SearchPageRoutingModule,
+    SearchBoxModule,
     StoreModule.forFeature("SearchPageStore",searchPageReducer),
     EffectsModule.forFeature([SearchPageEffect])
   ],

@@ -5,6 +5,7 @@ import { UserInfoHeaderComponent } from './user-info-header/user-info-header.com
 import { ProfileImageModule } from '../profile-image/profile-image.module';
 import { AbstractPostListModule } from '../abstract-post-list/abstract-post-list.module';
 import { UserInfoContentComponent } from './user-info-content/user-info-content.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -16,6 +17,7 @@ import { UserInfoContentComponent } from './user-info-content/user-info-content.
   imports: [
     CommonModule,
     IonicModule,
+    RouterModule,
     ProfileImageModule,
     AbstractPostListModule
   ],

@@ -8,13 +8,13 @@
     </div>
 
     <div class="follower">
-      <span class="follower-counts">{{numberOfFollowers$ | async}}</span>
-      <span class="follower-text">Takipçi</span>
+      <a routerLink="/place/profile/following" class="follower-counts"><span>{{user?.countOfFollowers}}</span></a>
+      <a routerLink="/place/profile/following" class="follower-text"><span>Takipçi</span></a>
     </div>
 
     <div class="followed">
-      <span class="followed-counts">{{numberOfFolloweds$ | async}}</span>
-      <span class="followed-text">Takip</span>
+      <a routerLink="/place/profile/following" class="followed-counts"><span>{{user?.countOfFolloweds}}</span></a>
+      <a routerLink="/place/profile/following" class="followed-text"><span>Takip</span></a>
     </div>
 
   </div>

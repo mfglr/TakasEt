@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ProfileModuleState } from '../state/reducer';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
-import { selectPostIds } from '../state/selectors';
-import { nextPostsAction } from '../state/actions';
+import { nextPostsAction } from 'src/app/states/profile-state/actions';
+import { ProfileState } from 'src/app/states/profile-state/reducer';
+import { selectPostIds } from 'src/app/states/profile-state/selectors';
 
 @Component({
   selector: 'app-profile-posts-page',
@@ -12,16 +12,16 @@ import { nextPostsAction } from '../state/actions';
 })
 export class ProfilePostsPage {
 
-  postIds$ = this.profileModuleStore.select(selectPostIds);
+  postIds$ = this.profileStore.select(selectPostIds);
   initiliazer = this.postIds$.pipe(take(1)).subscribe(
     postIds => {
       if(!postIds.length)
-        this.profileModuleStore.dispatch(nextPostsAction())
+        this.profileStore.dispatch(nextPostsAction())
     }
   )
 
   constructor(
-    private profileModuleStore : Store<ProfileModuleState>,
+    private profileStore : Store<ProfileState>,
   ) { }
 
   ngOnDestroy(){

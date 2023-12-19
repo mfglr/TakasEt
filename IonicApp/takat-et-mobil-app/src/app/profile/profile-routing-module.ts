@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path : 'posts',
     loadChildren : () => import('./profile-posts-page/profile-posts-page.module').then( m => m.ProfilePostsPageModule)
+  },
+  {
+    path : 'following',
+    loadChildren : () => import('./following/following.module').then(m => m.FollowingPageModule)
   }
 ];
 

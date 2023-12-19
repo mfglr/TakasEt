@@ -8,20 +8,20 @@ import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, s
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
 import { loadProfileImagesSuccessAction } from "src/app/states/profile-image-state/actions";
 import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { ProfileModuleState } from "./reducer";
 import { LoginState } from "src/app/states/login_state/reducer";
 import { selectUserId } from "src/app/states/login_state/selectors";
 import { UserService } from "src/app/services/user.service";
 import { loadUsersSuccessAction } from "src/app/states/user-entity-state/actions";
+import { ProfileState } from "./reducer";
 
 @Injectable()
-export class ProfileModuleEffect{
+export class ProfileEffect{
   constructor(
     private actions : Actions,
     private postService : PostService,
     private userServie : UserService,
     private loginStore : Store<LoginState>,
-    private profileModuleStore: Store<ProfileModuleState>,
+    private profileModuleStore: Store<ProfileState>,
   ) {}
 
   nextPosts$ = createEffect(

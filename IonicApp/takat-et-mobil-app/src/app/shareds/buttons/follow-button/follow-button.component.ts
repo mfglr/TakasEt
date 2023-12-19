@@ -1,11 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { UserResponse } from 'src/app/models/responses/user-response';
-import { EntityFollowingState } from 'src/app/states/following-state/reducer';
+import { Component, Input } from '@angular/core';
 import { SwitchButton } from '../switch-button';
-import { commitFollowedValueAction, initFollowingStateAction, changeFollowedValueAction } from 'src/app/states/following-state/actions';
-import { Observable } from 'rxjs';
-import { selectIsFollowed } from 'src/app/states/following-state/selectors';
+import { Store } from '@ngrx/store';
+import { UserEntityState } from 'src/app/states/user-entity-state/reducer';
+import { LoginState } from 'src/app/states/login_state/reducer';
+import { Observable, filter, first, map, mergeMap } from 'rxjs';
+import { selectUserId } from 'src/app/states/login_state/selectors';
+import { ProfileState } from 'src/app/states/profile-state/reducer';
+import { selectIsFollowed } from 'src/app/states/user-entity-state/selectors';
+import { addOrRemoveFollowedAction } from 'src/app/states/profile-state/actions';
+import { changeFollowingStatusAction, commitFollowingStatusAction } from 'src/app/states/user-entity-state/actions';
 
 @Component({
   selector: 'app-follow-button',
@@ -14,31 +17,54 @@ import { selectIsFollowed } from 'src/app/states/following-state/selectors';
 })
 export class FollowButtonComponent {
 
-  @Input() user? : UserResponse | null;
-  switchButton? : SwitchButton;
+  @Input() userId? : number | null;
   isFollowed$? : Observable<boolean | undefined>
+  switchButton? : SwitchButton;
 
   constructor(
-    private entityFollowingStore : Store<EntityFollowingState>
-  ) { }
+    private userEntityStore : Store<UserEntityState>,
+    private profileStore : Store<ProfileState>,
+    private loginStore : Store<LoginState>
+  ) {}
 
   ngOnChanges() {
-    if(this.user){
+    if(this.userId){
 
-      this.entityFollowingStore.dispatch(initFollowingStateAction({user : this.user}))
-      this.isFollowed$ = this.entityFollowingStore.select(selectIsFollowed({userId : this.user.id}))
+      this.isFollowed$ = this.userEntityStore.select(selectIsFollowed({userId : this.userId}))
 
-      this.switchButton = new SwitchButton(this.user.isFollowed,500);
-      this.switchButton.valueChanges.subscribe(
-        x => {
-          this.entityFollowingStore.dispatch(changeFollowedValueAction({userId : this.user!.id,value : x}))
+      this.isFollowed$.pipe(
+        filter(isFollowed => isFollowed != undefined),
+        first(),
+        map(isFollowed => isFollowed!)
+      ).subscribe(
+        isFollowed => {
+
+          this.switchButton = new SwitchButton(isFollowed,500)
+
+          this.switchButton.valueChanges.pipe(
+            mergeMap(value => this.loginStore.select(selectUserId).pipe(
+              map(loginUserId => ({loginUserId : loginUserId!, value : value}))
+            ))
+          ).subscribe(
+            x => {
+              this.profileStore.dispatch(addOrRemoveFollowedAction({
+                followedId : this.userId!,value : x.value
+              }))
+              this.userEntityStore.dispatch(changeFollowingStatusAction({
+                userId : this.userId!, logginUserId : x.loginUserId,value : x.value
+              }))
+            }
+          )
+
+          this.switchButton.commitValue.subscribe(
+            x => this.userEntityStore.dispatch(commitFollowingStatusAction({
+              userId : this.userId!,value : x
+            }))
+          )
         }
-      )
-      this.switchButton.commitValue.subscribe(
-        x => this.entityFollowingStore.dispatch(commitFollowedValueAction({userId : this.user!.id}))
       )
 
     }
   }
-
 }
+

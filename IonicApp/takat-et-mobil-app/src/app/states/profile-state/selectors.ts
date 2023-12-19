@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { ProfileModuleState } from "./reducer";
+import { ProfileState } from "./reducer";
 
-const selectStore = createFeatureSelector<ProfileModuleState>("ProfileModuleStore");
+const selectStore = createFeatureSelector<ProfileState>("ProfileStore");
 
 export const selectPosts = createSelector(selectStore,state => state.posts)
 export const selectPostIds = createSelector(selectPosts,state => state.entityIds)

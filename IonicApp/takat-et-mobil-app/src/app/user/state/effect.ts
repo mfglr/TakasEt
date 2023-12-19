@@ -12,7 +12,6 @@ import { filterAppEntityState } from "src/app/custom-operators/filter-app-entity
 import { UserModuleCollectionState } from "./reducer";
 import { UserService } from "src/app/services/user.service";
 import { loadUsersSuccessAction } from "src/app/states/user-entity-state/actions";
-import { initFollowingStatesAction } from "src/app/states/following-state/actions";
 
 @Injectable()
 export class UserModuleCollectionEffect{

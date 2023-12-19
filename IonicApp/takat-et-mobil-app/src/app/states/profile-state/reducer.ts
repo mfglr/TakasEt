@@ -1,9 +1,9 @@
 import { createReducer, on } from "@ngrx/store";
 import { AppEntityState, addMany, addOne, init, removeOne } from "src/app/states/app-entity-state";
 import { takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-states";
-import { addFollowedAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction, removeFollowedAction, removeFollowerAction } from "./actions";
+import { addOrRemoveFollowedAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction, removeFollowerAction } from "./actions";
 
-export interface ProfileModuleState{
+export interface ProfileState{
   posts : AppEntityState;
   swappedPosts : AppEntityState;
   notSwappedPosts : AppEntityState;
@@ -11,7 +11,7 @@ export interface ProfileModuleState{
   followeds : AppEntityState;
 }
 
-const initialState : ProfileModuleState = {
+const initialState : ProfileState = {
   posts : init(takeValueOfPosts),
   swappedPosts : init(takeValueOfPosts),
   notSwappedPosts : init(takeValueOfPosts),
@@ -19,7 +19,7 @@ const initialState : ProfileModuleState = {
   followeds : init(takeValueOfUsers),
 }
 
-export const profileModuleReducer = createReducer(
+export const profileReducer = createReducer(
   initialState,
   on(
     nextPostsSuccessAction,
@@ -37,12 +37,24 @@ export const profileModuleReducer = createReducer(
     })
   ),
   on(
-    addFollowedAction,
-    (state,action) => ({...state,followeds : addOne(action.followedId,state.followeds)})
+    nextFollowedsSuccessAction,
+    (state,action) => ({
+      ...state,followeds : addMany(action.payload.map(x => x.id),takeValueOfUsers,state.followeds)
+    })
   ),
   on(
-    removeFollowedAction,
-    (state,action) => ({...state,followeds : removeOne(action.followedId,state.followeds)})
+    nextFollowersSuccessAction,
+    (state,action) => ({
+      ...state,followers : addMany(action.payload.map(x => x.id),takeValueOfUsers,state.followers)
+    })
+  ),
+  on(
+    addOrRemoveFollowedAction,
+    (state,action) => {
+      if(action.value)
+        return {...state,followeds : addOne(action.followedId,state.followeds)};
+      return {...state,followeds : removeOne(action.followedId,state.followeds)};
+    }
   ),
   on(
     removeFollowerAction,

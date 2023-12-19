@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>following</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">following</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <swiper-container (swiperactiveindexchange)="changeActiveTab($event)" >
+      <swiper-slide>
+        <app-user-item-list [userIds]="followerIds$ | async"></app-user-item-list>
+      </swiper-slide>
+      <swiper-slide>
+        <app-user-item-list [userIds]="followedIds$ | async"></app-user-item-list>
+      </swiper-slide>
+    </swiper-container>
+  </ion-content>
+
+
+</ion-content>

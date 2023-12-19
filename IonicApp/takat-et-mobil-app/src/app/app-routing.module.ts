@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'following',
     loadChildren: () => import('./user/following/following.module').then( m => m.FollowingPageModule)
   },
+  {
+    path: 'following',
+    loadChildren: () => import('./profile/following/following.module').then( m => m.FollowingPageModule)
+  },
 ];
 
 @NgModule({

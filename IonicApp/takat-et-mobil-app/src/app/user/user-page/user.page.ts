@@ -11,8 +11,6 @@ import { initUserModuleStateAction, nextNotSwappedPostsAction, nextPostsAction, 
 import { selectNotSwappedPostIds, selectPostIds, selectSwappedPostIds } from '../state/selectors';
 import { selectActiveTab } from './state/selectors';
 import { loadUserAction } from 'src/app/states/user-entity-state/actions';
-import { EntityFollowingState } from 'src/app/states/following-state/reducer';
-import { initFollowingStateAction } from 'src/app/states/following-state/actions';
 
 @Component({
   selector: 'app-user',
@@ -21,7 +19,8 @@ import { initFollowingStateAction } from 'src/app/states/following-state/actions
 })
 export class UserPage implements OnInit {
 
-  userId$ = this.activatedRoute.paramMap.pipe( map(x => parseInt(x.get("userId")!)) )
+  userId$ = this.activatedRoute.paramMap.pipe( map(x => parseInt(x.get("userId")!)))
+
   activeTab$ = this.userId$.pipe(
     mergeMap(userId => this.userPageCollectionStore.select(selectActiveTab({userId : userId})))
   )
@@ -43,7 +42,6 @@ export class UserPage implements OnInit {
   constructor(
     private userPageCollectionStore : Store<UserPageCollectionState>,
     private userModuleCollectionStore : Store<UserModuleCollectionState>,
-    private entityFollowingStore : Store<EntityFollowingState>,
     private userStore : Store<UserState>,
     private activatedRoute : ActivatedRoute
   ) { }
@@ -55,11 +53,6 @@ export class UserPage implements OnInit {
         this.userPageCollectionStore.dispatch(initUserPageStateAction({userId : userId}))
         this.userStore.dispatch(loadUserAction({userId : userId}))
         this.nextPosts()
-      }
-    )
-    this.user$.pipe(first(),filter(user => user != undefined)).subscribe(
-      user => {
-        this.entityFollowingStore.dispatch(initFollowingStateAction({user : user!}))
       }
     )
   }

@@ -7,12 +7,10 @@ import { UserState } from 'src/app/states/user-entity-state/reducer';
 import { selectUser } from 'src/app/states/user-entity-state/selectors';
 import { ProfilePageState } from './state/reducer';
 import { selectActiveTab } from './state/selectors';
-import { ProfileModuleState } from '../state/reducer';
-import { selectNotSwappedPostIds, selectPostIds, selectSwappedPostIds } from '../state/selectors';
-import { nextNotSwappedPostsAction, nextPostsAction, nextSwappedPostsAction } from '../state/actions';
 import { changeActiveTabAction } from './state/actions';
-import { EntityFollowingState } from 'src/app/states/following-state/reducer';
-import { initFollowingStateAction } from 'src/app/states/following-state/actions';
+import { ProfileState } from 'src/app/states/profile-state/reducer';
+import { selectNotSwappedPostIds, selectPostIds, selectSwappedPostIds } from 'src/app/states/profile-state/selectors';
+import { nextNotSwappedPostsAction, nextPostsAction, nextSwappedPostsAction } from 'src/app/states/profile-state/actions';
 
 @Component({
   selector: 'app-profile-page',
@@ -28,9 +26,9 @@ export class ProfilePage implements OnInit {
 
   activeTab$? = this.profilePageStore.select(selectActiveTab);
 
-  postIds$ = this.profileModuleStore.select(selectPostIds)
-  swappedPostIds$ = this.profileModuleStore.select(selectSwappedPostIds);
-  notSwappedPostIds$ = this.profileModuleStore.select(selectNotSwappedPostIds);
+  postIds$ = this.profileStore.select(selectPostIds)
+  swappedPostIds$ = this.profileStore.select(selectSwappedPostIds);
+  notSwappedPostIds$ = this.profileStore.select(selectNotSwappedPostIds);
 
   ids = [this.postIds$,this.swappedPostIds$,this.notSwappedPostIds$];
 
@@ -38,17 +36,12 @@ export class ProfilePage implements OnInit {
     private loginStore : Store<LoginState>,
     private userStore : Store<UserState>,
     private profilePageStore : Store<ProfilePageState>,
-    private profileModuleStore : Store<ProfileModuleState>,
-    private entityFollowingState : Store<EntityFollowingState>
+    private profileStore : Store<ProfileState>,
   ) { }
 
 
   ngOnInit(){
     this.nextPosts();
-    this.user$.pipe(filter(x => x != undefined)).subscribe(
-      user => this.entityFollowingState.dispatch(initFollowingStateAction({user : user!}))
-    )
-
   }
 
   nextPosts(){

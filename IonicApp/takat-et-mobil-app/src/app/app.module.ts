@@ -18,8 +18,8 @@ import { ProfileImageEffect } from './states/profile-image-state/effect';
 import { postImageReducer } from './states/post-image-state/reducer';
 import { PostImageEffect } from './states/post-image-state/effect';
 import { UserEntityEffect } from './states/user-entity-state/effect';
-import { entityFollowingReducer } from './states/following-state/reducer';
-import { EntityFollowingEffect } from './states/following-state/effect';
+import { profileReducer } from './states/profile-state/reducer';
+import { ProfileEffect } from './states/profile-state/effect';
 
 @NgModule({
   declarations: [
@@ -36,14 +36,14 @@ import { EntityFollowingEffect } from './states/following-state/effect';
     StoreModule.forFeature("UserEntityStore",userEntityReducer),
     StoreModule.forFeature("ProfileImageStore",profileImageReducer),
     StoreModule.forFeature("PostImageStore",postImageReducer),
-    StoreModule.forFeature("EntityFollowingStore",entityFollowingReducer),
+    StoreModule.forFeature("ProfileStore",profileReducer),
 
     EffectsModule.forRoot(),
     EffectsModule.forFeature([LoginEffect]),
     EffectsModule.forFeature([ProfileImageEffect]),
     EffectsModule.forFeature([PostImageEffect]),
     EffectsModule.forFeature([UserEntityEffect]),
-    EffectsModule.forFeature([EntityFollowingEffect]),
+    EffectsModule.forFeature([ProfileEffect]),
 
     LoginModule,
   ],

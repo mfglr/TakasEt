@@ -1,0 +1,10 @@
+<div class="user-item-list">
+  <ng-container *ngIf="userIds && userIds.length; else noContent">
+    <ng-container *ngFor="let userId of userIds;">
+      <app-user-item [userId]="userId"></app-user-item>
+    </ng-container>
+  </ng-container>
+  <ng-template #noContent>
+    <app-no-user-items></app-no-user-items>
+  </ng-template>
+</div>
