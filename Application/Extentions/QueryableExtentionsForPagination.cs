@@ -14,7 +14,6 @@ namespace Application.Extentions
 			return queryable
 				.Where(x => pagination.LastId == null || x.Id < pagination.LastId)
 				.OrderByDescending( x => x.Id )
-				.Skip(pagination.Skip)
 				.Take(pagination.Take);
 		}
 	}

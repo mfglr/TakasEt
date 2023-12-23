@@ -39,7 +39,7 @@ namespace Repository.ModelBuilders
 				.HasForeignKey<UserRefreshToken>(x => x.UserId);
 
 			builder
-				.HasMany(x => x.ProfileImages)
+				.HasMany(x => x.UserImages)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);

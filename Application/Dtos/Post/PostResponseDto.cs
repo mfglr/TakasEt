@@ -12,7 +12,7 @@
         public int CountOfLikes { get; set; }
 		public int CountOfComments { get; set; }
 		public bool LikeStatus { get; set; }
-		public ProfileImageResponseDto? ProfileImage { get; set; }
+		public UserImageResponseDto? UserImage { get; set; }
 		public IEnumerable<PostImageResponseDto> PostImages { get; set; }
 		public IEnumerable<string> Tags { get; set; }
     }

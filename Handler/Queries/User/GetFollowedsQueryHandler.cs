@@ -26,7 +26,7 @@ namespace Handler.Queries
 				.AsNoTracking()
 				.Include(x => x.Followers)
 				.Include(x => x.Followeds)
-				.Include(x => x.ProfileImages)
+				.Include(x => x.UserImages)
 				.Where(user => user.Followers.Any(follower => follower.FollowerId == _loggedInUser.UserId))
 				.ToPage(request)
 				.ToUserResponseDto(_loggedInUser.UserId)

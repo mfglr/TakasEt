@@ -24,12 +24,12 @@ namespace Application.Extentions
 						CountOfLikes = x.UsersWhoLiked.Count,
 						CountOfComments = x.Comments.Count,
 						LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),
-						ProfileImage = x
+						UserImage = x
 							.User
-							.ProfileImages
+							.UserImages
 							.Where(x => x.IsActive)
 							.Select(
-								x => new ProfileImageResponseDto() {
+								x => new UserImageResponseDto() {
 									Id = x.Id,
 									Extention = x.Extention
 								}
@@ -65,12 +65,12 @@ namespace Application.Extentions
 					UserName = x.User.UserName!,
 					CountOfLikes = x.UsersWhoLiked.Count,
 					LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),
-					ProfileImage = x
+					UserImage = x
 						.User
-						.ProfileImages
+						.UserImages
 						.Where(x => x.IsActive)
 						.Select(
-							x => new ProfileImageResponseDto()
+							x => new UserImageResponseDto()
 							{
 								Id = x.Id,
 								Extention = x.Extention
@@ -100,10 +100,10 @@ namespace Application.Extentions
 							IsFollowed = x.Followers.Any(x => loggedInUserId != null && x.FollowerId == loggedInUserId),
 							IsFollower = x.Followeds.Any(x => loggedInUserId != null && x.FollowedId == loggedInUserId),
 							ProfileImage = x
-								.ProfileImages
+								.UserImages
 								.Where(x => x.IsActive)
 								.Select(
-									image => new ProfileImageResponseDto()
+									image => new UserImageResponseDto()
 									{
 										Id = image.Id,
 										Extention = image.Extention

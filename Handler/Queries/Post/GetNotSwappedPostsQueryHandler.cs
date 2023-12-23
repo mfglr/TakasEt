@@ -29,7 +29,7 @@ namespace Handler.Queries
 				.Include(x => x.Comments)
 				.Include(x => x.Category)
 				.Include(x => x.User)
-				.ThenInclude(x => x.ProfileImages)
+				.ThenInclude(x => x.UserImages)
 				.Include(x => x.User)
 				.ThenInclude(x => x.Followers)
 				.Include(x => x.PostImages)

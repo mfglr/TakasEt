@@ -24,11 +24,20 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
+		[HttpGet("comment/get-comments")]
+		public async Task<AppResponseDto> GetComments()
+		{
+			return await _sender.Send(new GetComments(Request.Query));
+		}
+
+
+		[Authorize(Roles = "user")]
 		[HttpGet("comment/get-children/{id}")]
 		public async Task<AppResponseDto> GetChildren(int id)
 		{
 			return await _sender.Send(new GetChildren(id,Request.Query));
 		}
+
 
 		[Authorize(Roles = "user")]
 		[HttpPost("comment/add-comment")]

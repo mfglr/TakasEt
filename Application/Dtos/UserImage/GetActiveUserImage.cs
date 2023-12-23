@@ -2,11 +2,11 @@
 
 namespace Application.Dtos
 {
-    public class GetActiveProfileImage : IRequest<Stream>
+    public class GetActiveUserImage : IRequest<Stream>
     {
         public int UserId { get; private set; }
 
-        public GetActiveProfileImage(int userId)
+        public GetActiveUserImage(int userId)
         {
             UserId = userId;
         }

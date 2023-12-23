@@ -2,11 +2,11 @@
 
 namespace Application.Dtos
 {
-	public class GetActiveProfileImageByUserName : IRequest<byte[]>
+	public class GetActiveUserImageByUserName : IRequest<byte[]>
 	{
         public string UserName { get; private set; }
 
-		public GetActiveProfileImageByUserName(string userName)
+		public GetActiveUserImageByUserName(string userName)
 		{
 			UserName = userName;
 		}

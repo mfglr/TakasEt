@@ -1,15 +1,20 @@
 ﻿namespace Application.Entities
 {
-	public class ProfileImage : AppFile
+	public class UserImage : Entity
 	{
 		public bool IsActive { get; private set; }
 		public int UserId { get; private set; }
 		public User User { get; }
+		public string BlobName { get; private set; }
+        public string Extention { get; private set; }
+		public string ContainerName { get; private set; }
+        
+		public UserImage() { }
 
-		public ProfileImage() { }
-
-		public ProfileImage(bool isActive, int userId, string blobName, string extention) : base( blobName, extention)
+		public UserImage(bool isActive, int userId, string blobName, string extention)
 		{
+			BlobName = blobName;
+			Extention = extention;
 			UserId = userId;
 			ContainerName = ValueObjects.ContainerName.ProfileImage.Value;
 			IsActive = isActive;

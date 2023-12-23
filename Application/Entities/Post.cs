@@ -48,7 +48,7 @@ namespace Application.Entities
         }
 
         [JsonConstructor]
-		public Post(int id, int userId, string title, string content, int categoryId, int countOfImages,DateTime createddate)
+		public Post(int id, int userId, string title, string content, int categoryId, int countOfImages,DateTime createddate,List<PostImage> postImages)
 		{
             Id = id;
 			UserId = userId;
@@ -58,6 +58,8 @@ namespace Application.Entities
 			Content = content;
 			CountOfImages = countOfImages;
             CreatedDate = createddate;
+            foreach (PostImage image in postImages)
+				AddImage(image);
 		}
 	}
 }

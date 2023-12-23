@@ -27,7 +27,7 @@ namespace Handler.Queries
 				.AsNoTracking()
 				.Include (x => x.Followers)
                 .Include(x => x.Followeds)
-				.Include(x => x.ProfileImages)
+				.Include(x => x.UserImages)
 				.ToUserResponseDto(_loggedInUser.UserId)
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
             if (user == null) throw new UserNotFoundException();

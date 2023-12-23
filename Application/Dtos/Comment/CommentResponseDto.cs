@@ -10,6 +10,6 @@
         public int CountOfChildren { get; set; }
 		public int CountOfLikes { get; set; }
 		public bool LikeStatus { get; set; }
-		public ProfileImageResponseDto? ProfileImage { get; set; }
+		public UserImageResponseDto? UserImage { get; set; }
     }
 }

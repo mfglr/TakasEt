@@ -26,7 +26,7 @@ namespace Handler.Queries
 				.Include(x => x.Followers)
 				.Include(x => x.Followeds)
 				.Include(x => x.LikedPosts)
-				.Include(x => x.ProfileImages)
+				.Include(x => x.UserImages)
 				.Where(x => x.LikedPosts.Select(x => x.PostId).Contains(request.PostId))
 				.ToPage(request)
 				.ToUserResponseDto(_loggedInUser.UserId)

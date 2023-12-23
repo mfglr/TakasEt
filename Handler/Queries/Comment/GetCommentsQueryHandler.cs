@@ -3,24 +3,23 @@ using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostId, AppResponseDto>
+	public class GetCommentsQueryHandler : IRequestHandler<GetComments, AppResponseDto>
 	{
+		private readonly LoggedInUser _loggedInUser;
 		private readonly IRepository<Comment> _comments;
-		private readonly LoggedInUser _loggeddInUser;
 
-		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments, LoggedInUser loggeddInUser)
+		public GetCommentsQueryHandler(IRepository<Comment> comments, LoggedInUser loggedInUser)
 		{
 			_comments = comments;
-			_loggeddInUser = loggeddInUser;
+			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetCommentsByPostId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetComments request, CancellationToken cancellationToken)
 		{
 			var comments = await _comments
 				.DbSet
@@ -29,9 +28,8 @@ namespace Handler.Queries
 				.ThenInclude(x => x.UserImages)
 				.Include(x => x.Children)
 				.Include(x => x.UsersWhoLiked)
-				.Where(x => x.PostId == request.PostId)
 				.ToPage(request)
-				.ToCommentResponseDto(_loggeddInUser.UserId)
+				.ToCommentResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(comments);
 		}
