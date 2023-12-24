@@ -5,12 +5,14 @@ namespace Service
 {
 	public class LocalBlobService : IBlobService
 	{
-		public async Task<Stream> DownloadAsync(string blobName, string containerName, CancellationToken cancellationToken)
+		public async Task<byte[]> DownloadAsync(string blobName, string containerName, CancellationToken cancellationToken)
 		{
 			Assembly asm = Assembly.GetExecutingAssembly();
 			string path = $"{Path.GetDirectoryName(asm.Location)}/{containerName}/{blobName}"; ;
-			return File.OpenRead(path);
-			
+			var stream = File.OpenRead(path);
+			var bytes = new byte[stream.Length];
+			await stream.ReadAsync(bytes,0,bytes.Length);
+			return bytes;
 		}
 
 		public async Task UploadAsync(Stream stream, string blobName, string containerName, CancellationToken cancellationToken)

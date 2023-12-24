@@ -1,13 +1,13 @@
 import { createAction, props } from "@ngrx/store";
-import { ProfileImageResponse } from "src/app/models/responses/profile-image-response";
+import { UserImageResponse } from "src/app/models/responses/profile-image-response";
 
 export const loadProfileImageSuccessAction = createAction(
     "[Profile Image Store] addProfileImage",
-    props<{image : ProfileImageResponse | null | undefined}>()
+    props<{image : UserImageResponse | null | undefined}>()
 )
 export const loadProfileImagesSuccessAction = createAction(
     "[Profile Image Store] addProfileImages",
-    props<{images : (ProfileImageResponse | null | undefined)[]}>()
+    props<{images : (UserImageResponse | null | undefined)[]}>()
 )
 export const loadProfileImageUrlAction = createAction(
     "[Profile Image State] loadProfileImage",

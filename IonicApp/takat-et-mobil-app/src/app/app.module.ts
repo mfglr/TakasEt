@@ -13,8 +13,8 @@ import { postReducer } from './states/post-state/reducer';
 import { loginReducer } from './states/login_state/reducer';
 import { LoginEffect } from './states/login_state/effect';
 import { userEntityReducer } from './states/user-entity-state/reducer';
-import { profileImageReducer } from './states/profile-image-state/reducer';
-import { ProfileImageEffect } from './states/profile-image-state/effect';
+import { userImageEntityReducer } from './states/user-image-entity-state/reducer';
+import { UserImageEntityEffect } from './states/user-image-entity-state/effect';
 import { postImageReducer } from './states/post-image-state/reducer';
 import { PostImageEffect } from './states/post-image-state/effect';
 import { UserEntityEffect } from './states/user-entity-state/effect';
@@ -34,13 +34,13 @@ import { ProfileEffect } from './states/profile-state/effect';
     StoreModule.forFeature("LoginState",loginReducer),
     StoreModule.forFeature("PostStore",postReducer),
     StoreModule.forFeature("UserEntityStore",userEntityReducer),
-    StoreModule.forFeature("ProfileImageStore",profileImageReducer),
+    StoreModule.forFeature("UserImageEntityStore",userImageEntityReducer),
     StoreModule.forFeature("PostImageStore",postImageReducer),
     StoreModule.forFeature("ProfileStore",profileReducer),
 
     EffectsModule.forRoot(),
     EffectsModule.forFeature([LoginEffect]),
-    EffectsModule.forFeature([ProfileImageEffect]),
+    EffectsModule.forFeature([UserImageEntityEffect]),
     EffectsModule.forFeature([PostImageEffect]),
     EffectsModule.forFeature([UserEntityEffect]),
     EffectsModule.forFeature([ProfileEffect]),

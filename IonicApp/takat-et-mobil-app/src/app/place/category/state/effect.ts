@@ -9,7 +9,7 @@ import { selectPosts } from "./selectors";
 import { filterAppEntityState } from "src/app/custom-operators/filter-app-entity-state";
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
 import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/profile-image-state/actions";
+import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
 
 @Injectable()
 export class CategoryPageCollectionEffect{
@@ -30,7 +30,7 @@ export class CategoryPageCollectionEffect{
               nextPostsSuccessAction({categoryId : action.categoryId, payload : response}),
               loadPostsSuccessAction({ payload : response}),
               loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-              loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+              loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
           )))
       )
     )

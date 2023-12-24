@@ -23,5 +23,14 @@ namespace WebApi.Controllers
 			return await _sender.Send(new AddUserImage(form));
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("user-image/get-user-image/{id}")]
+		public async Task GetUserImage(int id)
+		{
+			await Response.Body.WriteAsync(
+				await _sender.Send(new GetUserImage() { Id = id })
+			);
+		}
+
 	}
 }

@@ -6,7 +6,7 @@ import { nextFollowedsAction, nextFollowedsSuccessAction, nextFollowersAction, n
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, selectSwappedPosts } from "./selectors";
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/profile-image-state/actions";
+import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
 import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
 import { LoginState } from "src/app/states/login_state/reducer";
 import { selectUserId } from "src/app/states/login_state/selectors";
@@ -38,7 +38,7 @@ export class ProfileEffect{
           nextPostsSuccessAction({payload : response}),
           loadPostsSuccessAction({payload : response}),
           loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
         ))
       )
     }
@@ -58,7 +58,7 @@ export class ProfileEffect{
           nextSwappedPostsSuccessAction({payload : response}),
           loadPostsSuccessAction({payload : response}),
           loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
         ))
       )
     }
@@ -78,7 +78,7 @@ export class ProfileEffect{
           nextNotSwappedPostsSuccessAction({payload : response}),
           loadPostsSuccessAction({payload : response}),
           loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
         ))
       )
     }
@@ -97,7 +97,7 @@ export class ProfileEffect{
         mergeMap(response => of(
           nextFollowersSuccessAction({payload : response}),
           loadUsersSuccessAction({users : response}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
         ))
       )
     }
@@ -116,7 +116,7 @@ export class ProfileEffect{
         mergeMap(response => of(
           nextFollowedsSuccessAction({payload : response}),
           loadUsersSuccessAction({users : response}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.profileImage)})
+          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
         ))
       )
     }

@@ -1,6 +1,8 @@
-<div *ngFor="let postId of postIds">
-  <app-post [postId]="postId"></app-post>
-</div>
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <div #postList>
+    <app-post [postId]="postId" *ngFor="let postId of postIds;"></app-post>
+  </div>
+</ion-content>
 
 <app-post-detail-modal
   [post]="postOfModal$ | async"

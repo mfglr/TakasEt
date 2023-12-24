@@ -6,3 +6,11 @@ export const selectPostIds = createSelector(selectStore,state => state.posts.ent
 export const selectStatusAndPage = createSelector(
   selectStore, state => ({ status : state.posts.isLastEntities,page : state.posts.page })
 )
+export const selectIsLastEntities = createSelector(
+  selectStore,
+  state => state.posts.isLastEntities
+)
+export const selectLastRequestedPageOfPosts = createSelector(
+  selectStore,
+  state => state.posts.lastRequestedPage
+)

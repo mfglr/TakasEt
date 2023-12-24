@@ -14,7 +14,6 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
-    <app-post-list [postIds]="postsIds$ | async"></app-post-list>
-  </ion-content>
+  <app-post-list [postIds]="postsIds$ | async" (nextPageEvent)="nextPage()"></app-post-list>
+
 </ion-content>

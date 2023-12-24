@@ -1,30 +1,30 @@
 <ion-modal [isOpen]="isModalOpen" class="root">
   <ng-template>
-    
+
     <ion-header class="header">
       <ion-toolbar class="toolbar">
-        
+
         <div class="toolbar-header">
 
           <div class="user-info">
-            <app-profile-image [diameter]="3" [id]="post?.profileImage?.id"></app-profile-image>
+            <app-profile-image [diameter]="3" [id]="post?.userImage?.id"></app-profile-image>
             <a href="" class="username">
               <span>{{this.post?.userName}}</span>
             </a>
           </div>
-  
+
           <div class="close-modal-button-wrapper">
             <ion-button (click)="closeModal()" class="close-modal-button">
               <ion-icon name="close-outline"></ion-icon>
             </ion-button>
           </div>
-        
+
         </div>
-        
+
 
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content class="content">
       <app-post-image-slider [post]="post" ></app-post-image-slider>
       <div class="content-wrapper">
@@ -34,20 +34,20 @@
     </ion-content>
 
     <ion-fab slot="fixed" horizontal="center" vertical="bottom">
-      
+
       <ion-fab-button color="secondary">
         <i class="fa-regular fa-handshake" clas="swap-icon"></i>
       </ion-fab-button>
 
-      
+
 
       <ion-fab-list side="end">
         <ion-fab-button color="tertiary">
           <i class="fa-solid fa-share-from-square"></i>
         </ion-fab-button>
       </ion-fab-list>
-      
-      
+
+
       <ion-fab-list side="start">
         <ion-fab-button color="danger">
           <i class="fa-solid fa-plus"></i>

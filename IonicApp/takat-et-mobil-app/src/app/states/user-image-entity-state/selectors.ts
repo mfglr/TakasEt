@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { ProfileImageState } from "./reducer";
+import { UserImageEntityState } from "./reducer";
 
-const selectEntityState = createFeatureSelector<ProfileImageState>("ProfileImageStore")
+const selectEntityState = createFeatureSelector<UserImageEntityState>("UserImageEntityStore")
 export const selectState = (props : {id : number}) => createSelector(
     selectEntityState,
     state => state.entities[props.id]

@@ -15,6 +15,7 @@ export class CategoryPage implements OnInit {
 
   categoryId$? : Observable<number>
   postsIds$? : Observable<number[] | undefined>
+  categoryId? : number;
 
   constructor(
     private categoryPageCollectionStore : Store<CategoryPageCollectionState>,
@@ -25,6 +26,9 @@ export class CategoryPage implements OnInit {
     this.categoryId$ = this.activatedRoute.paramMap.pipe(
       map(x => parseInt(x.get("categoryId")!))
     )
+
+    this.categoryId$.subscribe(x => this.categoryId = x);
+
     this.postsIds$ = this.categoryId$.pipe(
       mergeMap(
         categoryId => this.categoryPageCollectionStore.select(selectPostIds({categoryId : categoryId}))
@@ -42,8 +46,11 @@ export class CategoryPage implements OnInit {
       )),
     ).subscribe()
 
+  }
 
-
+  nextPage(){
+    if(this.categoryId)
+      this.categoryPageCollectionStore.dispatch(nextPostsAction({categoryId : this.categoryId}))
   }
 
 }

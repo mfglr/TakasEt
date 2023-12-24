@@ -25,7 +25,6 @@ namespace Handler.Queries
 				.AsNoTracking()
 				.Where(x => x.PostId == request.PostId)
 				.OrderBy(x => x.Id)
-				.Skip(request.Skip)
 				.Take(request.Take)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(_mapper.Map<PostImageResponseDto>(images));

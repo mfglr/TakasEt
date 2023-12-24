@@ -1,17 +1,17 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AppFileService } from "src/app/services/app-file.service";
 import { loadPostImageUrlAction, loadPostImageUrlSuccessAction } from "./actions";
 import { filter, first, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { State } from "./reducer";
 import { selectPostImageState } from "./selectors";
 import { Injectable } from "@angular/core";
+import { PostImageService } from "src/app/services/post-image.service";
 
 @Injectable()
 export class PostImageEffect{
   constructor(
     private actions : Actions,
-    private appFileService : AppFileService,
+    private postImageService : PostImageService,
     private postImageStore : Store<State>
   ) {}
 
@@ -24,7 +24,7 @@ export class PostImageEffect{
             filter(state => state != undefined),
             first(),
             filter(state => !(state!.loadStatus)),
-            mergeMap(state => this.appFileService.getAppFile(action.id)),
+            mergeMap(state => this.postImageService.getPostImage(action.id)),
             mergeMap(url => of(loadPostImageUrlSuccessAction({id : action.id,url : url})))
           )
         )

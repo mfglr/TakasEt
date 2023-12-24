@@ -2,18 +2,18 @@ import { Injectable } from "@angular/core";
 import { filter, first, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AppFileService } from "src/app/services/app-file.service";
 import { loadProfileImageUrlAction, loadProfileImageUrlSuccessAction } from "./actions";
-import { ProfileImageState } from "./reducer";
+import { UserImageEntityState } from "./reducer";
 import { selectState } from "./selectors";
+import { UserImageService } from "src/app/services/user-image.service";
 
 @Injectable()
-export class ProfileImageEffect{
+  export class UserImageEntityEffect{
 
     constructor(
       private actions : Actions,
-      private appFileService : AppFileService,
-      private profileImageStore : Store<ProfileImageState>
+      private userImageService : UserImageService,
+      private profileImageStore : Store<UserImageEntityState>
     ) {}
 
     loadProfileImage$ = createEffect(() => {
@@ -24,7 +24,7 @@ export class ProfileImageEffect{
             filter(state => state != undefined),
             first(),
             filter(state => !(state!.loadStatus)),
-            mergeMap(() => this.appFileService.getAppFile(action.id)),
+            mergeMap(() => this.userImageService.getUserImage(action.id)),
             mergeMap(url => of(loadProfileImageUrlSuccessAction({id : action.id,url : url})))
           )
         )

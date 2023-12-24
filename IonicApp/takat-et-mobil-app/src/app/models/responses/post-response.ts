@@ -1,6 +1,6 @@
 import { BaseResponse } from "./base-response";
 import { PostImageResponse } from "./post-image-response";
-import { ProfileImageResponse } from "./profile-image-response";
+import { UserImageResponse } from "./profile-image-response";
 
 export interface PostResponse extends BaseResponse{
   userName : string;
@@ -14,6 +14,6 @@ export interface PostResponse extends BaseResponse{
   countOfComments : number;
   likeStatus : boolean;
   postImages : PostImageResponse[];
-  profileImage : ProfileImageResponse;
+  userImage : UserImageResponse;
   tags : string[];
 }

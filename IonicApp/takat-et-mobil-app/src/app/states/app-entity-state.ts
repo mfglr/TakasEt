@@ -1,5 +1,4 @@
 export interface Page{
-  skip : number;
   take : number;
   lastId : number | undefined;
 }
@@ -8,13 +7,15 @@ export interface AppEntityState{
   entityIds : number[];
   page : Page;
   isLastEntities : boolean;
+  lastRequestedPage : number | undefined;
 }
 
 export function init(take : number) : AppEntityState{
   return {
     entityIds : [],
     isLastEntities : false,
-    page : { lastId : undefined, skip : 0, take : take }
+    lastRequestedPage : undefined,
+    page : { lastId : undefined, take : take },
   }
 }
 
@@ -24,12 +25,12 @@ export function addOne(entityId : number,state : AppEntityState) : AppEntityStat
 
 export function addMany(entityIds : number[],take : number,state : AppEntityState) : AppEntityState{
   return {
+    ...state,
     entityIds : [...state.entityIds,...entityIds],
     isLastEntities : entityIds.length < take,
     page : {
       lastId : entityIds.length > 0 ? entityIds[entityIds.length - 1] : state.page.lastId,
-      skip : state.page.skip + take,
-      take : take
+      take : take,
     }
   }
 }

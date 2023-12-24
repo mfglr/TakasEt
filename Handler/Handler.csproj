@@ -15,7 +15,7 @@
   <ItemGroup>
     <Folder Include="Commands\User\" />
     <Folder Include="DomainEventHandlers\" />
-    <Folder Include="Queries\ProfileImage\" />
+    <Folder Include="Queries\UserImage\" />
   </ItemGroup>
 
   <ItemGroup>

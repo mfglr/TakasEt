@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { takeValueOfPosts } from "src/app/states/app-states";
-import { nextPostsSuccessAction } from "./actions";
+import { nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
 
 export interface HomePageState{
@@ -16,4 +16,13 @@ export const homePageReducer = createReducer(
     nextPostsSuccessAction,
     (state,action) => ({ posts : addMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts) })
   ),
+  on(
+    nextPostsAction,
+    state => ({
+      posts : {
+        ...state.posts,
+        lastRequestedPage : state.posts.lastRequestedPage != undefined ? state.posts.lastRequestedPage + 1 : 0
+      }
+    })
+  )
 )

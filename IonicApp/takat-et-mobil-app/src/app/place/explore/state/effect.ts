@@ -7,7 +7,7 @@ import { Store } from "@ngrx/store";
 import { selectExplorePageState } from "./selectors";
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
 import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/profile-image-state/actions";
+import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
 import { State } from "./reducer";
 
 @Injectable()

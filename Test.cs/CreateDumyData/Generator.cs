@@ -225,8 +225,8 @@ namespace Test.cs.CreateDumyData
 		}
 		private void WriteRandomUserImage() {
 			string cDirectory = Directory.GetCurrentDirectory();
-			string blobName = $"{userId}_{userImageId}";
-			GenerateRandomImage($"{cDirectory}/images/p.jpg",$"{cDirectory}/user-image/{blobName}.jpg",userImageId);
+			string blobName = $"{userId}_{userImageId}.jpg";
+			GenerateRandomImage($"{cDirectory}/images/p.jpg",$"{cDirectory}/user-image/{blobName}",userImageId);
 			var userImage = new {
 				Id = userImageId,
 				IsActive = true,
@@ -274,8 +274,8 @@ namespace Test.cs.CreateDumyData
 		private void WriteRandomPostImage(int index)
 		{
 			string cDirectory = Directory.GetCurrentDirectory();
-			string blobName = $"{postId}_{postImageId}";
-			GenerateRandomImage($"{cDirectory}/images/a.jpg", $"{cDirectory}/post-image/{blobName}.jpg",postImageId);
+			string blobName = $"{postId}_{postImageId}.jpg";
+			GenerateRandomImage($"{cDirectory}/images/a.jpg", $"{cDirectory}/post-image/{blobName}",postImageId);
 			var postImage = new
 			{
 				Id = postImageId,

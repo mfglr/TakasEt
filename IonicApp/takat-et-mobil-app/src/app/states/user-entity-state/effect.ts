@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { UserService } from "src/app/services/user.service";
 import { commitFollowingStatusAction, commitFollowingStatusSuccessAction, followAction, loadUserAction, loadUserSuccessAction } from "./actions";
 import { mergeMap, of, withLatestFrom } from "rxjs";
-import { loadProfileImageSuccessAction } from "../profile-image-state/actions";
+import { loadProfileImageSuccessAction } from "../user-image-entity-state/actions";
 import { UserEntityState } from "./reducer";
 import { Store } from "@ngrx/store";
 import { selectUserState } from "./selectors";
@@ -32,7 +32,7 @@ export class UserEntityEffect{
           mergeMap(() => this.userService.getUser(action.userId)),
           mergeMap(response => of(
             loadUserSuccessAction({ user : response}),
-            loadProfileImageSuccessAction({image : response.profileImage})
+            loadProfileImageSuccessAction({image : response.userImage})
           ))
         )
       )

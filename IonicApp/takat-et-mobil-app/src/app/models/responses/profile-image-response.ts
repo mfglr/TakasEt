@@ -1,6 +1,4 @@
-import { AppFileResponse } from "./app-file-response";
-
-export interface ProfileImageResponse{
+export interface UserImageResponse{
     id : number;
     extention : string;
 }
