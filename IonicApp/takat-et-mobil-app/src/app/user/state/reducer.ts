@@ -3,7 +3,6 @@ import { createReducer, on } from "@ngrx/store";
 import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
 import { takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-states";
 import { initUserModuleStateAction, initUserModuleStatesAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction } from "./actions";
-import { UserResponse } from "src/app/models/responses/user-response";
 
 interface UserModuleState{
   userId : number;

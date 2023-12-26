@@ -15,14 +15,5 @@ export const homePageReducer = createReducer(
   on(
     nextPostsSuccessAction,
     (state,action) => ({ posts : addMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts) })
-  ),
-  on(
-    nextPostsAction,
-    state => ({
-      posts : {
-        ...state.posts,
-        lastRequestedPage : state.posts.lastRequestedPage != undefined ? state.posts.lastRequestedPage + 1 : 0
-      }
-    })
   )
 )

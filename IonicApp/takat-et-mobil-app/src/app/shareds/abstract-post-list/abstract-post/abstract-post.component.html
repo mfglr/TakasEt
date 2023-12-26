@@ -1,6 +1,6 @@
 <ng-container *ngIf="(post$ | async) as post">
   <ng-container *ngIf="(postImageState$ | async) as postImageState">
-    <a [routerLink]="url" [fragment]="'' + post.id">
+    <a [routerLink]="url" [fragment]="'post' + post.id">
       <img [src]="postImageState.url" [alt]="post.title" class="img">
     </a>
   </ng-container>

@@ -7,14 +7,12 @@ export interface AppEntityState{
   entityIds : number[];
   page : Page;
   isLastEntities : boolean;
-  lastRequestedPage : number | undefined;
 }
 
 export function init(take : number) : AppEntityState{
   return {
     entityIds : [],
     isLastEntities : false,
-    lastRequestedPage : undefined,
     page : { lastId : undefined, take : take },
   }
 }

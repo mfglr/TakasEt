@@ -10,7 +10,3 @@ export const selectIsLastEntities = createSelector(
   selectStore,
   state => state.posts.isLastEntities
 )
-export const selectLastRequestedPageOfPosts = createSelector(
-  selectStore,
-  state => state.posts.lastRequestedPage
-)

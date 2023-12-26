@@ -99,7 +99,7 @@ namespace Application.Extentions
 							CountOfFollowers = x.Followers.Count,
 							IsFollowed = x.Followers.Any(x => loggedInUserId != null && x.FollowerId == loggedInUserId),
 							IsFollower = x.Followeds.Any(x => loggedInUserId != null && x.FollowedId == loggedInUserId),
-							ProfileImage = x
+							UserImage = x
 								.UserImages
 								.Where(x => x.IsActive)
 								.Select(

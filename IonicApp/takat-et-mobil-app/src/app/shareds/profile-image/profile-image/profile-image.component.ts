@@ -12,7 +12,7 @@ import { selectLoadStatus, selectUrl } from 'src/app/states/user-image-entity-st
 })
 export class ProfileImageComponent {
 
-  @Input() id? : number;
+  @Input() userImageId? : number;
   @Input() userName : string='takaset.com';
   @Input() diameter : number = 2;
 
@@ -25,10 +25,10 @@ export class ProfileImageComponent {
   ) { }
 
   ngOnChanges() {
-    if(this.id){
-      this.userImageEntityStore.dispatch(loadProfileImageUrlAction({id : this.id}))
-      this.loadStatus$ = this.userImageEntityStore.select(selectLoadStatus({ id : this.id}))
-      this.url$ = this.userImageEntityStore.select(selectUrl({id : this.id}))
+    if(this.userImageId){
+      this.userImageEntityStore.dispatch(loadProfileImageUrlAction({id : this.userImageId}))
+      this.loadStatus$ = this.userImageEntityStore.select(selectLoadStatus({ id : this.userImageId}))
+      this.url$ = this.userImageEntityStore.select(selectUrl({id : this.userImageId}))
     }
     this.style = `width:${this.diameter}rem;height:${this.diameter}rem;`
   }

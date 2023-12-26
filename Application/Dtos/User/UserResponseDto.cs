@@ -13,6 +13,6 @@ namespace Application.Dtos
 		public int CountOfPosts { get; set; }
 		public bool IsFollowed { get; set; }
 		public bool IsFollower { get; set; }
-		public UserImageResponseDto? ProfileImage { get; set; }
+		public UserImageResponseDto? UserImage { get; set; }
     }
 }

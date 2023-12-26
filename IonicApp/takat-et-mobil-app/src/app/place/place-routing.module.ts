@@ -18,7 +18,7 @@ const routes: Routes = [
       },
       {
         path: 'search',
-        loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+        loadChildren: () => import('src/app/search/search.module').then( m => m.SearchModule)
       },
       {
         path: 'create-post',

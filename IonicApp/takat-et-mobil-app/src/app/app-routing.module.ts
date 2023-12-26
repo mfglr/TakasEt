@@ -19,11 +19,21 @@ const routes: Routes = [
     path: 'following',
     loadChildren: () => import('./profile/following/following.module').then( m => m.FollowingPageModule)
   },
+  {
+    path: 'search-home',
+    loadChildren: () => import('./search/search-home/search-home.module').then( m => m.SearchHomePageModule)
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules,anchorScrolling : "enabled"})
+    RouterModule.forRoot(
+      routes, {
+        preloadingStrategy: PreloadAllModules,
+        anchorScrolling : "enabled",
+        scrollPositionRestoration: 'enabled'
+      }
+    )
   ],
   exports: [RouterModule]
 })

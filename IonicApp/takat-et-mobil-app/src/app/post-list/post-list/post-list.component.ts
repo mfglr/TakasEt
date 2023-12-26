@@ -1,20 +1,20 @@
-import { AfterContentInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectIsModalOpen, selectPostOfModal } from '../state/selectors';
 import { PostListState } from '../state/reducer';
 import { closeModalAction } from '../state/actions';
 import { takeValueOfPosts } from 'src/app/states/app-states';
 import { ViewportScroller } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
 })
-export class PostListComponent implements AfterContentInit {
+export class PostListComponent {
   @ViewChild("postList",{static : true}) postList? : ElementRef;
   @Input() postIds? : number[] | null;
-  @Input() startIndex? : number;
   @Output() nextPageEvent = new EventEmitter();
 
   postOfModal$ = this.postListStore.select(selectPostOfModal);
@@ -24,20 +24,9 @@ export class PostListComponent implements AfterContentInit {
 
   constructor(
     private postListStore : Store<PostListState>,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
+    private router : ActivatedRoute
   ) {}
-
-  ngOnInit(){
-    window.addEventListener("load",() => {
-      document.getElementById("394")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "nearest"
-      });
-    })
-
-  }
-
 
   onScroll(event : any){
     if(this.postIds && this.lastRequestedPage != undefined){
@@ -55,9 +44,18 @@ export class PostListComponent implements AfterContentInit {
     }
   }
 
-  ngAfterContentInit(){
+  ngAfterViewInit(){
+    this.router.fragment.subscribe(
+      fragment =>{
+        if(fragment){
 
+          document.getElementById(fragment)?.scrollTo()
+          this.viewportScroller.scrollToAnchor(fragment);
+        }
+      }
+    )
   }
+
   ngOnChanges(){
     if(this.postIds){
       if(!this.lastRequestedPage){
@@ -68,5 +66,8 @@ export class PostListComponent implements AfterContentInit {
 
   closeModal(){
     this.postListStore.dispatch(closeModalAction())
+  }
+  ngOnDestroy(){
+    console.log("a")
   }
 }
