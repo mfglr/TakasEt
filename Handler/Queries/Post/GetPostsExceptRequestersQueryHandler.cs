@@ -24,15 +24,8 @@ namespace Handler.Queries
             var posts = await _posts
                 .DbSet
 				.AsNoTracking()
-                .Include(x => x.PostImages)
+                .IncludePost()
 				.Include(x => x.Requesteds)
-				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.Comments)
-				.Include(x => x.User)
-                .ThenInclude(x => x.UserImages)
-				.Include(x => x.Category)
-				.Include(x => x.Tags)
-				.ThenInclude(x => x.Tag)
 				.Where(
                     x =>
 						x.UserId == _loggedInUser.UserId &&

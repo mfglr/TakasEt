@@ -23,13 +23,7 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.Comments)
-				.Include(x => x.User)
-				.Include(x => x.Category)
-				.Include(x => x.PostImages)
-				.Include(x => x.Tags)
-				.ThenInclude(x => x.Tag)
+				.IncludePost()
 				.Where(post => post.UserId == request.UserId)
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)

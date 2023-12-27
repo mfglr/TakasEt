@@ -53,6 +53,11 @@ namespace Repository.ModelBuilders
 				.WithOne(x => x.DestinationPost)
 				.HasForeignKey<Swapping>(x => x.DestinationPostId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.UserPostExplorings)
+				.WithOne(x => x.Post)
+				.HasForeignKey(x => x.PostId);
 		}
 	}
 }

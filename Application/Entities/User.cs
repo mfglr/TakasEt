@@ -27,6 +27,7 @@ namespace Application.Entities
 		public IReadOnlyCollection<UserUserFollowing> Followeds { get; }
 		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
         public IReadOnlyCollection<Searching> Searchings { get;}
+		public IReadOnlyCollection<UserPostExploring> UserPostExplorings { get; }
 
 		private readonly List<UserRole> _roles = new();
 		private readonly List<Post> _posts = new();
@@ -39,21 +40,6 @@ namespace Application.Entities
 			Email = email;
 			SetCreatedDate(DateTime.Now);
         }
-
-		[JsonConstructor]
-		public User(int id, string email, string userName,string name, string lastName,DateTime dateOfBirth,bool gender,DateTime createdDate,int countOfPost)
-		{
-			Id = id;
-			Email = email;
-			UserName = userName;
-			Name = name;
-			CountOfPost = countOfPost;
-			LastName = lastName;
-			DateOfBirth = dateOfBirth;
-			Gender = gender;
-			CreatedDate = createdDate;
-			NormalizedFullName = $"{name} {lastName}".CustomNormalize();
-		}
 
         public User()
         {

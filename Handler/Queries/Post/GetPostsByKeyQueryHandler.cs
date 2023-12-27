@@ -8,29 +8,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handler.Queries
 {
-	public class GetPostsByCategoryIdQueryHandler : IRequestHandler<GetPostsByCategoryId, AppResponseDto>
+	public class GetPostsByKeyQueryHandler : IRequestHandler<GetPostsByKey, AppResponseDto>
 	{
 
 		private readonly LoggedInUser _loggedInUser;
 		private readonly IRepository<Post> _posts;
 
-		public GetPostsByCategoryIdQueryHandler(LoggedInUser loggedInUser, IRepository<Post> posts)
+		public GetPostsByKeyQueryHandler(LoggedInUser loggedInUser, IRepository<Post> posts)
 		{
 			_loggedInUser = loggedInUser;
 			_posts = posts;
 		}
 
-		public async Task<AppResponseDto> Handle(GetPostsByCategoryId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetPostsByKey request, CancellationToken cancellationToken)
 		{
+
+			var normalizeKey = request.Key.CustomNormalize();
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
 				.IncludePost()
-				.Where(post => post.CategoryId == request.CategoryId)
+				.Where(
+					post => (
+						normalizeKey == null ||
+						post.NormalizedTitle.Contains(normalizeKey) ||
+						post.Tags.Any(postTag => postTag.Tag.NormalizeName.Contains(normalizeKey))
+					)
+				)
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
+
 		}
 	}
 }

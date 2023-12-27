@@ -24,16 +24,7 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.Comments)
-				.Include(x => x.Category)
-				.Include(x => x.User)
-				.ThenInclude(x => x.UserImages)
-				.Include(x => x.User)
-				.ThenInclude(x => x.Followers)
-				.Include(x => x.PostImages)
-				.Include(x => x.Tags)
-				.ThenInclude(x => x.Tag)
+				.IncludePost()
 				.Where(
 					x =>
 						(request.CategoryId == null || x.CategoryId == request.CategoryId) &&

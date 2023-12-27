@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
-import { selectPostIds } from './state/selector';
+import { selectAbstractPostIds } from './state/selector';
 
 @Component({
   selector: 'app-search-home',
@@ -10,7 +10,7 @@ import { selectPostIds } from './state/selector';
 })
 export class SearchHomePage implements OnInit {
 
-  postIds$ = this.searchHomePageStore.select(selectPostIds);
+  postIds$ = this.searchHomePageStore.select(selectAbstractPostIds);
 
   constructor(
     private searchHomePageStore : Store<SearchHomePageState>

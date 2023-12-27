@@ -73,5 +73,19 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetPostsByCategoryId(Request.Query) { CategoryId = categoryId });
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-search-page-posts")]
+		public async Task<AppResponseDto> GetSearchPage(int categoryId)
+		{
+			return await _sender.Send(new GetSearchPagePosts(Request.Query));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-posts-by-key/{key}")]
+		public async Task<AppResponseDto> GetPostsByKey(string key)
+		{
+			return await _sender.Send(new GetPostsByKey(Request.Query) { Key = key });
+		}
+
 	}
 }

@@ -25,6 +25,7 @@ namespace Application.Entities
 		public IReadOnlyCollection<PostPostRequesting> Requesteds { get; }//talep ettikleri
 		public IReadOnlyCollection<PostPostRequesting> Requesters { get; }//telap edenler
         public IReadOnlyCollection<PostTag> Tags { get; }
+        public IReadOnlyCollection<UserPostExploring> UserPostExplorings { get; }
 
         private readonly List<PostImage> _images = new();
 
@@ -46,20 +47,5 @@ namespace Application.Entities
         {
             _images.Add(image);
         }
-
-        [JsonConstructor]
-		public Post(int id, int userId, string title, string content, int categoryId, int countOfImages,DateTime createddate,List<PostImage> postImages)
-		{
-            Id = id;
-			UserId = userId;
-			CategoryId = categoryId;
-			Title = title;
-			NormalizedTitle = title.CustomNormalize();
-			Content = content;
-			CountOfImages = countOfImages;
-            CreatedDate = createddate;
-            foreach (PostImage image in postImages)
-				AddImage(image);
-		}
 	}
 }

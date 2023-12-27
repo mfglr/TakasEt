@@ -1,6 +1,16 @@
-﻿using Test.cs.CreateDumyData;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using Test.cs.CreateDumyData;
 
-Generator generator = new Generator(100,10,10,10,5,10,5);
-generator.Open();
-generator.GenerateJsonFiles();
-generator.Close();
+
+IEnumerable<IEnumerable<string>> a = new List<List<string>>(){
+	new List<string>(){"1","2"},new List<string>(){"3","4"}
+};
+
+var b = a.Aggregate((x, y) => x.Concat(y));
+
+foreach (var x in b) Console.WriteLine(x);
+
+
+
+

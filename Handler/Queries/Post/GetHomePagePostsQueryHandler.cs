@@ -24,17 +24,10 @@ namespace Handler.Queries
 			var posts = await _posts
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.UsersWhoLiked)
-				.Include(x => x.Comments)
-				.Include(x => x.Category)
-				.Include(x => x.User)
-				.ThenInclude(x => x.UserImages)
+				.IncludePost()
 				.Include(x => x.User)
 				.ThenInclude(x => x.Followers)
-				.Include(x => x.PostImages)
-				.Include(x => x.Tags)
-				.ThenInclude(x => x.Tag)
-				.Where( x => (x.User.Followers.Any(x => x.FollowerId == _loggedInUser.UserId)) )
+				.Where( x => x.User.Followers.Any(x => x.FollowerId == _loggedInUser.UserId) )
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);

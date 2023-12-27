@@ -1,10 +1,27 @@
 ﻿using Application.Dtos;
 using Application.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Extentions
 {
 	public static class QueryableExtenionsForMapping
 	{
+
+
+		public static IIncludableQueryable<Post,Tag> IncludePost(this IQueryable<Post> queryable)
+		{
+			return queryable
+				.Include(x => x.User)
+				.ThenInclude(x => x.UserImages)
+				.Include(x => x.UsersWhoLiked)
+				.Include(x => x.Comments)
+				.Include(x => x.Category)
+				.Include(x => x.PostImages)
+				.Include(x => x.Tags)
+				.ThenInclude(x => x.Tag);
+		}
+
 		public static IQueryable<PostResponseDto> ToPostResponseDto(this IQueryable<Post> queryable,int? loggedInUserId)
 		{
 			return queryable
