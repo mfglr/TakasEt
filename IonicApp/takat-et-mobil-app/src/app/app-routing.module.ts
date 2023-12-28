@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'search-home',
     loadChildren: () => import('./search/search-home/search-home.module').then( m => m.SearchHomePageModule)
   },
+  {
+    path: 'search-post-list',
+    loadChildren: () => import('./search/search-post-list/search-post-list.module').then( m => m.SearchPostListPageModule)
+  },
 ];
 
 @NgModule({

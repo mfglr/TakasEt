@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, filter, mergeMap } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
@@ -16,7 +16,9 @@ import { selectPostResponse } from 'src/app/states/post-state/selectors';
 export class AbstractPostComponent  implements OnInit {
 
   @Input() postId? : number;
-  @Input() url? : string;
+  @Input() postListUrl? : string;
+  @Input() addIdToUrl = false;
+
   post$? : Observable<PostResponse | undefined>;
   postImageState$? : Observable<PostImageState | undefined>
 
@@ -43,5 +45,4 @@ export class AbstractPostComponent  implements OnInit {
     }
 
   }
-
 }

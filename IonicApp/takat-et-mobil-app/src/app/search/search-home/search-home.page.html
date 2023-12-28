@@ -13,7 +13,11 @@
 
   <ion-content [scrollEvents]="true">
     <app-search-input></app-search-input>
-    <app-abstract-post-list [postIds]="postIds$ | async"></app-abstract-post-list>
+    <app-abstract-post-list
+      [postIds]="postIds$ | async"
+      postListUrl="/place/search/post-list"
+      [addIdToUrl]="true">
+    </app-abstract-post-list>
   </ion-content>
 
 </ion-content>

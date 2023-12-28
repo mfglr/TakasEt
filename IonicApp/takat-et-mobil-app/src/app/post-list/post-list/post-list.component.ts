@@ -67,7 +67,4 @@ export class PostListComponent {
   closeModal(){
     this.postListStore.dispatch(closeModalAction())
   }
-  ngOnDestroy(){
-    console.log("a")
-  }
 }

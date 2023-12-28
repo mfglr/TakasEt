@@ -19,15 +19,21 @@ export class PostService {
     return this.nativeHttpClientService.post<NoContentResponse>("post/add-post",formData);
   }
 
-  getHomePosts(page : Page) : Observable<PostResponse[]>{
+  getHomePagePosts(page : Page) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
-      `post/get-home-posts?${UrlHelper.createPaginationQueryString(page)}`
+      `post/get-home-page-posts?${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 
-  getSearchPosts(page : Page) : Observable<PostResponse[]>{
+  getSearchPagePosts(page : Page) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
-      `post/get-search-posts?${UrlHelper.createPaginationQueryString(page)}`
+      `post/get-search-page-posts?${UrlHelper.createPaginationQueryString(page)}`
+    )
+  }
+
+  getSearchPostListPagePosts(postId : number,page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-search-post-list-page-posts/${postId}?${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 

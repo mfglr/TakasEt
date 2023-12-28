@@ -39,7 +39,7 @@ namespace Handler.Queries
 			var posts = await _posts	
 				.DbSet
 				.IncludePost()
-				.Where( post => categorIds.Contains(post.CategoryId) )
+				.Where( post => categorIds.Count() == 0 || categorIds.Contains(post.CategoryId) )
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);

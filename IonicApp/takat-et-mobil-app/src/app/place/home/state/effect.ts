@@ -24,7 +24,7 @@ export class HomePageEffect{
       ofType(nextPostsAction),
       withLatestFrom(this.homePageStore.select(selectStatusAndPage)),
       filter(([action,x]) => !x.status),
-      mergeMap(([action,x]) => this.postService.getHomePosts(x.page)),
+      mergeMap(([action,x]) => this.postService.getHomePagePosts(x.page)),
       mergeMap(
         response => of(
           nextPostsSuccessAction({payload : response}),

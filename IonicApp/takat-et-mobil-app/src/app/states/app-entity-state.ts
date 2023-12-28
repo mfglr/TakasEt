@@ -23,7 +23,6 @@ export function addOne(entityId : number,state : AppEntityState) : AppEntityStat
 
 export function addMany(entityIds : number[],take : number,state : AppEntityState) : AppEntityState{
   return {
-    ...state,
     entityIds : [...state.entityIds,...entityIds],
     isLastEntities : entityIds.length < take,
     page : {

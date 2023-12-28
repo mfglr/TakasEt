@@ -20,7 +20,7 @@
   <swiper-container #swiperContainer (swiperactiveindexchange)="changeActiveTab($event)">
 
     <swiper-slide >
-      <app-abstract-post-list [postIds]="postIds" [url]="postsUrl"></app-abstract-post-list>
+      <app-abstract-post-list [postIds]="postIds" [postListUrl]="postListUrl"></app-abstract-post-list>
     </swiper-slide>
 
     <swiper-slide>

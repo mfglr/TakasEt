@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
-import { selectAbstractPostIds } from './state/selector';
+import { selectPostIds } from './state/selector';
+import { first } from 'rxjs';
+import { nextPostsAction } from './state/action';
 
 @Component({
   selector: 'app-search-home',
@@ -10,13 +12,21 @@ import { selectAbstractPostIds } from './state/selector';
 })
 export class SearchHomePage implements OnInit {
 
-  postIds$ = this.searchHomePageStore.select(selectAbstractPostIds);
+  clickedPostId? : number;
+
+  postIds$ = this.searchHomePageStore.select(selectPostIds);
 
   constructor(
     private searchHomePageStore : Store<SearchHomePageState>
   ) { }
 
   ngOnInit() {
+    this.postIds$.pipe(first()).subscribe(
+      postIds => {
+        if(postIds.length == 0)
+          this.searchHomePageStore.dispatch(nextPostsAction());
+      }
+    )
   }
 
 }

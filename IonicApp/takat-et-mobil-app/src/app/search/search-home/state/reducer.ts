@@ -1,23 +1,20 @@
 import { createReducer, on } from "@ngrx/store";
 import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
 import { takeValueOfPosts } from "src/app/states/app-states";
-import { nextAbstractPostsSuccessAction } from "./action";
+import { nextPostsSuccessAction } from "./action";
 
 export interface SearchHomePageState{
-  abstractPosts : AppEntityState
+  posts : AppEntityState
 }
 
 const initialState : SearchHomePageState = {
-  abstractPosts : init(takeValueOfPosts)
+  posts : init(takeValueOfPosts)
 }
 
 export const searchHomePageReducer = createReducer(
   initialState,
   on(
-    nextAbstractPostsSuccessAction,
-    (state,action) => ({
-      ...state,
-      abstractPosts : addMany(action.posts.map(x => x.id),takeValueOfPosts,state.abstractPosts)
-    })
+    nextPostsSuccessAction,
+    (state,action) => ({ ...state, posts : addMany(action.posts.map(x => x.id),takeValueOfPosts,state.posts) })
   )
 )

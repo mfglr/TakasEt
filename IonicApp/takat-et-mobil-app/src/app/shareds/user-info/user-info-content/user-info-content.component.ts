@@ -7,7 +7,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
   styleUrls: ['./user-info-content.component.scss'],
 })
 export class UserInfoContentComponent  implements OnInit {
-  @Input() postsUrl? : string;
+  @Input() postListUrl? : string;
   @Input() user? : UserResponse | null;
   @Input() activeTab? : number | null;
   @Input() postIds? : number[] | null;

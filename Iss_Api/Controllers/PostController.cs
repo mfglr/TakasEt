@@ -25,10 +25,24 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post/get-home-posts")]
+		[HttpGet("post/get-home-page-posts")]
 		public async Task<AppResponseDto> GetHomePosts()
 		{
 			return await _sender.Send(new GetHomePagePosts(Request.Query));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-search-page-posts")]
+		public async Task<AppResponseDto> GetSearchPagePosts(int categoryId)
+		{
+			return await _sender.Send(new GetSearchPagePosts(Request.Query));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-search-post-list-page-posts/{postId}")]
+		public async Task<AppResponseDto> GetSearchPostListPagePosts(int postId)
+		{
+			return await _sender.Send(new GetSearchPostListPagePosts(Request.Query) { PostId = postId });
 		}
 
 		[Authorize(Roles = "user")]
@@ -71,13 +85,6 @@ namespace WebApi.Controllers
 		public async Task<AppResponseDto> GetPostsByCategoryId(int categoryId)
 		{
 			return await _sender.Send(new GetPostsByCategoryId(Request.Query) { CategoryId = categoryId });
-		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("post/get-search-page-posts")]
-		public async Task<AppResponseDto> GetSearchPage(int categoryId)
-		{
-			return await _sender.Send(new GetSearchPagePosts(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
