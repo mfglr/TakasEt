@@ -8,6 +8,7 @@ namespace Application.Dtos
         public int PostId { get; set; }
         public GetSearchPostListPagePosts(IQueryCollection collection) : base(collection)
 		{
+
 		}
 	}
 }

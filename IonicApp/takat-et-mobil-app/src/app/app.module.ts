@@ -20,6 +20,7 @@ import { PostImageEffect } from './states/post-image-state/effect';
 import { UserEntityEffect } from './states/user-entity-state/effect';
 import { profileReducer } from './states/profile-state/reducer';
 import { ProfileEffect } from './states/profile-state/effect';
+import { AppEffect } from './states/effect';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ProfileEffect } from './states/profile-state/effect';
     StoreModule.forFeature("ProfileStore",profileReducer),
 
     EffectsModule.forRoot(),
+    EffectsModule.forFeature([AppEffect]),
     EffectsModule.forFeature([LoginEffect]),
     EffectsModule.forFeature([UserImageEntityEffect]),
     EffectsModule.forFeature([PostImageEffect]),

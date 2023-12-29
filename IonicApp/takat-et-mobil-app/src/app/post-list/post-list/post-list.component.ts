@@ -3,9 +3,9 @@ import { Store } from '@ngrx/store';
 import { selectIsModalOpen, selectPostOfModal } from '../state/selectors';
 import { PostListState } from '../state/reducer';
 import { closeModalAction } from '../state/actions';
-import { takeValueOfPosts } from 'src/app/states/app-states';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { takeValueOfPosts } from 'src/app/states/app-entity-state';
 
 @Component({
   selector: 'app-post-list',

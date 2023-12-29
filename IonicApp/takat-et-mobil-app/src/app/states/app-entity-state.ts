@@ -1,3 +1,10 @@
+
+export const takeValueOfPosts = 10;
+export const takeValueOfComments = 10;
+export const takeValueOfUsers = 10;
+export const takeValueOfPostImages = 10;
+
+
 export interface Page{
   take : number;
   lastId : number | undefined;

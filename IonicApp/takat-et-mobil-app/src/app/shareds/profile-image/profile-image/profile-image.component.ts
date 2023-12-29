@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { loadProfileImageUrlAction } from 'src/app/states/user-image-entity-state/actions';
+import { loadUserImageUrlAction } from 'src/app/states/user-image-entity-state/actions';
 import { UserImageEntityState } from 'src/app/states/user-image-entity-state/reducer';
 import { selectLoadStatus, selectUrl } from 'src/app/states/user-image-entity-state/selectors';
 
@@ -26,7 +26,7 @@ export class ProfileImageComponent {
 
   ngOnChanges() {
     if(this.userImageId){
-      this.userImageEntityStore.dispatch(loadProfileImageUrlAction({id : this.userImageId}))
+      this.userImageEntityStore.dispatch(loadUserImageUrlAction({id : this.userImageId}))
       this.loadStatus$ = this.userImageEntityStore.select(selectLoadStatus({ id : this.userImageId}))
       this.url$ = this.userImageEntityStore.select(selectUrl({id : this.userImageId}))
     }

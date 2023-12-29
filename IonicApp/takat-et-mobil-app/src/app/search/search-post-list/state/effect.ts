@@ -7,9 +7,7 @@ import { nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { mergeMap, of } from "rxjs";
 import { selectPosts } from "./selectors";
 import { filterAppEntityState } from "src/app/custom-operators/filter-app-entity-state";
-import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
+import { loadPostsAction } from "src/app/states/actions";
 
 @Injectable()
 export class EntitySearchPostListPageEffect{
@@ -29,9 +27,7 @@ export class EntitySearchPostListPageEffect{
             mergeMap(x => this.postService.getSearchPostListPagePosts(action.postId,x.page)),
             mergeMap(response => of(
               nextPostsSuccessAction({postId : action.postId,payload : response}),
-              loadPostsSuccessAction({payload : response}),
-              loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-              loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+              loadPostsAction({posts : response})
             ))
           )
         )

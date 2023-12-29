@@ -6,9 +6,7 @@ import { Store } from "@ngrx/store";
 import { selectStatusAndPage } from "./selectors";
 import { Injectable } from "@angular/core";
 import { HomePageState } from "./reducer";
-import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
-import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
+import { loadPostsAction } from "src/app/states/actions";
 
 @Injectable()
 export class HomePageEffect{
@@ -28,9 +26,7 @@ export class HomePageEffect{
       mergeMap(
         response => of(
           nextPostsSuccessAction({payload : response}),
-          loadPostsSuccessAction({payload : response}),
-          loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadPostsAction({posts : response})
         )
       )
     )

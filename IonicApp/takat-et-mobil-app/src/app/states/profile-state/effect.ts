@@ -5,14 +5,11 @@ import { PostService } from "src/app/services/post.service";
 import { nextFollowedsAction, nextFollowedsSuccessAction, nextFollowersAction, nextFollowersSuccessAction, nextNotSwappedPostsAction, nextNotSwappedPostsSuccessAction, nextPostsAction, nextPostsSuccessAction, nextSwappedPostsAction, nextSwappedPostsSuccessAction } from "./actions";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, selectSwappedPosts } from "./selectors";
-import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
-import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
 import { LoginState } from "src/app/states/login_state/reducer";
 import { selectUserId } from "src/app/states/login_state/selectors";
 import { UserService } from "src/app/services/user.service";
-import { loadUsersSuccessAction } from "src/app/states/user-entity-state/actions";
 import { ProfileState } from "./reducer";
+import { loadPostsAction, loadUsersAction } from "../actions";
 
 @Injectable()
 export class ProfileEffect{
@@ -36,9 +33,7 @@ export class ProfileEffect{
         mergeMap(([action,userId,state]) =>  this.postService.getPostsByUserId(userId!,state.page)),
         mergeMap(response => of(
           nextPostsSuccessAction({payload : response}),
-          loadPostsSuccessAction({payload : response}),
-          loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadPostsAction({posts : response})
         ))
       )
     }
@@ -56,9 +51,7 @@ export class ProfileEffect{
         mergeMap(([action,userId,state]) =>  this.postService.getSwappedPosts(userId!,state.page)),
         mergeMap(response => of(
           nextSwappedPostsSuccessAction({payload : response}),
-          loadPostsSuccessAction({payload : response}),
-          loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadPostsAction({posts : response})
         ))
       )
     }
@@ -76,9 +69,7 @@ export class ProfileEffect{
         mergeMap(([action,userId,state]) =>  this.postService.getNotSwappedPosts(userId!,state.page)),
         mergeMap(response => of(
           nextNotSwappedPostsSuccessAction({payload : response}),
-          loadPostsSuccessAction({payload : response}),
-          loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadPostsAction({posts : response})
         ))
       )
     }
@@ -96,8 +87,7 @@ export class ProfileEffect{
         mergeMap(([action,userId,state]) =>  this.userServie.getFollowers(userId!,state.page)),
         mergeMap(response => of(
           nextFollowersSuccessAction({payload : response}),
-          loadUsersSuccessAction({users : response}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadUsersAction({users : response})
         ))
       )
     }
@@ -115,8 +105,7 @@ export class ProfileEffect{
         mergeMap(([action,userId,state]) =>  this.userServie.getFolloweds(userId!,state.page)),
         mergeMap(response => of(
           nextFollowedsSuccessAction({payload : response}),
-          loadUsersSuccessAction({users : response}),
-          loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
+          loadUsersAction({users : response})
         ))
       )
     }

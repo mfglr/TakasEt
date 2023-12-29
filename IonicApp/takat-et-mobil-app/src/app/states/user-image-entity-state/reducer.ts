@@ -1,6 +1,6 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { loadProfileImageUrlSuccessAction, loadProfileImageSuccessAction, loadProfileImagesSuccessAction } from "./actions";
+import { loadUserImageUrlSuccessAction, loadUserImageSuccessAction, loadUserImagesSuccessAction } from "./actions";
 import { UserImageResponse } from "src/app/models/responses/profile-image-response";
 
 interface UserImageState{
@@ -15,14 +15,14 @@ const adapter = createEntityAdapter<UserImageState>({ selectId : x => x.profileI
 export const userImageEntityReducer = createReducer(
   adapter.getInitialState(),
   on(
-    loadProfileImageUrlSuccessAction,
+    loadUserImageUrlSuccessAction,
     (state,action) => adapter.updateOne({
       id : action.id,
       changes : { loadStatus : true, url : action.url }
     },state)
   ),
   on(
-    loadProfileImageSuccessAction,
+    loadUserImageSuccessAction,
     (state,action) => {
       if(action.image)
         return adapter.addOne({ profileImage : action.image, loadStatus : false, url : undefined },state)
@@ -30,7 +30,7 @@ export const userImageEntityReducer = createReducer(
     }
   ),
   on(
-    loadProfileImagesSuccessAction,
+    loadUserImagesSuccessAction,
     (state,action) => adapter.addMany(
       action.images.filter(x => !(!x)).map( (x) : UserImageState => ({
         profileImage : x!,

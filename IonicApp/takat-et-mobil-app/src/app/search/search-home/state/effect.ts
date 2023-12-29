@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
-import { nextPostsAction, nextPostsSuccessAction } from "./action";
-import { filter, first, mergeMap, of } from "rxjs";
+import { nextPostsAction, nextPostsSuccessAction, searchPostsAction, searchPostsSuccessAction } from "./action";
+import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { SearchHomePageState } from "./reducer";
-import { selectPosts } from "./selector";
-import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { loadProfileImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
+import { selectKey, selectPosts } from "./selector";
+import { takeValueOfPosts } from "src/app/states/app-entity-state";
+import { loadPostsAction } from "src/app/states/actions";
 
 @Injectable()
 export class SearchHomePageEffect{
@@ -19,23 +18,38 @@ export class SearchHomePageEffect{
     private searchHomePageStore : Store<SearchHomePageState>
   ) {}
 
-  nextPosts$ = createEffect(() => {
+  searchPosts$ = createEffect( () => {
     return this.actions.pipe(
-      ofType(nextPostsAction),
+      ofType(searchPostsAction),
       mergeMap(
-        () => this.searchHomePageStore.select(selectPosts).pipe(
-          first(),
-          filter(state => !state.isLastEntities),
-          mergeMap(state => this.postService.getSearchPagePosts(state.page)),
-          mergeMap(response => of(
-            nextPostsSuccessAction({posts : response}),
-            loadPostsSuccessAction({payload : response}),
-            loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-            loadProfileImagesSuccessAction({images : response.map(x => x.userImage)})
-          ))
+        action => this.postService.getSearchPagePosts(action.key,{lastId : undefined,take : takeValueOfPosts}).pipe(
+          mergeMap(
+            response => of(
+              searchPostsSuccessAction({key : action.key,posts : response}),
+              loadPostsAction({posts : response})
+            )
+          )
         )
       )
     )
   })
+
+  nextPosts$ = createEffect(() => {
+    return this.actions.pipe(
+      ofType(nextPostsAction),
+      withLatestFrom(
+        this.searchHomePageStore.select(selectPosts),
+        this.searchHomePageStore.select(selectKey)
+      ),
+      filter(([action,state,key]) => !state.isLastEntities),
+      mergeMap(([action,state,key]) => this.postService.getSearchPagePosts(key,state.page)),
+      mergeMap(response => of(
+        nextPostsSuccessAction({posts : response}),
+        loadPostsAction({posts : response})
+      ))
+    )
+  })
+
+
 
 }

@@ -1,7 +1,6 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState, addMany, init } from "src/app/states/app-entity-state";
-import { takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-states";
+import { AppEntityState, addMany, init, takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-entity-state";
 import { initUserModuleStateAction, initUserModuleStatesAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction } from "./actions";
 
 interface UserModuleState{
