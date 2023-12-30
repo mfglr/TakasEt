@@ -6,7 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ToShortTextPipe implements PipeTransform {
 
   transform(value: string | undefined,length : number = 30): string {
-    return value ? value.length < length ? value : value.substring(0,length) : ''; 
+    if(value && value?.length <= length)
+      return value;
+    return (value ? value.length < length ? value : value.substring(0,length) : '') + '...';
   }
 
 }

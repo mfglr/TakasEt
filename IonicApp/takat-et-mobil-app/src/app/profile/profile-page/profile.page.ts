@@ -24,6 +24,12 @@ export class ProfilePage implements OnInit {
     mergeMap(userId => this.userStore.select(selectUser({userId : userId!})))
   );
 
+  tags = [
+    {icon : 'fa-solid fa-table-cells-large',name : undefined},
+    {icon : 'fa-solid fa-handshake-simple',name : undefined},
+    {icon : 'fa-solid fa-handshake-simple-slash',name : undefined}
+  ]
+
   activeTab$? = this.profilePageStore.select(selectActiveTab);
 
   postIds$ = this.profileStore.select(selectPostIds)

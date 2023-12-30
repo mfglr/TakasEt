@@ -1,15 +1,15 @@
 import { createReducer, on } from "@ngrx/store"
-import { changeActiveTabAction } from "./actions"
+import { changeActiveIndexAction } from "./actions"
 
 export interface ProfileFollowingPageState{
-  activeTab : number
+  activeIndex : number
 }
 
 const initialState : ProfileFollowingPageState = {
-  activeTab : 0
+  activeIndex : 0
 }
 
 export const profileFollowingPageReducer = createReducer(
   initialState,
-  on(changeActiveTabAction,(state,action) => ({...state,activeTab : action.activeTab}))
+  on(changeActiveIndexAction,(state,action) => ({...state,activeIndex : action.activeTab}))
 )

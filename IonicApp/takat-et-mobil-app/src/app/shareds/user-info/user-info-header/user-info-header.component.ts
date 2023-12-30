@@ -7,5 +7,10 @@ import { UserResponse } from 'src/app/models/responses/user-response';
   styleUrls: ['./user-info-header.component.scss'],
 })
 export class UserInfoHeaderComponent{
+
   @Input() user? : UserResponse | null;
+
+  onClickPostButton(){
+    document.getElementById("content")?.scrollIntoView({behavior :'smooth'});
+  }
 }

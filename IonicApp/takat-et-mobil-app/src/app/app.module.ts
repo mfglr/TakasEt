@@ -21,6 +21,7 @@ import { UserEntityEffect } from './states/user-entity-state/effect';
 import { profileReducer } from './states/profile-state/reducer';
 import { ProfileEffect } from './states/profile-state/effect';
 import { AppEffect } from './states/effect';
+import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,8 @@ import { AppEffect } from './states/effect';
     EffectsModule.forFeature([PostImageEffect]),
     EffectsModule.forFeature([UserEntityEffect]),
     EffectsModule.forFeature([ProfileEffect]),
+
+    SwiperHeaderModule,
 
     LoginModule,
   ],

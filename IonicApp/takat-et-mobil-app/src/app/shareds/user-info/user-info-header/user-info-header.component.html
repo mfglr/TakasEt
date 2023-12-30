@@ -2,20 +2,20 @@
   <app-profile-image [diameter]="6" [userImageId]="user?.userImage?.id"></app-profile-image>
   <div class="counts">
 
-    <div class="post">
+    <button class="post" (click)="onClickPostButton()">
       <span class="post-counts" >{{user?.countOfPosts}}</span>
       <span class="post-text">Gönderi</span>
-    </div>
+    </button>
 
-    <div class="follower">
-      <a routerLink="/place/profile/following" class="follower-counts"><span>{{user?.countOfFollowers}}</span></a>
-      <a routerLink="/place/profile/following" class="follower-text"><span>Takipçi</span></a>
-    </div>
+    <button class="follower" routerLink="/place/profile/following">
+      <span class="follower-counts">{{user?.countOfFollowers}}</span>
+      <span class="folower-text">Takipçi</span>
+    </button>
 
-    <div class="followed">
-      <a routerLink="/place/profile/following" class="followed-counts"><span>{{user?.countOfFolloweds}}</span></a>
-      <a routerLink="/place/profile/following" class="followed-text"><span>Takip</span></a>
-    </div>
+    <button class="followed" routerLink="/place/profile/following">
+      <span class="followed-counts">{{user?.countOfFolloweds}}</span>
+      <span class="followed-text">Takip</span>
+    </button>
 
   </div>
 </ion-card>

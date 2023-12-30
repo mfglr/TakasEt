@@ -7,6 +7,8 @@ import { UserItemListComponent } from './user-item-list/user-item-list.component
 import { UserItemLoadingComponent } from './user-item-loading/user-item-loading.component';
 import { NoUserItemsComponent } from './no-user-items/no-user-items.component';
 import { ButtonsModule } from '../buttons/buttons.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -21,7 +23,9 @@ import { ButtonsModule } from '../buttons/buttons.module';
     CommonModule,
     ProfileImageModule,
     IonicModule,
-    ButtonsModule
+    ButtonsModule,
+    PipesModule,
+    RouterModule
   ],
   exports : [
     UserItemListComponent

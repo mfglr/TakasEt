@@ -6,6 +6,7 @@ import { ProfilePageModule } from './profile-page/profile-page.module';
 import { ProfilePostsPageModule } from './profile-posts-page/profile-posts-page.module';
 import { ProfileRoutingModule } from './profile-routing-module';
 import { FollowingPageModule } from './following/following.module';
+import { FollowingModule } from '../shareds/following/following.module';
 
 @NgModule({
   declarations: [],

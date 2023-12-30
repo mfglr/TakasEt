@@ -32,11 +32,11 @@
     </ion-card>
 
     <app-user-info-content
-      [activeTab]="activeTab$ | async"
+      [activeIndex]="activeTab$ | async"
       [postIds]="postIds$ | async"
       [swappedPostIds]="swappedPostIds$ | async"
       [notSwappedPostIds]="notSwappedPostIds$ | async"
-      (changeActiveTabEvent)="changeActiveTab($event)">
+      (changeActiveIndexEvent)="changeActiveTab($event)">
     </app-user-info-content>
   </ion-content>
 

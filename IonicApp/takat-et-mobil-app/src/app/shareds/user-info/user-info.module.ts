@@ -6,6 +6,7 @@ import { ProfileImageModule } from '../profile-image/profile-image.module';
 import { AbstractPostListModule } from '../abstract-post-list/abstract-post-list.module';
 import { UserInfoContentComponent } from './user-info-content/user-info-content.component';
 import { RouterModule } from '@angular/router';
+import { SwiperHeaderModule } from '../swiper-header/swiper-header.module';
 
 
 
@@ -19,7 +20,8 @@ import { RouterModule } from '@angular/router';
     IonicModule,
     RouterModule,
     ProfileImageModule,
-    AbstractPostListModule
+    AbstractPostListModule,
+    SwiperHeaderModule
   ],
   exports : [
     UserInfoHeaderComponent,

@@ -1,5 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/place/profile"></ion-back-button>
+    </ion-buttons>
     <ion-title>following</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,21 +10,30 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-buttons>
-        <ion-back-butto></ion-back-butto>
-      </ion-buttons>
       <ion-title size="large">following</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
-    <swiper-container (swiperactiveindexchange)="changeActiveTab($event)" >
+
+    <app-swiper-header
+      [tags]="tags"
+      [activeIndex]="activeIndex$ | async"
+      (changeActiveIndexEvent)="changeActiveIndex($event)"></app-swiper-header>
+
+    <swiper-container #swiperContainer
+      (swiperactiveindexchange)="changeActiveIndex($event)"
+      (swiperslidermove)="onSliderMove($event)"
+      (swipersliderfirstmove)="onSliderFirstMove($event)">
+
       <swiper-slide>
         <app-user-item-list [userIds]="followerIds$ | async"></app-user-item-list>
       </swiper-slide>
+
       <swiper-slide>
         <app-user-item-list [userIds]="followedIds$ | async"></app-user-item-list>
       </swiper-slide>
+
     </swiper-container>
   </ion-content>
 

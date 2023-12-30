@@ -10,6 +10,7 @@ import { FollowingPage } from './following.page';
 import { FollowingModule } from 'src/app/shareds/following/following.module';
 import { StoreModule } from '@ngrx/store';
 import { profileFollowingPageReducer } from './state/reducer';
+import { SwiperHeaderModule } from 'src/app/shareds/swiper-header/swiper-header.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { profileFollowingPageReducer } from './state/reducer';
     IonicModule,
     FollowingPageRoutingModule,
     FollowingModule,
-    StoreModule.forFeature("ProfileFollowingPageStore",profileFollowingPageReducer)
+    StoreModule.forFeature("ProfileFollowingPageStore",profileFollowingPageReducer),
+    SwiperHeaderModule
   ],
   declarations: [FollowingPage],
   schemas : [CUSTOM_ELEMENTS_SCHEMA]

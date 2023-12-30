@@ -9,11 +9,12 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 export class UserInfoContentComponent  implements OnInit {
   @Input() postListUrl? : string;
   @Input() user? : UserResponse | null;
-  @Input() activeTab? : number | null;
+  @Input() activeIndex? : number | null;
   @Input() postIds? : number[] | null;
   @Input() swappedPostIds? : number[] | null;
   @Input() notSwappedPostIds? : number[] | null;
-  @Output() changeActiveTabEvent = new EventEmitter<number>();
+  @Input() tags? : {name : string| undefined,icon : string| undefined}[];
+  @Output() changeActiveIndexEvent = new EventEmitter<number>();
   @ViewChild("swiperContainer") swiperContainer? : ElementRef;
 
   constructor() { }
@@ -22,8 +23,8 @@ export class UserInfoContentComponent  implements OnInit {
   }
 
   ngAfterContentInit(){
-    if(this.activeTab){
-      this.slideTo(this.activeTab)
+    if(this.activeIndex){
+      this.slideTo(this.activeIndex)
     }
   }
 
@@ -31,7 +32,13 @@ export class UserInfoContentComponent  implements OnInit {
     this.swiperContainer?.nativeElement.swiper.slideTo(index)
   }
 
-  changeActiveTab(e : any){
-    this.changeActiveTabEvent.emit(e.detail[0].activeIndex)
+  changeActiveIndex(e : any){
+    if(e instanceof CustomEvent){
+      this.changeActiveIndexEvent.emit(e.detail[0].activeIndex)
+    }
+    else{
+      this.changeActiveIndexEvent.emit(e)
+      this.slideTo(e);
+    }
   }
 }

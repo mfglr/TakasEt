@@ -1,3 +1,20 @@
-<div class="root">
+  <div class="root">
+    <div class="row1">
 
-</div>
+      <div *ngFor="let tag of tags;let i = index;" class="tag" [ngClass]="{'active' : activeIndex == i}" (click)="onClick(i)">
+        <i *ngIf="tag.icon" [class]=" tag.icon + ' icon'"></i>
+        <span *ngIf="tag.name" class="name">
+          {{tag.name}}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="row2">
+      <div class="line" #line>
+        <div class="indexer" [style]="'left:'+location+'px;width:'+indexerLength+'px'"></div>
+      </div>
+    </div>
+
+  </div>
+
