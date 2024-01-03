@@ -58,5 +58,13 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetFollowers(Request.Query) { UserId = userId});
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("user/get-search-page-users")]
+		public async Task<AppResponseDto> GetSearchPageUsers(string key)
+		{
+			return await _sender.Send(new GetSearchPageUsers(Request.Query) { Key = key });
+		}
+
+
 	}
 }

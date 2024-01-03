@@ -12,12 +12,29 @@
   </ion-header>
 
   <ion-content [scrollEvents]="true">
-    <app-search-input></app-search-input>
-    <app-abstract-post-list
-      [postIds]="postIds$ | async"
-      postListUrl="/place/search/post-list"
-      [addIdToUrl]="true">
-    </app-abstract-post-list>
+
+    <div class="search-box-wrapper">
+      <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
+    </div>
+
+    <app-swiper-header [tags]="tags" ></app-swiper-header>
+
+    <swiper-container (swiperactiveindexchange)="onActiveIndexChange($event)">
+
+      <swiper-slide>
+        <app-abstract-post-list
+          [postIds]="postIds$ | async"
+          postListUrl="/place/search/post-list"
+          [addIdToUrl]="true">
+        </app-abstract-post-list>
+      </swiper-slide>
+
+      <swiper-slide>
+
+      </swiper-slide>
+
+    </swiper-container>
+
   </ion-content>
 
 </ion-content>

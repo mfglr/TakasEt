@@ -1,5 +1,8 @@
-img{
+.root{
+  padding: 2px;
+  img{
     width: 100%;
     aspect-ratio: 1/1;
     object-fit: cover;
+  }
 }

@@ -22,6 +22,15 @@ namespace Application.Extentions
 				.ThenInclude(x => x.Tag);
 		}
 
+		public static IIncludableQueryable<User,IReadOnlyCollection<UserImage>> IncludeUser(this IQueryable<User> queryable)
+		{
+			return queryable
+				.Include(x => x.Followers)
+				.Include(x => x.Followeds)
+				.Include(x => x.UserImages);
+		}
+
+
 		public static IQueryable<PostResponseDto> ToPostResponseDto(this IQueryable<Post> queryable,int? loggedInUserId)
 		{
 			return queryable

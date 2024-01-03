@@ -31,6 +31,7 @@ namespace Handler.Queries
 				.Where(
 					post => (
 						normalizeKey == null ||
+						normalizeKey == "" ||
 						post.NormalizedTitle.Contains(normalizeKey) ||
 						post.Tags.Any(postTag => postTag.Tag.NormalizeName.Contains(normalizeKey))
 					)

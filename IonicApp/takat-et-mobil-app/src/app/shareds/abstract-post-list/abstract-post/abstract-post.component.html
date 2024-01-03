@@ -1,7 +1,9 @@
 <ng-container *ngIf="(post$ | async) as post">
   <ng-container *ngIf="(postImageState$ | async) as postImageState">
-    <a [routerLink]="addIdToUrl ? postListUrl + '/' + postId : postListUrl" [fragment]="'post' + post.id" >
-      <img [src]="postImageState.url" [alt]="post.title" class="img">
-    </a>
+    <div class="root">
+      <a [routerLink]="addIdToUrl ? postListUrl + '/' + postId : postListUrl" [fragment]="'post' + post.id">
+        <img [src]="postImageState.url" [alt]="post.title" class="img">
+      </a>
+    </div>
   </ng-container>
 </ng-container>

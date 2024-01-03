@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handler", "Handler\Handler.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Iss_Api", "Iss_Api\Iss_Api.csproj", "{A1F4082B-D304-40BF-A449-AEB5D028F1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApi", "TestApi\TestApi.csproj", "{ACBF3F32-B099-4B47-90AD-37B329901B40}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{A1F4082B-D304-40BF-A449-AEB5D028F1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1F4082B-D304-40BF-A449-AEB5D028F1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1F4082B-D304-40BF-A449-AEB5D028F1E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACBF3F32-B099-4B47-90AD-37B329901B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACBF3F32-B099-4B47-90AD-37B329901B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACBF3F32-B099-4B47-90AD-37B329901B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACBF3F32-B099-4B47-90AD-37B329901B40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

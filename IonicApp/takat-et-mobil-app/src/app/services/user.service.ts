@@ -45,4 +45,11 @@ export class UserService {
   addProfileImage(formData:FormData) : Observable<NoContentResponse> {
     return this.httpClient.post<NoContentResponse>('user/add-profile-image',formData);
   }
+
+  getSearchPageUsers(key : string | undefined, page : Page) : Observable<UserResponse[]>{
+    let url;
+    if(key) url = `user/get-search-page-users?key=${key}&${UrlHelper.createPaginationQueryString(page)}`;
+    else url = `user/get-search-page-users?${UrlHelper.createPaginationQueryString(page)}`;
+    return this.httpClient.get<UserResponse[]>(url);
+  }
 }

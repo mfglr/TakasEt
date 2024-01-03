@@ -12,4 +12,7 @@ export class FilterPage implements OnInit {
   ngOnInit() {
   }
 
+  onKeyChange(key : string){
+    console.log(key);
+  }
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -12,7 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { searchHomePageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { SearchHomePageEffect } from './state/effect';
-import { SearchInputComponent } from './search-input/search-input.component';
+import { SearchBoxModule } from 'src/app/shareds/search-box/search-box.module';
+import { SwiperHeaderModule } from 'src/app/shareds/swiper-header/swiper-header.module';
 
 @NgModule({
   imports: [
@@ -24,10 +25,12 @@ import { SearchInputComponent } from './search-input/search-input.component';
     StoreModule.forFeature("SearchHomePageStore",searchHomePageReducer),
     EffectsModule.forFeature([SearchHomePageEffect]),
     AbstractPostListModule,
+    SearchBoxModule,
+    SwiperHeaderModule
   ],
   declarations: [
     SearchHomePage,
-    SearchInputComponent
-  ]
+  ],
+  schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SearchHomePageModule {}

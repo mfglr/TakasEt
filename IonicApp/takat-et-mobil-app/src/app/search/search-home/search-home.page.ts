@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
 import { selectPostIds } from './state/selector';
 import { first } from 'rxjs';
-import { nextPostsAction } from './state/action';
+import { nextPostsAction, searchPostsAction } from './state/action';
 
 @Component({
   selector: 'app-search-home',
@@ -11,6 +11,11 @@ import { nextPostsAction } from './state/action';
   styleUrls: ['./search-home.page.scss'],
 })
 export class SearchHomePage implements OnInit {
+
+  tags = [
+    {name : "posts", icon : undefined},
+    {name : "users", icon : undefined}
+  ]
 
   clickedPostId? : number;
 
@@ -29,4 +34,10 @@ export class SearchHomePage implements OnInit {
     )
   }
 
+  onKeyChange(key : string){
+    this.searchHomePageStore.dispatch(searchPostsAction({key : key}))
+  }
+  onActiveIndexChange(e : any){
+    console.log(e.detail[0].activeIndex);
+  }
 }

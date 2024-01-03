@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { FilterPageRoutingModule } from './filter-routing.module';
 
 import { FilterPage } from './filter.page';
-import { InputComponent } from './input/input.component';
+import { SearchBoxModule } from 'src/app/shareds/search-box/search-box.module';
+import { CategorySelectorModule } from 'src/app/shareds/category-selector/category-selector.module';
 
 @NgModule({
   imports: [
@@ -15,11 +16,12 @@ import { InputComponent } from './input/input.component';
     FormsModule,
     IonicModule,
     FilterPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SearchBoxModule,
+    CategorySelectorModule
   ],
   declarations: [
     FilterPage,
-    InputComponent
   ]
 })
 export class FilterPageModule {}
