@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
-import { selectPostIds } from './state/selector';
+import { selectActiveIndex, selectPostIds, selectUserIds } from './state/selector';
+import { changeActiveIndex, nextPostsAction, searchUsersAction } from './state/action';
 import { first } from 'rxjs';
-import { nextPostsAction, searchPostsAction } from './state/action';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-search-home',
@@ -17,27 +18,40 @@ export class SearchHomePage implements OnInit {
     {name : "users", icon : undefined}
   ]
 
-  clickedPostId? : number;
+  @ViewChild(IonContent) content? : IonContent
 
+  activeIndex$ = this.searchHomePageStore.select(selectActiveIndex);
   postIds$ = this.searchHomePageStore.select(selectPostIds);
-
+  userIds$ = this.searchHomePageStore.select(selectUserIds);
   constructor(
     private searchHomePageStore : Store<SearchHomePageState>
   ) { }
 
   ngOnInit() {
-    this.postIds$.pipe(first()).subscribe(
-      postIds => {
-        if(postIds.length == 0)
-          this.searchHomePageStore.dispatch(nextPostsAction());
-      }
-    )
+    this.postIds$.pipe(
+      first()
+    ).subscribe(postIds => {
+      if(postIds.length == 0) this.searchHomePageStore.dispatch(nextPostsAction())
+    })
   }
 
   onKeyChange(key : string){
-    this.searchHomePageStore.dispatch(searchPostsAction({key : key}))
+    this.searchHomePageStore.dispatch(searchUsersAction({ key : key }))
   }
+
   onActiveIndexChange(e : any){
-    console.log(e.detail[0].activeIndex);
+    this.searchHomePageStore.dispatch(changeActiveIndex({activeIndex : e.detail[0].activeIndex}));
   }
+
+  async onScroll(event : any){
+
+    if(this.content){
+      const scrollElement = await this.content.getScrollElement();
+      const scrollTop = event.detail.scrollTop;
+    }
+
+
+  }
+
+
 }

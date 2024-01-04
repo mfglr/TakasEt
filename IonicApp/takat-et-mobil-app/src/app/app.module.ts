@@ -22,6 +22,8 @@ import { profileReducer } from './states/profile-state/reducer';
 import { ProfileEffect } from './states/profile-state/effect';
 import { AppEffect } from './states/effect';
 import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module';
+import { categoryEntityReducer } from './states/category-entity-state/reducer';
+import { EntityCategoryEffect } from './states/category-entity-state/effect';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module
     StoreModule.forFeature("UserImageEntityStore",userImageEntityReducer),
     StoreModule.forFeature("PostImageStore",postImageReducer),
     StoreModule.forFeature("ProfileStore",profileReducer),
+    StoreModule.forFeature("CategoryEntityStore",categoryEntityReducer),
 
     EffectsModule.forRoot(),
     EffectsModule.forFeature([AppEffect]),
@@ -47,7 +50,7 @@ import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module
     EffectsModule.forFeature([PostImageEffect]),
     EffectsModule.forFeature([UserEntityEffect]),
     EffectsModule.forFeature([ProfileEffect]),
-
+    EffectsModule.forFeature([EntityCategoryEffect]),
     SwiperHeaderModule,
 
     LoginModule,

@@ -1,10 +1,8 @@
-<ion-list>
-  <ion-item>
-    <ion-select aria-label="Category" interface="action-sheet" placeholder="Category">
-      <ion-select-option value="Category">Category</ion-select-option>
-      <ion-select-option value="Kitap">Kitap</ion-select-option>
-      <ion-select-option value="Araba">Araba</ion-select-option>
-      <ion-select-option value="Elektronik">Elektronik</ion-select-option>
-    </ion-select>
-  </ion-item>
-</ion-list>
+<ion-select
+  placeholder="Category"
+  (ionChange)="onChange($event)"
+  [multiple]="true">
+  <ion-select-option *ngFor="let category of (categories$ | async)" [value]="category.id">
+    {{category.name}}
+  </ion-select-option>
+</ion-select>

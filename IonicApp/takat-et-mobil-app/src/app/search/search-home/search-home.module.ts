@@ -14,6 +14,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { SearchHomePageEffect } from './state/effect';
 import { SearchBoxModule } from 'src/app/shareds/search-box/search-box.module';
 import { SwiperHeaderModule } from 'src/app/shareds/swiper-header/swiper-header.module';
+import { UsersListModule } from 'src/app/shareds/users-list/users-list.module';
+import { CategorySelectorModule } from 'src/app/shareds/category-selector/category-selector.module';
 
 @NgModule({
   imports: [
@@ -26,7 +28,9 @@ import { SwiperHeaderModule } from 'src/app/shareds/swiper-header/swiper-header.
     EffectsModule.forFeature([SearchHomePageEffect]),
     AbstractPostListModule,
     SearchBoxModule,
-    SwiperHeaderModule
+    SwiperHeaderModule,
+    UsersListModule,
+    CategorySelectorModule
   ],
   declarations: [
     SearchHomePage,

@@ -8,7 +8,7 @@ namespace Application.Dtos
         public string? Key { get; set; }
         public GetSearchPageUsers(IQueryCollection collection) : base(collection)
 		{
-			string key = collection.Where(x => x.Key == "take").FirstOrDefault().Value.ToString();
+			string key = collection.Where(x => x.Key == "key").FirstOrDefault().Value.ToString();
 			if (key == "")
 				Key = null;
 			else

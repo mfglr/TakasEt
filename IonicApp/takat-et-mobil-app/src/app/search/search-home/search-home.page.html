@@ -11,17 +11,16 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content [scrollEvents]="true">
-
-    <div class="search-box-wrapper">
-      <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
-    </div>
+  <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
 
     <app-swiper-header [tags]="tags" ></app-swiper-header>
 
     <swiper-container (swiperactiveindexchange)="onActiveIndexChange($event)">
 
       <swiper-slide>
+        <div class="search-button-wrapper">
+          <ion-button class="search-button" routerLink="/place/search/filter">SEARCH</ion-button>
+        </div>
         <app-abstract-post-list
           [postIds]="postIds$ | async"
           postListUrl="/place/search/post-list"
@@ -30,7 +29,10 @@
       </swiper-slide>
 
       <swiper-slide>
-
+        <div class="search-button-wrapper">
+          <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
+        </div>
+        <app-users-list [userIds]="userIds$ | async"></app-users-list>
       </swiper-slide>
 
     </swiper-container>

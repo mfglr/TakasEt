@@ -45,4 +45,5 @@ export class AbstractPostComponent  implements OnInit {
     }
 
   }
+
 }

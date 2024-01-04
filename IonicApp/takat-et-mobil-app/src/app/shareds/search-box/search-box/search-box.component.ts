@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { filterSearchInput } from 'src/app/custom-operators/filter-search-input';
 
@@ -10,6 +10,7 @@ import { filterSearchInput } from 'src/app/custom-operators/filter-search-input'
 export class SearchBoxComponent implements OnDestroy {
 
   @Output() keyChangesEvent = new EventEmitter<string>();
+
   inputControl = new FormControl<string>("");
   subs = this.inputControl.valueChanges.pipe(
     filterSearchInput()

@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class UsersListComponent  implements OnInit {
 
-  @Input() postIds? : number[];
+  @Input() userIds? : number[] | null;
 
   constructor() { }
 

@@ -25,11 +25,10 @@ export class PostService {
     )
   }
 
-  getSearchPagePosts(key : string | undefined,page : Page) : Observable<PostResponse[]>{
-    let url;
-    if(key) url = `post/get-search-page-posts?key=${key}&${UrlHelper.createPaginationQueryString(page)}`;
-    else url = `post/get-search-page-posts?${UrlHelper.createPaginationQueryString(page)}`;
-    return this.nativeHttpClientService.get<PostResponse[]>(url);
+  getSearchPagePosts(page : Page) : Observable<PostResponse[]>{
+    return this.nativeHttpClientService.get<PostResponse[]>(
+      `post/get-search-page-posts?${UrlHelper.createPaginationQueryString(page)}`
+    );
   }
 
   getSearchPostListPagePosts(postId : number,page : Page) : Observable<PostResponse[]>{

@@ -60,9 +60,9 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-search-page-users")]
-		public async Task<AppResponseDto> GetSearchPageUsers(string key)
+		public async Task<AppResponseDto> GetSearchPageUsers()
 		{
-			return await _sender.Send(new GetSearchPageUsers(Request.Query) { Key = key });
+			return await _sender.Send(new GetSearchPageUsers(Request.Query));
 		}
 
 

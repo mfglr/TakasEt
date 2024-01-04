@@ -29,5 +29,12 @@ namespace WebApi.Controllers
 		{
 			return await _sender.Send(new FilterCategories(key,Request.Query));
 		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("category/get-categories")]
+		public async Task<AppResponseDto> GetCategories()
+		{
+			return await _sender.Send(new GetCategories(Request.Query));
+		}
 	}
 }

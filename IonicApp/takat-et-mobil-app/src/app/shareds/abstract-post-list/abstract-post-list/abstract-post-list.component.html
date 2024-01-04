@@ -1,7 +1,13 @@
 <ion-grid class="grid">
   <ion-row class="row">
-    <ion-col class="col" size="6" *ngFor="let postId of postIds">
-      <app-abstract-post [postId]="postId" [postListUrl]="postListUrl" [addIdToUrl]="addIdToUrl"></app-abstract-post>
+    <ion-col class="col" [size]="12 / size" *ngFor="let postId of postIds">
+      <app-abstract-post
+        [postId]="postId"
+        [postListUrl]="postListUrl"
+        [addIdToUrl]="addIdToUrl">
+      </app-abstract-post>
     </ion-col>
   </ion-row>
 </ion-grid>
+
+

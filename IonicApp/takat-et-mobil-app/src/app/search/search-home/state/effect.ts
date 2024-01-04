@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
-import { nextPostsAction, nextPostsSuccessAction, nextUsersAction, nextUsersSuccessAction, searchPostsAction, searchPostsSuccessAction, searchUsersAction, searchUsersSuccessAction } from "./action";
+import { nextPostsAction, nextPostsSuccessAction, nextUsersAction, nextUsersSuccessAction, searchUsersAction, searchUsersSuccessAction } from "./action";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { SearchHomePageState } from "./reducer";
@@ -19,22 +19,6 @@ export class SearchHomePageEffect{
     private userService : UserService,
     private searchHomePageStore : Store<SearchHomePageState>
   ) {}
-
-  searchPosts$ = createEffect( () => {
-    return this.actions.pipe(
-      ofType(searchPostsAction),
-      mergeMap(
-        action => this.postService.getSearchPagePosts(action.key,{lastId : undefined,take : takeValueOfPosts}).pipe(
-          mergeMap(
-            response => of(
-              searchPostsSuccessAction({key : action.key,posts : response}),
-              loadPostsAction({posts : response})
-            )
-          )
-        )
-      )
-    )
-  })
 
   searchUsers$ = createEffect( () => {
     return this.actions.pipe(
@@ -56,11 +40,10 @@ export class SearchHomePageEffect{
     return this.actions.pipe(
       ofType(nextPostsAction),
       withLatestFrom(
-        this.searchHomePageStore.select(selectPosts),
-        this.searchHomePageStore.select(selectKey)
+        this.searchHomePageStore.select(selectPosts)
       ),
-      filter(([action,state,key]) => !state.isLastEntities),
-      mergeMap(([action,state,key]) => this.postService.getSearchPagePosts(key,state.page)),
+      filter(([action,state]) => !state.isLastEntities),
+      mergeMap(([action,state]) => this.postService.getSearchPagePosts(state.page)),
       mergeMap(response => of(
         nextPostsSuccessAction({posts : response}),
         loadPostsAction({posts : response})

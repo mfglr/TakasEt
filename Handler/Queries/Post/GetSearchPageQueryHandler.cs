@@ -36,32 +36,10 @@ namespace Handler.Queries
 				)
 				.FirstAsync();
 
-			var normalizeKey = request.Key?.CustomNormalize();
-
 			var posts = await _posts	
 				.DbSet
 				.IncludePost()
-				.Where(
-					post => 
-						(
-							normalizeKey == null && 
-							(
-								categorIds.Count() == 0 ||
-								categorIds.Contains(post.CategoryId)
-							)
-						) ||
-						(
-							normalizeKey != null &&
-							(
-								post.NormalizedTitle.Contains(normalizeKey) ||
-								post.Tags.Any(
-									pt => 
-										pt.Tag.NormalizeName.Contains(normalizeKey) ||
-										normalizeKey.Contains(pt.Tag.NormalizeName)
-								)
-							)
-						)
-				)
+				.Where( post => categorIds.Count() == 0 || categorIds.Contains(post.CategoryId) )
 				.ToPage(request)
 				.ToPostResponseDto(_loggedInUser.UserId)
 				.ToListAsync(cancellationToken);

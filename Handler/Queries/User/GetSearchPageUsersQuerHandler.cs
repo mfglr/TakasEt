@@ -29,7 +29,7 @@ namespace Handler.Queries
 					user => (
 						normalizeKey == null ||
 						user.NormalizedFullName.Contains(normalizeKey) ||
-						user.NormalizedUserName.Contains(normalizeKey)
+						user.NormalizedUserName!.Contains(normalizeKey)
 					)
 				)
 				.ToPage(request)

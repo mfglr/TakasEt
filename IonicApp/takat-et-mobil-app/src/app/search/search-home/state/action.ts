@@ -2,15 +2,6 @@ import { createAction, props } from "@ngrx/store";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { UserResponse } from "src/app/models/responses/user-response";
 
-export const searchPostsAction = createAction(
-  "[Search Home Page Store] search posts",
-  props<{key : string | undefined}>()
-)
-export const searchPostsSuccessAction = createAction(
-  "[Search Home Page Store] search posts success",
-  props<{key : string | undefined,posts : PostResponse[]}>()
-)
-
 export const searchUsersAction = createAction(
   "[Search Home Page Store] search users",
   props<{key : string | undefined}>()
