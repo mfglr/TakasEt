@@ -14,11 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOptions();
 Configuration configuration = builder.Configuration.GetSection("Configuration").Get<Configuration>();
 builder.Services.AddSingleton(configuration);
+
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddSqlDbContext();
 builder.Services.AddApplication();
-builder.Services.AddHandlers();
+builder.Services.AddQueries();
+builder.Services.AddCommands();
 builder.Services.AddServices();
 
 builder.Services.AddAuthentication(

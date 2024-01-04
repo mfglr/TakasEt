@@ -23,7 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Handler\Handler.csproj" />
+    <ProjectReference Include="..\Commands\Commands.csproj" />
+    <ProjectReference Include="..\Queries\Queries.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
