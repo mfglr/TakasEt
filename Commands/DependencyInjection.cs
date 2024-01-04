@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Handler
+namespace Commands
 {
 	public static class DependencyInjection
 	{

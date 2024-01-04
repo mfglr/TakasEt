@@ -3,11 +3,12 @@ using Microsoft.IdentityModel.Tokens;
 using Service;
 using Repository;
 using Application;
-using Handler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Function.Middlewares;
 using WebApi.Extentions;
+using Queries;
+using Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
