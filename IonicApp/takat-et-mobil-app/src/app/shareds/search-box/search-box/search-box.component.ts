@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { filterSearchInput } from 'src/app/custom-operators/filter-search-input';
 

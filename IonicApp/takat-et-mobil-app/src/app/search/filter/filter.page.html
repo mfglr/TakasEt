@@ -7,21 +7,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollEvents]="true">
 
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">filter</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="search-box-wrapper">
+    <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
+    <app-category-selector (changeCategoryIdEvent)="onCategoryIdChange($event)"></app-category-selector>
+  </div>
 
-  <ion-content>
-
-    <div class="search-box-wrapper">
-      <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
-      <app-category-selector></app-category-selector>
-    </div>
-
-  </ion-content>
+  <app-abstract-post-list
+    [addIdToUrl]="true"
+    [postIds]="postIds$ | async">
+  </app-abstract-post-list>
 
 </ion-content>

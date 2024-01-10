@@ -1,5 +1,5 @@
 
-export const takeValueOfPosts = 20;
+export const takeValueOfPosts = 15;
 export const takeValueOfComments = 10;
 export const takeValueOfUsers = 10;
 export const takeValueOfPostImages = 10;
@@ -21,6 +21,17 @@ export function init(take : number) : AppEntityState{
     entityIds : [],
     isLastEntities : false,
     page : { lastId : undefined, take : take },
+  }
+}
+
+export function initMany(entityIds : number[],take : number,state : AppEntityState) : AppEntityState{
+  return {
+    entityIds : entityIds,
+    isLastEntities : entityIds.length < take,
+    page : {
+      lastId : entityIds.length > 0 ? entityIds[entityIds.length - 1] : undefined,
+      take : take
+    }
   }
 }
 

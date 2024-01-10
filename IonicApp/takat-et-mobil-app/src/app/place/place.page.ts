@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonTabBar } from '@ionic/angular';
 
 @Component({
   selector: 'app-place',
@@ -12,5 +13,4 @@ export class PlacePage implements OnInit {
 
   ngOnInit() {
   }
-
 }

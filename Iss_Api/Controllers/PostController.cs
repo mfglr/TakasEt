@@ -94,5 +94,12 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetPostsByKey(Request.Query) { Key = key });
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpGet("post/get-filter-page-posts")]
+		public async Task<AppResponseDto> GetFilterPagePosts()
+		{
+			return await _sender.Send(new GetFilterPagePosts(Request.Query));
+		}
+
 	}
 }

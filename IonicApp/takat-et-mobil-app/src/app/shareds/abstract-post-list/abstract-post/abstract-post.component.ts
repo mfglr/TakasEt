@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, filter, mergeMap } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';

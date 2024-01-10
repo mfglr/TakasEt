@@ -21,16 +21,16 @@ namespace Queries
 
 		public async Task<AppResponseDto> Handle(GetSearchPageUsers request, CancellationToken cancellationToken)
 		{
-			var normalizeKey = request.Key?.CustomNormalize();
+			var normalizeKey = request.Key.CustomNormalize();
+			
+			if(normalizeKey == "")
+				return AppResponseDto.Success();
+
 			var users = await _users
 				.DbSet
 				.IncludeUser()
 				.Where(
-					user => (
-						normalizeKey == null ||
-						user.NormalizedFullName.Contains(normalizeKey) ||
-						user.NormalizedUserName!.Contains(normalizeKey)
-					)
+					user => user.NormalizedFullName.Contains(normalizeKey) || user.NormalizedUserName!.Contains(normalizeKey)
 				)
 				.ToPage(request)
 				.ToUserResponseDto(_loggedInUser.UserId)

@@ -71,4 +71,14 @@ export class PostService {
     )
   }
 
+  getFilterPagePosts(categoryIds : string | undefined, key : string | undefined,page : Page) : Observable<PostResponse[]>{
+
+    let url = 'post/get-filter-page-posts?';
+    if(categoryIds) url = `${url}categoryIds=${categoryIds}&`
+    if(key) url = `${url}key=${key}&`
+    return this.nativeHttpClientService.get<PostResponse[]>( `${url}${UrlHelper.createPaginationQueryString(page)}` )
+
+  }
+
+
 }

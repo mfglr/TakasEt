@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
 import { selectActiveIndex, selectPostIds, selectUserIds } from './state/selector';
-import { changeActiveIndex, nextPostsAction, searchUsersAction } from './state/action';
+import { changeActiveIndex, nextPostsAction, nextUsersAction, searchUsersAction } from './state/action';
 import { first } from 'rxjs';
 import { IonContent } from '@ionic/angular';
 
@@ -18,11 +18,16 @@ export class SearchHomePage implements OnInit {
     {name : "users", icon : undefined}
   ]
 
-  @ViewChild(IonContent) content? : IonContent
+  @ViewChild("swiperContainer") swiperContainer? : ElementRef;
+  @ViewChild(IonContent) content? : any;
 
   activeIndex$ = this.searchHomePageStore.select(selectActiveIndex);
   postIds$ = this.searchHomePageStore.select(selectPostIds);
   userIds$ = this.searchHomePageStore.select(selectUserIds);
+
+  endOfPostsScroll? : number;
+  endOfUsersScroll? : number;
+
   constructor(
     private searchHomePageStore : Store<SearchHomePageState>
   ) { }
@@ -35,23 +40,76 @@ export class SearchHomePage implements OnInit {
     })
   }
 
+  ngAfterContentInit(){
+    this.activeIndex$.pipe(first()).subscribe(x => {
+      this.slideTo(x)
+    })
+  }
+
   onKeyChange(key : string){
     this.searchHomePageStore.dispatch(searchUsersAction({ key : key }))
   }
 
-  onActiveIndexChange(e : any){
-    this.searchHomePageStore.dispatch(changeActiveIndex({activeIndex : e.detail[0].activeIndex}));
+  slideTo(index : number){
+    this.swiperContainer?.nativeElement.swiper.slideTo(index)
   }
 
-  async onScroll(event : any){
+  onActiveIndexChange(e : any){
+    if(e instanceof CustomEvent)
+      this.searchHomePageStore.dispatch(changeActiveIndex({activeIndex : e.detail[0].activeIndex}));
+    else{
+      this.searchHomePageStore.dispatch(changeActiveIndex({activeIndex : e}))
+      this.slideTo(e)
+    }
+  }
 
+  onScroll(event : CustomEvent){
+
+    this.activeIndex$.pipe(first()).subscribe(
+      activeIndex => {
+        if(activeIndex == 0){
+          if(this.endOfPostsScroll){
+            let scrollTop = Math.round(event.detail.scrollTop);
+            if(scrollTop >= this.endOfPostsScroll - 10){
+              this.searchHomePageStore.dispatch(nextPostsAction())
+            }
+          }
+        }
+        else{
+          if(this.endOfUsersScroll){
+            let scrollTop = Math.round(event.detail.scrollTop);
+            if(scrollTop >= this.endOfUsersScroll - 10){
+              this.searchHomePageStore.dispatch(nextUsersAction())
+            }
+          }
+        }
+      }
+    )
+
+
+  }
+
+  ngAfterViewChecked(){
     if(this.content){
-      const scrollElement = await this.content.getScrollElement();
-      const scrollTop = event.detail.scrollTop;
+      let children = this.content?.el.children;
+
+      this.endOfPostsScroll =
+        children[0].children[0].children[0].children[0].offsetHeight +
+        children[0].children[0].children[0].children[1].offsetHeight -
+        this.content.el.clientHeight
+
+      this.userIds$.pipe(first()).subscribe(
+        userIds => {
+          if(userIds.length > 0){
+            this.endOfUsersScroll =
+            children[0].children[1].children[0].children[0].offsetHeight +
+            children[0].children[1].children[0].children[1].offsetHeight -
+            this.content.el.clientHeight
+          }
+        }
+      )
     }
 
-
   }
-
 
 }

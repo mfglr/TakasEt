@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { FilterPostsPageState } from './state/reducer';
+import { filterPostsByCategoryIdsAction, filterPostsByKeyAction } from './state/actions';
+import { selectPostIds } from './state/selectors';
 
 @Component({
   selector: 'app-filter',
@@ -7,12 +11,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilterPage implements OnInit {
 
-  constructor() { }
+  postIds$ = this.filterPostPageStore.select(selectPostIds);
+
+  constructor(
+    private filterPostPageStore : Store<FilterPostsPageState>
+  ) { }
 
   ngOnInit() {
   }
 
-  onKeyChange(key : string){
-    console.log(key);
+  onKeyChange(key : string | undefined){
+    this.filterPostPageStore.dispatch(filterPostsByKeyAction({key : key}))
+  }
+
+  onCategoryIdChange(categoryIds : string | undefined){
+    this.filterPostPageStore.dispatch(filterPostsByCategoryIdsAction({categoryIds : categoryIds}))
   }
 }
