@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'place',
     loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule)
   },
+  {
+    path: 'create-message',
+    loadChildren: () => import('./message/create-message/create-message.module').then( m => m.CreateMessagePageModule)
+  },
 ];
 
 @NgModule({

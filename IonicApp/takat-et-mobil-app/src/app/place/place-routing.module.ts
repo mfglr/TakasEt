@@ -26,7 +26,7 @@ const routes: Routes = [
       },
       {
         path: 'messages',
-        loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
+        loadChildren: () => import('src/app/message/message.module').then( m => m.MessageModule)
       },
       {
         path: 'profile',

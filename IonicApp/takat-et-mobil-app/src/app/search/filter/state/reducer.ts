@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { AppEntityState, addMany, init, initMany, takeValueOfPosts } from "src/app/states/app-entity-state";
-import { filterPostsByCategoryIdsSuccessAction, filterPostsByKeySuccessAction, filterPostsSuccessAction, nextPostsSuccessAction } from "./actions";
+import { filterPostsByCategoryIdsSuccessAction, filterPostsByKeySuccessAction,nextPostsSuccessAction } from "./actions";
 
 export interface FilterPostsPageState{
   posts : AppEntityState,
@@ -16,15 +16,6 @@ const initialState : FilterPostsPageState = {
 
 export const filterPostsPageReducer = createReducer(
   initialState,
-  on(
-    filterPostsSuccessAction,
-    (state,action) => ({
-      categoryIds : action.categoryIds,
-      key : action.key,
-      posts : initMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts)
-    })
-  ),
-
   on(
     filterPostsByKeySuccessAction,
     (state,action) => ({

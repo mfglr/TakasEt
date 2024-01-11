@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostService } from "src/app/services/post.service";
 import { FilterPostsPageState } from "./reducer";
 import { Store } from "@ngrx/store";
-import { filterPostsAction, filterPostsByCategoryIdsAction, filterPostsByCategoryIdsSuccessAction, filterPostsByKeyAction, filterPostsByKeySuccessAction, filterPostsSuccessAction, nextPostsAction, nextPostsSuccessAction } from "./actions";
+import { filterPostsByCategoryIdsAction, filterPostsByCategoryIdsSuccessAction, filterPostsByKeyAction, filterPostsByKeySuccessAction,nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectCategoryIds, selectKey, selectPosts } from "./selectors";
 import { loadPostsAction } from "src/app/states/actions";
@@ -16,24 +16,6 @@ export class FilterPostsPageEffect{
     private postService : PostService,
     private filterPageStore : Store<FilterPostsPageState>
   ) {}
-
-  filterPosts$ = createEffect(
-    () => {
-      return this.actions.pipe(
-        ofType(filterPostsAction),
-        mergeMap(
-          (action) => this.postService.getFilterPagePosts(
-            action.categoryIds,action.key,{lastId : undefined,take : takeValueOfPosts}
-          ).pipe(
-            mergeMap(response => of(
-              filterPostsSuccessAction({categoryIds : action.categoryIds,key : action.key,payload : response}),
-              loadPostsAction({posts : response})
-            ))
-          )
-        ),
-      )
-    }
-  )
 
   filterPostsByKey$ = createEffect(
     () => {
@@ -93,7 +75,6 @@ export class FilterPostsPageEffect{
           loadPostsAction({posts : response})
         ))
       )
-
     }
   )
 }

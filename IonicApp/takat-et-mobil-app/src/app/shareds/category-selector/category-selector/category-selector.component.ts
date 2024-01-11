@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { IonSelect } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { nextCategoriesAction } from 'src/app/states/category-entity-state/actions';
 import { CategoryEntityState } from 'src/app/states/category-entity-state/reducer';
@@ -12,8 +13,8 @@ import { selectCategories } from 'src/app/states/category-entity-state/selectors
 export class CategorySelectorComponent implements OnInit {
 
   @Output() changeCategoryIdEvent = new EventEmitter<string | undefined>();
-  categories$ = this.categoryEntityStore.select(selectCategories);
 
+  categories$ = this.categoryEntityStore.select(selectCategories);
 
   constructor(
     private categoryEntityStore : Store<CategoryEntityState>
@@ -21,6 +22,9 @@ export class CategorySelectorComponent implements OnInit {
 
   ngOnInit() {
     this.categoryEntityStore.dispatch(nextCategoriesAction());
+  }
+
+  ngOnChanges(){
   }
 
   onChange(e : any){

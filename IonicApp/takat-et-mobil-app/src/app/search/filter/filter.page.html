@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" [scrollEvents]="true">
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
 
   <div class="search-box-wrapper">
     <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
@@ -16,6 +16,7 @@
 
   <app-abstract-post-list
     [addIdToUrl]="true"
+    postListUrl="/place/search/post-list"
     [postIds]="postIds$ | async">
   </app-abstract-post-list>
 

@@ -1,9 +1,17 @@
 <ng-container *ngIf="(post$ | async) as post">
-  <ng-container *ngIf="(postImageState$ | async) as postImageState">
-    <div class="root">
-      <a [routerLink]="addIdToUrl ? postListUrl + '/' + postId : postListUrl" [fragment]="'post' + post.id">
-        <img [src]="postImageState.url" [alt]="post.title" class="img">
-      </a>
-    </div>
+  <ng-container *ngIf="(postImageState$ | async) as postImageState;">
+    <ng-container *ngIf="postImageState.loadStatus; else loading">
+      <div class="root">
+        <a [routerLink]="addIdToUrl ? postListUrl + '/' + postId : postListUrl" [fragment]="'post' + post.id">
+          <img [src]="postImageState.url" [alt]="post.title" class="img">
+        </a>
+      </div>
+    </ng-container>
+    <ng-template #loading>
+      <div class="loading">
+        <ion-spinner color="light"></ion-spinner>
+      </div>
+    </ng-template>
   </ng-container>
+
 </ng-container>
