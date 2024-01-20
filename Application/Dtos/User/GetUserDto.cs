@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-	public class GetUserDto : BaseRequestDto, IRequest<AppResponseDto>
+	public class GetUserDto :  IRequest<AppResponseDto>
     {
-        public int? UserId { get; private set; }
+        public int? LoggedInUserId { get; private set; }
 
-        public GetUserDto(IQueryCollection collection) : base(collection)
+        public GetUserDto(IQueryCollection collection)
         {
-            UserId = collection.ReadInt("userId");
+			LoggedInUserId = collection.ReadInt("loggedInUserId");
         }
     }
 }

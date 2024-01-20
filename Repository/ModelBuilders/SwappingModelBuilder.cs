@@ -13,6 +13,13 @@ namespace Repository.ModelBuilders
 				.WithOne(x => x.Swapping)
 				.HasForeignKey(x => x.SwappingId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.OwnsOne(
+				x => x.Status,
+				s => {
+					s.Property(status => status.Status).HasColumnName("status");
+				}
+			);
 		}
 
 	}

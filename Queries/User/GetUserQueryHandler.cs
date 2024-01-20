@@ -24,7 +24,7 @@ namespace Queries
 				.AsNoTracking()
 				.IncludeUser()
 				.ToUserResponseDto(request.LoggedInUserId)
-				.FirstOrDefaultAsync(x => x.Id == request.UserId,cancellationToken);
+				.FirstOrDefaultAsync(x => x.Id == request.LoggedInUserId,cancellationToken);
 
 			return AppResponseDto.Success(user);
 		}
