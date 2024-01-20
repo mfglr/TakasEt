@@ -9,18 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostId, AppResponseDto>
+	public class GetCommentsByPostIdQueryHandler : IRequestHandler<GetCommentsByPostIdDto, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
-		private readonly LoggedInUser _loggeddInUser;
 
-		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments, LoggedInUser loggeddInUser)
+		public GetCommentsByPostIdQueryHandler(IRepository<Comment> comments)
 		{
 			_comments = comments;
-			_loggeddInUser = loggeddInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetCommentsByPostId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetCommentsByPostIdDto request, CancellationToken cancellationToken)
 		{
 			var comments = await _comments
 				.DbSet
@@ -31,7 +29,7 @@ namespace Queries
 				.Include(x => x.UsersWhoLiked)
 				.Where(x => x.PostId == request.PostId)
 				.ToPage(request)
-				.ToCommentResponseDto(_loggeddInUser.UserId)
+				.ToCommentResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(comments);
 		}

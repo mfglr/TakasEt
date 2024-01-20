@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Validators
 {
-	public class RemoveFollowerCommandValidator : AbstractValidator<RemoveFollower>
+	public class RemoveFollowerCommandValidator : AbstractValidator<RemoveFollowerDto>
 	{
 		public RemoveFollowerCommandValidator(IRepository<UserUserFollowing> followings)
 		{

@@ -1,5 +1,4 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -8,18 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetHomePagePostsQueryHandler : IRequestHandler<GetHomePagePosts, AppResponseDto>
+	public class GetHomePagePostsQueryHandler : IRequestHandler<GetHomePagePostsDto, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
-		private readonly LoggedInUser _loggedInUser;
 
-		public GetHomePagePostsQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
+		public GetHomePagePostsQueryHandler(IRepository<Post> posts)
 		{
 			_posts = posts;
-			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetHomePagePosts request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetHomePagePostsDto request, CancellationToken cancellationToken)
 		{
 			var posts = await _posts
 				.DbSet
@@ -27,9 +24,9 @@ namespace Queries
 				.IncludePost()
 				.Include(x => x.User)
 				.ThenInclude(x => x.Followers)
-				.Where( x => x.User.Followers.Any(x => x.FollowerId == _loggedInUser.UserId) )
+				.Where( x => x.User.Followers.Any(x => x.FollowerId == request.LoggedInUserId) )
 				.ToPage(request)
-				.ToPostResponseDto(_loggedInUser.UserId)
+				.ToPostResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

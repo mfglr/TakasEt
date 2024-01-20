@@ -31,13 +31,13 @@ namespace Application.Extentions
 			}
 		}
 		
-		public static IEnumerable<int>? ReadIntList(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
+		public static IReadOnlyCollection<int>? ReadIntList(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
 		{
 			var data = collection.Where(x => x.Key == key).FirstOrDefault();
 			if (data.Key == null)
 				return null;
-			IList<string> values = data.Value.ToString().Split(',');
-			IList<int> r = new List<int>();
+			string[] values = data.Value.ToString().Split(',');
+			List<int> r = new List<int>();
 			try
 			{
 				foreach (var value in values)
@@ -49,6 +49,15 @@ namespace Application.Extentions
 				throw new InvalidQueryArgumentException(data.Value.ToString(),key);
 			}
 		}
+
+		public static IReadOnlyCollection<string>? ReadStringList(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
+		{
+			var data = collection.Where(x => x.Key == key).FirstOrDefault();
+			if (data.Key == null)
+				return null;
+			return data.Value.ToString().Split(',');
+		}
+
 
 	}
 }

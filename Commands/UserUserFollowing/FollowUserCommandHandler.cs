@@ -6,26 +6,24 @@ using MediatR;
 
 namespace Commands
 {
-    public class FollowUserCommandHandler : IRequestHandler<FollowUser, AppResponseDto>
+    public class FollowUserCommandHandler : IRequestHandler<FollowUserDto, AppResponseDto>
     {
 
 
         private readonly IRepository<UserUserFollowing> _followeds;
-        private readonly LoggedInUser _loggedInUser;
 
-        public FollowUserCommandHandler(IRepository<UserUserFollowing> followeds, LoggedInUser loggedInUser)
+        public FollowUserCommandHandler(IRepository<UserUserFollowing> followeds)
         {
             _followeds = followeds;
-            _loggedInUser = loggedInUser;
         }
 
-        public async Task<AppResponseDto> Handle(FollowUser request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(FollowUserDto request, CancellationToken cancellationToken)
         {
 
             await _followeds
                 .DbSet
                 .AddAsync(
-                   new UserUserFollowing(_loggedInUser.UserId, request.FollowedId),
+                   new UserUserFollowing(request.LoggedInUserId, request.FollowingId),
                    cancellationToken
                 );
             return AppResponseDto.Success();

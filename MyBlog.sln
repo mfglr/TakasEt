@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Iss_Api", "Iss_Api\Iss_Api.csproj", "{A1F4082B-D304-40BF-A449-AEB5D028F1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands", "Commands\Commands.csproj", "{8A295207-D024-467E-A2E4-B72A594D6E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands", "Commands\Commands.csproj", "{8A295207-D024-467E-A2E4-B72A594D6E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "Queries\Queries.csproj", "{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.Test", "UnitTest.Test\UnitTest.Test.csproj", "{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

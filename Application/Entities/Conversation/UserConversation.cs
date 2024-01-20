@@ -8,9 +8,10 @@
         public User User { get; }
 		public Conversation Conversation { get; }
 
-        public UserConversation(int userId)
+        public UserConversation(int userId,int conversationId)
         {
             UserId = userId;
+            ConversationId = conversationId;
         }
     }
 }

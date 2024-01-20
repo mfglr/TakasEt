@@ -18,7 +18,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPost("category/add-category")]
-		public async Task<AppResponseDto> AddCategory(AddCategory request)
+		public async Task<AppResponseDto> AddCategory(AddCategoryDto request)
 		{
 			return await _sender.Send(request);
 		}

@@ -8,19 +8,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetPostsByCategoryIdQueryHandler : IRequestHandler<GetPostsByCategoryId, AppResponseDto>
+	public class GetPostsByCategoryIdQueryHandler : IRequestHandler<GetPostsByCategoryIdDto, AppResponseDto>
 	{
 
-		private readonly LoggedInUser _loggedInUser;
 		private readonly IRepository<Post> _posts;
 
-		public GetPostsByCategoryIdQueryHandler(LoggedInUser loggedInUser, IRepository<Post> posts)
+		public GetPostsByCategoryIdQueryHandler(IRepository<Post> posts)
 		{
-			_loggedInUser = loggedInUser;
 			_posts = posts;
 		}
 
-		public async Task<AppResponseDto> Handle(GetPostsByCategoryId request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetPostsByCategoryIdDto request, CancellationToken cancellationToken)
 		{
 			var posts = await _posts
 				.DbSet
@@ -28,7 +26,7 @@ namespace Queries
 				.IncludePost()
 				.Where(post => post.CategoryId == request.CategoryId)
 				.ToPage(request)
-				.ToPostResponseDto(_loggedInUser.UserId)
+				.ToPostResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

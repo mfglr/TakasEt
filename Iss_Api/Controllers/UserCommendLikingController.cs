@@ -18,23 +18,16 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles ="user")]
 		[HttpPost("user-comment-liking/like-comment")]
-		public async Task<AppResponseDto> LikeComment(LikeComment request)
+		public async Task<AppResponseDto> LikeComment(LikeCommentDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("user-comment-liking/unlike-comment/{commentId}")]
-		public async Task<AppResponseDto> UnlikeComment(int commentId)
+		[HttpDelete("user-comment-liking/unlike-comment")]
+		public async Task<AppResponseDto> DislikeComment(DislikeCommentDto request)
 		{
-			return await _sender.Send(new UnlikeComment(commentId));
-		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("user-comment-liking/is-comment-liked/{commentId}")]
-		public async Task<AppResponseDto> IsCommentLiked(int commentId)
-		{
-			return await _sender.Send(new IsCommentLiked(commentId));
+			return await _sender.Send(request);
 		}
 
 	}

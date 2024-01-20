@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class UnfollowUserCommandValidator : AbstractValidator<UnfollowUser>
+    public class UnfollowUserCommandValidator : AbstractValidator<UnfollowUserDto>
     {
         public UnfollowUserCommandValidator()
         {
-            RuleFor(x => x.FollowedId).NotEmpty().NotNull().WithMessage("hata");
+            RuleFor(x => x.FollowingId).NotEmpty().NotNull().WithMessage("hata");
         }
     }
 }

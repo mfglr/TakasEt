@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 		[HttpGet("comment/get-comments-by-post-id/{postId}")]
 		public async Task<AppResponseDto> GetCommentsByPostId(int postId)
 		{
-			return await _sender.Send(new GetCommentsByPostId(postId,Request.Query));
+			return await _sender.Send(new GetCommentsByPostIdDto(postId,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
@@ -41,21 +41,21 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPost("comment/add-comment")]
-		public async Task<AppResponseDto> AddComment(AddComment request)
+		public async Task<AppResponseDto> AddComment(AddCommentDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpPut("user/like-comment")]
-		public async Task<AppResponseDto> LikeComment(LikeComment request)
+		public async Task<AppResponseDto> LikeComment(LikeCommentDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpPut("user/unlike-comment")]
-		public async Task<AppResponseDto> unlikeComment(UnlikeComment request)
+		public async Task<AppResponseDto> unlikeComment(DislikeCommentDto request)
 		{
 			return await _sender.Send(request);
 		}

@@ -1,5 +1,4 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;

@@ -16,19 +16,19 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPost("login")]
-		public async Task<AppResponseDto> Login(Login request)
+		public async Task<AppResponseDto> Login(LoginDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[HttpPost("login-by-refresh-token")]
-		public async Task<AppResponseDto> LoginByRefreshToken(LoginByRefreshToken request)
+		public async Task<AppResponseDto> LoginByRefreshToken(LoginByRefreshTokenDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[HttpPost("sing-up")]
-		public async Task<AppResponseDto> SingUp(SignUp request)
+		public async Task<AppResponseDto> SingUp(SignUpDto request)
 		{
 			return await _sender.Send(request);
 		}

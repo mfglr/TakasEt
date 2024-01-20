@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Commands
 {
-    public class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshToken, AppResponseDto>
+    public class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshTokenDto, AppResponseDto>
     {
         private readonly IRepository<User> _users;
         private readonly ITokenService _tokenService;
@@ -20,7 +20,7 @@ namespace Commands
             _tokenService = tokenService;
         }
 
-        public async Task<AppResponseDto> Handle(LoginByRefreshToken request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(LoginByRefreshTokenDto request, CancellationToken cancellationToken)
         {
             var user = await _users
                 .DbSet

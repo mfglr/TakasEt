@@ -30,7 +30,7 @@ namespace Application.Entities
         private readonly List<Requesting> _requesterPosts = new();
         private readonly List<Swapping> _requesterSwappings = new();
 
-        public Post(int userId, string title, string content, int categoryId,int countOfImages,List<PostImage> postImages)
+        public Post(int userId, string title, string content, int categoryId,int countOfImages)
         {
             UserId = userId;
 			CategoryId = categoryId;
@@ -38,8 +38,6 @@ namespace Application.Entities
             NormalizedTitle = title.CustomNormalize()!;
             Content = content;
             CountOfImages = countOfImages;
-            foreach (var image in postImages)
-                _images.Add(image);
         }
 
         public void Update(string title) { 

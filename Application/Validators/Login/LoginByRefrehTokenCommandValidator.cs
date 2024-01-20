@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-	public class LoginByRefrehTokenCommandValidator : AbstractValidator<LoginByRefreshToken>
+	public class LoginByRefrehTokenCommandValidator : AbstractValidator<LoginByRefreshTokenDto>
 	{
         public LoginByRefrehTokenCommandValidator()
         {

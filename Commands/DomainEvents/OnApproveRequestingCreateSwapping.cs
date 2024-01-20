@@ -16,12 +16,14 @@ namespace Commands.DomainEvents
 
 		public Task Handle(RequestingDomainEvent notification, CancellationToken cancellationToken)
 		{
-			var requesterPostId = notification.Requesting.RequesterId;
-			var requestedPostId = notification.Requesting.RequestedId;
+			//var requesterPostId = notification.Requesting.RequesterId;
+			//var requestedPostId = notification.Requesting.RequestedId;
 
-			_posts
-				.DbSet
-				.Add(new )
+			//_posts
+			//	.DbSet
+			//	.Add(new )
+
+			return Task.CompletedTask;
 		}
 	}
 }

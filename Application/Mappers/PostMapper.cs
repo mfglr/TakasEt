@@ -8,7 +8,7 @@ namespace Application.Mappers
 	{
         public PostMapper()
         {
-            CreateMap<AddPost, Post>();
+            CreateMap<AddPostDto, Post>();
             CreateMap<User, PostResponseDto>();
 			CreateMap<Category, PostResponseDto>();
             CreateMap<Post, PostResponseDto>()

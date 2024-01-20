@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.UserCommentLiking
 {
-	public class UnlikeCommentValidator : AbstractValidator<UnlikeComment>
+	public class UnlikeCommentValidator : AbstractValidator<DislikeCommentDto>
 	{
         public UnlikeCommentValidator()
         {

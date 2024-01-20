@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Queries
 {
-	public class GetPostImageQueryHandler : IRequestHandler<GetPostImage, byte[]>
+	public class GetPostImageQueryHandler : IRequestHandler<GetPostImageDto, byte[]>
 	{
 		private readonly IBlobService _blobService;
 		private readonly IRepository<PostImage> _postImages;
@@ -17,7 +17,7 @@ namespace Queries
 			_postImages = postImages;
 		}
 
-		public async Task<byte[]> Handle(GetPostImage request, CancellationToken cancellationToken)
+		public async Task<byte[]> Handle(GetPostImageDto request, CancellationToken cancellationToken)
 		{
 			var postImage = await _postImages.DbSet.FindAsync(request.Id);
 			return await _blobService.DownloadAsync(postImage.BlobName, postImage.ContainerName, cancellationToken);

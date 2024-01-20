@@ -1,25 +1,22 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using MediatR;
 
 namespace Commands
 {
-    public class RemoveFollowerCommandHandler : IRequestHandler<RemoveFollower, AppResponseDto>
+    public class RemoveFollowerCommandHandler : IRequestHandler<RemoveFollowerDto, AppResponseDto>
     {
-        private readonly LoggedInUser _loggedInUser;
         private readonly IRepository<UserUserFollowing> _followings;
 
-        public RemoveFollowerCommandHandler(LoggedInUser loggedInUser, IRepository<UserUserFollowing> followings)
+        public RemoveFollowerCommandHandler(IRepository<UserUserFollowing> followings)
         {
-            _loggedInUser = loggedInUser;
             _followings = followings;
         }
 
-        public Task<AppResponseDto> Handle(RemoveFollower request, CancellationToken cancellationToken)
+        public Task<AppResponseDto> Handle(RemoveFollowerDto request, CancellationToken cancellationToken)
         {
-            _followings.DbSet.Remove(new UserUserFollowing(request.FollowerId, _loggedInUser.UserId));
+            _followings.DbSet.Remove(new UserUserFollowing(request.FollowerId, request.LoggedInUserId));
             return Task.Factory.StartNew(() => AppResponseDto.Success());
         }
     }

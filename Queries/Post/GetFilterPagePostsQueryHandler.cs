@@ -1,5 +1,4 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -8,18 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetFilterPagePostsQueryHandler : IRequestHandler<GetFilterPagePosts, AppResponseDto>
+	public class GetFilterPagePostsQueryHandler : IRequestHandler<GetFilterPagePostsDto, AppResponseDto>
 	{
 		private readonly IRepository<Post> _posts;
-		private readonly LoggedInUser _loggedInUser;
 
-		public GetFilterPagePostsQueryHandler(IRepository<Post> posts, LoggedInUser loggedInUser)
+		public GetFilterPagePostsQueryHandler(IRepository<Post> posts)
 		{
 			_posts = posts;
-			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetFilterPagePosts request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetFilterPagePostsDto request, CancellationToken cancellationToken)
 		{
 			string? normalizeKey = request.Key.CustomNormalize();
 			
@@ -40,7 +37,7 @@ namespace Queries
 					)
 				)
 				.ToPage(request)
-				.ToPostResponseDto(_loggedInUser.UserId)
+				.ToPostResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(posts);
 		}

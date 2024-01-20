@@ -8,7 +8,7 @@ namespace Application.Mappers
 	{
         public CommentMapper()
         {
-            CreateMap<AddComment, Comment>();
+            CreateMap<AddCommentDto, Comment>();
             CreateMap<User,CommentResponseDto>();
             CreateMap<Comment,CommentResponseDto>()
                 .IncludeMembers(x => x.User)

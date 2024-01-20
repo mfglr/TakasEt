@@ -7,7 +7,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace Application.Validators
 {
-    public class FollowUserCommandValidator : AbstractValidator<FollowUser>
+    public class FollowUserCommandValidator : AbstractValidator<FollowUserDto>
     {
 		private static string[] messages =
 		{

@@ -18,23 +18,23 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPost("following/follow-user")]
-		public async Task<AppResponseDto> FollowUser(FollowUser request)
+		public async Task<AppResponseDto> FollowUser(FollowUserDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpDelete("following/unfollow-user/{userId}")]
-		public async Task<AppResponseDto> UnfollowUser(int userId)
+		[HttpDelete("following/unfollow-user")]
+		public async Task<AppResponseDto> UnfollowUser(UnfollowUserDto request)
 		{
-			return await _sender.Send(new UnfollowUser(userId));
+			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpDelete("following/remove-follower/{userId}")]
 		public async Task<AppResponseDto> RemoveFollower(int userId)
 		{
-			return await _sender.Send(new RemoveFollower() { FollowerId = userId });
+			return await _sender.Send(new RemoveFollowerDto() { FollowerId = userId });
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 		[HttpGet("post-image/get-post-images/{postId}")]
 		public async Task<AppResponseDto> GetPostImages(int postId)
 		{
-			return await _sender.Send(new GetPostImages(Request.Query,postId));
+			return await _sender.Send(new GetPostImagesDto(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
@@ -28,7 +28,7 @@ namespace WebApi.Controllers
 		public async Task GetPostImage(int id)
 		{
 			await Response.Body.WriteAsync(
-				await _sender.Send(new GetPostImage() { Id = id})
+				await _sender.Send(new GetPostImageDto() { Id = id})
 			);
 		}
 	}

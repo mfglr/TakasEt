@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Commands
 {
-    public class AddCommentHandler : IRequestHandler<AddComment, AppResponseDto>
+    public class AddCommentHandler : IRequestHandler<AddCommentDto, AppResponseDto>
     {
 
         private readonly IRepository<Comment> _comments;
@@ -21,7 +21,7 @@ namespace Commands
             _users = users;
         }
 
-        public async Task<AppResponseDto> Handle(AddComment request, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> Handle(AddCommentDto request, CancellationToken cancellationToken)
         {
             var comment = new Comment(request.ParentId, request.PostId, request.UserId, request.Content);
             await _comments.DbSet.AddAsync(comment, cancellationToken);

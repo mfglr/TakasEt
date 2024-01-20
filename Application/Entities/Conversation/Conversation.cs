@@ -5,27 +5,15 @@ namespace Application.Entities
 	public class Conversation : Entity
 	{
 
-        public string Title { get; private set; }
+        public string Title { get; protected set; }
         public IReadOnlyCollection<ConversationImage> ConversationImages => _conversationImages;
         public IReadOnlyCollection<UserConversation> UserConversations => _userConversations;
 		public IReadOnlyCollection<Message> Messages => _messages;
 
-		private readonly List<ConversationImage> _conversationImages = new List<ConversationImage>();
-		private readonly List<UserConversation> _userConversations = new List<UserConversation>();
-		private readonly List<Message> _messages = new List<Message>();
-
-        public Conversation(string title)
-        {
-            Title = title;
-        }
-
-        public Conversation(int senderId,int receiverId,string firstMessageContent)
-		{
-			_userConversations.Add(new UserConversation(senderId));
-			_userConversations.Add(new UserConversation(receiverId));
-			_messages.Add(new Message(senderId, firstMessageContent));
-		}
-
+		protected readonly List<ConversationImage> _conversationImages = new List<ConversationImage>();
+		protected readonly List<UserConversation> _userConversations = new List<UserConversation>();
+		protected readonly List<Message> _messages = new List<Message>();
+       
 		public void AddConversationImage(string blobName,string extention)
 		{
 			var newImage = new ConversationImage(Id, blobName, extention);
@@ -71,23 +59,6 @@ namespace Application.Entities
 			var index = _messages.FindIndex(m => m.Id == id);
 			if (index == -1) throw new MessageNotFoundException();
 			_messages.RemoveAt(index);
-		}
-
-		public void AddUser(int userId)
-		{
-			_userConversations.Add(new UserConversation(userId));
-		}
-		public void DeleteUser(int userId)
-		{
-			var user = _userConversations.FirstOrDefault(x => x.UserId == userId);
-			if(user == null) throw new UserNotFoundException();
-			user.Remove();
-		}
-		public void RemoveUser(int userId)
-		{
-			int index = _userConversations.FindIndex(x => x.UserId == userId);
-			if (index == -1) throw new UserNotFoundException();
-			_userConversations.RemoveAt(index);
 		}
 
     }

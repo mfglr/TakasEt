@@ -10,4 +10,10 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Conversation\" />
+    <Folder Include="UserCommentLiking\" />
+    <Folder Include="UserPostLiking\" />
+  </ItemGroup>
+
 </Project>
