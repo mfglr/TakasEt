@@ -30,7 +30,7 @@ export class ProfileEffect{
           this.profileModuleStore.select(selectPosts)
         ),
         filter(([action,userId,state]) => userId != undefined && !state.isLastEntities),
-        mergeMap(([action,userId,state]) =>  this.postService.getPostsByUserId(userId!,state.page)),
+        mergeMap(([action,userId,state]) =>  this.postService.getUserPosts(userId!,state.page)),
         mergeMap(response => of(
           nextPostsSuccessAction({payload : response}),
           loadPostsAction({posts : response})

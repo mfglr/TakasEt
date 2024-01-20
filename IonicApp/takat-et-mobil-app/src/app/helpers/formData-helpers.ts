@@ -26,7 +26,7 @@ export class FormDataHelper{
     return formData;
   }
 
-  static createFormDataForAddProfileImage(value : {file : File}) : FormData{
+  static createFormDataForAddUserImage(value : {file : File}) : FormData{
     let formData = new FormData();
     formData.append('extention',this.getExtention(value.file));
     formData.append('stream',value.file);

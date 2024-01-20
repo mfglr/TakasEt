@@ -26,10 +26,9 @@ namespace Application.Extentions
 		{
 			return queryable
 				.Include(x => x.Followers)
-				.Include(x => x.Followeds)
+				.Include(x => x.Followings)
 				.Include(x => x.UserImages);
 		}
-
 
 		public static IQueryable<PostResponseDto> ToPostResponseDto(this IQueryable<Post> queryable,int? loggedInUserId)
 		{
@@ -121,10 +120,10 @@ namespace Application.Extentions
 							UserName = x.UserName!,
 							Email = x.Email!,
 							CountOfPosts = x.CountOfPost,
-							CountOfFolloweds = x.Followeds.Count,
+							CountOfFolloweds = x.Followings.Count,
 							CountOfFollowers = x.Followers.Count,
 							IsFollowed = x.Followers.Any(x => loggedInUserId != null && x.FollowerId == loggedInUserId),
-							IsFollower = x.Followeds.Any(x => loggedInUserId != null && x.FollowedId == loggedInUserId),
+							IsFollower = x.Followings.Any(x => loggedInUserId != null && x.FollowingId == loggedInUserId),
 							UserImage = x
 								.UserImages
 								.Where(x => x.IsActive)

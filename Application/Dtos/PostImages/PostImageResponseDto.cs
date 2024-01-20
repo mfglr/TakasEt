@@ -1,6 +1,4 @@
-﻿using Application.Dtos.AppFile;
-
-namespace Application.Dtos
+﻿namespace Application.Dtos
 {
 	public class PostImageResponseDto
 	{

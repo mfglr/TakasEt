@@ -57,7 +57,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.Followeds)
+				.HasMany(x => x.Followings)
 				.WithOne(x => x.Follower)
 				.HasForeignKey(x => x.FollowerId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -65,7 +65,7 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.Followers)
 				.WithOne(x => x.Followed)
-				.HasForeignKey (x => x.FollowedId)
+				.HasForeignKey (x => x.FollowingId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
@@ -83,8 +83,14 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.UserPostExplorings)
 				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId);
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 
+			builder
+				.HasMany(x => x.UserConversations)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

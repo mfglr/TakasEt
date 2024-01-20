@@ -5,7 +5,7 @@ import { PostListState } from '../state/reducer';
 import { closeModalAction } from '../state/actions';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { takeValueOfPosts } from 'src/app/states/app-entity-state';
+import { takeValueOfPosts } from 'src/app/states/app-entity-state/app-entity-state';
 
 @Component({
   selector: 'app-post-list',
@@ -48,7 +48,6 @@ export class PostListComponent {
     this.router.fragment.subscribe(
       fragment =>{
         if(fragment){
-
           document.getElementById(fragment)?.scrollTo()
           this.viewportScroller.scrollToAnchor(fragment);
         }

@@ -4,7 +4,7 @@ import { UserResponse } from '../models/responses/user-response';
 import { NoContentResponse } from '../models/responses/no-content-response';
 import { UrlHelper } from '../helpers/url-helper';
 import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../states/app-entity-state';
+import { Page } from '../states/app-entity-state/app-entity-state';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,10 @@ export class UserService {
   constructor(
     private httpClient: NativeHttpClientService,
   ) {
+  }
+
+  addUserImage(formData : FormData) : Observable<NoContentResponse>{
+    return this.httpClient.post<NoContentResponse>("user/add-user-image",formData);
   }
 
   getUserByUserName(userName : string) : Observable<UserResponse>{

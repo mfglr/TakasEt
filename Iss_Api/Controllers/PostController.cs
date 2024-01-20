@@ -45,18 +45,12 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetSearchPostListPagePosts(Request.Query) { PostId = postId });
 		}
 
-		[Authorize(Roles = "user")]
-		[HttpGet("post/get-explore-page-posts")]
-		public async Task<AppResponseDto> GetExplorePagePosts()
-		{
-			return await _sender.Send(new GetExplorePagePosts(Request.Query));
-		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("post/get-posts-by-user-id/{userId}")]
-		public async Task<AppResponseDto> GetPostsByUserId(int userId)
+		[HttpGet("post/get-user-posts/{userId}")]
+		public async Task<AppResponseDto> GetUserPosts(int userId)
 		{
-			return await _sender.Send(new GetPostsByUserId(userId,Request.Query));
+			return await _sender.Send(new GetUserPosts(userId,Request.Query));
 		}
 
 		[Authorize(Roles = "user")]

@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { initPageState, nextPostsSuccessAction } from "./actions";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
-import { AppEntityState, addMany, init, takeValueOfPosts } from "src/app/states/app-entity-state";
+import { AppEntityState, addMany, init, takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
 
 interface ExplorePageState{
   posts : AppEntityState;

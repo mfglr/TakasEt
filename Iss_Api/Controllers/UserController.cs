@@ -17,54 +17,45 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/get-user-by-username/{username}")]
-		public async Task<AppResponseDto> GetUserByUserName(string username)
+		[HttpPost("user/add-user-image")]
+		public async Task<AppResponseDto> AddUserImage([FromForm] IFormCollection form)
 		{
-			return await _sender.Send(new GetUserByUserName(username));
+			return await _sender.Send(new AddUserImageDto(form));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-user/{userId}")]
 		public async Task<AppResponseDto> GetUser(int userId)
 		{
-			return await _sender.Send(new GetUser(userId));
+			return await _sender.Send(new GetUserDto(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-users-who-liked-post/{postId}")]
 		public async Task<AppResponseDto> GetUsersWhoLikedPost(int postId)
 		{
-			return await _sender.Send(new GetUsersWhoLikedPost(postId,Request.Query));
-		}
-
-		[Authorize(Roles = "user")]
-		[HttpGet("user/get-users-by-filter")]
-		public async Task<AppResponseDto> GetUsersThatByFilter()
-		{
-			return await _sender.Send(new GetUsersByFilter(Request.Query));
+			return await _sender.Send(new GetUsersWhoLikedPostDto(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-followeds/{userId}")]
 		public async Task<AppResponseDto> GetFolloweds(int userId)
 		{
-			return await _sender.Send(new GetFolloweds(Request.Query) { UserId = userId});
+			return await _sender.Send(new GetFollowedsDto(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-followers/{userId}")]
 		public async Task<AppResponseDto> GetFollowers(int userId)
 		{
-			return await _sender.Send(new GetFollowers(Request.Query) { UserId = userId});
+			return await _sender.Send(new GetFollowersDto(Request.Query));
 		}
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user/get-search-page-users")]
 		public async Task<AppResponseDto> GetSearchPageUsers()
 		{
-			return await _sender.Send(new GetSearchPageUsers(Request.Query));
+			return await _sender.Send(new GetSearchPageUsersDto(Request.Query));
 		}
-
-
 	}
 }

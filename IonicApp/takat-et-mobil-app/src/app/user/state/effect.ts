@@ -29,7 +29,7 @@ export class UserModuleCollectionEffect{
         mergeMap(
           action => this.userModuleCollectionStore.select(selectPosts({userId : action.userId})).pipe(
             filterAppEntityState(),
-            mergeMap(x => this.postService.getPostsByUserId(action.userId,x.page)),
+            mergeMap(x => this.postService.getUserPosts(action.userId,x.page)),
             mergeMap(response => of(
               nextPostsSuccessAction({userId : action.userId,payload : response}),
               loadPostsSuccessAction({payload : response}),

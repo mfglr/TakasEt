@@ -9,9 +9,9 @@ namespace Repository.Seeds
 		public void Configure(EntityTypeBuilder<Role> builder)
 		{
 			builder.HasData(
-				new { Id = 1, Name = "client", CreatedDate = DateTime.Now },
-				new { Id = 2, Name = "user", CreatedDate = DateTime.Now },
-				new { Id = 3, Name = "admin", CreatedDate = DateTime.Now }
+				new { Id = 1, Name = "client", CreatedDate = DateTime.Now, IsRemoved = false },
+				new { Id = 2, Name = "user", CreatedDate = DateTime.Now, IsRemoved = false },
+				new { Id = 3, Name = "admin", CreatedDate = DateTime.Now, IsRemoved = false }
 			);
 		}
 	}

@@ -9,12 +9,10 @@ namespace Commands
 {
     public class UnlikeCommentCommandHandler : IRequestHandler<UnlikeComment, AppResponseDto>
     {
-        private readonly LoggedInUser _loggedInUser;
         private readonly IRepository<UserCommentLiking> _likes;
 
-        public UnlikeCommentCommandHandler(LoggedInUser loggedInUser, IRepository<UserCommentLiking> likes)
+        public UnlikeCommentCommandHandler( IRepository<UserCommentLiking> likes)
         {
-            _loggedInUser = loggedInUser;
             _likes = likes;
         }
 
@@ -22,7 +20,7 @@ namespace Commands
         {
             var record = await _likes.DbSet.FirstOrDefaultAsync(
                 x =>
-                    x.UserId == _loggedInUser.UserId &&
+                    x.UserId == request.LoggedInUserId &&
                     x.CommentId == request.CommentId,
                 cancellationToken
             );

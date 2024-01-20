@@ -12,14 +12,12 @@ namespace Commands
 
         private readonly IRepository<Comment> _comments;
         private readonly IMapper _mapper;
-        private readonly LoggedInUser _loggedInUser;
         private readonly IRepository<User> _users;
 
-        public AddCommentHandler(IRepository<Comment> comments, IMapper mapper, LoggedInUser loggedInUser, IRepository<User> users)
+        public AddCommentHandler(IRepository<Comment> comments, IMapper mapper, IRepository<User> users)
         {
             _comments = comments;
             _mapper = mapper;
-            _loggedInUser = loggedInUser;
             _users = users;
         }
 

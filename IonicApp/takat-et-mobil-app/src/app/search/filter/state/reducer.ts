@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState, addMany, init, initMany, takeValueOfPosts } from "src/app/states/app-entity-state";
+import { AppEntityState, addMany, init, initMany, takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
 import { filterPostsByCategoryIdsSuccessAction, filterPostsByKeySuccessAction,nextPostsSuccessAction } from "./actions";
 
 export interface FilterPostsPageState{

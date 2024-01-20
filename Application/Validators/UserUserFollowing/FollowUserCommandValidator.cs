@@ -1,5 +1,4 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using FluentValidation;
@@ -17,10 +16,10 @@ namespace Application.Validators
 			"Validation Error : FollowUser => e0003",
 		};
 
-		public FollowUserCommandValidator(IRepository<UserUserFollowing> followings,LoggedInUser loggedInUser)
+		public FollowUserCommandValidator(IRepository<UserUserFollowing> followings)
 		{
-			RuleFor(x => x.FollowedId).NotEmpty().NotNull().WithMessage(messages[0]);
-			RuleFor(x => x.FollowedId).NotEqual(loggedInUser.UserId).WithMessage(messages[1]);
+			RuleFor(x => x.FollowingId).NotEmpty().NotNull().WithMessage(messages[0]);
+			RuleFor(x => x).Must( (x) => x.LoggedInUserId != x.FollowingId ).WithMessage(messages[1]);
 			RuleFor(x => x).MustAsync(
 				async (request, cancellationToken) =>
 				{
@@ -28,8 +27,8 @@ namespace Application.Validators
 						.DbSet
 						.AnyAsync(
 							x => 
-								x.FollowedId == request.FollowedId && 
-								x.FollowerId == loggedInUser.UserId,
+								x.FollowingId == request.FollowingId && 
+								x.FollowerId == request.LoggedInUserId,
 							cancellationToken
 						);
 				}

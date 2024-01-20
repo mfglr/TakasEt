@@ -2,7 +2,7 @@ import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import { CategoryResponse } from "src/app/models/responses/CategoryReponse";
 import { nextCategoriesSuccessAction } from "./actions";
-import { Page, takeValueOfCategories } from "../app-entity-state";
+import { Page, takeValueOfCategories } from "../app-entity-state/app-entity-state";
 
 export interface CategoryEntityState extends EntityState<CategoryResponse>{
   isLastEntities : boolean,

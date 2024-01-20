@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { UserImageResponse } from "src/app/models/responses/profile-image-response";
+import { UserImageResponse } from "src/app/models/responses/user-image-response";
 
 export const loadUserImageSuccessAction = createAction(
     "[Profile Image Store] addProfileImage",

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-	public class GetPostImages : Pagination, IRequest<AppResponseDto>
+	public class GetPostImages : Page, IRequest<AppResponseDto>
 	{
 		public GetPostImages(IQueryCollection collection,int postId) : base(collection)
 		{

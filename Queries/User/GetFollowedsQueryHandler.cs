@@ -8,28 +8,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetFollowedsQueryHandler : IRequestHandler<GetFolloweds, AppResponseDto>
+	public class GetFollowedsQueryHandler : IRequestHandler<GetFollowedsDto, AppResponseDto>
 	{
-		private readonly LoggedInUser _loggedInUser;
 		private readonly IRepository<User> _users;
 
-		public GetFollowedsQueryHandler(LoggedInUser loggedInUser, IRepository<User> users)
+		public GetFollowedsQueryHandler(IRepository<User> users)
 		{
-			_loggedInUser = loggedInUser;
 			_users = users;
 		}
 
-		public async Task<AppResponseDto> Handle(GetFolloweds request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetFollowedsDto request, CancellationToken cancellationToken)
 		{
 			var users = await _users
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.Followers)
-				.Include(x => x.Followeds)
-				.Include(x => x.UserImages)
-				.Where(user => user.Followers.Any(follower => follower.FollowerId == _loggedInUser.UserId))
+				.IncludeUser()
+				.Where(user => user.Followers.Any(follower => follower.FollowerId == request.LoggedInUserId))
 				.ToPage(request)
-				.ToUserResponseDto(_loggedInUser.UserId)
+				.ToUserResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(users);
 		}

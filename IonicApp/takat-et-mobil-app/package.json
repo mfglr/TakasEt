@@ -32,6 +32,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/angular": "^7.5.6",
     "@ionic/pwa-elements": "^3.2.2",
+    "@microsoft/signalr": "^8.0.0",
     "@ngrx/effects": "^17.0.0",
     "@ngrx/entity": "^17.0.0",
     "@ngrx/store": "^17.0.0",

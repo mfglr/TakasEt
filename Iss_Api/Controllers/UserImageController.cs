@@ -16,12 +16,7 @@ namespace WebApi.Controllers
 			_sender = sender;
 		}
 
-		[Authorize(Roles = "user")]
-		[HttpPost("user-image/add-user-image")]
-		public async Task<AppResponseDto> AddUserImage([FromForm] IFormCollection form)
-		{
-			return await _sender.Send(new AddUserImage(form));
-		}
+		
 
 		[Authorize(Roles = "user")]
 		[HttpGet("user-image/get-user-image/{id}")]

@@ -1,5 +1,4 @@
-﻿using HttpMultipartParser;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
@@ -13,16 +12,6 @@ namespace Application.Dtos
 		public int CountOfImages { get; private set; }
 		public IReadOnlyCollection<Stream> Streams => _streams;
         private readonly List<Stream> _streams = new List<Stream>();
-
-		public AddPost(MultipartFormDataParser parser)
-		{
-			_streams = parser.Files.Select(x => x.Data).ToList();
-			Extentions = parser.GetParameterValue("extentions");
-			Title = parser.GetParameterValue("title");
-			Content = parser.GetParameterValue("content");
-			CategoryId = int.Parse( parser.GetParameterValue("categoryId"));
-			CountOfImages = int.Parse(parser.GetParameterValue("countOfImages"));
-		}
 
         public AddPost(IFormCollection form)
         {

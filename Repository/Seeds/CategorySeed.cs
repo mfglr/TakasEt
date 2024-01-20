@@ -14,56 +14,64 @@ namespace Repository.Seeds
 					Id = 1,
 					CreatedDate = DateTime.Now,
 					Name = "Kitap",
-					NormalizedName = "KITAP"
+					NormalizedName = "KITAP",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 2,
 					CreatedDate = DateTime.Now,
 					Name = "Araba",
-					NormalizedName = "ARABA"
+					NormalizedName = "ARABA",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 3,
 					CreatedDate = DateTime.Now,
 					Name = "Elektronik",
-					NormalizedName = "ELEKTRONIK"
+					NormalizedName = "ELEKTRONIK",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 4,
 					CreatedDate = DateTime.Now,
 					Name = "Giyim",
-					NormalizedName = "GIYIM"
+					NormalizedName = "GIYIM",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 5,
 					CreatedDate = DateTime.Now,
 					Name = "Ev Eşyaları",
-					NormalizedName = "EV ESYALARI"
+					NormalizedName = "EV ESYALARI",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 6,
 					CreatedDate = DateTime.Now,
 					Name = "Telefon",
-					NormalizedName = "TELEFON"
+					NormalizedName = "TELEFON",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 7,
 					CreatedDate = DateTime.Now,
 					Name = "Bilgisayar",
-					NormalizedName = "BILGISAYAR"
+					NormalizedName = "BILGISAYAR",
+					IsRemoved = false
 				},
 				new
 				{
 					Id = 8,
 					CreatedDate = DateTime.Now,
 					Name = "Motor",
-					NormalizedName = "MOTOR"
+					NormalizedName = "MOTOR",
+					IsRemoved = false
 				}
 			);
 		}

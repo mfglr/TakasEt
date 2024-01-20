@@ -1,5 +1,5 @@
 import { BaseResponse } from "./base-response";
-import { UserImageResponse } from "./profile-image-response";
+import { UserImageResponse } from "./user-image-response";
 
 export interface UserResponse extends BaseResponse{
   userName : string;

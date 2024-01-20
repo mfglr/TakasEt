@@ -27,21 +27,35 @@ namespace WebApi.Controllers
 		[HttpGet("comment/get-comments")]
 		public async Task<AppResponseDto> GetComments()
 		{
-			return await _sender.Send(new GetComments(Request.Query));
+			return await _sender.Send(new GetCommentsDto(Request.Query));
 		}
 
 
 		[Authorize(Roles = "user")]
-		[HttpGet("comment/get-children/{id}")]
-		public async Task<AppResponseDto> GetChildren(int id)
+		[HttpGet("comment/get-children")]
+		public async Task<AppResponseDto> GetChildren()
 		{
-			return await _sender.Send(new GetChildren(id,Request.Query));
+			return await _sender.Send(new GetChildrenDto(Request.Query));
 		}
 
 
 		[Authorize(Roles = "user")]
 		[HttpPost("comment/add-comment")]
 		public async Task<AppResponseDto> AddComment(AddComment request)
+		{
+			return await _sender.Send(request);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("user/like-comment")]
+		public async Task<AppResponseDto> LikeComment(LikeComment request)
+		{
+			return await _sender.Send(request);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("user/unlike-comment")]
+		public async Task<AppResponseDto> unlikeComment(UnlikeComment request)
 		{
 			return await _sender.Send(request);
 		}

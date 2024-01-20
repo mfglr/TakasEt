@@ -9,20 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetChildrenQueryHandler : IRequestHandler<GetChildren, AppResponseDto>
+	public class GetChildrenQueryHandler : IRequestHandler<GetChildrenDto, AppResponseDto>
 	{
 		private readonly IRepository<Comment> _comments;
 		private readonly IMapper _mapper;
-		private readonly LoggedInUser _loggedInUser;
 
-		public GetChildrenQueryHandler(IRepository<Comment> comments, IMapper mapper, LoggedInUser loggedInUser)
+		public GetChildrenQueryHandler(IRepository<Comment> comments, IMapper mapper)
 		{
 			_comments = comments;
 			_mapper = mapper;
-			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetChildren request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetChildrenDto request, CancellationToken cancellationToken)
 		{
 			var comments = await _comments
 				.DbSet
@@ -30,7 +28,7 @@ namespace Queries
 				.Include(x => x.UsersWhoLiked)
 				.Where(x => x.ParentId == request.ParentId)
 				.ToPage(request)
-				.ToCommentResponseDto(_loggedInUser.UserId)
+				.ToCommentResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(_mapper.Map<List<CommentResponseDto>>(comments));
 		}

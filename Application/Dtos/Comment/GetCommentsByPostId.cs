@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos
 {
-	public class GetCommentsByPostId : Pagination, IRequest<AppResponseDto>
+	public class GetCommentsByPostId : Page, IRequest<AppResponseDto>
 	{
         public int PostId { get; private set; }
 

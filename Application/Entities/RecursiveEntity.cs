@@ -13,6 +13,14 @@ namespace Application.Entities
 		public DateTime CreatedDate { get; private set; }
 		public DateTime? UpdatedDate { get; private set; }
 
+		public bool IsRemoved => throw new NotImplementedException();
+
+		public DateTime? RemovedDate => throw new NotImplementedException();
+
+		public void Remove()
+		{
+			throw new NotImplementedException();
+		}
 
 		public void SetCreatedDate(DateTime date)
 		{

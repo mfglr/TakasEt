@@ -22,5 +22,5 @@ namespace Service
 			using (FileStream fileStream = File.Create(path))
 				await stream.CopyToAsync(fileStream, cancellationToken);
 		}
-	}
+	}	
 }

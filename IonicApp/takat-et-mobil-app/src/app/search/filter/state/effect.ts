@@ -7,7 +7,7 @@ import { filterPostsByCategoryIdsAction, filterPostsByCategoryIdsSuccessAction, 
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectCategoryIds, selectKey, selectPosts } from "./selectors";
 import { loadPostsAction } from "src/app/states/actions";
-import { takeValueOfPosts } from "src/app/states/app-entity-state";
+import { takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
 
 @Injectable()
 export class FilterPostsPageEffect{

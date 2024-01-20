@@ -17,5 +17,12 @@ namespace Application.Extentions
 			return result.ToString();
 		}
 
+		//public static bool IsNumeric(this string input) {
+		//	if (input == "")
+		//		return false;
+		//	int i = 0;
+		//	while (i < input.Length && char.IsDigit(input[i])) i++;
+		//	return i == input.Length;
+		//}
 	}
 }

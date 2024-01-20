@@ -1,7 +1,7 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import { loadUserImageUrlSuccessAction, loadUserImageSuccessAction, loadUserImagesSuccessAction } from "./actions";
-import { UserImageResponse } from "src/app/models/responses/profile-image-response";
+import { UserImageResponse } from "src/app/models/responses/user-image-response";
 
 interface UserImageState{
     profileImage : UserImageResponse;

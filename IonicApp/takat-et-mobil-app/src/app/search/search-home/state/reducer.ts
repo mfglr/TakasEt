@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState, addMany, init, takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-entity-state";
+import { AppEntityState, addMany, init, takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-entity-state/app-entity-state";
 import { changeActiveIndex, nextPostsSuccessAction, nextUsersSuccessAction, searchUsersSuccessAction } from "./action";
 
 export interface SearchHomePageState{

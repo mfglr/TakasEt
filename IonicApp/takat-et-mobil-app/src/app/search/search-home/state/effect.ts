@@ -6,7 +6,7 @@ import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { SearchHomePageState } from "./reducer";
 import { selectKey, selectPosts, selectUsers } from "./selector";
-import { takeValueOfPosts } from "src/app/states/app-entity-state";
+import { takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
 import { loadPostsAction, loadUsersAction } from "src/app/states/actions";
 import { UserService } from "src/app/services/user.service";
 
@@ -36,20 +36,20 @@ export class SearchHomePageEffect{
     )
   })
 
-  nextPosts$ = createEffect(() => {
-    return this.actions.pipe(
-      ofType(nextPostsAction),
-      withLatestFrom(
-        this.searchHomePageStore.select(selectPosts)
-      ),
-      filter(([action,state]) => !state.isLastEntities),
-      mergeMap(([action,state]) => this.postService.getSearchPagePosts(state.page)),
-      mergeMap(response => of(
-        nextPostsSuccessAction({posts : response}),
-        loadPostsAction({posts : response})
-      ))
-    )
-  })
+  // nextPosts$ = createEffect(() => {
+  //   return this.actions.pipe(
+  //     ofType(nextPostsAction),
+  //     withLatestFrom(
+  //       this.searchHomePageStore.select(selectPosts)
+  //     ),
+  //     filter(([action,state]) => !state.isLastEntities),
+  //     mergeMap(([action,state]) => this.postService.getSearchPagePosts(state.page)),
+  //     mergeMap(response => of(
+  //       nextPostsSuccessAction({posts : response}),
+  //       loadPostsAction({posts : response})
+  //     ))
+  //   )
+  // })
 
   nextUsers$ = createEffect( () => {
     return this.actions.pipe(

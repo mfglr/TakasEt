@@ -15,12 +15,10 @@ namespace Commands
     {
         private readonly IBlobService _blobService;
         private readonly IRepository<User> _users;
-        private readonly LoggedInUser _loggedInUser;
 
-        public AddPostCommandHandler(IBlobService blobService, LoggedInUser loggedInUser, IRepository<User> users)
+        public AddPostCommandHandler(IBlobService blobService, IRepository<User> users)
         {
             _blobService = blobService;
-            _loggedInUser = loggedInUser;
             _users = users;
         }
 

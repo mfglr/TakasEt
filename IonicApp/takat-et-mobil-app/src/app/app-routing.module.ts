@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'create-message',
     loadChildren: () => import('./message/create-message/create-message.module').then( m => m.CreateMessagePageModule)
   },
+  {
+    path: 'home',
+    loadChildren: () => import('./home/home/home.module').then( m => m.HomePageModule)
+  },
 ];
 
 @NgModule({

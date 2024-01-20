@@ -8,32 +8,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetSearchPageUsersQuerHandler : IRequestHandler<GetSearchPageUsers, AppResponseDto>
+	public class GetSearchPageUsersQuerHandler : IRequestHandler<GetSearchPageUsersDto, AppResponseDto>
 	{
 		private readonly IRepository<User> _users;
-		private readonly LoggedInUser _loggedInUser;
 
-		public GetSearchPageUsersQuerHandler(IRepository<User> users, LoggedInUser loggedInUser)
+		public GetSearchPageUsersQuerHandler(IRepository<User> users)
 		{
 			_users = users;
-			_loggedInUser = loggedInUser;
 		}
 
-		public async Task<AppResponseDto> Handle(GetSearchPageUsers request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetSearchPageUsersDto request, CancellationToken cancellationToken)
 		{
 			var normalizeKey = request.Key.CustomNormalize();
 			
-			if(normalizeKey == "")
+			if(normalizeKey == null || normalizeKey == "")
 				return AppResponseDto.Success();
 
 			var users = await _users
 				.DbSet
+				.AsNoTracking()
 				.IncludeUser()
 				.Where(
-					user => user.NormalizedFullName.Contains(normalizeKey) || user.NormalizedUserName!.Contains(normalizeKey)
+					user => 
+						user.NormalizedFullName == null || 
+						user.NormalizedFullName.Contains(normalizeKey) || 
+						user.NormalizedUserName!.Contains(normalizeKey)
 				)
 				.ToPage(request)
-				.ToUserResponseDto(_loggedInUser.UserId)
+				.ToUserResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(users);
 		}

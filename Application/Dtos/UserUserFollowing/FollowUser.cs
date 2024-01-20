@@ -4,11 +4,12 @@ namespace Application.Dtos
 {
 	public class FollowUser : IRequest<AppResponseDto>
     {
-        public int FollowedId { get; private set; }
+        public int LoggedInUserId { get; set; }
+        public int FollowingId { get; private set; }
 
-        public FollowUser(int followedId)
+        public FollowUser(int followingId)
         {
-            FollowedId = followedId;
+			FollowingId = followingId;
         }
     }
 }

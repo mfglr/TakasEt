@@ -5,10 +5,10 @@ using Repository;
 using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-using Function.Middlewares;
 using WebApi.Extentions;
 using Queries;
 using Commands;
+using Iss_Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,11 +70,11 @@ var app = builder.Build();
 app.UseCors("local");
 app.UseRouting();
 app.UseAuthorization();
-app.UseMiddleware<SetLoggedInUserMiddleware>();
 app.UseEndpoints(
 	endpoints =>
 	{
 		endpoints.MapControllers();
+		endpoints.MapHub<MessageHub>("/message");
 	}
 );
 app.Run();

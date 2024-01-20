@@ -12,9 +12,7 @@ export class UserImageService {
     private httpClient : NativeHttpClientService
   ) { }
 
-  addUserImage(formData : FormData) : Observable<NoContentResponse>{
-    return this.httpClient.post<NoContentResponse>("user-image/add-user-image",formData);
-  }
+
 
   getUserImage(id : number) : Observable<string>{
     return this.httpClient.getBlob(`user-image/get-user-image/${id}`)

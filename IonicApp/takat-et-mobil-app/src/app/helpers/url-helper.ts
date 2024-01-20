@@ -1,4 +1,4 @@
-import { Page } from "../states/app-entity-state";
+import { Page } from "../states/app-entity-state/app-entity-state";
 
 export class UrlHelper{
 

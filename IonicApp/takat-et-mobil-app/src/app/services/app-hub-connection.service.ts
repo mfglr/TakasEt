@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class AppHubConnectionService {
 
-  private static baseUrl : string = "http://localhost:5027";
+  private static baseUrl : string = "http://localhost:7160";
   private hubConnection? : HubConnection;
   private subjects : {[key : string] : Subject<any>} = {};
   private mehtodsName : string[] = []
@@ -18,7 +18,9 @@ export class AppHubConnectionService {
   }
 
   async start(){
-    this.hubConnection?.start().catch( () => setTimeout(() => this.start(), 4000) )
+    this.hubConnection?.start()
+      .then(() => console.log(this.hubConnection?.state))
+      .catch(() => setTimeout(() => this.start(), 4000))
   }
 
   invoke<T>(method : string,data : T) : void{

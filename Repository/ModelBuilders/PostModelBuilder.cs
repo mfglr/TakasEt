@@ -31,13 +31,13 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.Requesters)
+				.HasMany(x => x.RequesterPosts)
 				.WithOne(x => x.Requested)
 				.HasForeignKey(x => x.RequestedId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.Requesteds)
+				.HasMany(x => x.RequestedPosts)
 				.WithOne(x => x.Requester)
 				.HasForeignKey(x => x.RequesterId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -49,9 +49,15 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasOne(x => x.Swapping)
-				.WithOne(x => x.DestinationPost)
-				.HasForeignKey<Swapping>(x => x.DestinationPostId)
+				.HasMany(x => x.RequesterSwappings)
+				.WithOne(x => x.Requested)
+				.HasForeignKey(x => x.RequestedId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.RequestedSwappings)
+				.WithOne(x => x.Requester)
+				.HasForeignKey(x => x.RequesterId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder

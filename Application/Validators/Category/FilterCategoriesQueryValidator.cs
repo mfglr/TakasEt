@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class FilterCategoriesQueryValidator : AbstractValidator<FilterCategories>
+    public class FilterCategoriesQueryValidator : AbstractValidator<FilterCategoriesDto>
     {
         public FilterCategoriesQueryValidator()
         {

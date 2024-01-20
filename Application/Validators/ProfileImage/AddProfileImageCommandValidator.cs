@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class AddProfileImageCommandValidator : AbstractValidator<AddUserImage>
+    public class AddProfileImageCommandValidator : AbstractValidator<AddUserImageDto>
     {
         public AddProfileImageCommandValidator()
         {

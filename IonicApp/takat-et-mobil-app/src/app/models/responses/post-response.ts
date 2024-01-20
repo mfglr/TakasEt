@@ -1,6 +1,6 @@
 import { BaseResponse } from "./base-response";
 import { PostImageResponse } from "./post-image-response";
-import { UserImageResponse } from "./profile-image-response";
+import { UserImageResponse } from "./user-image-response";
 
 export interface PostResponse extends BaseResponse{
   userName : string;

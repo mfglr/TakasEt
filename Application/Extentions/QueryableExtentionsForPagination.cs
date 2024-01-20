@@ -5,16 +5,12 @@ namespace Application.Extentions
 {
 	public static class QueryableExtentionsForPagination
 	{
-		public static IQueryable<TEntity> ToPage<TEntity>(
-			this IQueryable<TEntity> queryable,
-			Pagination pagination
-		)
-			where TEntity : IEntity
+		public static IQueryable<TEntity> ToPage<TEntity>( this IQueryable<TEntity> queryable, IPage page) where TEntity : IEntity
 		{
-			return queryable
-				.Where(x => pagination.LastId == null || x.Id < pagination.LastId)
-				.OrderByDescending( x => x.Id )
-				.Take(pagination.Take);
+			var r = queryable.Where(x => page.LastId == null || x.Id < page.LastId).OrderByDescending(x => x.Id);
+			if (page.Take != null)
+				return r.Take((int)page.Take);
+			return r.Take(10);
 		}
 	}
 }

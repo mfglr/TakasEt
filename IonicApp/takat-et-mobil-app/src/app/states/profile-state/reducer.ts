@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState, addMany, addOne, init, removeOne, takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-entity-state";
+import { AppEntityState, addMany, addOne, init, removeOne, takeValueOfPosts, takeValueOfUsers } from "src/app/states/app-entity-state/app-entity-state";
 import { addOrRemoveFollowedAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction, removeFollowerAction } from "./actions";
 
 export interface ProfileState{

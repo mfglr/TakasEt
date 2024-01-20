@@ -12,9 +12,9 @@ namespace Queries
 
     public class GetRequestersQueryHandler : IRequestHandler<GetRequesters, AppResponseDto>
     {
-        private readonly IRepository<PostPostRequesting> _requestings;
+        private readonly IRepository<Requesting> _requestings;
         private readonly IMapper _mapper;
-        public GetRequestersQueryHandler(IRepository<PostPostRequesting> requestings, IMapper mapper)
+        public GetRequestersQueryHandler(IRepository<Requesting> requestings, IMapper mapper)
         {
 			_requestings = requestings;
             _mapper = mapper;

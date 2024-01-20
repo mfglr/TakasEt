@@ -4,7 +4,8 @@ import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { UrlHelper } from '../helpers/url-helper';
 import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../states/app-entity-state';
+import { Page } from '../states/app-entity-state/app-entity-state';
+import { GetSearchPagePostsRequest } from '../models/requests/get-search-page-posts-request';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,9 @@ export class PostService {
     )
   }
 
-  getSearchPagePosts(page : Page) : Observable<PostResponse[]>{
+  getSearchPagePosts(request : GetSearchPagePostsRequest) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
-      `post/get-search-page-posts?${UrlHelper.createPaginationQueryString(page)}`
+      `post/get-search-page-posts?${UrlHelper.createPaginationQueryString(request)}`
     );
   }
 
@@ -37,7 +38,7 @@ export class PostService {
     )
   }
 
-  getPostsByUserId(userId : number,page : Page) : Observable<PostResponse[]>{
+  getUserPosts(userId : number,page : Page) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
       `post/get-posts-by-user-id/${userId}?${UrlHelper.createPaginationQueryString(page)}`
     );
@@ -72,12 +73,10 @@ export class PostService {
   }
 
   getFilterPagePosts(categoryIds : string | undefined, key : string | undefined,page : Page) : Observable<PostResponse[]>{
-
     let url = 'post/get-filter-page-posts?';
     if(categoryIds) url = `${url}categoryIds=${categoryIds}&`
     if(key) url = `${url}key=${key}&`
     return this.nativeHttpClientService.get<PostResponse[]>( `${url}${UrlHelper.createPaginationQueryString(page)}` )
-
   }
 
 

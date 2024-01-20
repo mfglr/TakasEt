@@ -10,15 +10,13 @@ namespace Application.Validators
 	public class AddRequestingsCommandValidator : AbstractValidator<AddRequestings>
 	{
 
-        private readonly IRepository<PostPostRequesting> _swapRequests;
+        private readonly IRepository<Requesting> _swapRequests;
 		private readonly IRepository<Post> _posts;
-        private readonly LoggedInUser _loggedInUser;
 
-		public AddRequestingsCommandValidator(IRepository<PostPostRequesting> swapRequests, LoggedInUser loggedInUser, IRepository<Post> posts)
+		public AddRequestingsCommandValidator(IRepository<Requesting> swapRequests, IRepository<Post> posts)
 		{
 			_swapRequests = swapRequests;
 			_posts = posts;
-			_loggedInUser = loggedInUser;
 
 			RuleFor(x => x.RequestedId).NotEmpty().NotNull().WithMessage("hata : 0");
 			RuleFor(x => x.RequesterIds).NotNull().WithMessage("hata : 1");
@@ -43,7 +41,7 @@ namespace Application.Validators
 				return !await _posts
 					.DbSet
 					.AnyAsync(
-						post => post.UserId == _loggedInUser.UserId && 
+						post => post.UserId == dto.LoggedInUserId && 
 						(dto.RequestedId == post.Id || !dto.RequesterIds.Contains(post.Id)),
 						cancellationToken
 					);

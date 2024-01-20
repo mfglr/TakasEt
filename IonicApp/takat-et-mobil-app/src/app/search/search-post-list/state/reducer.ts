@@ -1,7 +1,7 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import { initSearchPostListPageStateAction, nextPostsSuccessAction } from "./actions";
-import { AppEntityState, addMany, takeValueOfPosts } from "src/app/states/app-entity-state";
+import { AppEntityState, addMany, takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
 
 interface SearchPostListPageState{
   posts : AppEntityState,

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Queries
 {
-	public class GetCategoriesQueryHandler : IRequestHandler<GetCategories, AppResponseDto>
+	public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesDto, AppResponseDto>
 	{
 		private readonly IRepository<Category> _categories;
 		private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace Queries
 			_mapper = mapper;
 		}
 
-		public async Task<AppResponseDto> Handle(GetCategories request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(GetCategoriesDto request, CancellationToken cancellationToken)
 		{
 			var categories = await _categories
 				.DbSet
