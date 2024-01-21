@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FilterPostsPageState } from './state/reducer';
 import { filterPostsByCategoryIdsAction, filterPostsByKeyAction, nextPostsAction } from './state/actions';
-import { selectPostIds } from './state/selectors';
 import { first } from 'rxjs';
 import { IonContent } from '@ionic/angular';
 
@@ -15,7 +14,7 @@ export class FilterPage implements OnInit {
 
   @ViewChild(IonContent) content? : any;
 
-  postIds$ = this.filterPostPageStore.select(selectPostIds);
+  // postIds$ = this.filterPostPageStore.select(selectPostIds);
 
   endOfScroll? : number;
 
@@ -24,12 +23,12 @@ export class FilterPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.postIds$.pipe(first()).subscribe(
-      postIds => {
-        if(postIds.length <= 0)
-          this.filterPostPageStore.dispatch(nextPostsAction())
-      }
-    )
+    // this.postIds$.pipe(first()).subscribe(
+    //   postIds => {
+    //     if(postIds.length <= 0)
+    //       this.filterPostPageStore.dispatch(nextPostsAction())
+    //   }
+    // )
   }
 
   ngAfterViewChecked(){

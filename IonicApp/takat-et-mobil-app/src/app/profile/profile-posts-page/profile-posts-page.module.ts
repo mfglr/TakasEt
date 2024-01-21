@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProfilePostsPageRoutingModule } from './profile-posts-page-routing.module';
 
 import { ProfilePostsPage } from './profile-posts.page';
-import { PostListModule } from 'src/app/post-list/post-list.module';
+import { PostListModule } from 'src/app/shareds/post-list/post-list.module';
 
 @NgModule({
   imports: [

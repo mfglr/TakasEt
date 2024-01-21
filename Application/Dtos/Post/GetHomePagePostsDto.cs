@@ -17,6 +17,6 @@ namespace Application.Dtos
 			LastId = collection.ReadInt("lastId");
 			LoggedInUserId = collection.ReadInt("loggedInUserId");
 		}
-		
+
 	}
 }

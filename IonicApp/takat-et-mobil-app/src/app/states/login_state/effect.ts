@@ -4,7 +4,6 @@ import { filter, map, mergeMap, of, withLatestFrom} from "rxjs";
 import { Injectable } from "@angular/core";
 import { LoginService } from "src/app/services/login.service";
 import { LoginResponse } from "src/app/models/responses/login-response";
-import { loadUserAction } from "../user-entity-state/actions";
 
 @Injectable()
 export class LoginEffect{
@@ -20,7 +19,6 @@ export class LoginEffect{
         mergeMap(action => this.loginService.login(action.email,action.password)),
         mergeMap(response => of(
           loginSuccess({ payload : response}),
-          loadUserAction({userId : response.userId})
         ))
       )
     }
@@ -32,7 +30,6 @@ export class LoginEffect{
       mergeMap( action => this.loginService.loginByRefreshToken(action.refreshToken)),
       mergeMap(response => of(
         loginSuccess({ payload : response}),
-        loadUserAction({userId : response.userId})
       ))
     )
   })
@@ -48,7 +45,6 @@ export class LoginEffect{
       filter(x => x != undefined),
       mergeMap(response => of(
         loginSuccess({ payload : response!}),
-        loadUserAction({userId : response!.userId})
       ))
     )
   })

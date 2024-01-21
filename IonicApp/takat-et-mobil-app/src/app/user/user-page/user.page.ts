@@ -3,13 +3,10 @@ import { Store } from '@ngrx/store';
 import { UserPageCollectionState } from './state/reducer';
 import { changeActiveTabAction, initUserPageStateAction } from './state/actions';
 import { filter, first, map, mergeMap, take } from 'rxjs';
-import { UserState } from 'src/app/states/user-entity-state/reducer';
-import { selectUser } from 'src/app/states/user-entity-state/selectors';
 import { ActivatedRoute } from '@angular/router';
 import { UserModuleCollectionState } from '../state/reducer';
 import { initUserModuleStateAction, nextNotSwappedPostsAction, nextPostsAction, nextSwappedPostsAction } from '../state/actions';
 import { selectActiveTab } from './state/selectors';
-import { loadUserAction } from 'src/app/states/user-entity-state/actions';
 
 @Component({
   selector: 'app-user',

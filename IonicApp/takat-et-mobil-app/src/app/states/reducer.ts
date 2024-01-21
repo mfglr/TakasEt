@@ -4,7 +4,7 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { AppEntityState } from "./app-entity-state/app-entity-state";
 import { createReducer, on } from "@ngrx/store";
-import { loadConversationImagesSuccess, loadPostImagesSuccessAction, loadUserImagesSuccessAction } from "./actions";
+import { loadConversationImagesSuccess, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction } from "./actions";
 import { appPostAdapter, appUserAdapter } from "./app-entity-state/app-entity-adapter";
 
 interface ImageState{
@@ -69,11 +69,39 @@ export const appReducer = createReducer(
     })
   ),
   on(
+    loadPostImagesByPostResponsesSuccessAction,
+    (state, action) => ({
+      ...state,
+      postImages : action.payload.length > 0 ?
+        postImagesAdapter.addMany(
+          action.payload
+            .map(
+              x => x.postImages.map(
+                (x) : PostImageState => ({ id : x.id, loadStatus : false, url : undefined })
+              )
+            )
+            .reduce((prev,cur) => prev.concat(cur)),
+          state.postImages
+        ) :
+        state.postImages
+    })
+  ),
+  on(
     loadUserImagesSuccessAction,
     (state,action) => ({
       ...state,
       userImages : userImagesAdapter.addMany(
         action.userImageIds.map( (id) : UserImageState => ({ id : id, loadStatus : false, url : undefined }) ),
+        state.userImages
+      )
+    })
+  ),
+  on(
+    loadUserImagesByPostResponsesSuccessAction,
+    (state,action) => ({
+      ...state,
+      userImages : userImagesAdapter.addMany(
+        action.payload.map( (x) : UserImageState => ({id : x.userImage.id,loadStatus : false,url : undefined})),
         state.userImages
       )
     })

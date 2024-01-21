@@ -24,7 +24,7 @@
         </div>
 
         <app-abstract-post-list
-          [postIds]="postIds$ | async"
+          [postIds]=""
           postListUrl="/place/search/post-list"
           [addIdToUrl]="true">
         </app-abstract-post-list>
@@ -40,7 +40,7 @@
           <app-search-box (keyChangesEvent)="onKeyChange($event)"></app-search-box>
         </div>
 
-        <app-users-list [userIds]="userIds$ | async"></app-users-list>
+        <app-users-list [userIds]=""></app-users-list>
       </ion-content>
 
     </swiper-slide>

@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { CategoryPageCollectionState } from './state/reducer';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, first, map, mergeMap } from 'rxjs';
-import { selectPostIds } from './state/selectors';
 import { initCategoryPageState, nextPostsAction } from './state/actions';
 
 @Component({
@@ -29,11 +28,11 @@ export class CategoryPage implements OnInit {
 
     this.categoryId$.subscribe(x => this.categoryId = x);
 
-    this.postsIds$ = this.categoryId$.pipe(
-      mergeMap(
-        categoryId => this.categoryPageCollectionStore.select(selectPostIds({categoryId : categoryId}))
-      )
-    )
+    // this.postsIds$ = this.categoryId$.pipe(
+    //   mergeMap(
+    //     categoryId => this.categoryPageCollectionStore.select(selectPostIds({categoryId : categoryId}))
+    //   )
+    // )
 
     this.categoryId$.pipe(
       mergeMap(categoryId => this.postsIds$!.pipe(

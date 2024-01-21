@@ -8,10 +8,8 @@ import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, s
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
 import { loadUserImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
 import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
-import { filterAppEntityState } from "src/app/custom-operators/filter-app-entity-state";
 import { UserModuleCollectionState } from "./reducer";
 import { UserService } from "src/app/services/user.service";
-import { loadUsersSuccessAction } from "src/app/states/user-entity-state/actions";
 
 @Injectable()
 export class UserModuleCollectionEffect{
@@ -22,98 +20,98 @@ export class UserModuleCollectionEffect{
     private userModuleCollectionStore: Store<UserModuleCollectionState>,
   ) {}
 
-  nextPosts$ = createEffect(
-    () => {
-      return this.actions.pipe(
-        ofType(nextPostsAction),
-        mergeMap(
-          action => this.userModuleCollectionStore.select(selectPosts({userId : action.userId})).pipe(
-            filterAppEntityState(),
-            mergeMap(x => this.postService.getUserPosts(action.userId,x.page)),
-            mergeMap(response => of(
-              nextPostsSuccessAction({userId : action.userId,payload : response}),
-              loadPostsSuccessAction({payload : response}),
-              loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-              loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
-            ))
-          )
-        )
-      )
-    }
-  )
+  // nextPosts$ = createEffect(
+  //   () => {
+  //     return this.actions.pipe(
+  //       ofType(nextPostsAction),
+  //       mergeMap(
+  //         action => this.userModuleCollectionStore.select(selectPosts({userId : action.userId})).pipe(
+  //           filterAppEntityState(),
+  //           mergeMap(x => this.postService.getUserPosts(action.userId,x.page)),
+  //           mergeMap(response => of(
+  //             nextPostsSuccessAction({userId : action.userId,payload : response}),
+  //             loadPostsSuccessAction({payload : response}),
+  //             loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
+  //             loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
+  //           ))
+  //         )
+  //       )
+  //     )
+  //   }
+  // )
 
-  nextSwappedPosts$ = createEffect(
-    () => {
-      return this.actions.pipe(
-        ofType(nextSwappedPostsAction),
-        mergeMap(
-          action => this.userModuleCollectionStore.select(selectSwappedPosts({userId : action.userId})).pipe(
-            filterAppEntityState(),
-            mergeMap(x => this.postService.getSwappedPosts(action.userId,x.page)),
-            mergeMap(response => of(
-              nextSwappedPostsSuccessAction({userId : action.userId,payload : response}),
-              loadPostsSuccessAction({payload : response}),
-              loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-              loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
-            ))
-          )
-        )
-      )
-    }
-  )
+  // nextSwappedPosts$ = createEffect(
+  //   () => {
+  //     return this.actions.pipe(
+  //       ofType(nextSwappedPostsAction),
+  //       mergeMap(
+  //         action => this.userModuleCollectionStore.select(selectSwappedPosts({userId : action.userId})).pipe(
+  //           filterAppEntityState(),
+  //           mergeMap(x => this.postService.getSwappedPosts(action.userId,x.page)),
+  //           mergeMap(response => of(
+  //             nextSwappedPostsSuccessAction({userId : action.userId,payload : response}),
+  //             loadPostsSuccessAction({payload : response}),
+  //             loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
+  //             loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
+  //           ))
+  //         )
+  //       )
+  //     )
+  //   }
+  // )
 
-  nextNotSwappedPosts$ = createEffect(
-    () => {
-      return this.actions.pipe(
-        ofType(nextNotSwappedPostsAction),
-        mergeMap(
-          action => this.userModuleCollectionStore.select(selectNotSwappedPosts({userId : action.userId})).pipe(
-            filterAppEntityState(),
-            mergeMap(x => this.postService.getNotSwappedPosts(action.userId,x.page)),
-            mergeMap(response => of(
-              nextNotSwappedPostsSuccessAction({userId : action.userId,payload : response}),
-              loadPostsSuccessAction({payload : response}),
-              loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
-              loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
-            ))
-          )
-        )
-      )
-    }
-  )
+  // nextNotSwappedPosts$ = createEffect(
+  //   () => {
+  //     return this.actions.pipe(
+  //       ofType(nextNotSwappedPostsAction),
+  //       mergeMap(
+  //         action => this.userModuleCollectionStore.select(selectNotSwappedPosts({userId : action.userId})).pipe(
+  //           filterAppEntityState(),
+  //           mergeMap(x => this.postService.getNotSwappedPosts(action.userId,x.page)),
+  //           mergeMap(response => of(
+  //             nextNotSwappedPostsSuccessAction({userId : action.userId,payload : response}),
+  //             loadPostsSuccessAction({payload : response}),
+  //             loadPostImagesSuccessAction({postImages : response.map(x => x.postImages).reduce((a,c)=>a.concat(c))}),
+  //             loadUserImagesSuccessAction({images : response.map(x => x.userImage)})
+  //           ))
+  //         )
+  //       )
+  //     )
+  //   }
+  // )
 
-  nextFollowers$ = createEffect(() => {
-    return this.actions.pipe(
-      ofType(nextFollowersAction),
-      mergeMap(
-        action => this.userModuleCollectionStore.select(selectFollowers({userId : action.userId})).pipe(
-          filterAppEntityState(),
-          mergeMap(x => this.userService.getFollowers(action.userId,x.page)),
-          mergeMap(response => of(
-            nextFollowersSuccessAction({userId : action.userId,payload : response}),
-            loadUsersSuccessAction({users : response}),
-            loadUserImagesSuccessAction({images : response.map(x => x.userImage)}),
-          ))
-        )
-      )
-    )
-  })
+  // nextFollowers$ = createEffect(() => {
+  //   return this.actions.pipe(
+  //     ofType(nextFollowersAction),
+  //     mergeMap(
+  //       action => this.userModuleCollectionStore.select(selectFollowers({userId : action.userId})).pipe(
+  //         filterAppEntityState(),
+  //         mergeMap(x => this.userService.getFollowers(action.userId,x.page)),
+  //         mergeMap(response => of(
+  //           nextFollowersSuccessAction({userId : action.userId,payload : response}),
+  //           loadUsersSuccessAction({users : response}),
+  //           loadUserImagesSuccessAction({images : response.map(x => x.userImage)}),
+  //         ))
+  //       )
+  //     )
+  //   )
+  // })
 
-  nextFolloweds$ = createEffect(() => {
-    return this.actions.pipe(
-      ofType(nextFollowedsAction),
-      mergeMap(
-        action => this.userModuleCollectionStore.select(selectFolloweds({userId : action.userId})).pipe(
-          filterAppEntityState(),
-          mergeMap(x => this.userService.getFolloweds(action.userId,x.page)),
-          mergeMap(response => of(
-            nextFollowedsSuccessAction({userId : action.userId,payload : response}),
-            loadUsersSuccessAction({users : response}),
-            loadUserImagesSuccessAction({images : response.map(x => x.userImage)}),
-          ))
-        )
-      )
-    )
-  })
+  // nextFolloweds$ = createEffect(() => {
+  //   return this.actions.pipe(
+  //     ofType(nextFollowedsAction),
+  //     mergeMap(
+  //       action => this.userModuleCollectionStore.select(selectFolloweds({userId : action.userId})).pipe(
+  //         filterAppEntityState(),
+  //         mergeMap(x => this.userService.getFolloweds(action.userId,x.page)),
+  //         mergeMap(response => of(
+  //           nextFollowedsSuccessAction({userId : action.userId,payload : response}),
+  //           loadUsersSuccessAction({users : response}),
+  //           loadUserImagesSuccessAction({images : response.map(x => x.userImage)}),
+  //         ))
+  //       )
+  //     )
+  //   )
+  // })
 
 }

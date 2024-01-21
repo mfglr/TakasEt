@@ -20,9 +20,9 @@ export class PostService {
     return this.nativeHttpClientService.post<NoContentResponse>("post/add-post",formData);
   }
 
-  getHomePagePosts(page : Page) : Observable<PostResponse[]>{
+  getHomePagePosts(loggedInUserId : number,page : Page) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(
-      `post/get-home-page-posts?${UrlHelper.createPaginationQueryString(page)}`
+      `post/get-home-page-posts?loggedInUserId=${loggedInUserId}&${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 

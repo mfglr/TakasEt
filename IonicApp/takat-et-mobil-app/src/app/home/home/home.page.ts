@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
     private homePageStore : Store<HomePageState>,
   ) { }
 
-  posts = this.homePageStore.select(selectPostResponses);
+  posts$ = this.homePageStore.select(selectPostResponses);
   isLastEntities$ = this.homePageStore.select(selectIsLastEntities);
 
   ngOnInit() {

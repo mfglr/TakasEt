@@ -1,10 +1,11 @@
-import { createFeatureSelector, createSelector, props } from "@ngrx/store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { CategoryPageCollectionState } from "./reducer";
+import { appPostAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
 
 const selectStore = createFeatureSelector<CategoryPageCollectionState>("CategoryPageCollectionStore");
 export const selectPosts = (props : {categoryId : number}) => createSelector(
   selectStore,state => state.entities[props.categoryId]?.posts
 )
-export const selectPostIds = (props : {categoryId : number}) => createSelector(
-  selectPosts(props),state => state?.entityIds
+export const selectPostResponses = (props : {categoryId : number}) => createSelector(
+  selectPosts(props),appPostAdapter.selectResponses
 )

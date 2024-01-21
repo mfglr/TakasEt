@@ -1,5 +1,5 @@
 <div #postList>
-  <app-post [postId]="postId" *ngFor="let postId of postIds;"></app-post>
+  <app-post [post]="post" *ngFor="let post of posts;"></app-post>
 </div>
 <app-post-detail-modal
   [post]="postOfModal$ | async"

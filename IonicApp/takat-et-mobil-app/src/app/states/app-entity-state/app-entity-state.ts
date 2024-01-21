@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter } from "@ngrx/entity";
+import { EntityState } from "@ngrx/entity";
 import { BaseResponse } from "../../models/responses/base-response";
 
 export const takeValueOfPosts = 15;
@@ -6,6 +6,11 @@ export const takeValueOfComments = 10;
 export const takeValueOfUsers = 10;
 export const takeValueOfPostImages = 10;
 export const takeValueOfCategories = 10;
+
+export interface PageState{
+  index : number;
+  loadStatus : boolean;
+}
 
 export interface Page{
   take : number;
@@ -15,5 +20,5 @@ export interface Page{
 export interface AppEntityState<T extends BaseResponse>{
   entities : EntityState<T>
   page : Page,
-  isLastEntities : boolean
+  isLastEntities : boolean,
 }

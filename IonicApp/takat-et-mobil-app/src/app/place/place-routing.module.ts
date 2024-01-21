@@ -10,11 +10,11 @@ const routes: Routes = [
     children : [
       {
         path: '',
-        loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+        loadChildren: () => import('src/app/home/home.module').then( m => m.HomeModule)
       },
       {
         path: 'home',
-        loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+        loadChildren: () => import('src/app/home/home.module').then( m => m.HomeModule)
       },
       {
         path: 'search',
@@ -31,10 +31,6 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('src/app/profile/profile.module').then( m => m.ProfileModule )
-      },
-      {
-        path: 'explore',
-        loadChildren: () => import('./explore/explore.module').then( m => m.ExplorePageModule)
       },
       {
         path: 'category/:categoryId',

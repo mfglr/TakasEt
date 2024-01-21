@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { UserPostsPage } from './user-posts.page';
-import { PostListModule } from 'src/app/post-list/post-list.module';
 import { UserPostsPageRoutingModule } from './user-posts-page-routing.module';
+import { PostListModule } from 'src/app/shareds/post-list/post-list.module';
 
 @NgModule({
   imports: [

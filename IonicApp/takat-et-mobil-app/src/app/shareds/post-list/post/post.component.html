@@ -1,13 +1,13 @@
-<ng-container *ngIf="(post$ | async) as post;">
+<ng-container *ngIf="post;">
   <div [id]="'post'+post.id" style="width:100%;height: 0;"></div>
   <ion-card class="card">
     <ion-card-header class="header">
       <div class="header-left">
-        <app-profile-image [diameter]="3" [userImageId]="post?.userImage?.id"></app-profile-image>
+        <app-profile-image [diameter]="3" [userImageId]="post.userImage.id"></app-profile-image>
         <a [routerLink]="'/place/user/' + post.userId" class="username">
-          <span>{{post?.userName | toShortText : 15}}</span>
+          <span>{{post.userName | toShortText : 15}}</span>
         </a>
-        <span class="date">{{ post?.createdDate | dateFormat }}</span>
+        <span class="date">{{ post.createdDate | dateFormat }}</span>
       </div>
 
       <div class="header-right">
@@ -32,7 +32,7 @@
         <div class="right">
           <a class="post-category-link" [routerLink]="'/place/category/'+post.categoryId">
             <i class="fa-solid fa-book category-icon"></i>
-            <span class="post-category">{{post?.categoryName}}</span>
+            <span class="post-category">{{post.categoryName}}</span>
           </a>
         </div>
 
@@ -40,7 +40,7 @@
 
       <div class="row2">
         <span class="title">
-          {{((post?.title | toShortText) | toUpperFirstLetterOfAllWords)}}
+          {{((post.title | toShortText) | toUpperFirstLetterOfAllWords)}}
           <span class="load-content-button" (click)="loadContent(post)">...devami</span>
         </span>
       </div>

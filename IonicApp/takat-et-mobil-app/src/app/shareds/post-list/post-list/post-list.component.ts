@@ -5,7 +5,7 @@ import { PostListState } from '../state/reducer';
 import { closeModalAction } from '../state/actions';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { takeValueOfPosts } from 'src/app/states/app-entity-state/app-entity-state';
+import { PostResponse } from 'src/app/models/responses/post-response';
 
 @Component({
   selector: 'app-post-list',
@@ -14,7 +14,7 @@ import { takeValueOfPosts } from 'src/app/states/app-entity-state/app-entity-sta
 })
 export class PostListComponent {
   @ViewChild("postList",{static : true}) postList? : ElementRef;
-  @Input() postIds? : number[] | null;
+  @Input() posts? : PostResponse[] | null;
   @Output() nextPageEvent = new EventEmitter();
 
   postOfModal$ = this.postListStore.select(selectPostOfModal);
@@ -28,23 +28,7 @@ export class PostListComponent {
     private router : ActivatedRoute
   ) {}
 
-  onScroll(event : any){
-    if(this.postIds && this.lastRequestedPage != undefined){
-      let triggerIndex = this.postIds.length - takeValueOfPosts / 2;
-      let children = this.postList?.nativeElement.children
-      if(children[triggerIndex]){
-        let triggerOffSet = children[triggerIndex].offsetTop;
-        let scrollTop = event.detail.scrollTop
-        let requestedPage = this.postIds.length / takeValueOfPosts;
-        if(scrollTop >= triggerOffSet && requestedPage > this.lastRequestedPage){
-          this.lastRequestedPage = requestedPage;
-          this.nextPageEvent.emit();
-        }
-      }
-    }
-  }
-
-  ngAfterViewInit(){
+  ngAfterViewChecked(){
     this.router.fragment.subscribe(
       fragment =>{
         if(fragment){
@@ -56,11 +40,11 @@ export class PostListComponent {
   }
 
   ngOnChanges(){
-    if(this.postIds){
-      if(!this.lastRequestedPage){
-        this.lastRequestedPage = (this.postIds.length / takeValueOfPosts) - 1
-      }
-    }
+    // if(this.postIds){
+    //   if(!this.lastRequestedPage){
+    //     this.lastRequestedPage = (this.postIds.length / takeValueOfPosts) - 1
+    //   }
+    // }
   }
 
   closeModal(){

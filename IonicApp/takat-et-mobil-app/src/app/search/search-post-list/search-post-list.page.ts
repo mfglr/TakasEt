@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { EntitySearchPostListPageState } from './state/reducer';
 import { Observable, Subscription, first, map, mergeMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { selectPostIds, selectPosts } from './state/selectors';
 import { initSearchPostListPageStateAction, nextPostsAction } from './state/actions';
 
 @Component({
@@ -26,11 +25,11 @@ export class SearchPostListPage implements OnInit {
       map(x => parseInt(x.get("postId")!))
     )
 
-    this.postIds$ = this.postId$.pipe(
-      mergeMap(
-        postId => this.entitySearchPostListPageStore.select(selectPostIds({postId : postId}))
-      )
-    )
+    // this.postIds$ = this.postId$.pipe(
+    //   mergeMap(
+    //     postId => this.entitySearchPostListPageStore.select(selectPostIds({postId : postId}))
+    //   )
+    // )
 
     this.initializer = this.postId$.pipe(
       mergeMap(

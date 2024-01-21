@@ -3,11 +3,8 @@ import { Store } from '@ngrx/store';
 import { filter, map, mergeMap } from 'rxjs';
 import { LoginState } from 'src/app/states/login_state/reducer';
 import { selectUserId } from 'src/app/states/login_state/selectors';
-import { ProfileState } from 'src/app/states/profile-state/reducer';
-import { selectFollowedIds, selectFollowerIds } from 'src/app/states/profile-state/selectors';
 import { ProfileFollowingPageState } from './state/reducer';
 import { selectActiveIndex } from './state/selectors';
-import { nextFollowedsAction, nextFollowersAction } from 'src/app/states/profile-state/actions';
 import { changeActiveIndexAction } from './state/actions';
 
 @Component({
@@ -28,33 +25,32 @@ export class FollowingPage implements OnInit {
 
   userId$ = this.loginStore.select(selectUserId);
   activeIndex$ = this.profileFollowingPageStore.select(selectActiveIndex);
-  followerIds$ = this.profileStore.select(selectFollowerIds);
-  followedIds$ = this.profileStore.select(selectFollowedIds);
+  // followerIds$ = this.profileStore.select(selectFollowerIds);
+  // followedIds$ = this.profileStore.select(selectFollowedIds);
 
-  ids = [this.followerIds$,this.followedIds$];
+  // ids = [this.followerIds$,this.followedIds$];
   @ViewChild("swiperContainer",{static : true}) swiperContainer? : ElementRef;
 
   constructor(
     private profileFollowingPageStore : Store<ProfileFollowingPageState>,
-    private profileStore : Store<ProfileState>,
     private loginStore : Store<LoginState>
   ) { }
 
   ngOnInit() {
-    this.userId$.pipe(
-      filter(userId => userId != undefined),
-      map(userId => userId!),
-      mergeMap(userId => this.activeIndex$.pipe(
-        mergeMap(activeIndex => this.ids[activeIndex].pipe(
-          map(ids => {
-            if(ids.length == 0){
-              if(activeIndex == 0) this.profileStore.dispatch(nextFollowersAction())
-              else this.profileStore.dispatch(nextFollowedsAction())
-            }
-          })
-        ))
-      ))
-    ).subscribe();
+    // this.userId$.pipe(
+    //   filter(userId => userId != undefined),
+    //   map(userId => userId!),
+    //   mergeMap(userId => this.activeIndex$.pipe(
+    //     mergeMap(activeIndex => this.ids[activeIndex].pipe(
+    //       map(ids => {
+    //         if(ids.length == 0){
+    //           if(activeIndex == 0) this.profileStore.dispatch(nextFollowersAction())
+    //           else this.profileStore.dispatch(nextFollowedsAction())
+    //         }
+    //       })
+    //     ))
+    //   ))
+    // ).subscribe();
   }
 
   changeActiveIndex(e : any){

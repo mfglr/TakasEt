@@ -1,9 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState, addMany, init, initMany, takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
+import { AppEntityState } from "src/app/states/app-entity-state/app-entity-state";
 import { filterPostsByCategoryIdsSuccessAction, filterPostsByKeySuccessAction,nextPostsSuccessAction } from "./actions";
+import { PostResponse } from "src/app/models/responses/post-response";
+import { appPostAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
 
 export interface FilterPostsPageState{
-  posts : AppEntityState,
+  posts : AppEntityState<PostResponse>,
   key : string | undefined,
   categoryIds : string | undefined
 }
@@ -11,7 +13,7 @@ export interface FilterPostsPageState{
 const initialState : FilterPostsPageState = {
   key : undefined,
   categoryIds : undefined,
-  posts : init(takeValueOfPosts)
+  posts : appPostAdapter.init()
 }
 
 export const filterPostsPageReducer = createReducer(
@@ -21,7 +23,7 @@ export const filterPostsPageReducer = createReducer(
     (state,action) => ({
       ...state,
       key : action.key,
-      posts : initMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts)
+      posts : appPostAdapter.initMany(action.payload,state.posts)
     })
   ),
 
@@ -30,7 +32,7 @@ export const filterPostsPageReducer = createReducer(
     (state,action) => ({
       ...state,
       categoryIds : action.categoryIds,
-      posts : initMany(action.payload.map(x => x.id),takeValueOfPosts,state.posts)
+      posts : appPostAdapter.initMany(action.payload,state.posts)
     })
   ),
 
@@ -38,7 +40,7 @@ export const filterPostsPageReducer = createReducer(
     nextPostsSuccessAction,
     (state,action) => ({
       ...state,
-      posts : addMany(action.payload.map(x=> x.id),takeValueOfPosts,state.posts)
+      posts : appPostAdapter.addMany(action.payload,state.posts)
     })
   )
 )

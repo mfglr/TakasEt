@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchHomePageState } from './state/reducer';
-import { selectActiveIndex, selectPostIds, selectUserIds } from './state/selector';
+import { selectActiveIndex } from './state/selector';
 import { changeActiveIndex, nextPostsAction, nextUsersAction, searchUsersAction } from './state/action';
 import { first } from 'rxjs';
 import { IonContent } from '@ionic/angular';
@@ -22,8 +22,8 @@ export class SearchHomePage implements OnInit {
   @ViewChild(IonContent) content? : any;
 
   activeIndex$ = this.searchHomePageStore.select(selectActiveIndex);
-  postIds$ = this.searchHomePageStore.select(selectPostIds);
-  userIds$ = this.searchHomePageStore.select(selectUserIds);
+  // postIds$ = this.searchHomePageStore.select(selectPostIds);
+  // userIds$ = this.searchHomePageStore.select(selectUserIds);
 
   endOfPostsScroll? : number;
   endOfUsersScroll? : number;
@@ -33,11 +33,11 @@ export class SearchHomePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.postIds$.pipe(
-      first()
-    ).subscribe(postIds => {
-      if(postIds.length == 0) this.searchHomePageStore.dispatch(nextPostsAction())
-    })
+    // this.postIds$.pipe(
+    //   first()
+    // ).subscribe(postIds => {
+    //   if(postIds.length == 0) this.searchHomePageStore.dispatch(nextPostsAction())
+    // })
   }
 
   ngAfterContentInit(){
@@ -98,16 +98,16 @@ export class SearchHomePage implements OnInit {
         children[0].children[0].children[0].children[1].offsetHeight -
         this.content.el.clientHeight
 
-      this.userIds$.pipe(first()).subscribe(
-        userIds => {
-          if(userIds.length > 0){
-            this.endOfUsersScroll =
-            children[0].children[1].children[0].children[0].offsetHeight +
-            children[0].children[1].children[0].children[1].offsetHeight -
-            this.content.el.clientHeight
-          }
-        }
-      )
+      // this.userIds$.pipe(first()).subscribe(
+      //   userIds => {
+      //     if(userIds.length > 0){
+      //       this.endOfUsersScroll =
+      //       children[0].children[1].children[0].children[0].offsetHeight +
+      //       children[0].children[1].children[0].children[1].offsetHeight -
+      //       this.content.el.clientHeight
+      //     }
+      //   }
+      // )
     }
 
   }

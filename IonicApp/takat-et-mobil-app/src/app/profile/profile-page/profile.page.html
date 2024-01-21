@@ -12,15 +12,15 @@
   </ion-header>
 
   <ion-content>
-    <app-user-info-header [user]="user$ | async"></app-user-info-header>
+    <app-user-info-header [user]=""></app-user-info-header>
 
     <app-user-info-content
       postListUrl="/place/profile/posts"
       [tags]="tags"
-      [user]="user$ | async"
-      [postIds]="postIds$ | async"
-      [swappedPostIds]="swappedPostIds$ | async"
-      [notSwappedPostIds]="notSwappedPostIds$ | async"
+      [user]=""
+      [postIds]=""
+      [swappedPostIds]=""
+      [notSwappedPostIds]=""
       [activeIndex]="activeTab$ | async"
       (changeActiveIndexEvent)="changeActiveTab($event)">
     </app-user-info-content>

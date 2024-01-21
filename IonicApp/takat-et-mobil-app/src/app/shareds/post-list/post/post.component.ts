@@ -14,18 +14,14 @@ import { selectPostResponse } from 'src/app/states/post-state/selectors';
 })
 export class PostComponent{
 
-  @Input() postId? : number;
-  post$? : Observable<PostResponse | undefined>;
+  @Input() post? : PostResponse;
 
   constructor(
     private postListStore : Store<PostListState>,
-    private postStore : Store<PostState>
   ) {}
 
   ngOnInit(){
-    if(this.postId){
-      this.post$ = this.postStore.select(selectPostResponse({postId : this.postId}))
-    }
+
   }
 
   displayPostDetail(post : PostResponse){

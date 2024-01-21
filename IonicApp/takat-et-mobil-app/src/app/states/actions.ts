@@ -8,9 +8,17 @@ export const loadUserImagesSuccessAction = createAction(
   "[App Store] load user images success",
   props<{userImageIds : number[]}>()
 )
+export const loadUserImagesByPostResponsesSuccessAction = createAction(
+  "[App Store] load user images by post responses success",
+  props<{payload : PostResponse[]}>()
+)
 export const loadPostImagesSuccessAction = createAction(
   "[App Store] load post images success",
   props<{postImageIds : number[]}>()
+)
+export const loadPostImagesByPostResponsesSuccessAction = createAction(
+  "[App Store] load post images by post responses success",
+  props<{ payload : PostResponse[]}>()
 )
 export const loadConversationImagesSuccess = createAction(
   "[App Store] load conversation images success",
