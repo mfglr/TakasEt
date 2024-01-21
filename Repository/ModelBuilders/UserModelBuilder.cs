@@ -58,13 +58,13 @@ namespace Repository.ModelBuilders
 
 			builder
 				.HasMany(x => x.Followings)
-				.WithOne(x => x.Follower)
+				.WithOne(x => x.FollowerUser)
 				.HasForeignKey(x => x.FollowerId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
 				.HasMany(x => x.Followers)
-				.WithOne(x => x.Followed)
+				.WithOne(x => x.FollowingUser)
 				.HasForeignKey (x => x.FollowingId)
 				.OnDelete(DeleteBehavior.NoAction);
 

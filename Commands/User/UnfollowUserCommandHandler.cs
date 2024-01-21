@@ -9,9 +9,9 @@ namespace Commands
     public class UnfollowUserCommandHandler : IRequestHandler<UnfollowUserDto, AppResponseDto>
     {
 
-        private readonly IRepository<UserUserFollowing> _followings;
+        private readonly IRepository<Following> _followings;
 
-        public UnfollowUserCommandHandler(IRepository<UserUserFollowing> followings)
+        public UnfollowUserCommandHandler(IRepository<Following> followings)
         {
             _followings = followings;
         }

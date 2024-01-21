@@ -1,5 +1,4 @@
 ﻿using Application.DomainEventModels;
-using Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,8 +22,8 @@ namespace Application.Entities
 		public IReadOnlyCollection<Comment> Comments { get; }
 		public IReadOnlyCollection<UserCommentLiking> LikedComments { get; }
 		public IReadOnlyCollection<UserPostLiking> LikedPosts => _likedPosts;
-		public IReadOnlyCollection<UserUserFollowing> Followings { get; }
-		public IReadOnlyCollection<UserUserFollowing> Followers { get; }
+		public IReadOnlyCollection<Following> Followings { get; }
+		public IReadOnlyCollection<Following> Followers { get; }
 		public IReadOnlyCollection<Searching> Searchings => _searchings;
 		public IReadOnlyCollection<UserPostExploring> UserPostExplorings { get; }
 
@@ -34,6 +33,10 @@ namespace Application.Entities
 		private readonly List<UserImage> _userImages = new();
 		private readonly List<Searching> _searchings = new();
 
+		public int[] GetKey()
+		{
+			return new[] { Id };
+		}
 
 		public User(string email,string userName)
         {

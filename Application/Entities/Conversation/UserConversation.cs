@@ -8,10 +8,17 @@
         public User User { get; }
 		public Conversation Conversation { get; }
 
-        public UserConversation(int userId,int conversationId)
+		public override int[] GetKey()
+		{
+			return new[] { UserId, ConversationId };
+		}
+
+		public UserConversation(int userId,int conversationId)
         {
             UserId = userId;
             ConversationId = conversationId;
         }
-    }
+
+		
+	}
 }

@@ -14,7 +14,12 @@ namespace Application.Entities
 
 		private List<SwappingComment> _swappingComments = new();
 
-        public Swapping(int requesterId,int requestedId)
+		public override int[] GetKey()
+		{
+			return new[] { RequesterId, RequestedId };
+		}
+
+		public Swapping(int requesterId,int requestedId)
 		{
 			RequesterId = requesterId;
 			RequestedId = requestedId;

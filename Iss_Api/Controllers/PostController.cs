@@ -95,5 +95,19 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetFilterPagePostsDto(Request.Query));
 		}
 
+		[Authorize(Roles = "user")]
+		[HttpPut("post/like-post")]
+		public async Task<AppResponseDto> LikePost(LikePostDto request)
+		{
+			return await _sender.Send(request);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("post/dislike-post")]
+		public async Task<AppResponseDto> DislikePost(DislikePostDto request)
+		{
+			return await _sender.Send(request);
+		}
+
 	}
 }

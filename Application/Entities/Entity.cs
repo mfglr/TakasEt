@@ -4,7 +4,7 @@ namespace Application.Entities
 {
     public abstract class Entity : EntityDomainEvent, IEntity
 	{
-        public int Id { get; protected set; }
+		public abstract int[] GetKey();
 		public bool IsRemoved { get; protected set; }
         public DateTime CreatedDate { get; protected set; }
         public DateTime? UpdatedDate { get; protected set; }

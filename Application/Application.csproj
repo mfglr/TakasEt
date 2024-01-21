@@ -19,8 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
-    <Folder Include="Validators\AppFile\" />
-    <Folder Include="Validators\PostImage\" />
   </ItemGroup>
 
 </Project>

@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Conversation\" />
-    <Folder Include="UserCommentLiking\" />
-    <Folder Include="UserPostLiking\" />
   </ItemGroup>
 
 </Project>

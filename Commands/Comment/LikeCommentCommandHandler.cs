@@ -2,34 +2,23 @@
 using Application.Entities;
 using Application.Interfaces.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Commands
 {
     public class LikeCommentCommandHandler : IRequestHandler<LikeCommentDto, AppResponseDto>
     {
-        private readonly IRepository<UserCommentLiking> _likes;
+        private readonly IRepository<Comment> _comments;
 
-        public LikeCommentCommandHandler(IRepository<UserCommentLiking> likes)
+        public LikeCommentCommandHandler(IRepository<Comment> comments)
         {
-            _likes = likes;
+			_comments = comments;
         }
 
         public async Task<AppResponseDto> Handle(LikeCommentDto request, CancellationToken cancellationToken)
         {
-            var anyRecord = await _likes.DbSet.AnyAsync(
-                x =>
-                    x.UserId == request.LoggedInUserId &&
-                    x.CommentId == request.CommentId,
-                cancellationToken
-            );
-            if (!anyRecord)
-                await _likes.DbSet.AddAsync(
-                    new UserCommentLiking(request.LoggedInUserId, request.CommentId),
-                    cancellationToken
-                );
+            var comment = await _comments.DbSet.FindAsync(request.CommentId,cancellationToken);
+            comment!.LikeComment(request.LoggedInUserId);
             return AppResponseDto.Success();
-
         }
     }
 }

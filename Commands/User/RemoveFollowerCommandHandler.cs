@@ -7,16 +7,16 @@ namespace Commands
 {
     public class RemoveFollowerCommandHandler : IRequestHandler<RemoveFollowerDto, AppResponseDto>
     {
-        private readonly IRepository<UserUserFollowing> _followings;
+        private readonly IRepository<Following> _followings;
 
-        public RemoveFollowerCommandHandler(IRepository<UserUserFollowing> followings)
+        public RemoveFollowerCommandHandler(IRepository<Following> followings)
         {
             _followings = followings;
         }
 
         public Task<AppResponseDto> Handle(RemoveFollowerDto request, CancellationToken cancellationToken)
         {
-            _followings.DbSet.Remove(new UserUserFollowing(request.FollowerId, request.LoggedInUserId));
+            _followings.DbSet.Remove(new Following(request.FollowerId, request.LoggedInUserId));
             return Task.Factory.StartNew(() => AppResponseDto.Success());
         }
     }

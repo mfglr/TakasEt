@@ -8,7 +8,7 @@ namespace Application.Validators
 {
 	public class RemoveFollowerCommandValidator : AbstractValidator<RemoveFollowerDto>
 	{
-		public RemoveFollowerCommandValidator(IRepository<UserUserFollowing> followings)
+		public RemoveFollowerCommandValidator(IRepository<Following> followings)
 		{
 			RuleFor(x => x.FollowerId).NotEmpty().NotNull().WithMessage("hata");
 			RuleFor(x => x).Must(x => x.LoggedInUserId != x.FollowerId).WithMessage("hata");

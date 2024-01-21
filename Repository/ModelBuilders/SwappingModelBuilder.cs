@@ -11,15 +11,17 @@ namespace Repository.ModelBuilders
 			builder
 				.HasMany(x => x.SwappingComments)
 				.WithOne(x => x.Swapping)
-				.HasForeignKey(x => x.SwappingId)
+				.HasForeignKey(x => new { x.RequesterId, x.RequestedId })
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder.OwnsOne(
 				x => x.Status,
 				s => {
-					s.Property(status => status.Status).HasColumnName("status");
+					s.Property(status => status.Status).HasColumnName("Status");
 				}
 			);
+
+			builder.HasKey(x => new { x.RequesterId, x.RequestedId });
 		}
 
 	}

@@ -2,13 +2,19 @@
 {
 	public class UserImage : Entity
 	{
+		public int Id { get; private set; }
 		public bool IsActive { get; private set; }
 		public int UserId { get; private set; }
 		public User User { get; }
 		public string BlobName { get; private set; }
         public string Extention { get; private set; }
 		public string ContainerName { get; private set; }
-        
+
+		public override int[] GetKey()
+		{
+			return new[] { Id };
+		}
+
 		public UserImage() { }
 
 		public UserImage(int userId, string blobName, string extention)
@@ -28,6 +34,7 @@
 		{
 			IsActive = false;
 		}
+
 		
 	}
 }

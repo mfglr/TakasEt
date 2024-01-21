@@ -11,7 +11,12 @@ namespace Application.Entities
 
 		public Post Requester { get; }
 		public Post Requested { get; }
-        
+
+		public override int[] GetKey()
+		{
+			return new[] { RequesterId, RequestedId };
+		}
+
 		public Requesting(int requesterId, int requestedId)
 		{
 			RequesterId = requesterId;
@@ -33,7 +38,6 @@ namespace Application.Entities
 			Status = RequestingStatus.UnApproved;
 		}
 
-
-
+		
 	}
 }

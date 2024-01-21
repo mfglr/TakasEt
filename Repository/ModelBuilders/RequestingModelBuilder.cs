@@ -11,9 +11,10 @@ namespace Repository.ModelBuilders
 			builder.OwnsOne(
 				x => x.Status,
 				r => {
-					r.Property(status => status.Status).HasColumnName("status");
+					r.Property(status => status.Status).HasColumnName("Status");
 				}
 			);
+			builder.HasKey(x => new { x.RequesterId, x.RequestedId });
 		}
 	}
 }

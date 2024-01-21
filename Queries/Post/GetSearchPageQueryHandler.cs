@@ -1,5 +1,4 @@
-﻿using Application.Configurations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Entities;
 using Application.Extentions;
 using Application.Interfaces.Repositories;
@@ -30,7 +29,7 @@ namespace Queries
 				.ThenInclude(x => x.Tags)
 				.Where(x => x.Id == request.LoggedInUserId)
 				.Select(
-					x => x.UserPostExplorings.OrderByDescending(x => x.Id).Take(5).Select(x => x.Post.CategoryId)
+					x => x.UserPostExplorings.OrderByDescending(x => x.CreatedDate).Take(5).Select(x => x.Post.CategoryId)
 				)
 				.FirstAsync();
 

@@ -10,9 +10,9 @@ namespace Commands
     {
 
 
-        private readonly IRepository<UserUserFollowing> _followeds;
+        private readonly IRepository<Following> _followeds;
 
-        public FollowUserCommandHandler(IRepository<UserUserFollowing> followeds)
+        public FollowUserCommandHandler(IRepository<Following> followeds)
         {
             _followeds = followeds;
         }
@@ -23,7 +23,7 @@ namespace Commands
             await _followeds
                 .DbSet
                 .AddAsync(
-                   new UserUserFollowing(request.LoggedInUserId, request.FollowingId),
+                   new Following(request.LoggedInUserId, request.FollowingId),
                    cancellationToken
                 );
             return AppResponseDto.Success();

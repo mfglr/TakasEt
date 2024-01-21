@@ -5,6 +5,7 @@ namespace Application.Entities
 	public abstract class RecursiveEntity<T> : EntityDomainEvent, IEntity where T : RecursiveEntity<T>
 	{
 		public static int Depth = 2;
+
         public int? ParentId { get; protected set; }
 		public T? Parent { get; }
 		public IReadOnlyCollection<T> Children { get; }
@@ -16,6 +17,11 @@ namespace Application.Entities
 		public bool IsRemoved => throw new NotImplementedException();
 
 		public DateTime? RemovedDate => throw new NotImplementedException();
+
+		public int[] GetKey()
+		{
+			return new[] { Id };
+		}
 
 		public void Remove()
 		{

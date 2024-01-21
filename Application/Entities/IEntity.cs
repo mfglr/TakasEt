@@ -2,7 +2,7 @@
 {
 	public interface IEntity
 	{
-        int Id { get; }
+		int[] GetKey();
 		bool IsRemoved { get; }
 		DateTime CreatedDate { get; }
 		DateTime? UpdatedDate { get; }

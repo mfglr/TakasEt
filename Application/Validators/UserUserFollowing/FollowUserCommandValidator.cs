@@ -16,7 +16,7 @@ namespace Application.Validators
 			"Validation Error : FollowUser => e0003",
 		};
 
-		public FollowUserCommandValidator(IRepository<UserUserFollowing> followings)
+		public FollowUserCommandValidator(IRepository<Following> followings)
 		{
 			RuleFor(x => x.FollowingId).NotEmpty().NotNull().WithMessage(messages[0]);
 			RuleFor(x => x).Must( (x) => x.LoggedInUserId != x.FollowingId ).WithMessage(messages[1]);
