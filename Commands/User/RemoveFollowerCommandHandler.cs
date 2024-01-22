@@ -16,7 +16,7 @@ namespace Commands
 
         public Task<AppResponseDto> Handle(RemoveFollowerDto request, CancellationToken cancellationToken)
         {
-            _followings.DbSet.Remove(new Following(request.FollowerId, request.LoggedInUserId));
+            _followings.DbSet.Remove(new Following((int)request.FollowerId!, (int)request.LoggedInUserId!));
             return Task.Factory.StartNew(() => AppResponseDto.Success());
         }
     }

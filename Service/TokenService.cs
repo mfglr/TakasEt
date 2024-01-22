@@ -53,7 +53,7 @@ namespace Service
 			var byteArray = new byte[32];
 			using var randomValue = RandomNumberGenerator.Create();
 			randomValue.GetBytes(byteArray);
-			return new Token(Convert.ToBase64String(byteArray),DateTime.Now);
+			return new Token(Convert.ToBase64String(byteArray),DateTime.Now.AddMinutes(_configuration.CustomTokenOptions.ExprationOfRefreshToken));
 		}
 		
 		public Token CreateAccessTokenByClient(Client client)

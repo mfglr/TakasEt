@@ -4,13 +4,11 @@ namespace Application.DomainEventModels
 {
 	public class EntityDomainEvent : IEntityDomainEvent
 	{
-		private List<INotification> _domainEvents = new List<INotification>();
-
+		private readonly List<INotification> _domainEvents = new ();
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);
 		}
-
 		public void PublishAllDomainEvents(IPublisher publisher)
 		{
 			_domainEvents.ForEach(
@@ -20,12 +18,10 @@ namespace Application.DomainEventModels
 				}
 			);
 		}
-
 		public void ClearAllDomainEvents()
 		{
 			_domainEvents.Clear();
 		}
-
 		public bool AnyDomainEvents()
 		{
 			return _domainEvents.Any();

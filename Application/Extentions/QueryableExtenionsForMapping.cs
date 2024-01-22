@@ -119,7 +119,7 @@ namespace Application.Extentions
 							LastName = x.LastName,
 							UserName = x.UserName!,
 							Email = x.Email!,
-							CountOfPosts = x.CountOfPost,
+							CountOfPosts = x.NumberOfPost,
 							CountOfFolloweds = x.Followings.Count,
 							CountOfFollowers = x.Followers.Count,
 							IsFollowed = x.Followers.Any(x => loggedInUserId != null && x.FollowerId == loggedInUserId),

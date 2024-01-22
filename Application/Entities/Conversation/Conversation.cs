@@ -4,20 +4,14 @@ namespace Application.Entities
 {
 	public class Conversation : Entity
 	{
-		public int Id { get; private set; }
         public string Title { get; protected set; }
         public IReadOnlyCollection<ConversationImage> ConversationImages => _conversationImages;
         public IReadOnlyCollection<UserConversation> UserConversations => _userConversations;
 		public IReadOnlyCollection<Message> Messages => _messages;
 
-		public override int[] GetKey()
-		{
-			return new[] { Id };
-		}
-
-		protected readonly List<ConversationImage> _conversationImages = new List<ConversationImage>();
-		protected readonly List<UserConversation> _userConversations = new List<UserConversation>();
-		protected readonly List<Message> _messages = new List<Message>();
+		protected readonly List<ConversationImage> _conversationImages = new ();
+		protected readonly List<UserConversation> _userConversations = new ();
+		protected readonly List<Message> _messages = new ();
        
 		public void AddConversationImage(string blobName,string extention)
 		{

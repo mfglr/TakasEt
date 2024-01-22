@@ -4,8 +4,6 @@ namespace Application.Entities
 {
     public class Post : Entity
     {
-        public int Id { get; private set; }
-
 		public string Title { get; private set; }
 		public string NormalizedTitle { get; private set; }
 		public string Content { get; private set; }
@@ -31,12 +29,6 @@ namespace Application.Entities
         private readonly List<Requesting> _requestedPosts = new();
         private readonly List<Requesting> _requesterPosts = new();
         private readonly List<Swapping> _requesterSwappings = new();
-
-
-		public override int[] GetKey()
-		{
-            return new[] { Id };
-		}
 
 		public Post(int userId, string title, string content, int categoryId,int countOfImages)
         {

@@ -24,8 +24,8 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/get-user/{userId}")]
-		public async Task<AppResponseDto> GetUser(int userId)
+		[HttpGet("user/get-user")]
+		public async Task<AppResponseDto> GetUser()
 		{
 			return await _sender.Send(new GetUserDto(Request.Query));
 		}
@@ -56,6 +56,34 @@ namespace WebApi.Controllers
 		public async Task<AppResponseDto> GetSearchPageUsers()
 		{
 			return await _sender.Send(new GetSearchPageUsersDto(Request.Query));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpGet("user/get-user-image/{id}")]
+		public async Task GetUserImage(int id)
+		{
+			await Response.Body.WriteAsync(await _sender.Send(new GetUserImage() { Id = id }));
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("user/follow-user")]
+		public async Task<AppResponseDto> FollowUser(FollowUserDto request)
+		{
+			return await _sender.Send(request);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("user/unfollow-user")]
+		public async Task<AppResponseDto> UnfollowUser(UnfollowUserDto request)
+		{
+			return await _sender.Send(request);
+		}
+
+		[Authorize(Roles = "user")]
+		[HttpPut("user/remove-follower")]
+		public async Task<AppResponseDto> RemoveFollower(RemoveFollowerDto request)
+		{
+			return await _sender.Send(request);
 		}
 	}
 }

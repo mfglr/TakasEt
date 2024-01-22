@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class UserCommentLiking : Entity
+	public class UserCommentLiking : CrossEntity
 	{
         public int UserId { get; private set; }
         public int CommentId { get; private set; }

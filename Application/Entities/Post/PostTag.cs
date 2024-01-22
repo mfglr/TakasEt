@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class PostTag : Entity
+	public class PostTag : CrossEntity
 	{
         public int PostId { get; private set; }
         public int TagId { get; private set; }

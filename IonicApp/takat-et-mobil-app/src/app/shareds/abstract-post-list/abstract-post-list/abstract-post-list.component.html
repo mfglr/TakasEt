@@ -1,8 +1,8 @@
 <ion-grid class="grid">
   <ion-row class="row">
-    <ion-col class="col" [size]="12 / size" *ngFor="let postId of postIds">
+    <ion-col class="col" [size]="12 / size" *ngFor="let post of posts">
       <app-abstract-post
-        [postId]="postId"
+        [post]="post"
         [postListUrl]="postListUrl"
         [addIdToUrl]="addIdToUrl">
       </app-abstract-post>

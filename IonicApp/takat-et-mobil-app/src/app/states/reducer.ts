@@ -4,7 +4,7 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { AppEntityState } from "./app-entity-state/app-entity-state";
 import { createReducer, on } from "@ngrx/store";
-import { loadConversationImagesSuccess, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction } from "./actions";
+import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loginSuccessAction } from "./actions";
 import { appPostAdapter, appUserAdapter } from "./app-entity-state/app-entity-adapter";
 
 interface ImageState{
@@ -42,6 +42,8 @@ const userImagesAdapter = createEntityAdapter<UserImageState>({selectId : state 
 const postImagesAdapter = createEntityAdapter<PostImageState>({selectId : state => state.id})
 const conversationImagesAdapter = createEntityAdapter<ConversationImageState>({selectId : state => state.id})
 
+
+
 const initialState : AppState = {
   postImages : postImagesAdapter.getInitialState(),
   userImages : userImagesAdapter.getInitialState(),
@@ -58,6 +60,16 @@ const initialState : AppState = {
 
 export const appReducer = createReducer(
   initialState,
+  on(
+    loginSuccessAction,
+    (state,action) => {
+      localStorage.setItem('login_response',JSON.stringify(action.payload));
+      return {
+        ...state,
+        loginState : { loginResponse : action.payload,isLogin : true }
+      }
+    }
+  ),
   on(
     loadPostImagesSuccessAction,
     (state,action) => ({
@@ -101,7 +113,7 @@ export const appReducer = createReducer(
     (state,action) => ({
       ...state,
       userImages : userImagesAdapter.addMany(
-        action.payload.map( (x) : UserImageState => ({id : x.userImage.id,loadStatus : false,url : undefined})),
+        action.payload.filter(x => x.userImage != undefined).map( (x) : UserImageState => ({id : x.userImage!.id,loadStatus : false,url : undefined})),
         state.userImages
       )
     })
@@ -114,6 +126,16 @@ export const appReducer = createReducer(
         action.conversationImageIds.map( (id) : ConversationImageState => ({id : id,loadStatus : false,url : undefined}) ),
         state.conversationImages
       )
+    })
+  ),
+  on(
+    loadPostImageUrlSuccessAction,
+    (state,action) => ({
+      ...state,
+      postImages : postImagesAdapter.updateOne({
+        id : action.id,
+          changes : { loadStatus : true, url : action.url }
+      },state.postImages)
     })
   )
 )

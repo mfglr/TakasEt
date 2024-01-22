@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class UserConversation : Entity
+	public class UserConversation : CrossEntity
 	{
         public int UserId { get; private set; }
         public int ConversationId { get; private set; }

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, mergeMap, take } from 'rxjs';
-import { LoginState } from 'src/app/states/login_state/reducer';
-import { selectUserId } from 'src/app/states/login_state/selectors';
 import { ProfilePageState } from './state/reducer';
 import { selectActiveTab } from './state/selectors';
 import { changeActiveTabAction } from './state/actions';
@@ -34,7 +32,6 @@ export class ProfilePage implements OnInit {
   // ids = [this.postIds$,this.swappedPostIds$,this.notSwappedPostIds$];
 
   constructor(
-    private loginStore : Store<LoginState>,
     private profilePageStore : Store<ProfilePageState>,
   ) { }
 

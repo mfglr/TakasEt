@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { Store } from '@ngrx/store';
-import { PostImageState } from 'src/app/states/post-image-state/reducer';
-import { loadPostImageUrlAction } from 'src/app/states/post-image-state/actions';
+import { AppState } from 'src/app/states/reducer';
+import { loadPostImageUrlAction } from 'src/app/states/actions';
 
 
 
@@ -17,19 +17,19 @@ export class PostImageSliderComponent  implements OnInit {
 
 
   constructor(
-    private postImageStore : Store<PostImageState>
+    private appStore : Store<AppState>
   ) { }
 
   ngOnInit() {
-    if(this.post){
-      this.postImageStore.dispatch(loadPostImageUrlAction({id : this.post.postImages[0].id}))
+    if(this.post && this.post.postImages){
+      this.appStore.dispatch(loadPostImageUrlAction({id : this.post.postImages[0].id}))
     }
   }
 
   loadImage(e : any) {
-    if(this.post){
+    if(this.post && this.post.postImages){
       let index = (e.detail[0].activeIndex + 1) % this.post.postImages.length;
-      this.postImageStore.dispatch(loadPostImageUrlAction({id : this.post.postImages[index].id}))
+      this.appStore.dispatch(loadPostImageUrlAction({id : this.post.postImages[index].id}))
     }
   }
 

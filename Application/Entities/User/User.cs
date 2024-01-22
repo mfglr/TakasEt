@@ -11,7 +11,7 @@ namespace Application.Entities
 		public string? NormalizedFullName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
-		public int CountOfPost {  get; private set; }
+		public int NumberOfPost {  get; private set; }
 
 		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<Message> Messages { get; }
@@ -53,7 +53,7 @@ namespace Application.Entities
 		public void AddPost(Post post)
 		{
 			_posts.Add(post);
-			CountOfPost++;
+			NumberOfPost++;
 		}
 		public void RemovePost(Post post)
 		{
@@ -68,7 +68,7 @@ namespace Application.Entities
 		public void LikePost(int postId) {
 			_likedPosts.Add(new UserPostLiking(Id, postId));
 		}
-		public void UnlikePost(int postId) {
+		public void DislikePost(int postId) {
 			var liking = _likedPosts.FirstOrDefault(p => p.PostId == postId && p.UserId == Id);
 			_likedPosts.Remove(liking!);
 		}
@@ -107,11 +107,9 @@ namespace Application.Entities
 		
 
 		//IEntity
-		public int Id { get; private set; }
-		public bool IsRemoved { get; private set; }
-		public DateTime CreatedDate { get; private set; }
-		public DateTime? UpdatedDate { get; private set; }
-		public DateTime? RemovedDate { get; private set; }
+		public int Id { get; protected set; }
+		public DateTime CreatedDate { get; protected set; }
+		public DateTime? UpdatedDate { get; protected set; }
 		public void SetCreatedDate(DateTime date)
 		{
 			CreatedDate = date;
@@ -120,6 +118,11 @@ namespace Application.Entities
 		{
 			UpdatedDate = date;
 		}
+		
+
+		//IRemovable
+		public bool IsRemoved { get; protected set; }
+		public DateTime? RemovedDate { get; protected set; }
 		public void Remove()
 		{
 			IsRemoved = true;
@@ -127,7 +130,7 @@ namespace Application.Entities
 		}
 
 		//IDomainEvent
-		private List<INotification> _domainEvents = new List<INotification>();
+		private List<INotification> _domainEvents = new ();
 		public void AddDomainEvent(INotification domainEvent)
 		{
 			_domainEvents.Add(domainEvent);

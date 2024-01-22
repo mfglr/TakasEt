@@ -20,7 +20,7 @@ namespace Queries
 		public async Task<byte[]> Handle(GetPostImageDto request, CancellationToken cancellationToken)
 		{
 			var postImage = await _postImages.DbSet.FindAsync(request.Id);
-			return await _blobService.DownloadAsync(postImage.BlobName, postImage.ContainerName, cancellationToken);
+			return await _blobService.DownloadAsync(postImage!.BlobName, postImage.ContainerName, cancellationToken);
 		}
 	}
 }

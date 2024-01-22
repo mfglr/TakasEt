@@ -1,8 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, mergeMap } from 'rxjs';
-import { LoginState } from 'src/app/states/login_state/reducer';
-import { selectUserId } from 'src/app/states/login_state/selectors';
 import { ProfileFollowingPageState } from './state/reducer';
 import { selectActiveIndex } from './state/selectors';
 import { changeActiveIndexAction } from './state/actions';
@@ -23,8 +21,8 @@ export class FollowingPage implements OnInit {
   ]
 
 
-  userId$ = this.loginStore.select(selectUserId);
-  activeIndex$ = this.profileFollowingPageStore.select(selectActiveIndex);
+  // userId$ = this.loginStore.select(selectUserId);
+  // activeIndex$ = this.profileFollowingPageStore.select(selectActiveIndex);
   // followerIds$ = this.profileStore.select(selectFollowerIds);
   // followedIds$ = this.profileStore.select(selectFollowedIds);
 
@@ -33,7 +31,6 @@ export class FollowingPage implements OnInit {
 
   constructor(
     private profileFollowingPageStore : Store<ProfileFollowingPageState>,
-    private loginStore : Store<LoginState>
   ) { }
 
   ngOnInit() {

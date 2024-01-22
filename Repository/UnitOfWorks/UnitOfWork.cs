@@ -29,9 +29,9 @@ namespace Repository.UnitOfWorks
 				entity.ClearAllDomainEvents();
 			}
 			var date = DateTime.Now;
-			var createdEntity = GetEntities<IEntity>(x => x.State == EntityState.Added);
+			var createdEntity = GetEntities<IBaseEntity>(x => x.State == EntityState.Added);
 			foreach (var entity in createdEntity)entity.SetCreatedDate(date);
-			var updatedEntity = GetEntities<IEntity>(x => x.State == EntityState.Modified);
+			var updatedEntity = GetEntities<IBaseEntity>(x => x.State == EntityState.Modified);
 			foreach (var entity in updatedEntity) entity.SetUpdatedDate(date);
 			await _context.SaveChangesAsync(cancellationToken);
 			return date;

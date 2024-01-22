@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { login } from 'src/app/states/login_state/actions';
-import { LoginState } from 'src/app/states/login_state/reducer';
+import { loginAction } from 'src/app/states/actions';
+import { AppState } from 'src/app/states/reducer';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +15,13 @@ export class LoginComponent{
     email : new FormControl<string>(""),
     password : new FormControl<string>("")
   })
-  
+
   constructor(
-    private loginStore : Store<LoginState>,
+    private appStore : Store<AppState>,
   ) {}
 
   login(){
     const formData = this.loginForm.value;
-    this.loginStore.dispatch(login({email : formData.email!, password : formData.password! }))
+    this.appStore.dispatch(loginAction({email : formData.email!, password : formData.password! }))
   }
 }

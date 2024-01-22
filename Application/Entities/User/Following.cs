@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Application.Entities
 {
-	public class Following : Entity
+	public class Following : CrossEntity
 	{
 		public int FollowerId { get; private set; }
         public int FollowingId { get; private set; }

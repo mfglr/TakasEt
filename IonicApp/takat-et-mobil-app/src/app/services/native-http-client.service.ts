@@ -4,8 +4,8 @@ import { Observable, first, from, map, mergeMap } from 'rxjs';
 import { AppResponse } from '../models/responses/app-response';
 import { CapacitorHttp } from '@capacitor/core';
 import { NoContentResponse } from '../models/responses/no-content-response';
-import { LoginState } from '../states/login_state/reducer';
-import { selectAccessToken } from '../states/login_state/selectors';
+import { AppState } from '../states/reducer';
+import { selectAccessToken } from '../states/selector';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +15,10 @@ export class NativeHttpClientService {
   private baseUrl : string = 'https://localhost:7160/api'
 
   constructor(
-    private loginStore : Store<LoginState>
+    private appStore : Store<AppState>
   ) { }
 
-  private getHttpHeaders$ : Observable<any> = this.loginStore.select(selectAccessToken).pipe(
+  private getHttpHeaders$ : Observable<any> = this.appStore.select(selectAccessToken).pipe(
     first(),
     map(accessToken => {
       if(accessToken) return { "Authorization" : `Bearer ${accessToken}`, 'Content-Type': 'application/json' }

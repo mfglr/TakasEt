@@ -23,7 +23,7 @@ namespace Application.Pipelines
 			//Validation
 			if(_validators.Any())
 			{
-				var validationResult = await _validators.First().ValidateAsync(request);
+				var validationResult = await _validators.First().ValidateAsync(request,cancellationToken);
 				if (!validationResult.IsValid)
 				{
 					var errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
@@ -42,7 +42,7 @@ namespace Application.Pipelines
 					if (appResponseDto.Data is BaseResponseDto)
 					{
 						BaseResponseDto baseResponse = (BaseResponseDto)appResponseDto.Data;
-						if (baseResponse != null && baseResponse.CreatedDate == default(DateTime))
+						if (baseResponse != null && baseResponse.CreatedDate == default)
 							baseResponse.CreatedDate = date;
 					}
 				}

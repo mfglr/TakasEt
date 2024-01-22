@@ -2,7 +2,7 @@
 
 namespace Application.Entities
 {
-	public class Swapping : Entity
+	public class Swapping : CrossEntity
 	{
 		public int RequesterId { get; private set; }
 		public int RequestedId { get; private set; }

@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class UserPostExploring : Entity
+	public class UserPostExploring : CrossEntity
 	{
         public int UserId { get; private set; }
         public int PostId { get; private set; }

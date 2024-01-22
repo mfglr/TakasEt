@@ -6,8 +6,6 @@ import { nextFollowedsAction, nextFollowedsSuccessAction, nextFollowersAction, n
 import { mergeMap, of } from "rxjs";
 import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, selectSwappedPosts } from "./selectors";
 import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
-import { loadUserImagesSuccessAction } from "src/app/states/user-image-entity-state/actions";
-import { loadPostImagesSuccessAction } from "src/app/states/post-image-state/actions";
 import { UserModuleCollectionState } from "./reducer";
 import { UserService } from "src/app/services/user.service";
 

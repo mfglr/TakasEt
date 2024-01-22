@@ -2,7 +2,6 @@
 {
 	public class Comment : Entity
 	{
-		public int Id { get; private set; }
 		public int? PostId { get; private set; }
 		public int UserId { get; private set; }
 		public string Content { get; private set; }
@@ -16,12 +15,7 @@
 
 		private readonly List<UserCommentLiking> _usersWhoLiked = new();
 		private readonly List<Comment> _children = new();
-
-		public override int[] GetKey()
-		{
-			return new[] { Id };
-		}
-
+		
 		public Comment(int? parentId, int? postId, int userId, string content)
 		{
 			ParentId = parentId;

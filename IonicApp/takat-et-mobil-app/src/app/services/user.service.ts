@@ -56,4 +56,9 @@ export class UserService {
     else url = `user/get-search-page-users?${UrlHelper.createPaginationQueryString(page)}`;
     return this.httpClient.get<UserResponse[]>(url);
   }
+
+  getUserImage(id : number) : Observable<string>{
+    return this.httpClient.getBlob(`user/get-user-image/${id}`)
+  }
+
 }

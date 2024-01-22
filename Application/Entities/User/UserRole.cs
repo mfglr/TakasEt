@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class UserRole : Entity
+	public class UserRole : CrossEntity
 	{
         public int UserId { get; private set; }
 		public int RoleId { get; private set; }

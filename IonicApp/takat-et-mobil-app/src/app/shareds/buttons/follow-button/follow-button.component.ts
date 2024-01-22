@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SwitchButton } from '../switch-button';
 import { Store } from '@ngrx/store';
-import { LoginState } from 'src/app/states/login_state/reducer';
 import { Observable, filter, first, map, mergeMap } from 'rxjs';
-import { selectUserId } from 'src/app/states/login_state/selectors';
 import { AppState } from '@capacitor/app';
 
 @Component({
@@ -19,7 +17,6 @@ export class FollowButtonComponent {
 
   constructor(
     private appStore : Store<AppState>,
-    private loginStore : Store<LoginState>
   ) {}
 
   ngOnChanges() {

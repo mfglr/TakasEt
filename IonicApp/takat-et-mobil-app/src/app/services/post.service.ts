@@ -44,12 +44,6 @@ export class PostService {
     );
   }
 
-  getExplorePagePosts(tags : string[], categoryId : number,page : Page) : Observable<PostResponse[]>{
-    return this.nativeHttpClientService.get<PostResponse[]>(
-      `post/get-explore-page-posts?categoryId=${categoryId}&tags=${tags.join(",")}&${UrlHelper.createPaginationQueryString(page)}`
-    )
-  }
-
   getPostsExceptRequesters(postId : number) : Observable<PostResponse[]>{
     return this.nativeHttpClientService.get<PostResponse[]>(`post/get-posts-except-requesters/${postId}`);
   }
@@ -79,5 +73,8 @@ export class PostService {
     return this.nativeHttpClientService.get<PostResponse[]>( `${url}${UrlHelper.createPaginationQueryString(page)}` )
   }
 
+  getPostImage(id : number) : Observable<string>{
+    return this.nativeHttpClientService.getBlob(`post/get-post-image/${id}`)
+  }
 
 }

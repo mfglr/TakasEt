@@ -3,7 +3,7 @@ using Application.ValueObjects;
 
 namespace Application.Entities
 {
-	public class Requesting : Entity
+	public class Requesting : CrossEntity
 	{
 		public int RequesterId { get; private set; }
 		public int RequestedId { get; private set; }

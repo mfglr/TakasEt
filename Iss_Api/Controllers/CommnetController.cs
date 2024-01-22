@@ -30,14 +30,12 @@ namespace WebApi.Controllers
 			return await _sender.Send(new GetCommentsDto(Request.Query));
 		}
 
-
 		[Authorize(Roles = "user")]
 		[HttpGet("comment/get-children")]
 		public async Task<AppResponseDto> GetChildren()
 		{
 			return await _sender.Send(new GetChildrenDto(Request.Query));
 		}
-
 
 		[Authorize(Roles = "user")]
 		[HttpPost("comment/add-comment")]
@@ -47,15 +45,15 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpPut("user/like-comment")]
+		[HttpPut("comment/like-comment")]
 		public async Task<AppResponseDto> LikeComment(LikeCommentDto request)
 		{
 			return await _sender.Send(request);
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpPut("user/unlike-comment")]
-		public async Task<AppResponseDto> unlikeComment(DislikeCommentDto request)
+		[HttpPut("comment/dislike-comment")]
+		public async Task<AppResponseDto> DislikeComment(DislikeCommentDto request)
 		{
 			return await _sender.Send(request);
 		}

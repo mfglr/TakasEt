@@ -3,9 +3,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { register } from 'swiper/element/bundle';
-import { isLogin } from './states/login_state/selectors';
-import { LoginState } from './states/login_state/reducer';
-import { loginFromLocalStorage } from './states/login_state/actions';
+import { AppState } from './states/reducer';
+import { loginFromLocalStorageAction } from './states/actions';
+import { selectIsLogin } from './states/selector';
 register();
 
 @Component({
@@ -15,15 +15,15 @@ register();
 })
 export class AppComponent {
 
-  isLogin$? : Observable<boolean> = this.loginStore.select(isLogin);
+  isLogin$? : Observable<boolean> = this.appStore.select(selectIsLogin);
 
 
   constructor(
-    private loginStore : Store<LoginState>,
+    private appStore : Store<AppState>,
   ) {}
 
   ngOnInit() {
-    this.loginStore.dispatch(loginFromLocalStorage())
+    this.appStore.dispatch(loginFromLocalStorageAction())
   }
 
 }

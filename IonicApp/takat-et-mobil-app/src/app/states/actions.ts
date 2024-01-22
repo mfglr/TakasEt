@@ -31,7 +31,7 @@ export const loadUserImageUrlAction = createAction(
 )
 export const loadUserImageUrlSuccessAction = createAction(
   "[App Store] load user image url success",
-  props<{url : string}>()
+  props<{id : number, url : string}>()
 )
 export const loadPostImageUrlAction = createAction(
   "[App Store] load post image url",
@@ -39,7 +39,7 @@ export const loadPostImageUrlAction = createAction(
 )
 export const loadPostImageUrlSuccessAction = createAction(
   "[App Store] load post image url success",
-  props<{url : string}>()
+  props<{id : number,url : string}>()
 )
 export const loadConversationImageUrlAction = createAction(
   "[App Store] load conversation image url",
@@ -90,9 +90,9 @@ export const loginByRefreshTokenAction = createAction(
   "[App Store] login by refresh token",
   props<{refreshToken : string}>()
 )
-export const loginFromLocalStorageFailedAction = createAction('[App Store] login from local storage failed');
 export const loginFromLocalStorageAction = createAction('[App Store] login from local storage')
 export const loginSuccessAction = createAction(
   "[App Store] login success",
   props<{payload : LoginResponse}>()
 )
+export const loginFailedAction = createAction('[App Store] login from local storage failed');

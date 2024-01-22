@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { loadUserImageUrlAction } from 'src/app/states/user-image-entity-state/actions';
-import { UserImageEntityState } from 'src/app/states/user-image-entity-state/reducer';
-import { selectLoadStatus, selectUrl } from 'src/app/states/user-image-entity-state/selectors';
+import { loadUserImageUrlAction } from 'src/app/states/actions';
+import { AppState } from 'src/app/states/reducer';
+import { selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/states/selector';
 
 @Component({
   selector: 'app-profile-image',
@@ -21,14 +21,14 @@ export class ProfileImageComponent {
   url$? : Observable<string | undefined>
 
   constructor(
-    private userImageEntityStore : Store<UserImageEntityState>
+    private appStore : Store<AppState>
   ) { }
 
   ngOnChanges() {
     if(this.userImageId){
-      this.userImageEntityStore.dispatch(loadUserImageUrlAction({id : this.userImageId}))
-      this.loadStatus$ = this.userImageEntityStore.select(selectLoadStatus({ id : this.userImageId}))
-      this.url$ = this.userImageEntityStore.select(selectUrl({id : this.userImageId}))
+      this.appStore.dispatch(loadUserImageUrlAction({id : this.userImageId}))
+      this.loadStatus$ = this.appStore.select(selectUserImageLoadStatus({ id : this.userImageId}))
+      this.url$ = this.appStore.select(selectUserImageUrl({id : this.userImageId}))
     }
     this.style = `width:${this.diameter}rem;height:${this.diameter}rem;`
   }

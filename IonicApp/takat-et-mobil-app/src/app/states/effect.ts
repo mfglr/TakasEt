@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { UserImageService } from "../services/user-image.service";
-import { PostImageService } from "../services/post-image.service";
 import { LoginService } from "../services/login.service";
 import { PostService } from "../services/post.service";
 import { UserService } from "../services/user.service";
-import { loadPostImagesSuccessAction, nextPostsAction, nextPostsSuccessAction } from "./actions";
-import { filter, mergeMap, of, withLatestFrom } from "rxjs";
-import { selectPosts, selectUserId } from "./selector";
+import { loadPostImageUrlAction, loadPostImageUrlSuccessAction, loadPostImagesSuccessAction, loadUserImageUrlAction, loadUserImageUrlSuccessAction, loginAction, loginByRefreshTokenAction, loginFailedAction, loginFromLocalStorageAction, loginSuccessAction, nextPostsAction, nextPostsSuccessAction } from "./actions";
+import { filter, map, mergeMap, of, withLatestFrom } from "rxjs";
+import { selectPostImageLoadStatus, selectPosts, selectUserId, selectUserImageLoadStatus } from "./selector";
 import { AppState } from "./reducer";
 import { Store } from "@ngrx/store";
+import { LoginResponse } from "../models/responses/login-response";
 
 @Injectable()
 export class AppEffect{
@@ -17,12 +16,61 @@ export class AppEffect{
   constructor(
     private actions : Actions,
     private appStore : Store<AppState>,
-    private userImageService : UserImageService,
-    private postImageService : PostImageService,
     private loginService : LoginService,
     private postService : PostService,
     private userService : UserService
   ) {}
+
+  loging$ = createEffect(
+    () => {
+      return this.actions.pipe(
+        ofType(loginAction),
+        mergeMap(action => this.loginService.login(action.email,action.password)),
+        mergeMap(response => of(loginSuccessAction({payload : response})))
+      )
+    }
+  )
+
+  loginByRefreshToken$ = createEffect(() => {
+    return this.actions.pipe(
+      ofType(loginByRefreshTokenAction),
+      mergeMap( action => this.loginService.loginByRefreshToken(action.refreshToken)),
+      mergeMap(response => of(
+        loginSuccessAction({ payload : response}),
+      ))
+    )
+  })
+
+  loginFromLocalStorage$ = createEffect( () => {
+    return this.actions.pipe(
+      ofType(loginFromLocalStorageAction),
+      map( () : LoginResponse | undefined => {
+        const loginResponse = localStorage.getItem("login_response");
+        if(loginResponse){ return JSON.parse(loginResponse) }
+        return undefined;
+      }),
+      mergeMap(
+        response => {
+          if(response){
+            if(new Date(response.expirationDateOfAccessToken).getTime() > Date.now()){
+              return of( loginSuccessAction({ payload : response}) )
+            }
+            else{
+              if(new Date(response.expirationDateOfRefreshToken).getTime() > Date.now()){
+                return of(loginByRefreshTokenAction({refreshToken : response.refreshToken}))
+              }
+              else{
+                return of(loginFailedAction())
+              }
+            }
+          }
+          else{
+            return of(loginFailedAction())
+          }
+        }
+      )
+    )
+  })
 
   nextPosts$ = createEffect(
     () => {
@@ -48,5 +96,34 @@ export class AppEffect{
     }
   )
 
+  loadPostImageUrl$ = createEffect(
+    () => {
+      return this.actions.pipe(
+        ofType( loadPostImageUrlAction ),
+        mergeMap(
+          action => this.appStore.select(selectPostImageLoadStatus({id : action.id})).pipe(
+            filter(loadStatus => loadStatus!= undefined && !loadStatus),
+            mergeMap(() => this.postService.getPostImage(action.id)),
+            mergeMap(url => of(loadPostImageUrlSuccessAction({id : action.id,url : url})))
+          )
+        )
+      )
+    }
+  )
+
+  loadUserImageUrl$ = createEffect(
+    () => {
+      return this.actions.pipe(
+        ofType( loadUserImageUrlAction ),
+        mergeMap(
+          action => this.appStore.select(selectUserImageLoadStatus({id : action.id})).pipe(
+            filter(loadStatus => loadStatus!= undefined && !loadStatus),
+            mergeMap(() => this.userService.getUserImage(action.id)),
+            mergeMap(url => of(loadUserImageUrlSuccessAction({id : action.id,url : url})))
+          )
+        )
+      )
+    }
+  )
 
 }
