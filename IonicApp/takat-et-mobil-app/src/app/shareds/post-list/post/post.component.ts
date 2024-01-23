@@ -4,8 +4,6 @@ import { PostResponse } from 'src/app/models/responses/post-response';
 import { PostListState } from '../state/reducer';
 import { openModalAction } from '../state/actions';
 import { Observable } from 'rxjs';
-import { PostState } from 'src/app/states/post-state/reducer';
-import { selectPostResponse } from 'src/app/states/post-state/selectors';
 
 @Component({
   selector: 'app-post',

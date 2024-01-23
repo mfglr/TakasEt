@@ -5,7 +5,6 @@ import { PostService } from "src/app/services/post.service";
 import { nextFollowedsAction, nextFollowedsSuccessAction, nextFollowersAction, nextFollowersSuccessAction, nextNotSwappedPostsAction, nextNotSwappedPostsSuccessAction, nextPostsAction, nextPostsSuccessAction, nextSwappedPostsAction, nextSwappedPostsSuccessAction } from "./actions";
 import { mergeMap, of } from "rxjs";
 import { selectFolloweds, selectFollowers, selectNotSwappedPosts, selectPosts, selectSwappedPosts } from "./selectors";
-import { loadPostsSuccessAction } from "src/app/states/post-state/actions";
 import { UserModuleCollectionState } from "./reducer";
 import { UserService } from "src/app/services/user.service";
 

@@ -1,7 +1,7 @@
 <ng-container *ngIf="(user$ | async) as user">
   <a [routerLink]="'/place/user/' + user.id">
     <div class="root">
-      <app-profile-image [userImageId]="user.userImage.id" [diameter]="4"></app-profile-image>
+      <app-profile-image [userImageId]="user.userImage?.id" [diameter]="4"></app-profile-image>
       <div class="names">
         <span class="username">{{user.userName | toShortText:15}}</span>
         <span class="full-name">{{user.name + " " + user.lastName | toShortText:25}}</span>

@@ -7,6 +7,7 @@ namespace Application.Entities
 		ContainerName ContainerName { get; }
 		string BlobName { get; }
 		string Extention { get; }
+		float AspectRatio { get; }
 		Dimension Dimension { get; }
 	}
 }

@@ -124,7 +124,8 @@
 		[RemovedDate],
 		[IsRemoved],
 		[Height],
-		[Width]
+		[Width],
+		[AspectRatio]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -138,7 +139,8 @@
 		RemovedDate datetime2(7),
 		IsRemoved bit,
 		Height int,
-		Width int
+		Width int,
+		AspectRatio real
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[userImage] OFF;
 
@@ -238,7 +240,8 @@
 		[RemovedDate],
 		[IsRemoved],
 		[Height],
-		[Width]
+		[Width],
+		[AspectRatio]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -252,6 +255,7 @@
 		RemovedDate datetime2(7),
 		IsRemoved bit,
 		Height int,
-		Width int
+		Width int,
+		AspectRatio real
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[PostImage] OFF;

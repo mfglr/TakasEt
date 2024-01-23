@@ -1,7 +1,8 @@
 <ng-container *ngIf="(loadStatus$ | async) else template">
   <img [src]="url$ | async" [alt]="post?.title" class="img">
 </ng-container>
-
 <ng-template #template>
-  <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  <div class="loading" #loading [style]="'height : '+heightOfLoading + 'px'">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
 </ng-template>

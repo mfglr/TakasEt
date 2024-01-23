@@ -4,7 +4,7 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { AppEntityState } from "./app-entity-state/app-entity-state";
 import { createReducer, on } from "@ngrx/store";
-import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loginSuccessAction } from "./actions";
+import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loginSuccessAction } from "./actions";
 import { appPostAdapter, appUserAdapter } from "./app-entity-state/app-entity-adapter";
 
 interface ImageState{
@@ -96,6 +96,19 @@ export const appReducer = createReducer(
           state.postImages
         ) :
         state.postImages
+    })
+  ),
+  on(
+    loadUserImageSuccessAction,
+    (state,action) => ({
+      ...state,
+      userImages : action.userImageId ?
+        userImagesAdapter.addOne({
+          id : action.userImageId,
+          loadStatus : false,
+          url : undefined
+        },state.userImages) :
+        state.userImages
     })
   ),
   on(

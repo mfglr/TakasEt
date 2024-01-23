@@ -11,6 +11,7 @@ namespace Application.Entities
         public string Extention { get; private set; }
 		public ContainerName ContainerName { get; private set; }
 		public Dimension Dimension { get; private set; }
+		public float AspectRatio { get; private set; }
 
 		public UserImage() { }
 
@@ -21,6 +22,7 @@ namespace Application.Entities
 			UserId = userId;
 			ContainerName = ContainerName.UserImage;
 			Dimension = dimension;
+			AspectRatio = dimension.CalculateAspectRatio();
 		}
 
 		public void Activate()

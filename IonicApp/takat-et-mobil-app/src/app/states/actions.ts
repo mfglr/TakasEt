@@ -4,6 +4,10 @@ import { UserResponse } from "../models/responses/user-response";
 import { LoginResponse } from "../models/responses/login-response";
 
 // Image Store
+export const loadUserImageSuccessAction = createAction(
+  "[App Store] load user image success",
+  props<{userImageId : number | undefined | null}>()
+)
 export const loadUserImagesSuccessAction = createAction(
   "[App Store] load user images success",
   props<{userImageIds : number[]}>()

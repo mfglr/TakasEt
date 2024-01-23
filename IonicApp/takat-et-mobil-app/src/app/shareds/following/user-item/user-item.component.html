@@ -3,7 +3,7 @@
     <div class="user-item">
 
       <div class="left">
-        <app-profile-image [diameter]="3" [userImageId]="user.userImage.id"></app-profile-image>
+        <app-profile-image [diameter]="3" [userImageId]="user.userImage?.id"></app-profile-image>
         <a [routerLink]="'/place/user/'+ user.id" class="names">
           <span class="user-name">{{user.userName | toShortText:10}}</span>
         </a>

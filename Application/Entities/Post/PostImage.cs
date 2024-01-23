@@ -12,6 +12,7 @@ namespace Application.Entities
 		public Post Post { get; }
         public int Index { get; private set; }
 		public Dimension Dimension { get; private set; }
+		public float AspectRatio { get; private set; }
 
 		public PostImage() { }
 
@@ -22,6 +23,7 @@ namespace Application.Entities
             ContainerName = ContainerName.PostImage;
             Index = index;
             Dimension = dimention;
+            AspectRatio = dimention.CalculateAspectRatio();
         }
 
 		

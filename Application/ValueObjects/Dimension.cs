@@ -10,5 +10,10 @@
 			Height = height;
 			Width = width;
 		}
+
+		public float CalculateAspectRatio()
+		{
+			return (float)Height / (float)Width;
+		}
 	}
 }

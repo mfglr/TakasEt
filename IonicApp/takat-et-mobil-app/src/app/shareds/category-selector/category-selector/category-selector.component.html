@@ -2,7 +2,7 @@
   placeholder="Category"
   (ionChange)="onChange($event)"
   [multiple]="true">
-  <ion-select-option *ngFor="let category of (categories$ | async)" [value]="category.id">
+  <!-- <ion-select-option *ngFor="let category of (categories$ | async)" [value]="category.id">
     {{category.name}}
-  </ion-select-option>
+  </ion-select-option> -->
 </ion-select>
