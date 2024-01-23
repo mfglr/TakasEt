@@ -11,8 +11,6 @@ import { nextPostsAction } from './state/actions';
 })
 export class HomePage implements OnInit {
 
-  private scrollTop : number = 0;
-
   constructor(
     private homePageStore : Store<HomePageState>,
   ) { }
@@ -22,14 +20,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.homePageStore.dispatch(nextPostsAction())
-  }
-
-  nextPage(){
-    this.homePageStore.dispatch(nextPostsAction());
-  }
-
-  onScroll(e : CustomEvent){
-    console.log(e.detail)
   }
 
 }

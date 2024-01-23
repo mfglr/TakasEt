@@ -1,21 +1,27 @@
-﻿namespace Application.Entities
+﻿using Application.ValueObjects;
+
+namespace Application.Entities
 {
-	public class ConversationImage : Entity
+	public class ConversationImage : Entity,IImage
 	{
 		public bool IsActive { get; private set; }
 		public int ConversationId { get; private set; }
 		public string BlobName { get; private set; }
 		public string Extention { get; private set; }
-		public string ContainerName { get; private set; }
+		public Dimension Dimension { get; private set; }
+		public ContainerName ContainerName { get; private set; }
 
 		public Conversation Conversation { get; }
 
-		public ConversationImage(int conversationId, string blobName, string extention)
+        public ConversationImage() {}
+
+        public ConversationImage(int conversationId, string blobName, string extention,Dimension dimension)
 		{
 			ConversationId = conversationId;
 			BlobName = blobName;
 			Extention = extention;
-			ContainerName = ValueObjects.ContainerName.ConversationImage.Value;
+			ContainerName = ContainerName.ConversationImage;
+			Dimension = dimension;
 		}
 
 		public void Activate()

@@ -53,72 +53,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7670),
-                            IsRemoved = false,
-                            Name = "Kitap",
-                            NormalizedName = "KITAP"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7683),
-                            IsRemoved = false,
-                            Name = "Araba",
-                            NormalizedName = "ARABA"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7683),
-                            IsRemoved = false,
-                            Name = "Elektronik",
-                            NormalizedName = "ELEKTRONIK"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7684),
-                            IsRemoved = false,
-                            Name = "Giyim",
-                            NormalizedName = "GIYIM"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7685),
-                            IsRemoved = false,
-                            Name = "Ev Eşyaları",
-                            NormalizedName = "EV ESYALARI"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7685),
-                            IsRemoved = false,
-                            Name = "Telefon",
-                            NormalizedName = "TELEFON"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7686),
-                            IsRemoved = false,
-                            Name = "Bilgisayar",
-                            NormalizedName = "BILGISAYAR"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7686),
-                            IsRemoved = false,
-                            Name = "Motor",
-                            NormalizedName = "MOTOR"
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -206,10 +140,6 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContainerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ConversationId")
                         .HasColumnType("int");
 
@@ -258,20 +188,6 @@ namespace Repository.Migrations
                     b.HasIndex("FollowingId");
 
                     b.ToTable("Following");
-
-                    b.HasData(
-                        new
-                        {
-                            FollowerId = 1,
-                            FollowingId = 2,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7742)
-                        },
-                        new
-                        {
-                            FollowerId = 2,
-                            FollowingId = 1,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7745)
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Message", b =>
@@ -338,9 +254,6 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CountOfImages")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -350,6 +263,9 @@ namespace Repository.Migrations
                     b.Property<string>("NormalizedTitle")
                         .IsRequired()
                         .HasColumnType("varchar(256)");
+
+                    b.Property<int>("NumberOfImages")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -374,128 +290,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Post");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Content = "Dikkat! İçerde Felsefespri var!\r\n\r\n“Yılın en matrak çoksatarı” –The Boston Globe\r\n\r\n“Çok güldüm, çok şey öğrendim, çok sevdim” –Roy Blount Jr.\r\n\r\nFelsefe mi? Felsefeyi anlamak için büyük bir dehanın zekâsına ve peygamber sabrına sahip olmak gerekir. Bu doğru değil! Bu komik, ele avuca sığmaz, çok yönlü ve zengin içerikli kitap bu efsaneyi yerle bir ediyor.\r\n\r\n“Platon Bir Gün Kolunda Bir Ornitorenkle Bara Girer…” ile birlikte kendinizi olağanüstü eğlenceli bir felsefe dersinin içinde bulacaksınız. Felsefi kavramların esprilerle nasıl aydınlatılabileceğini, mizahın da aslında büyüleyici bir felsefi içerik barındırdığını göreceksiniz. Ama bir dakika… Bu iki kavrayış yolu, yani felsefe ile espri aynı şey mi yoksa? Fıkra ve esprilerin kuruluşu ve etkisiyle felsefi kavramların kuruluşu ve etkisi aynı malzemelere dayanmaz mı? İkisi de aynı şekilde aklımızı gıdıklamaz mı? Şey, biraz düşünüp sonra söylesek?\r\n\r\nHarvard’lı iki felsefe profesöründen “güldürürken düşündüren” bir Stand-Up…",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7880),
-                            IsRemoved = false,
-                            NormalizedTitle = "PLATON BIR GUN KOLUNDA BIR ORNITORENKLE BARA GIRER : FELSEFEYI MIZAH YOLUYLA ANLAMAK",
-                            Title = "Platon Bir Gün Kolunda Bir Ornitorenkle Bara Girer : Felsefeyi Mizah Yoluyla Anlamak",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            Content = "Bu klâsik ders kitabı, mühendislik, fen bilimleri veya bilgisayar bilimlerine uygulandığı kadarıyla olasılık ve istatistik dersleri alan üçüncü/dördiincü sınıf lisans öğrencileri için güncel konularla ilgili uygulamalara bağlayarak harekete getiren titiz bir temel olasılık teorisi ve istatistiksel kanıtlamaya giriş sunar. Kitap temel yüksek matematik bilgisini öngörür.\r\nÖnceki baskıları kullananlar olağanüstü anlatım ve yazım biçimine övgüye devam ediyor. Ross, olasılığın istatistik problemlerinin içyüzünü kavrama konusundaki rolünün altını çizerken, bu baskının yeni nesil mühendis ve fen bilimcilere cazip geleceğini de garanti ediyor. Kapalı CD-ROM alıştırmalar için gerekli hesaplamaları otomatikleştiren ve olasılık teorisini günlük istatistiksel problemlere ve durumlara uygulamada öğrencilere yardımcı olan kullanımı kolay yazılım içeriyor.",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7883),
-                            IsRemoved = false,
-                            NormalizedTitle = "OLASILIK VE ISTATISTIGE GIRIS -MUHEMDISLER VE FENCILER ICIN- / INTRODUCTION TO PROBABILITY AND STATICTICS FOR ENGINEERS AND SCIENTIST",
-                            Title = "OLASILIK ve İSTATİSTİĞE GİRİŞ -Mühendisler ve Fenciler için- / Introduction to Probability and Statistics for Engineers and Scientist",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 1,
-                            Content = "Yayıncı	Ekin Kitabevi Yayınları\r\nListe Fiyatı	150.00 \r\nFormat	Kitap\r\nBarkod	9786055335854\r\nYayın Tarihi	2018-11-07\r\nBaskı Sayısı	2012.Baskı\r\nSayfa Sayısı	394\r\nBoyut	160 X 235\r\nBasım Yeri	Bursa",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7883),
-                            IsRemoved = false,
-                            NormalizedTitle = "TURKIYE CUMHURIYETI TARIHI",
-                            Title = "Türkiye Cumhuriyeti Tarihi",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 1,
-                            Content = "Ekonomiye Giriş Temel Kavramlar : Arz-Talep : Esneklik : Piyasa Dengesi ve Kaymalar : Piyasalar 1: Üretim ve Maliyetler : Piyasalar 2 : Kamu Ekonomisi : Makroekonomik Kavramlar ve Makro Denge : Harcamalar ve Denge Milli Gelir : Kamu Kesimi Genel Dengesi : Para ve Para : Teorisine Giriş : Merkez Bankacılığına Giriş : Merkez Bankası ve İşleyiş Mekanizması : Finansal Sistem İşleyişi : Uluslararası Ticaret, Ödemeler Dengesi ve Döviz Kuru",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7884),
-                            IsRemoved = false,
-                            NormalizedTitle = "EKONOMIYE GIRIS",
-                            Title = "Ekonomiye Giris",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 1,
-                            Content = "X86 Tabanlı Mikroişlemci ve Assembly Dili - Nurettin Topaloğlu - Seçkin Yayıncılık - İngilizce ve Türkçe Kitap, Nurettin Topaloğlu tarafından kaleme alınmıştır. Eser - editörlüğünde hazırlanmıştır. Kitap 2001 yılında Seçkin Yayıncılık tarafından [Ankara] yayınlanmıştır. Bu baskının çevirisi - tarafından yapılmıştır. 512 sayfadır. Sayfa bilgisi - olarak belirtilmiştir. X86 Tabanlı Mikroişlemci ve Assembly Dili - Nurettin Topaloğlu - Seçkin Yayıncılık - İngilizce ve Türkçe Kitap adlı eser İngilizce dilindedir. Eserin içeriğinde Türkçe dilinde bölümlere de yer verilmektedir.\r\n\r\nKitap, 19 cm genişliğinde 24 cm yüksekliğindedir.\r\n\r\nKitap KARTON KAPAKLI cilt bilgisi ile 26 gün önce eklenmiştir.\r\n\r\nX86 Tabanlı Mikroişlemci ve Assembly Dili - Nurettin Topaloğlu - Seçkin Yayıncılık - İngilizce ve Türkçe Kitap adlı eser, Kitap > Bilim, Teknik, Araştırma kategorisinde İkinci El olarak satıştadır.",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7884),
-                            IsRemoved = false,
-                            NormalizedTitle = "X86 TABANLI MIKROISLEMCI VE ASEMBLY DILI",
-                            Title = "X86 Tabanlı Mikroişlemci ve Assembly Dili",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 1,
-                            Content = "Dil pek çok bilim alanının incelediği bir olgudur. Ancak dil ile ilgili incelemelerin kalbi dilbilimdir. Bu kitap dilbilimin dünü ve bugününü ana hatlarıyla okuyucuya sunma amacıyla hazırlanmıştır. Dilbilim kuramları, dilbilimin ses bilgisi, biçim bilgisi, sözdizimi gibi alanlardaki uygulamaları, göstergebilim, edimbilim gibi dil ile ilgili pek çok alanın yaklaşım biçimleri isimler, kuramlar ve uygulamalar üzerinden değerlendirilmiştir. Kitabın yeniliklerinden birisi daha önceki yayınlarda toplu olarak ele alınmayan dilbilgisi kuramlarına ayrı bir başlık ayırmasıdır. Dilbilim İngilizce, Fransızca ve Almanca gibi Batı dillerinin akademik programında yer alan bir ders olarak da okutulmaktadır. Son yıllarda üniversitelerimizin Türkçeyle ilgili bölümlerinde de Genel Dilbilim dersi yer almaktadır. Bu nedenle kitapta açıklama ve uygulamalar Türkolojiyle ilişkilendirilerek verilmeye çalışılmıştır. Ayrıca sesbilgisi, biçimbilgisi ve sözdizimi bölümlerinde Türkolojideki bakış açıları da ayrı bir başlık açılarak tartışılmıştır.",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7885),
-                            IsRemoved = false,
-                            NormalizedTitle = "GENEL DILBILIMINE GIRIS",
-                            Title = "Genel Dilbilime Giriş",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 1,
-                            Content = "Fahrettin Erdinç, web tasarımına ve HTML'e yeni başlayanları hedef alarak yazdığı bu kitapta, fazla teoriye kaçmadan, konuya odaklanarak, kolay anlaşılacak örneklerle web tasarım mantığını anlatıyor, HTML 5 ve CSS 3'ün yeni olanaklarını örneklerle okura sunuyor.\r\n\r\nKitapta Web sayfalarının oluşturulması süreci anlatılırken, Steve Champeon’ın “Aşamalı Geliştirme” yaklaşımını kullanıldı. Bu yaklaşımda amaç, önce basit bir sayfa oluşturup zamanla eklemeler yaparak daha karmaşık sayfalar oluşturmaktır. Bu yöntemde, önce HTML kodları yazılıyor ve okurla birlikte doğru çalışıp çalışmadığı test ediliyor. Daha sonra CCS kodları eklenip sayfa daha görsel hale getiriliyor. Son olarak da Javascript ve ilgili kütüphaneleri kullanarak daha etkileşimli sayfalar oluşturuluyor.\r\n\r\nFahrettin Erdinç, web teknolojisinin en yeni araçlarını kullanarak, web sayfası tasarımının temel mantığını herkesin anlayabileceği bir şekilde adım adım anlatıyor. Bu da kitabı, hiç HTML ve CSS bilmeyip öğrenmek isteyen veya var olan HTML/CSS bilgisini geliştirmek isteyenler için ideal başvuru kaynağı haline getiriyor",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7885),
-                            IsRemoved = false,
-                            NormalizedTitle = "YENI BASLAYANLAR ICIN HTML5 - CSS3",
-                            Title = "Yeni Başlayanlar İçin HTML5 - CSS3",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryId = 1,
-                            Content = "1) Bilgisayar ile ilişkili bir eğitim görüyorsanız, çok kullanıcılı işletim sistemleri içinde kararlılık ve güvenilirlik bakımından en popüleri olan UNIX işletim sistemini öğrenmek zorundasınız demektir. Ancak UNIX, PC'ler üzerine yüklenemez. Evde kullanabileceğiniz bir PC üzerine ancak Linux'u yükleyebilirsiniz ve Linux, komut ve özellikleri bakımından, grafik arayüzleri bakımından UNIX'in tam bir kopyasıdır. O halde evdeki UNIX laboratuvarınız, bir Linux makinasıdır.\r\n\r\n2) İşyerinizde UNIX kullanan bir profesyonelseniz evinizdeki PC'de de Linux kullanmak istemeniz son derecede anlaşılır bir istektir.\r\n\r\n3) Bir bilişim teknolojisi (Information technology-IT) uzmanı iseniz ve şu ana kadar Linux ile pek ilgilenmedi iseniz, bilmelisiniz ki uygun bir Linux dağıtımını seçerek (Red Hat, Mandrake vb), ticari bir ağ uygulamasını Linux ile mükemmel bir şekilde yürütebilirsiniz. Linux, güvenilirlik ve kararlılık açısından mükemmel bir işletim sistemidir.\r\n\r\nKitapta Yer Alan Konular\r\n\r\no Linux Nedir? Linux'un Tarihçesi Linux Dağıtımları\r\n\r\no Ubuntu Linux Sürümü Hakkında Kısa Bilgi\r\n\r\no Linux'a Giriş En Sık Kullanılan Komutlar\r\n\r\no KDE - K Desktop Environment (K Masaüstü Ortamı)\r\n\r\no Linux Komut Satırı ve Linux Komutları\r\n\r\no Linux'ta Süreç (Process) Yönetimi\r\n\r\no Önyükleme (Boot) ve Kapatma (Shut Down) İşlemleri\r\n\r\no Linux'ta Dosya (File) ve Dizin (Directory, Folder) Kavramları\r\n\r\no Paketlerin Kurulumu Rpm ile Yazılımın Yüklenmesi\r\n\r\no Linux Kernel\r\n\r\no Linux'ta Kabuk (Shell) Programlama\r\n\r\no Linux'ta Yazıcı (Printer) Kullanımı\r\n\r\no Linux Altında Kullanılabilen Programlama Dilleri\r\n\r\no Yedekleme (Backup) İşlemi\r\n\r\no Ağ Ortamında Linux - Linux ile Internet Hizmetleri\r\n\r\no Gnome ve KDE ile Web ve E-Mail",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7886),
-                            IsRemoved = false,
-                            NormalizedTitle = "LINUX ISLETIM SISTEMI",
-                            Title = "linux isletim sistemi",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryId = 1,
-                            Content = "Muhteşem yazım tarzı ile Shakepeare Edebiyat Ödülü kazanmış bir bilim insanı olan Profesör Richard Dawkins, karmaşık bilimsel gerçekleri insanlara basit bir dille anlatmayı kendisine görev edinerek, yaşamın doğa üstü bir yaratıcı olmadan nasıl ortaya çıktığını ateşli bir şekilde anlatıyor. Çağımızın en çok okunan bilim insanları listesinde muhtemelen ilk sırayı alan Dawkins, Gen Bencildir ile sarstığı dünyayı bu kitapla bir kez daha canlandırıyor. Bilimi yanlış anlayan veya anlamak isteyen çeşitli kesimlere çekinmeden dağıttığı eleştirileriyle, uzun yıllar sonra yazacağı Tanrı Yanılgısı kitabının ilk sinyallerini veriyor.\r\n \r\n“Güzel ve mükemmel yazılmış. … Tamamen anlaşılır fakat derin duygularla dolu konuşmanın ritmine sahip. Her sayfa gerçeği çınlatıyor. Bu, şu ana kadar okuduğum en iyi bilim kitaplarından biri (en iyi kitaplardan biri).”\r\n—Lee Dembart, Los Angeles Times\r\n \r\n“Nefis bir kitap, orijinal ve hayat dolu, evrimin ayrıntılarını coşkun bir berraklıkla açıklıyor, her yerinde yaradılışçı mağara adamlarını cevaplıyor.”\r\n—Isaac Asimov\r\n \r\n“İyi bilim edebiyatının sırrı, kişinin fikirleri önce kendisinin anlamasının gerektiği: iyi yazmak net düşünmekle mümkün olur. … Kör Saatçi’yi okurken Dawkins’in problemlere bakışındaki berraklıkla tekrar tekrar hayrete düştüm. … Dawkins’in doğal dünya hakkında bilgisini arttırmışken ona karşı hayranlık duygusunu kaybetmemiş olduğu fazlasıyla açık. … Keşke ben de böyle yazabiliyor olsaydım.”\r\n—John Maynard Smith, New Scientist",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7887),
-                            IsRemoved = false,
-                            NormalizedTitle = "KOR SAATCI",
-                            Title = "Kör Saatçi",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryId = 1,
-                            Content = "Başlangıcından günümüze insanoğluna\r\nyol gösteren düşünsel gelişmeler...\r\nDört bin yıllık düşün, sanat ve bilim tarihinin klasik yapıtları üstüne eleştirel inceleme olan kitabın 27. basımı...\r\nOrhan Hançerlioğlu, insanlığın var ettiği kimi kavramları, akımlar ve yapıtlar temelinde incelerken bilim, sanat ve evrensel düşünce tarihinin\r\ndönüm noktalarını oluşturan atılımları eleştirel ama nesnel bir gözle değerlendirmektedir.\r\nYoğun bir emek ürünü olan kitap, insanoğlunun dört bin yıllık düşünsel birikiminin yanı sıra dünyayı anlama, kavrama ve yorumlamada biricik rehber olma özelliğini koruyor.\r\nDüşünce Tarihi, çağdaş, yenilikçi ve kuşatıcı yaklaşımıyla günümüzün olduğu kadar gelecek kuşakların da düşünsel yolunu aydınlatıyor.",
-                            CountOfImages = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7887),
-                            IsRemoved = false,
-                            NormalizedTitle = "DUSUNCE TARIHI",
-                            Title = "Düşünce Tarihi",
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.PostImage", b =>
@@ -507,10 +301,6 @@ namespace Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BlobName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContainerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -541,338 +331,6 @@ namespace Repository.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostImage");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BlobName = "1_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7811),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BlobName = "1_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7814),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BlobName = "1_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7815),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BlobName = "2_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7816),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            BlobName = "2_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7816),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            BlobName = "2_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7817),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            BlobName = "3_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7818),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 3
-                        },
-                        new
-                        {
-                            Id = 8,
-                            BlobName = "3_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7818),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 3
-                        },
-                        new
-                        {
-                            Id = 9,
-                            BlobName = "3_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7819),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            BlobName = "4_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7819),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 4
-                        },
-                        new
-                        {
-                            Id = 11,
-                            BlobName = "4_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7820),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 4
-                        },
-                        new
-                        {
-                            Id = 12,
-                            BlobName = "4_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7820),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 4
-                        },
-                        new
-                        {
-                            Id = 13,
-                            BlobName = "5_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7822),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            BlobName = "5_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7822),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            BlobName = "5_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7823),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 5
-                        },
-                        new
-                        {
-                            Id = 16,
-                            BlobName = "6_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7823),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 6
-                        },
-                        new
-                        {
-                            Id = 17,
-                            BlobName = "6_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7824),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 6
-                        },
-                        new
-                        {
-                            Id = 18,
-                            BlobName = "6_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7824),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 6
-                        },
-                        new
-                        {
-                            Id = 19,
-                            BlobName = "7_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7825),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 7
-                        },
-                        new
-                        {
-                            Id = 20,
-                            BlobName = "7_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7825),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 7
-                        },
-                        new
-                        {
-                            Id = 21,
-                            BlobName = "7_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7826),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 7
-                        },
-                        new
-                        {
-                            Id = 22,
-                            BlobName = "8_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7826),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 8
-                        },
-                        new
-                        {
-                            Id = 23,
-                            BlobName = "8_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7827),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 8
-                        },
-                        new
-                        {
-                            Id = 24,
-                            BlobName = "8_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7828),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 8
-                        },
-                        new
-                        {
-                            Id = 25,
-                            BlobName = "9_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7828),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 9
-                        },
-                        new
-                        {
-                            Id = 26,
-                            BlobName = "9_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7829),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 9
-                        },
-                        new
-                        {
-                            Id = 27,
-                            BlobName = "9_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7830),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 9
-                        },
-                        new
-                        {
-                            Id = 28,
-                            BlobName = "10_0.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7831),
-                            Extention = "jpg",
-                            Index = 0,
-                            IsRemoved = false,
-                            PostId = 10
-                        },
-                        new
-                        {
-                            Id = 29,
-                            BlobName = "10_1.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7831),
-                            Extention = "jpg",
-                            Index = 1,
-                            IsRemoved = false,
-                            PostId = 10
-                        },
-                        new
-                        {
-                            Id = 30,
-                            BlobName = "10_2.jpg",
-                            ContainerName = "post-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7832),
-                            Extention = "jpg",
-                            Index = 2,
-                            IsRemoved = false,
-                            PostId = 10
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.PostTag", b =>
@@ -944,29 +402,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7927),
-                            IsRemoved = false,
-                            Name = "client"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7929),
-                            IsRemoved = false,
-                            Name = "user"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7930),
-                            IsRemoved = false,
-                            Name = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Searching", b =>
@@ -1227,62 +662,6 @@ namespace Repository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("User");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "605095b2-c70f-4f4d-b85c-b2adde79c0ec",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8031),
-                            DateOfBirth = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8031),
-                            Email = "mfglr@outlook.com",
-                            EmailConfirmed = false,
-                            Gender = true,
-                            IsRemoved = false,
-                            LastName = "Guler",
-                            LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Unspecified).AddTicks(8036), new TimeSpan(0, 3, 0, 0, 0)),
-                            Name = "Furkan",
-                            NormalizedEmail = "MFGLR@OUTLOOK.COM",
-                            NormalizedFullName = "FURKAN GULER",
-                            NormalizedUserName = "MFGLR",
-                            NumberOfPost = 5,
-                            PasswordHash = "AQAAAAIAAYagAAAAED6NMviLL2arHtiYhoWGr4sgZ8Fshn5Zle16j09bcR35MFXSGYpE0wskAKdEiV6LYw==",
-                            PhoneNumber = "0000000000",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "MJ3TWU3F4CA3YUYFWTJMO3GXQUXGWT4F",
-                            TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8032),
-                            UserName = "mfglr"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "605095b2-c70f-4f4d-b85c-b2adde79c0ec",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8068),
-                            DateOfBirth = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8068),
-                            Email = "test@outlook.com",
-                            EmailConfirmed = false,
-                            Gender = true,
-                            IsRemoved = false,
-                            LastName = "test",
-                            LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Unspecified).AddTicks(8069), new TimeSpan(0, 3, 0, 0, 0)),
-                            Name = "test",
-                            NormalizedEmail = "TEST@OUTLOOK.COM",
-                            NormalizedFullName = "TEST TEST",
-                            NormalizedUserName = "TEST",
-                            NumberOfPost = 5,
-                            PasswordHash = "AQAAAAIAAYagAAAAED6NMviLL2arHtiYhoWGr4sgZ8Fshn5Zle16j09bcR35MFXSGYpE0wskAKdEiV6LYw==",
-                            PhoneNumber = "0000000001",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "MJ3TWU3F4CA3YUYFWTJMO3GXQUXGWT4F",
-                            TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(8068),
-                            UserName = "test"
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.UserCommentLiking", b =>
@@ -1339,10 +718,6 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContainerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -1370,30 +745,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserImage");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BlobName = "1.jpg",
-                            ContainerName = "user-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7966),
-                            Extention = "jpg",
-                            IsActive = true,
-                            IsRemoved = false,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BlobName = "2.jpg",
-                            ContainerName = "user-image",
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7967),
-                            Extention = "jpg",
-                            IsActive = true,
-                            IsRemoved = false,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.UserPostExploring", b =>
@@ -1495,20 +846,6 @@ namespace Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 2,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7993)
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            RoleId = 2,
-                            CreatedDate = new DateTime(2024, 1, 23, 2, 31, 42, 467, DateTimeKind.Local).AddTicks(7994)
-                        });
                 });
 
             modelBuilder.Entity("Application.Entities.Comment", b =>
@@ -1544,7 +881,52 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.OwnsOne("Application.ValueObjects.ContainerName", "ContainerName", b1 =>
+                        {
+                            b1.Property<int>("ConversationImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContainerName");
+
+                            b1.HasKey("ConversationImageId");
+
+                            b1.ToTable("ConversationImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ConversationImageId");
+                        });
+
+                    b.OwnsOne("Application.ValueObjects.Dimension", "Dimension", b1 =>
+                        {
+                            b1.Property<int>("ConversationImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int")
+                                .HasColumnName("Height");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("ConversationImageId");
+
+                            b1.ToTable("ConversationImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ConversationImageId");
+                        });
+
+                    b.Navigation("ContainerName")
+                        .IsRequired();
+
                     b.Navigation("Conversation");
+
+                    b.Navigation("Dimension")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Application.Entities.Following", b =>
@@ -1608,6 +990,51 @@ namespace Repository.Migrations
                         .WithMany("PostImages")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("Application.ValueObjects.ContainerName", "ContainerName", b1 =>
+                        {
+                            b1.Property<int>("PostImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContainerName");
+
+                            b1.HasKey("PostImageId");
+
+                            b1.ToTable("PostImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PostImageId");
+                        });
+
+                    b.OwnsOne("Application.ValueObjects.Dimension", "Dimension", b1 =>
+                        {
+                            b1.Property<int>("PostImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int")
+                                .HasColumnName("Height");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("PostImageId");
+
+                            b1.ToTable("PostImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PostImageId");
+                        });
+
+                    b.Navigation("ContainerName")
+                        .IsRequired();
+
+                    b.Navigation("Dimension")
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -1790,6 +1217,51 @@ namespace Repository.Migrations
                         .WithMany("UserImages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("Application.ValueObjects.ContainerName", "ContainerName", b1 =>
+                        {
+                            b1.Property<int>("UserImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContainerName");
+
+                            b1.HasKey("UserImageId");
+
+                            b1.ToTable("UserImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserImageId");
+                        });
+
+                    b.OwnsOne("Application.ValueObjects.Dimension", "Dimension", b1 =>
+                        {
+                            b1.Property<int>("UserImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int")
+                                .HasColumnName("Height");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("UserImageId");
+
+                            b1.ToTable("UserImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserImageId");
+                        });
+
+                    b.Navigation("ContainerName")
+                        .IsRequired();
+
+                    b.Navigation("Dimension")
                         .IsRequired();
 
                     b.Navigation("User");

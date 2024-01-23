@@ -12,7 +12,7 @@ namespace Service
 			services.AddSingleton(new JwtSecurityTokenHandler());
 			services.AddSingleton<ITokenService, TokenService>();
 			services.AddScoped<IBlobService,LocalBlobService>();
-			services.AddTransient<IFileWriterService, FileWriterService>();
+			services.AddScoped<IImageService,ImageService>();
 		}
     }
 }

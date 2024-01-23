@@ -3,10 +3,7 @@
 	public class ContainerName
 	{
         public string Value { get; private set; }
-        public ContainerName(string value)
-        {
-            Value = value;
-        }
+        private ContainerName(string value){ Value = value; }
 
         public static readonly ContainerName PostImage = new ContainerName("post-image");
 		public static readonly ContainerName UserImage = new ContainerName("user-image");

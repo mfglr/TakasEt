@@ -1,12 +1,7 @@
-
-create procedure sp_importJsonFiles
-as
-begin
-
 	Declare @JSON varchar(max)
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\users.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\users.json',
 		SINGLE_CLOB
 	) as j
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[user] ON;
@@ -33,7 +28,9 @@ begin
 		[LockoutEnd],
 		[LockoutEnabled],
 		[AccessFailedCount],
-		[CountOfPost]
+		[NumberOfPost],
+		[RemovedDate],
+		[IsRemoved]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -58,35 +55,60 @@ begin
 		LockoutEnd datetimeoffset(7),
 		LockoutEnabled bit,
 		AccessFailedCount int,
-		CountOfPost int
+		NumberOfPost int,
+		RemovedDate datetime2(7),
+		IsRemoved bit
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[user] OFF;
 
+
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\userRoles.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\roles.json',
 		SINGLE_CLOB
 	) as j
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[userRole] ON;
-	insert into [TakasEt].[dbo].[userRole] (
+	SET IDENTITY_INSERT  [TakasEt].[dbo].[Role] ON;
+	insert into [TakasEt].[dbo].[Role] (
 		[Id],
+		[Name],
+		[CreatedDate],
+		[UpdatedDate],
+		[RemovedDate],
+		[IsRemoved]
+	)
+	SELECT * from OPENJSON (@JSON) with (
+		Id int,
+		[Name] nvarchar(max),
+		CreatedDate datetime2(7),
+		UpdatedDate datetime2(7),
+		RemovedDate datetime2(7),
+		IsRemoved bit
+	)
+	SET IDENTITY_INSERT  [TakasEt].[dbo].[Role] OFF;
+
+
+	SELECT @JSON = BulkColumn
+	FROM OPENROWSET (
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\userRoles.json',
+		SINGLE_CLOB
+	) as j
+
+	insert into [TakasEt].[dbo].[userRole] (
 		[RoleId],
 		[UserId],
 		[CreatedDate],
 		[UpdatedDate]
 	)
 	SELECT * from OPENJSON (@JSON) with (
-		Id int,
 		RoleId int,
 		UserId int,
 		CreatedDate datetime2(7),
 		UpdatedDate datetime2(7)
 	)
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[userRole] OFF;
 
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\userImages.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\userImages.json',
 		SINGLE_CLOB
 	) as j
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[userImage] ON;
@@ -98,7 +120,11 @@ begin
 		[Extention],
 		[IsActive],
 		[CreatedDate],
-		[UpdatedDate]
+		[UpdatedDate],
+		[RemovedDate],
+		[IsRemoved],
+		[Height],
+		[Width]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -108,35 +134,61 @@ begin
 		Extention nvarchar(max),
 		IsActive bit,
 		CreatedDate datetime2(7),
-		UpdatedDate datetime2(7)
+		UpdatedDate datetime2(7),
+		RemovedDate datetime2(7),
+		IsRemoved bit,
+		Height int,
+		Width int
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[userImage] OFF;
 
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\followings.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\followings.json',
 		SINGLE_CLOB
 	) as j
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[UserUserFollowing] ON;
-	insert into [TakasEt].[dbo].[UserUserFollowing] (
-		[Id],
+	insert into [TakasEt].[dbo].[Following] (
 		[FollowerId],
-		[FollowedId],
+		[FollowingId],
 		[CreatedDate],
 		[UpdatedDate]
 	)
 	SELECT * from OPENJSON (@JSON) with (
-		Id int,
 		FollowerId int,
-		FollowedId int,
+		FollowingId int,
 		CreatedDate datetime2(7),
 		UpdatedDate datetime2(7)
 	)
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[UserUserFollowing] OFF;
 
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\posts.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\categories.json',
+		SINGLE_CLOB
+	) as j
+	SET IDENTITY_INSERT  [TakasEt].[dbo].[Category] ON;
+	insert into [TakasEt].[dbo].[Category] (
+		[Id],
+		[Name],
+		[NormalizedName],
+		[CreatedDate],
+		[UpdatedDate],
+		[RemovedDate],
+		[IsRemoved]
+	)
+	SELECT * from OPENJSON (@JSON) with (
+		Id int,
+		[Name] nvarchar(max),
+		NormalizedName nvarchar(max),
+		CreatedDate datetime2(7),
+		UpdatedDate datetime2(7),
+		RemovedDate datetime2(7),
+		IsRemoved bit
+	)
+	SET IDENTITY_INSERT  [TakasEt].[dbo].[Category] OFF;
+
+	SELECT @JSON = BulkColumn
+	FROM OPENROWSET (
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\posts.json',
 		SINGLE_CLOB
 	) as j
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[post] ON;
@@ -147,9 +199,11 @@ begin
 		[Title],
 		[NormalizedTitle],
 		[Content],
-		[CountOfImages], 
+		[NumberOfImages], 
 		[CreatedDate],
-		[UpdatedDate]
+		[UpdatedDate],
+		[RemovedDate],
+		[IsRemoved]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -158,15 +212,17 @@ begin
 		Title varchar(256),
 		NormalizedTitle varchar(256),
 		Content nvarchar(max),
-		CountOfImages int,
+		NumberOfImages int,
 		CreatedDate datetime2(7),
-		UpdatedDate datetime2(7)
+		UpdatedDate datetime2(7),
+		RemovedDate datetime2(7),
+		IsRemoved bit
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[Post] OFF;
 
 	SELECT @JSON = BulkColumn
 	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\postImages.json',
+		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\jsons\postImages.json',
 		SINGLE_CLOB
 	) as j
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[PostImage] ON;
@@ -178,7 +234,11 @@ begin
 		[PostId],
 		[Index],
 		[CreatedDate],
-		[UpdatedDate]
+		[UpdatedDate],
+		[RemovedDate],
+		[IsRemoved],
+		[Height],
+		[Width]
 	)
 	SELECT * from OPENJSON (@JSON) with (
 		Id int,
@@ -188,34 +248,10 @@ begin
 		PostId int,
 		[Index] int,
 		CreatedDate datetime2(7),
-		UpdatedDate datetime2(7)
+		UpdatedDate datetime2(7),
+		RemovedDate datetime2(7),
+		IsRemoved bit,
+		Height int,
+		Width int
 	)
 	SET IDENTITY_INSERT  [TakasEt].[dbo].[PostImage] OFF;
-
-	SELECT @JSON = BulkColumn
-	FROM OPENROWSET (
-		BULK 'C:\Users\MFGGL\source\repos\mfgglr\TakasEt\Iss_Api\bin\Debug\net7.0\data\comments.json',
-		SINGLE_CLOB
-	) as j
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[Comment] ON;
-	insert into [TakasEt].[dbo].[Comment] (
-		[Id],
-		[PostId],
-		[UserId],
-		[Content],
-		[ParentId],
-		[CreatedDate],
-		[UpdatedDate]
-	)
-	SELECT * from OPENJSON (@JSON) with (
-		Id int,
-		PostId int,
-		UserId int,
-		Content nvarchar(max),
-		ParentId int,
-		CreatedDate datetime2(7),
-		UpdatedDate datetime2(7)
-	)
-	SET IDENTITY_INSERT  [TakasEt].[dbo].[Comment] OFF;
-
-end

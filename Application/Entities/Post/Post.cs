@@ -1,4 +1,5 @@
 ﻿using Application.Extentions;
+using Application.ValueObjects;
 
 namespace Application.Entities
 {
@@ -7,7 +8,7 @@ namespace Application.Entities
 		public string Title { get; private set; }
 		public string NormalizedTitle { get; private set; }
 		public string Content { get; private set; }
-		public int CountOfImages { get; private set; }
+		public int NumberOfImages { get; private set; }
 		public int UserId { get; private set; }
 		public int CategoryId { get; private set; }
 
@@ -30,14 +31,14 @@ namespace Application.Entities
         private readonly List<Requesting> _requesterPosts = new();
         private readonly List<Swapping> _requesterSwappings = new();
 
-		public Post(int userId, string title, string content, int categoryId,int countOfImages)
+		public Post(int userId, string title, string content, int categoryId,int numberOfImages)
         {
             UserId = userId;
 			CategoryId = categoryId;
 			Title = title;
             NormalizedTitle = title.CustomNormalize()!;
             Content = content;
-            CountOfImages = countOfImages;
+            NumberOfImages = numberOfImages;
         }
 
 
@@ -46,11 +47,11 @@ namespace Application.Entities
         }
 
         //post images
-        public void AddImage(string blobName, string extention, int index)
+        public void AddImage(string blobName, string extention, int index,Dimension dimension)
         {
-            _images.Add(new PostImage(blobName,extention,index));
-            CountOfImages++;
-		}
+            _images.Add(new PostImage(blobName, extention, index,dimension));
+			NumberOfImages++;
+        }
         public void RemoveImage(int postImageId)
         {
             var image = _images.First(x => x.Id == postImageId);

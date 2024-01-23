@@ -4,6 +4,11 @@ namespace Application.Dtos
 {
 	public class GetUserImage : IRequest<byte[]>
 	{
-        public int Id { get; set; }
-    }
+        public int Id { get; private set; }
+
+		public GetUserImage(int id)
+		{
+			Id = id;
+		}
+	}
 }

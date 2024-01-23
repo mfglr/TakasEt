@@ -1,4 +1,5 @@
 ﻿using Application.DomainEventModels;
+using Application.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -80,7 +81,7 @@ namespace Application.Entities
 		}
 
 		//user image
-		public void AddUserImage(string blobName, string extention)
+		public void AddUserImage(string blobName, string extention,Dimension dimension)
 		{
 
 			//deactive user image
@@ -88,7 +89,7 @@ namespace Application.Entities
 			if (activeUserImage != null) activeUserImage.Deactivate();
 
 			//add new active user image
-			var userImage = new UserImage(Id, blobName, extention);
+			var userImage = new UserImage(Id, blobName, extention,dimension);
 			userImage.Activate();
 			_userImages.Add(userImage);
 

@@ -62,7 +62,7 @@ namespace WebApi.Controllers
 		[HttpGet("user/get-user-image/{id}")]
 		public async Task GetUserImage(int id)
 		{
-			await Response.Body.WriteAsync(await _sender.Send(new GetUserImage() { Id = id }));
+			await Response.Body.WriteAsync(await _sender.Send(new GetUserImage(id)));
 		}
 
 		[Authorize(Roles = "user")]

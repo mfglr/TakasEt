@@ -45,7 +45,7 @@ namespace Application.Extentions
 						CategoryName = x.Category.Name,
 						Title = x.Title,
 						Content = x.Content,
-						CountOfImages = x.CountOfImages,
+						CountOfImages = x.NumberOfImages,
 						CountOfLikes = x.UsersWhoLiked.Count,
 						CountOfComments = x.Comments.Count,
 						LikeStatus = x.UsersWhoLiked.Any(l => loggedInUserId != null && l.UserId == loggedInUserId),

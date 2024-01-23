@@ -22,7 +22,8 @@ namespace Queries
 		{
 			var userImage = await _userImages
 				.DbSet
-				.FirstOrDefaultAsync(x => x.Id == request.Id);
+				.AsNoTracking()
+				.FirstAsync(x => x.Id == request.Id,cancellationToken);
 			return await _blobService.DownloadAsync(userImage.BlobName, userImage.ContainerName, cancellationToken);
 		}
 	}

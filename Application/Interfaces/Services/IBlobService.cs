@@ -1,8 +1,10 @@
-﻿namespace Application.Interfaces.Services
+﻿using Application.ValueObjects;
+
+namespace Application.Interfaces.Services
 {
 	public interface IBlobService
 	{
-		Task UploadAsync(Stream stream, string blobName, string containerName, CancellationToken cancellationToken);
-		Task<byte[]> DownloadAsync(string blobName, string containerName, CancellationToken cancellationToken);
+		Task UploadAsync(Stream stream, string blobName, ContainerName containerName, CancellationToken cancellationToken);
+		Task<byte[]> DownloadAsync(string blobName, ContainerName containerName, CancellationToken cancellationToken);
 	}
 }

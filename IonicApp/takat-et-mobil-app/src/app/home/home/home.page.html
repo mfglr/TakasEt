@@ -4,6 +4,6 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+<ion-content [fullscreen]="true">
   <app-post-list [posts]="posts$ | async"></app-post-list>
 </ion-content>

@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Application.ValueObjects;
 
 namespace Application.Entities
 {
@@ -13,9 +14,9 @@ namespace Application.Entities
 		protected readonly List<UserConversation> _userConversations = new ();
 		protected readonly List<Message> _messages = new ();
        
-		public void AddConversationImage(string blobName,string extention)
+		public void AddConversationImage(string blobName,string extention,Dimension dimension)
 		{
-			var newImage = new ConversationImage(Id, blobName, extention);
+			var newImage = new ConversationImage(Id, blobName, extention, dimension);
 			newImage.Activate();
 			_conversationImages.Add(newImage);
 		}
