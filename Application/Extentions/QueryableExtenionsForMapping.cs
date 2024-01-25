@@ -57,7 +57,7 @@ namespace Application.Extentions
 								x => new UserImageResponseDto() {
 									Id = x.Id,
 									Extention = x.Extention,
-									AspectRatio = x.AspectRatio
+									AspectRatio = x.Dimension.AspectRatio
 								}
 							)
 							.FirstOrDefault(),
@@ -68,7 +68,7 @@ namespace Application.Extentions
 								{
 									Id = x.Id,
 									Extention = x.Extention,
-									AspectRatio = x.AspectRatio
+									AspectRatio = x.Dimension.AspectRatio
 								}
 							),
 						Tags = x.Tags.Select(pt => pt.Tag.Name)
@@ -101,7 +101,7 @@ namespace Application.Extentions
 							{
 								Id = x.Id,
 								Extention = x.Extention,
-								AspectRatio = x.AspectRatio
+								AspectRatio = x.Dimension.AspectRatio
 							}
 						).FirstOrDefault()
 				}
@@ -135,7 +135,7 @@ namespace Application.Extentions
 									{
 										Id = image.Id,
 										Extention = image.Extention,
-										AspectRatio = image.AspectRatio,
+										AspectRatio = image.Dimension.AspectRatio,
 									}
 								)
 								.FirstOrDefault()

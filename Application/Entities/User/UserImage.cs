@@ -2,27 +2,17 @@
 
 namespace Application.Entities
 {
-	public class UserImage : Entity, IImage
+	public class UserImage : Image
 	{
 		public bool IsActive { get; private set; }
 		public int UserId { get; private set; }
+		
 		public User User { get; }
-		public string BlobName { get; private set; }
-        public string Extention { get; private set; }
-		public ContainerName ContainerName { get; private set; }
-		public Dimension Dimension { get; private set; }
-		public float AspectRatio { get; private set; }
 
 		public UserImage() { }
 
-		public UserImage(int userId, string blobName, string extention,Dimension dimension)
+		public UserImage(string blobName, string extention,Dimension dimension) : base(ContainerName.UserImage,blobName,extention,dimension)
 		{
-			BlobName = blobName;
-			Extention = extention;
-			UserId = userId;
-			ContainerName = ContainerName.UserImage;
-			Dimension = dimension;
-			AspectRatio = dimension.CalculateAspectRatio();
 		}
 
 		public void Activate()

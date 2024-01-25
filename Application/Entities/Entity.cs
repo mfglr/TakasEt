@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Entities
 {
-    public abstract class Entity : IEntity, IEntityDomainEvent
+    public abstract class Entity : IEntity, IEntityDomainEvent, IRemovable
 	{
 		public int Id {  get; protected set; }
 		public bool IsRemoved { get; protected set; }

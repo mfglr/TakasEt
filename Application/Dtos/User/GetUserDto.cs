@@ -1,16 +1,14 @@
-﻿using Application.Extentions;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 
 namespace Application.Dtos
 {
 	public class GetUserDto :  IRequest<AppResponseDto>
     {
-        public int? LoggedInUserId { get; private set; }
+        public int LoggedInUserId { get; private set; }
 
-        public GetUserDto(IQueryCollection collection)
+        public GetUserDto(int loggedInUserId)
         {
-			LoggedInUserId = collection.ReadInt("loggedInUserId");
+            LoggedInUserId = loggedInUserId;
         }
     }
 }

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { LoginService } from "../services/login.service";
 import { PostService } from "../services/post.service";
 import { UserService } from "../services/user.service";
-import { loadPostImageUrlAction, loadPostImageUrlSuccessAction, loadPostImagesSuccessAction, loadUserImageUrlAction, loadUserImageUrlSuccessAction, loginAction, loginByRefreshTokenAction, loginFailedAction, loginFromLocalStorageAction, loginSuccessAction, nextPostsAction, nextPostsSuccessAction } from "./actions";
+import { loadPostImageUrlAction, loadPostImageUrlSuccessAction, loadPostImagesSuccessAction, loadUserAction, loadUserImageSuccessAction, loadUserImageUrlAction, loadUserImageUrlSuccessAction, loadUserSuccessAction, loginAction, loginByRefreshTokenAction, loginFailedAction, loginFromLocalStorageAction, loginSuccessAction, nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { filter, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectPostImageLoadStatus, selectPosts, selectUserId, selectUserImageLoadStatus } from "./selector";
 import { AppState } from "./reducer";
@@ -20,6 +20,22 @@ export class AppEffect{
     private postService : PostService,
     private userService : UserService
   ) {}
+
+
+  loadUser$ = createEffect(
+    () => {
+      return this.actions.pipe(
+        ofType(loadUserAction),
+        withLatestFrom(this.appStore.select(selectUserId)),
+        filter(([action,userId]) => userId != undefined),
+        mergeMap(([action,userId]) => this.userService.getUser(userId!)),
+        mergeMap(response => of(
+          loadUserSuccessAction({payload : response}),
+          loadUserImageSuccessAction({userImageId : response.userImage?.id})
+        ))
+      )
+    }
+  )
 
   loging$ = createEffect(
     () => {

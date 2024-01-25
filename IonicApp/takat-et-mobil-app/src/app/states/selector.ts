@@ -3,6 +3,9 @@ import { AppState } from "./reducer";
 import { appPostAdapter } from "./app-entity-state/app-entity-adapter";
 
 const selectStore = createFeatureSelector<AppState>("AppStore")
+
+export const selectUser = createSelector(selectStore,state => state.user)
+
 const selectProfileState = createSelector(selectStore,state => state.profileState)
 export const selectPosts = createSelector(selectProfileState,state => state.posts)
 export const selectPostResponses = createSelector(selectPosts,appPostAdapter.selectResponses)

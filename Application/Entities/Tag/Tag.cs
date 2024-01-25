@@ -2,7 +2,7 @@
 
 namespace Application.Entities
 {
-	public class Tag : Entity
+	public class Tag : Entity,IAggregateRoot
 	{
         public string Name { get; private set; }
         public string NormalizeName { get; private set; }
@@ -11,7 +11,13 @@ namespace Application.Entities
 		public Tag(string name)
         {
             Name = name;
-            NormalizeName = name.CustomNormalize()!;
+            NormalizeName = name.CustomNormalize();
         }
+
+        public void Update(string name)
+        {
+			Name = name;
+			NormalizeName = name.CustomNormalize();
+		}
 	}
 }

@@ -91,6 +91,24 @@ namespace Repository.ModelBuilders
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.Stories)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.UserStoryImageLikings)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder
+				.HasMany(x => x.UserStoryImageViewing)
+				.WithOne(x => x.User)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

@@ -20,6 +20,7 @@ namespace Repository.ModelBuilders
 				x => {
 					x.Property(dimension => dimension.Height).HasColumnName("Height");
 					x.Property(dimension => dimension.Width).HasColumnName("Width");
+					x.Property(dimension => dimension.AspectRatio).HasColumnName("AspectRatio");
 				}
 			);
 		}

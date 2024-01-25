@@ -2,31 +2,25 @@ using Application.Extentions;
 
 namespace Application.Entities
 {
-	public class Category : Entity
+	public class Category : Entity,IAggregateRoot
     {
         
         public string Name { get; private set; }
         public string NormalizedName { get; private set; }
         
-        public IReadOnlyCollection<Post> Posts => _posts;
-
-		private readonly List<Post> _posts = new ();
+        public IReadOnlyCollection<Post> Posts { get; }
 
 		public Category(string name)
 		{
 			Name = name;
             NormalizedName = name.CustomNormalize();
 		}
-
-		public void AddArticle(Post article)
+        
+        public void Update(string name)
         {
-			_posts.Add(article);
-        }
-
-        public void RemoveArticle(Post article)
-        {
-			_posts.Remove(article);
-        }
+            Name = name;
+			NormalizedName = name.CustomNormalize();
+		}
 
 	}
 }

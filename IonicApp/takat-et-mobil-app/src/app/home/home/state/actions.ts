@@ -7,9 +7,3 @@ export const nextPostsSuccessAction = createAction(
   "[Home Page Store] next posts success",
   props<{payload : PostResponse[]}>()
 )
-
-export const loadUserAction = createAction("[Home Page Store] load user")
-export const loadUserSuccessAction = createAction(
-  "[Home Page Store] load user success",
-  props<{payload : UserResponse}>()
-)

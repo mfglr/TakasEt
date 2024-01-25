@@ -12,6 +12,7 @@ import { StoreModule } from '@ngrx/store';
 import { HomePageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HomePageEffect } from './state/effect';
+import { AddStoryCircleComponent } from './components/add-story-circle/add-story-circle.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,9 @@ import { HomePageEffect } from './state/effect';
     StoreModule.forFeature("HomePageStore",HomePageReducer),
     EffectsModule.forFeature([HomePageEffect])
   ],
-  declarations: [HomePage]
+  declarations: [
+    HomePage,
+    AddStoryCircleComponent
+  ]
 })
 export class HomePageModule {}

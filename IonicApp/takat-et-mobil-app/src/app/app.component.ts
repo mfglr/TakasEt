@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
 import { register } from 'swiper/element/bundle';
 import { AppState } from './states/reducer';
-import { loginFromLocalStorageAction } from './states/actions';
+import { loadUserAction, loginFromLocalStorageAction } from './states/actions';
 import { selectIsLogin } from './states/selector';
 register();
 
@@ -15,8 +14,7 @@ register();
 })
 export class AppComponent {
 
-  isLogin$? : Observable<boolean> = this.appStore.select(selectIsLogin);
-
+  isLogin$ : Observable<boolean> = this.appStore.select(selectIsLogin);
 
   constructor(
     private appStore : Store<AppState>,
@@ -24,6 +22,11 @@ export class AppComponent {
 
   ngOnInit() {
     this.appStore.dispatch(loginFromLocalStorageAction())
+
+    this.isLogin$.subscribe(isLogin => {
+      if(isLogin) this.appStore.dispatch(loadUserAction())
+    })
+
   }
 
 }

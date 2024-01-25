@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public class Comment : Entity
+	public class Comment : Entity, IAggregateRoot
 	{
 		public int? PostId { get; private set; }
 		public int UserId { get; private set; }

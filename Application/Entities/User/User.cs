@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Entities
 {
-	public class User : IdentityUser<int>, IEntity, IEntityDomainEvent
-    {
+	public class User : IdentityUser<int>, IEntity, IEntityDomainEvent, IRemovable, IAggregateRoot
+	{
 		public string? Name { get; private set; }
 		public string? LastName { get; private set; }
 		public string? NormalizedFullName { get; private set; }
-        public DateTime? DateOfBirth { get; private set; }
-        public bool? Gender { get; private set; }
-		public int NumberOfPost {  get; private set; }
+		public DateTime? DateOfBirth { get; private set; }
+		public bool? Gender { get; private set; }
+		public int NumberOfPost { get; private set; }
 
 		public UserRefreshToken UserRefreshToken { get; }
 		public IReadOnlyCollection<Message> Messages { get; }
@@ -27,12 +27,16 @@ namespace Application.Entities
 		public IReadOnlyCollection<Following> Followers { get; }
 		public IReadOnlyCollection<Searching> Searchings => _searchings;
 		public IReadOnlyCollection<UserPostExploring> UserPostExplorings { get; }
+		public IReadOnlyCollection<Story> Stories { get;}
+		public IReadOnlyCollection<UserStoryImageLiking> UserStoryImageLikings { get; }
+		public IReadOnlyCollection<UserStoryImageViewing> UserStoryImageViewing { get; }
 
 		private readonly List<UserRole> _roles = new();
 		private readonly List<Post> _posts = new();
         private readonly List<UserPostLiking> _likedPosts = new();
 		private readonly List<UserImage> _userImages = new();
 		private readonly List<Searching> _searchings = new();
+		
 
 		public int[] GetKey()
 		{
@@ -89,7 +93,7 @@ namespace Application.Entities
 			if (activeUserImage != null) activeUserImage.Deactivate();
 
 			//add new active user image
-			var userImage = new UserImage(Id, blobName, extention,dimension);
+			var userImage = new UserImage(blobName, extention,dimension);
 			userImage.Activate();
 			_userImages.Add(userImage);
 
@@ -105,7 +109,7 @@ namespace Application.Entities
 			var userImage = _userImages.FirstOrDefault(x => x.Id == id);
 			_userImages.Remove(userImage!);
 		}
-		
+
 
 		//IEntity
 		public int Id { get; protected set; }

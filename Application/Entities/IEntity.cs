@@ -1,6 +1,6 @@
 ﻿namespace Application.Entities
 {
-	public interface IEntity : IBaseEntity, IRemovable
+	public interface IEntity : IBaseEntity
 	{
         int Id { get; }
     }

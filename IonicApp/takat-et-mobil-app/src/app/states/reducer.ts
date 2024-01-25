@@ -4,7 +4,7 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { AppEntityState } from "./app-entity-state/app-entity-state";
 import { createReducer, on } from "@ngrx/store";
-import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loginSuccessAction } from "./actions";
+import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loadUserSuccessAction, loginSuccessAction } from "./actions";
 import { appPostAdapter, appUserAdapter } from "./app-entity-state/app-entity-adapter";
 
 interface ImageState{
@@ -31,6 +31,7 @@ interface ProfileState{
 }
 
 export interface AppState{
+  user : UserResponse | undefined;
   userImages : EntityState<UserImageState>,
   postImages : EntityState<PostImageState>,
   conversationImages : EntityState<ConversationImageState>,
@@ -42,9 +43,8 @@ const userImagesAdapter = createEntityAdapter<UserImageState>({selectId : state 
 const postImagesAdapter = createEntityAdapter<PostImageState>({selectId : state => state.id})
 const conversationImagesAdapter = createEntityAdapter<ConversationImageState>({selectId : state => state.id})
 
-
-
 const initialState : AppState = {
+  user : undefined,
   postImages : postImagesAdapter.getInitialState(),
   userImages : userImagesAdapter.getInitialState(),
   conversationImages : conversationImagesAdapter.getInitialState(),
@@ -60,6 +60,8 @@ const initialState : AppState = {
 
 export const appReducer = createReducer(
   initialState,
+
+  on( loadUserSuccessAction, (state,action) => ({...state, user : action.payload }) ),
   on(
     loginSuccessAction,
     (state,action) => {

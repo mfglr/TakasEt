@@ -136,9 +136,6 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("AspectRatio")
-                        .HasColumnType("real");
-
                     b.Property<string>("BlobName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -303,9 +300,6 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("AspectRatio")
-                        .HasColumnType("real");
-
                     b.Property<string>("BlobName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -446,6 +440,80 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Searching");
+                });
+
+            modelBuilder.Entity("Application.Entities.Story", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Story");
+                });
+
+            modelBuilder.Entity("Application.Entities.StoryImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BlobName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DisplayTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Extention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoryId");
+
+                    b.ToTable("StoryImage");
                 });
 
             modelBuilder.Entity("Application.Entities.Swapping", b =>
@@ -720,9 +788,6 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("AspectRatio")
-                        .HasColumnType("real");
-
                     b.Property<string>("BlobName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -857,6 +922,48 @@ namespace Repository.Migrations
                     b.ToTable("UserRole");
                 });
 
+            modelBuilder.Entity("Application.Entities.UserStoryImageLiking", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoryImageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "StoryImageId");
+
+                    b.HasIndex("StoryImageId");
+
+                    b.ToTable("UserStoryImageLiking");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserStoryImageViewing", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoryImageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "StoryImageId");
+
+                    b.HasIndex("StoryImageId");
+
+                    b.ToTable("UserStoryImageViewing");
+                });
+
             modelBuilder.Entity("Application.Entities.Comment", b =>
                 {
                     b.HasOne("Application.Entities.Comment", "Parent")
@@ -912,6 +1019,10 @@ namespace Repository.Migrations
                         {
                             b1.Property<int>("ConversationImageId")
                                 .HasColumnType("int");
+
+                            b1.Property<float>("AspectRatio")
+                                .HasColumnType("real")
+                                .HasColumnName("AspectRatio");
 
                             b1.Property<int>("Height")
                                 .HasColumnType("int")
@@ -1024,6 +1135,10 @@ namespace Repository.Migrations
                             b1.Property<int>("PostImageId")
                                 .HasColumnType("int");
 
+                            b1.Property<float>("AspectRatio")
+                                .HasColumnType("real")
+                                .HasColumnName("AspectRatio");
+
                             b1.Property<int>("Height")
                                 .HasColumnType("int")
                                 .HasColumnName("Height");
@@ -1119,6 +1234,77 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.Story", b =>
+                {
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("Stories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.StoryImage", b =>
+                {
+                    b.HasOne("Application.Entities.Story", "Story")
+                        .WithMany("StoryImages")
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("Application.ValueObjects.ContainerName", "ContainerName", b1 =>
+                        {
+                            b1.Property<int>("StoryImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContainerName");
+
+                            b1.HasKey("StoryImageId");
+
+                            b1.ToTable("StoryImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StoryImageId");
+                        });
+
+                    b.OwnsOne("Application.ValueObjects.Dimension", "Dimension", b1 =>
+                        {
+                            b1.Property<int>("StoryImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<float>("AspectRatio")
+                                .HasColumnType("real")
+                                .HasColumnName("AspectRatio");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int")
+                                .HasColumnName("Height");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("StoryImageId");
+
+                            b1.ToTable("StoryImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StoryImageId");
+                        });
+
+                    b.Navigation("ContainerName")
+                        .IsRequired();
+
+                    b.Navigation("Dimension")
+                        .IsRequired();
+
+                    b.Navigation("Story");
                 });
 
             modelBuilder.Entity("Application.Entities.Swapping", b =>
@@ -1251,6 +1437,10 @@ namespace Repository.Migrations
                             b1.Property<int>("UserImageId")
                                 .HasColumnType("int");
 
+                            b1.Property<float>("AspectRatio")
+                                .HasColumnType("real")
+                                .HasColumnName("AspectRatio");
+
                             b1.Property<int>("Height")
                                 .HasColumnType("int")
                                 .HasColumnName("Height");
@@ -1344,6 +1534,44 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Application.Entities.UserStoryImageLiking", b =>
+                {
+                    b.HasOne("Application.Entities.StoryImage", "StoryImage")
+                        .WithMany("Likes")
+                        .HasForeignKey("StoryImageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("UserStoryImageLikings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("StoryImage");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Entities.UserStoryImageViewing", b =>
+                {
+                    b.HasOne("Application.Entities.StoryImage", "StoryImage")
+                        .WithMany("Viewings")
+                        .HasForeignKey("StoryImageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Application.Entities.User", "User")
+                        .WithMany("UserStoryImageViewing")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("StoryImage");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Application.Entities.Category", b =>
                 {
                     b.Navigation("Posts");
@@ -1391,6 +1619,18 @@ namespace Repository.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Application.Entities.Story", b =>
+                {
+                    b.Navigation("StoryImages");
+                });
+
+            modelBuilder.Entity("Application.Entities.StoryImage", b =>
+                {
+                    b.Navigation("Likes");
+
+                    b.Navigation("Viewings");
+                });
+
             modelBuilder.Entity("Application.Entities.Swapping", b =>
                 {
                     b.Navigation("SwappingComments");
@@ -1426,6 +1666,8 @@ namespace Repository.Migrations
 
                     b.Navigation("Searchings");
 
+                    b.Navigation("Stories");
+
                     b.Navigation("UserConversations");
 
                     b.Navigation("UserImages");
@@ -1434,6 +1676,10 @@ namespace Repository.Migrations
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();
+
+                    b.Navigation("UserStoryImageLikings");
+
+                    b.Navigation("UserStoryImageViewing");
                 });
 #pragma warning restore 612, 618
         }

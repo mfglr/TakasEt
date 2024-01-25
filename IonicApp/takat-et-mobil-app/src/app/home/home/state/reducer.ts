@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { UserResponse } from "src/app/models/responses/user-response";
 import { AppEntityState } from "src/app/states/app-entity-state/app-entity-state";
-import { loadUserSuccessAction, nextPostsSuccessAction } from "./actions";
+import { nextPostsSuccessAction } from "./actions";
 import { appPostAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
 
 export interface HomePageState{
@@ -20,6 +20,5 @@ export const HomePageReducer = createReducer(
   on(
     nextPostsSuccessAction,
     (state,action) => ({ ...state, posts : appPostAdapter.addMany(action.payload,state.posts) })
-  ),
-  on( loadUserSuccessAction, (state,action) => ({...state, user : action.payload }) )
+  )
 )

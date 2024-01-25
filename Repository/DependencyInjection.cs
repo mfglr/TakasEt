@@ -19,13 +19,17 @@ namespace Repository
 			{
 				optionsAction.UseSqlServer(configuration.Local.SqlConnectionString);
 			});
+			
 			serviceCollection.AddIdentityCore<User>(opt =>
 			{
 				opt.User.RequireUniqueEmail = true;
 				opt.Password.RequireNonAlphanumeric = false;
 			}).AddEntityFrameworkStores<AppDbContext>();
+
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
+			serviceCollection.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
+			serviceCollection.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
 
 		}
 

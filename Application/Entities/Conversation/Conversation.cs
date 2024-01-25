@@ -3,7 +3,7 @@ using Application.ValueObjects;
 
 namespace Application.Entities
 {
-	public class Conversation : Entity
+	public class Conversation : Entity,IAggregateRoot
 	{
         public string Title { get; protected set; }
         public IReadOnlyCollection<ConversationImage> ConversationImages => _conversationImages;
@@ -16,7 +16,7 @@ namespace Application.Entities
        
 		public void AddConversationImage(string blobName,string extention,Dimension dimension)
 		{
-			var newImage = new ConversationImage(Id, blobName, extention, dimension);
+			var newImage = new ConversationImage(blobName, extention, dimension);
 			newImage.Activate();
 			_conversationImages.Add(newImage);
 		}

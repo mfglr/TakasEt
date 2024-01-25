@@ -24,10 +24,10 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/get-user")]
-		public async Task<AppResponseDto> GetUser()
+		[HttpGet("user/get-user/{userId}")]
+		public async Task<AppResponseDto> GetUser(int userId)
 		{
-			return await _sender.Send(new GetUserDto(Request.Query));
+			return await _sender.Send(new GetUserDto(userId));
 		}
 
 		[Authorize(Roles = "user")]

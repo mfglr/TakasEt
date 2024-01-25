@@ -3,6 +3,13 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { LoginResponse } from "../models/responses/login-response";
 
+//user
+export const loadUserAction = createAction( "[App Store] login user")
+export const loadUserSuccessAction = createAction(
+  "[App Store] login user success",
+  props<{payload : UserResponse}>()
+)
+
 // Image Store
 export const loadUserImageSuccessAction = createAction(
   "[App Store] load user image success",

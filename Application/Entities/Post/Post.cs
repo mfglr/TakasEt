@@ -3,8 +3,8 @@ using Application.ValueObjects;
 
 namespace Application.Entities
 {
-    public class Post : Entity
-    {
+    public class Post : Entity,IAggregateRoot
+	{
 		public string Title { get; private set; }
 		public string NormalizedTitle { get; private set; }
 		public string Content { get; private set; }
