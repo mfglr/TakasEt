@@ -1,11 +1,10 @@
-﻿using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contexts;
 
 namespace Repository.Repositories
 {
-	public class ReadRepository<T> : IReadRepository<T> where T : Entity
+	public class ReadRepository<T> : IReadRepository<T> where T : class
 	{
 
 		private readonly DbSet<T> _dbSet;

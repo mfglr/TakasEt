@@ -1,18 +1,18 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Helpers;
+﻿using Application.Helpers;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Application.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
+using Models.ValueObjects;
 
 namespace Commands
 {
     public class AddPostCommandHandler : IRequestHandler<AddPostDto, AppResponseDto>
     {
         private readonly IBlobService _blobService;
-        private readonly IRepository<User> _users;
+		private readonly IRepository<User> _users;
         private readonly IImageService _imageService;
 
 		public AddPostCommandHandler(IBlobService blobService, IRepository<User> users, IImageService imageService)

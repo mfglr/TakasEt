@@ -1,9 +1,9 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Extentions;
+﻿using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Queries
 {
@@ -24,12 +24,12 @@ namespace Queries
 			var categorIds = await _users
 				.DbSet
 				.AsNoTracking()
-				.Include(x => x.UserPostExplorings)
+				.Include(x => x.PostsExplored)
 				.ThenInclude(x => x.Post)
 				.ThenInclude(x => x.Tags)
 				.Where(x => x.Id == request.LoggedInUserId)
 				.Select(
-					x => x.UserPostExplorings.OrderByDescending(x => x.CreatedDate).Take(5).Select(x => x.Post.CategoryId)
+					x => x.PostsExplored.OrderByDescending(x => x.CreatedDate).Take(5).Select(x => x.Post.CategoryId)
 				)
 				.FirstAsync();
 

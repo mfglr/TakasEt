@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models.Entities;
 
 namespace Repository.ModelBuilders
 {
@@ -61,7 +61,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UserPostExplorings)
+				.HasMany(x => x.UsersWhoExplored)
 				.WithOne(x => x.Post)
 				.HasForeignKey(x => x.PostId);
 		}

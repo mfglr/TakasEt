@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.Dtos;
 
 namespace WebApi.Controllers
 {

@@ -2,7 +2,8 @@ import { createEntityAdapter } from "@ngrx/entity";
 import { BaseResponse } from "src/app/models/responses/base-response";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { UserResponse } from "src/app/models/responses/user-response";
-import { AppEntityState, PageState, takeValueOfPosts, takeValueOfUsers } from "./app-entity-state";
+import { AppEntityState, PageState, takeValueOfPosts, takeValueOfStories, takeValueOfUsers } from "./app-entity-state";
+import { StoryResponse } from "src/app/models/responses/story-response";
 
 class AppEntityAdapter<T extends BaseResponse>{
 
@@ -62,3 +63,4 @@ class AppEntityAdapter<T extends BaseResponse>{
 
 export const appPostAdapter = new AppEntityAdapter<PostResponse>(takeValueOfPosts)
 export const appUserAdapter = new AppEntityAdapter<UserResponse>(takeValueOfUsers)
+export const appStoryAdapter = new AppEntityAdapter<StoryResponse>(takeValueOfStories)

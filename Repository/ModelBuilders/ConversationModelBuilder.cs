@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models.Entities;
 
 namespace Repository.ModelBuilders
 {
@@ -9,13 +9,13 @@ namespace Repository.ModelBuilders
 		public void Configure(EntityTypeBuilder<Conversation> builder)
 		{
 			builder
-				.HasMany(x => x.ConversationImages)
+				.HasMany(x => x.Images)
 				.WithOne(x => x.Conversation)
 				.HasForeignKey(x => x.ConversationId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UserConversations)
+				.HasMany(x => x.Users)
 				.WithOne(x => x.Conversation)
 				.HasForeignKey(x => x.ConversationId)
 				.OnDelete(DeleteBehavior.NoAction);

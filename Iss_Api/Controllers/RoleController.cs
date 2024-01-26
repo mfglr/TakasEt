@@ -1,4 +1,4 @@
-﻿using Application.Dtos;
+﻿using Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

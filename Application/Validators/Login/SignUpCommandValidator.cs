@@ -1,15 +1,15 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Validators
 {
     public class SignUpCommandValidator : AbstractValidator<SignUpDto>
     {
 
-        public SignUpCommandValidator(UserManager<User> userManager)
+		public SignUpCommandValidator(UserManager<User> userManager)
         {
             RuleFor(x => x.UserName).NotEmpty().WithMessage("You have to specify a username!");
             RuleFor(x => x.Password).NotEmpty().WithMessage("The {PropertyName} can't be empty!");

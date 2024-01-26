@@ -1,9 +1,9 @@
-﻿using Application.Configurations;
-using Application.Entities;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Models.Configurations;
+using Models.Entities;
 using Repository.Contexts;
 using Repository.Repositories;
 using Repository.UnitOfWorks;

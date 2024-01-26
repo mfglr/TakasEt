@@ -1,6 +1,4 @@
-﻿using Application.Entities;
-
-namespace Application.Helpers
+﻿namespace Application.Helpers
 {
 	public class CreateMessageHelper
 	{

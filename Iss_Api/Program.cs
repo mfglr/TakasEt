@@ -1,4 +1,3 @@
-using Application.Configurations;
 using Microsoft.IdentityModel.Tokens;
 using Service;
 using Repository;
@@ -9,6 +8,7 @@ using WebApi.Extentions;
 using Queries;
 using Commands;
 using Iss_Api.Hubs;
+using Models.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddSqlDbContext();
 builder.Services.AddApplication();
+builder.Services.AddModels();
 builder.Services.AddQueries();
 builder.Services.AddCommands();
 builder.Services.AddServices();

@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Models.Entities;
 
 namespace Application.Extentions
 {

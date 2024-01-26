@@ -1,8 +1,8 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Helpers;
+﻿using Application.Helpers;
 using Application.Interfaces.Repositories;
 using FluentValidation;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Validators
 {

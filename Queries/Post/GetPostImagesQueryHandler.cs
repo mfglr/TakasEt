@@ -1,10 +1,10 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Extentions;
+﻿using Application.Extentions;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Queries
 {

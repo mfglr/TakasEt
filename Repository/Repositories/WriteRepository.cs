@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Models.Entities;
 using Repository.Contexts;
 
 namespace Repository.Repositories

@@ -1,14 +1,12 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Extentions
 {
 	public static class QueryableExtenionsForMapping
 	{
-
-
 		public static IIncludableQueryable<Post,Tag> IncludePost(this IQueryable<Post> queryable)
 		{
 			return queryable

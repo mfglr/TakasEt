@@ -1,6 +1,5 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
+﻿using Models.Dtos;
+using Models.Entities;
 using Application.Interfaces.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;

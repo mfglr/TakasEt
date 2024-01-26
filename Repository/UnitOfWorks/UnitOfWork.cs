@@ -1,9 +1,9 @@
-﻿using Application.DomainEventModels;
-using Application.Entities;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Models.DomainEventModels;
+using Models.Entities;
 using Repository.Contexts;
 using System.Data;
 

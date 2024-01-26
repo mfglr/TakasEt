@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using MediatR;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Commands
 {
@@ -17,7 +17,7 @@ namespace Commands
         public async Task<AppResponseDto> Handle(LikeCommentDto request, CancellationToken cancellationToken)
         {
             var comment = await _comments.DbSet.FindAsync(request.CommentId,cancellationToken);
-            comment!.LikeComment(request.LoggedInUserId);
+            comment!.Like((int)request.LoggedInUserId!);
             return AppResponseDto.Success();
         }
     }

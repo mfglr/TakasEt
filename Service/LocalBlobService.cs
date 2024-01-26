@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Services;
-using Application.ValueObjects;
+using Models.ValueObjects;
 using System.Reflection;
 
 namespace Service

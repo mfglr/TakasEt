@@ -1,10 +1,10 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Models.Configurations;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Commands
 {
@@ -14,6 +14,7 @@ namespace Commands
         private readonly IMapper _mapper;
         private readonly IRepository<UserRole> _userRoles;
         private readonly Configuration _configuration;
+
         public SignUpCommandHandler(UserManager<User> userManager, IMapper mapper, IRepository<UserRole> userRoles, Configuration configuration)
         {
             _userManager = userManager;

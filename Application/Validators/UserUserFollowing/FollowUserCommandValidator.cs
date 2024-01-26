@@ -1,8 +1,8 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 using System.Threading.Tasks.Dataflow;
 
 namespace Application.Validators

@@ -1,9 +1,8 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Commands
 {
@@ -23,7 +22,7 @@ namespace Commands
 
         public async Task<AppResponseDto> Handle(AddCommentDto request, CancellationToken cancellationToken)
         {
-            var comment = new Comment(request.ParentId, request.PostId, request.UserId, request.Content);
+            var comment = new Comment(request.ParentId, request.PostId, (int)request.UserId!, request.Content!);
             await _comments.DbSet.AddAsync(comment, cancellationToken);
             return AppResponseDto.Success(_mapper.Map<CommentResponseDto>(comment));
         }

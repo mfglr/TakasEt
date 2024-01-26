@@ -1,9 +1,9 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Pipelines;
 using Commands;
+using Models.Dtos;
+using Models.Entities;
 using Repository.Contexts;
 
 namespace UnitTest.Test

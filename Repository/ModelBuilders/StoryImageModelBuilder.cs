@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models.Entities;
 
 namespace Repository.ModelBuilders
 {
@@ -27,13 +27,13 @@ namespace Repository.ModelBuilders
 			);
 
 			builder
-				.HasMany(x => x.Likes)
+				.HasMany(x => x.UsersWhoLiked)
 				.WithOne(x => x.StoryImage)
 				.HasForeignKey(x => x.StoryImageId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.Viewings)
+				.HasMany(x => x.UsersWhoViewed)
 				.WithOne(x => x.StoryImage)
 				.HasForeignKey(x => x.StoryImageId)
 				.OnDelete(DeleteBehavior.NoAction);

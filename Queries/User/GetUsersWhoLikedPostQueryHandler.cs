@@ -1,10 +1,9 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
-using Application.Extentions;
+﻿using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Queries
 {
@@ -22,8 +21,8 @@ namespace Queries
 				.DbSet
 				.AsNoTracking()
 				.IncludeUser()
-				.Include(x => x.LikedPosts)
-				.Where( x => x.LikedPosts.Select(x => x.PostId).Contains((int)request.PostId!) )
+				.Include(x => x.PostsLiked)
+				.Where( x => x.PostsLiked.Select(x => x.PostId).Contains((int)request.PostId!) )
 				.ToPage(request)
 				.ToUserResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);

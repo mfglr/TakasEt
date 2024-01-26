@@ -1,12 +1,12 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Validators
 {
-	public class RemoveFollowerCommandValidator : AbstractValidator<RemoveFollowerDto>
+	public class RemoveFollowerCommandValidator : AbstractValidator<DeleteFollowerDto>
 	{
 		public RemoveFollowerCommandValidator(IRepository<Following> followings)
 		{

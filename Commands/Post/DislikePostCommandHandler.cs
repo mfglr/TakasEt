@@ -1,25 +1,23 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Commands
 {
     public class DislikePostCommandHandler : IRequestHandler<DislikePostDto, AppResponseDto>
     {
-        private readonly IRepository<UserPostLiking> _likes;
+		private readonly IReadRepository<Post> _posts;
 
-        public DislikePostCommandHandler(IRepository<UserPostLiking> likes)
+        public DislikePostCommandHandler(IReadRepository<Post> posts)
         {
-            _likes = likes;
+			_posts = posts;
         }
 
         public async Task<AppResponseDto> Handle(DislikePostDto request, CancellationToken cancellationToken)
         {
-            var record = await _likes.DbSet.SingleOrDefaultAsync(x => x.UserId == request.LoggedInUserId && x.PostId == request.PostId, cancellationToken);
-            if (record != null) _likes.DbSet.Remove(record);
+            var post = await _posts.GetByIdAsync(request.PostId, cancellationToken);
+            post!.Dislike(request.LoggedInUserId);
             return AppResponseDto.Success();
         }
     }

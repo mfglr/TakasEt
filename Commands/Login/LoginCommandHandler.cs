@@ -1,17 +1,17 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Exceptions;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
+using Models.Exceptions;
 
 namespace Commands
 {
     public class LoginCommandHandler : IRequestHandler<LoginDto, AppResponseDto>
     {
-        private readonly UserManager<User> _users;
+		private readonly UserManager<User> _users;
         private readonly ITokenService _tokenService;
         private readonly IRepository<UserRefreshToken> _userRefreshTokens;
 

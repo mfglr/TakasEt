@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using MediatR;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Commands
 {

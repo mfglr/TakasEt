@@ -1,4 +1,4 @@
-﻿using Application.Dtos;
+﻿using Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -81,7 +81,7 @@ namespace WebApi.Controllers
 
 		[Authorize(Roles = "user")]
 		[HttpPut("user/remove-follower")]
-		public async Task<AppResponseDto> RemoveFollower(RemoveFollowerDto request)
+		public async Task<AppResponseDto> RemoveFollower(DeleteFollowerDto request)
 		{
 			return await _sender.Send(request);
 		}

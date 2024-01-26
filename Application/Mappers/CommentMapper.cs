@@ -1,10 +1,10 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using AutoMapper;
+﻿using AutoMapper;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Mappers
 {
-	public class CommentMapper : Profile
+    public class CommentMapper : Profile
 	{
         public CommentMapper()
         {

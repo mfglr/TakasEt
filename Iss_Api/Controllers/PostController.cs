@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Dtos.Post;
+﻿using Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

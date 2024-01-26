@@ -1,9 +1,9 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Queries
 {
@@ -12,7 +12,7 @@ namespace Queries
 
     public class GetRequestersQueryHandler : IRequestHandler<GetRequesters, AppResponseDto>
     {
-        private readonly IRepository<Requesting> _requestings;
+		private readonly IRepository<Requesting> _requestings;
         private readonly IMapper _mapper;
         public GetRequestersQueryHandler(IRepository<Requesting> requestings, IMapper mapper)
         {

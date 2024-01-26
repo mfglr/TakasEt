@@ -1,10 +1,10 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using AutoMapper;
+﻿using AutoMapper;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Mappers
 {
-	internal class CategoryMapper : Profile
+    internal class CategoryMapper : Profile
 	{
         public CategoryMapper()
         {

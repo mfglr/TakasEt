@@ -1,10 +1,10 @@
-﻿using Application.Configurations;
-using Application.Dtos;
-using Application.Entities;
-using Application.Extentions;
+﻿using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
+using Models.Extentions;
 
 namespace Queries
 {
@@ -19,7 +19,7 @@ namespace Queries
 
 		public async Task<AppResponseDto> Handle(GetSearchPageUsersDto request, CancellationToken cancellationToken)
 		{
-			var normalizeKey = request.Key.CustomNormalize();
+			var normalizeKey = request.Key?.CustomNormalize();
 			
 			if(normalizeKey == null || normalizeKey == "")
 				return AppResponseDto.Success();

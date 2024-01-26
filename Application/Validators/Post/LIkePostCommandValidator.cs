@@ -1,15 +1,15 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Application.Validators
 {
     public class LIkePostCommandValidator : AbstractValidator<LikePostDto>
     {
         public LIkePostCommandValidator(
-            IRepository<UserPostLiking> userPostLikings,
+            IRepository<PostUserLiking> userPostLikings,
             IRepository<User> users,
             IRepository<Post> posts
         )

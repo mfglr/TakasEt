@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Application.Validators;
+using Models.Dtos;
+using Models.Entities;
 using Repository.Contexts;
 using Repository.Repositories;
 using Xunit;
@@ -12,14 +12,14 @@ namespace UnitTest.Test
 	{
         private readonly LIkePostCommandValidator validator;
         private readonly AppDbContext appDbContext;
-        private readonly IRepository<UserPostLiking> userPostLikings;
+        private readonly IRepository<PostUserLiking> userPostLikings;
         private readonly IRepository<User> users;
         private readonly IRepository<Post> posts;
 
         public LikePostCommandValidatorTest()
         {
             appDbContext = new AppDbContext(DbContextOptionFactory.DbContextOptions);
-            userPostLikings = new Repository<UserPostLiking>(appDbContext);
+            userPostLikings = new Repository<PostUserLiking>(appDbContext);
             users = new Repository<User>(appDbContext);
             posts = new Repository<Post>(appDbContext);
             validator = new LIkePostCommandValidator(userPostLikings, users, posts);

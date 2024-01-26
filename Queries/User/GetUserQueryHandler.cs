@@ -1,9 +1,9 @@
-﻿using Application.Dtos;
-using Application.Entities;
-using Application.Extentions;
+﻿using Application.Extentions;
 using Application.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Models.Dtos;
+using Models.Entities;
 
 namespace Queries
 {
@@ -25,7 +25,6 @@ namespace Queries
 				.IncludeUser()
 				.ToUserResponseDto(request.LoggedInUserId)
 				.FirstOrDefaultAsync(x => x.Id == request.LoggedInUserId,cancellationToken);
-
 			return AppResponseDto.Success(user);
 		}
 	}

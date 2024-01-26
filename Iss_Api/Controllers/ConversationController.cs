@@ -1,7 +1,6 @@
-﻿using Application.Dtos;
+﻿using Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Iss_Api.Controllers

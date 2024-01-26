@@ -1,5 +1,5 @@
-﻿using Application.Entities;
-using Application.Interfaces.Services;
+﻿using Application.Interfaces.Services;
+using Models.Entities;
 using Service.CustomMailMessages;
 using System.Net;
 using System.Net.Mail;

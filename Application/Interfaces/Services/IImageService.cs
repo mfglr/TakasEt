@@ -1,4 +1,4 @@
-﻿using Application.ValueObjects;
+﻿using Models.ValueObjects;
 
 namespace Application.Interfaces.Services
 {

@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces.Services;
-using Application.ValueObjects;
 using ImageProcessor;
+using Models.ValueObjects;
 
 namespace Service
 {

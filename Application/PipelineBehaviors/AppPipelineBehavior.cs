@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using FluentValidation;
 using MediatR;
+using Models.Dtos;
 using System.Data;
 
 namespace Application.Pipelines
@@ -27,7 +27,7 @@ namespace Application.Pipelines
 				if (!validationResult.IsValid)
 				{
 					var errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-					throw Exceptions.ValidationException.Create(errorMessages, request.GetType());
+					throw Models.Exceptions.ValidationException.Create(errorMessages, request.GetType());
 				}
 			}
 

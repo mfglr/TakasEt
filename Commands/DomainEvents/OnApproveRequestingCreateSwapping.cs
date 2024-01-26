@@ -1,7 +1,7 @@
-﻿using Application.DomainEventModels;
-using Application.Entities;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using MediatR;
+using Models.DomainEventModels;
+using Models.Entities;
 
 namespace Commands.DomainEvents
 {

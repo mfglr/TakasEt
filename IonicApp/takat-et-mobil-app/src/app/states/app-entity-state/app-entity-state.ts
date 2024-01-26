@@ -6,6 +6,7 @@ export const takeValueOfComments = 10;
 export const takeValueOfUsers = 10;
 export const takeValueOfPostImages = 10;
 export const takeValueOfCategories = 10;
+export const takeValueOfStories = 10;
 
 export interface PageState{
   index : number;

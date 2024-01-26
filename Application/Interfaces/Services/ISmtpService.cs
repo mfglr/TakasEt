@@ -1,4 +1,4 @@
-﻿using Application.Entities;
+﻿using Models.Entities;
 
 namespace Application.Interfaces.Services
 {

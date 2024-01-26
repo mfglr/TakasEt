@@ -1,6 +1,6 @@
-﻿using Application.Configurations;
-using Application.Entities;
-using Application.ValueObjects;
+﻿using Models.Configurations;
+using Models.Entities;
+using Models.ValueObjects;
 
 namespace Application.Interfaces.Services
 {

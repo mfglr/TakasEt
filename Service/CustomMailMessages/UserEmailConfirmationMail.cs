@@ -1,4 +1,4 @@
-﻿using Application.Entities;
+﻿using Models.Entities;
 using Service.Extentions;
 using System.Net.Mail;
 
