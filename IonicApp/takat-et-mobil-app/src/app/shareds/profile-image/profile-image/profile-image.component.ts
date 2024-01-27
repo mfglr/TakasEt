@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { loadUserImageUrlAction } from 'src/app/states/actions';
-import { AppState } from 'src/app/states/reducer';
-import { selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/states/selector';
+import { loadUserImageUrlAction } from 'src/app/state/actions';
+import { AppState } from 'src/app/state/reducer';
+import { selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/state/selector';
 
 @Component({
   selector: 'app-profile-image',

@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { FilterPostsPageState } from "./reducer";
-import { appPostAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
+import { appPostAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
 
 const selectStore = createFeatureSelector<FilterPostsPageState>("FilterPostPageStore");
 export const selectKey = createSelector(selectStore,state => state.key);

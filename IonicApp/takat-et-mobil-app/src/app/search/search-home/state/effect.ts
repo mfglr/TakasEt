@@ -6,7 +6,7 @@ import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { SearchHomePageState } from "./reducer";
 import { selectKey, selectPosts, selectUsers } from "./selector";
-import { takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
+import { takeValueOfPosts } from "src/app/state/app-entity-state/app-entity-state";
 import { UserService } from "src/app/services/user.service";
 
 @Injectable()

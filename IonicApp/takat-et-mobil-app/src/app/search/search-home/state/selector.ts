@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SearchHomePageState } from "./reducer";
-import { appPostAdapter, appUserAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
+import { appPostAdapter, appUserAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
 
 const selectStore = createFeatureSelector<SearchHomePageState>("SearchHomePageStore");
 export const selectPosts = createSelector(selectStore,state => state.posts);

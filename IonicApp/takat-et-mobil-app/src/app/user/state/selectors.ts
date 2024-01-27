@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { UserModuleCollectionState } from "./reducer";
-import { appPostAdapter, appUserAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
+import { appPostAdapter, appUserAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
 
 const selectStore = createFeatureSelector<UserModuleCollectionState>("UserModuleCollectionStore");
 

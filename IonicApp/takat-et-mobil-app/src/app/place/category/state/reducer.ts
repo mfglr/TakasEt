@@ -1,6 +1,6 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState,takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
+import { AppEntityState,takeValueOfPosts } from "src/app/state/app-entity-state/app-entity-state";
 import { initCategoryPageState, nextPostsSuccessAction } from "./actions";
 import { PostResponse } from "src/app/models/responses/post-response";
 

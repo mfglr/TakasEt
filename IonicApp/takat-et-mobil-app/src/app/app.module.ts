@@ -9,9 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { LoginModule } from './shareds/login/login.module';
-import { AppEffect } from './states/effect';
+import { AppEffect } from './state/effect';
 import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module';
-import { appReducer } from './states/reducer';
+import { appReducer } from './state/reducer';
 
 @NgModule({
   declarations: [

@@ -6,9 +6,9 @@ import { nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { PostService } from "src/app/services/post.service";
 import { selectPosts } from "./selectors";
-import { loadPostImagesByPostResponsesSuccessAction, loadUserImagesByPostResponsesSuccessAction } from "src/app/states/actions";
-import { AppState } from "src/app/states/reducer";
-import { selectUserId } from "src/app/states/selector";
+import { loadPostImagesByPostResponsesSuccessAction, loadUserImagesByPostResponsesSuccessAction } from "src/app/state/actions";
+import { AppState } from "src/app/state/reducer";
+import { selectUserId } from "src/app/state/selector";
 
 @Injectable()
 export class HomePageEffect{

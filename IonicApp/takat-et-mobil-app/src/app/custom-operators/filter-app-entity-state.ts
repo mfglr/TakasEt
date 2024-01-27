@@ -1,5 +1,5 @@
 import { OperatorFunction, filter, first, map, pipe } from "rxjs";
-import { AppEntityState } from "../states/app-entity-state/app-entity-state";
+import { AppEntityState } from "../state/app-entity-state/app-entity-state";
 
 // export function filterAppEntityState() : OperatorFunction<AppEntityState | undefined,AppEntityState>{
 //   return pipe(

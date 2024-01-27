@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { loginAction } from 'src/app/states/actions';
-import { AppState } from 'src/app/states/reducer';
+import { loginAction } from 'src/app/state/actions';
+import { AppState } from 'src/app/state/reducer';
 
 @Component({
   selector: 'app-login',

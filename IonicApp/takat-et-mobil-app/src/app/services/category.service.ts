@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { CategoryResponse } from '../models/responses/CategoryReponse';
 import { NativeHttpClientService } from './native-http-client.service';
 import { UrlHelper } from '../helpers/url-helper';
-import { Page } from '../states/app-entity-state/app-entity-state';
+import { Page } from '../state/app-entity-state/app-entity-state';
 
 @Injectable({
   providedIn: 'root'

@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { PostImageResponse } from 'src/app/models/responses/post-image-response';
 import { PostResponse } from 'src/app/models/responses/post-response';
-import { AppState } from 'src/app/states/reducer';
-import { selectPostImageLoadStatus, selectPostImageUrl } from 'src/app/states/selector';
+import { AppState } from 'src/app/state/reducer';
+import { selectPostImageLoadStatus, selectPostImageUrl } from 'src/app/state/selector';
 
 @Component({
   selector: 'app-post-image-slider-item',

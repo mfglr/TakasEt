@@ -4,8 +4,8 @@ import { Observable, first, from, map, mergeMap } from 'rxjs';
 import { AppResponse } from '../models/responses/app-response';
 import { CapacitorHttp } from '@capacitor/core';
 import { NoContentResponse } from '../models/responses/no-content-response';
-import { AppState } from '../states/reducer';
-import { selectAccessToken } from '../states/selector';
+import { AppState } from '../state/reducer';
+import { selectAccessToken } from '../state/selector';
 
 @Injectable({
   providedIn: 'root'

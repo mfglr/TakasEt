@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { filterPostsByCategoryIdsAction, filterPostsByCategoryIdsSuccessAction, filterPostsByKeyAction, filterPostsByKeySuccessAction,nextPostsAction, nextPostsSuccessAction } from "./actions";
 import { filter, mergeMap, of, withLatestFrom } from "rxjs";
 import { selectCategoryIds, selectKey, selectPosts } from "./selectors";
-import { takeValueOfPosts } from "src/app/states/app-entity-state/app-entity-state";
+import { takeValueOfPosts } from "src/app/state/app-entity-state/app-entity-state";
 
 @Injectable()
 export class FilterPostsPageEffect{

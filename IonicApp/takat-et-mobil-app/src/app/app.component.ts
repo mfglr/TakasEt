@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { register } from 'swiper/element/bundle';
-import { AppState } from './states/reducer';
-import { loadUserAction, loginFromLocalStorageAction } from './states/actions';
-import { selectIsLogin } from './states/selector';
+import { AppState } from './state/reducer';
+import { loadUserAction, loginFromLocalStorageAction } from './state/actions';
+import { selectIsLogin } from './state/selector';
 register();
 
 @Component({

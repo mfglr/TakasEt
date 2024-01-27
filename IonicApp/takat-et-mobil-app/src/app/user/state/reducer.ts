@@ -1,10 +1,10 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState } from "src/app/states/app-entity-state/app-entity-state";
+import { AppEntityState } from "src/app/state/app-entity-state/app-entity-state";
 import { initUserModuleStateAction, initUserModuleStatesAction, nextFollowedsSuccessAction, nextFollowersSuccessAction, nextNotSwappedPostsSuccessAction, nextPostsSuccessAction, nextSwappedPostsSuccessAction } from "./actions";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { UserResponse } from "src/app/models/responses/user-response";
-import { appPostAdapter, appUserAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
+import { appPostAdapter, appUserAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
 
 interface UserModuleState{
   userId : number;

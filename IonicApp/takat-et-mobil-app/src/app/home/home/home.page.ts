@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { HomePageState } from './state/reducer';
-import { selectIsLastEntities, selectPostResponses, selectUser } from './state/selectors';
+import { selectIsLastEntities, selectPostResponses } from './state/selectors';
 import { nextPostsAction } from './state/actions';
-import { AppState } from 'src/app/states/reducer';
-import { first } from 'rxjs';
-import { loadUserAction } from 'src/app/states/actions';
 
 @Component({
   selector: 'app-home',

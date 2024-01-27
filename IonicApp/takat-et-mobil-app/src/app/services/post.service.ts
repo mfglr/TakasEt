@@ -4,7 +4,7 @@ import { NoContentResponse } from '../models/responses/no-content-response';
 import { PostResponse } from '../models/responses/post-response';
 import { UrlHelper } from '../helpers/url-helper';
 import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../states/app-entity-state/app-entity-state';
+import { Page } from '../state/app-entity-state/app-entity-state';
 import { GetSearchPagePostsRequest } from '../models/requests/get-search-page-posts-request';
 
 @Injectable({

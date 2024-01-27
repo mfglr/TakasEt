@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, first, mergeMap } from 'rxjs';
 import { PhotoService } from 'src/app/services/photo.service';
-import { loadUserImageUrlAction } from 'src/app/states/actions';
-import { AppState } from 'src/app/states/reducer';
-import { selectUser, selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/states/selector';
+import { loadUserImageUrlAction } from 'src/app/state/actions';
+import { AppState } from 'src/app/state/reducer';
+import { selectUser, selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/state/selector';
 
 @Component({
   selector: 'app-add-story-circle',

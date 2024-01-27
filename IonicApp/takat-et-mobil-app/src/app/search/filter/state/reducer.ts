@@ -1,8 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppEntityState } from "src/app/states/app-entity-state/app-entity-state";
+import { AppEntityState } from "src/app/state/app-entity-state/app-entity-state";
 import { filterPostsByCategoryIdsSuccessAction, filterPostsByKeySuccessAction,nextPostsSuccessAction } from "./actions";
 import { PostResponse } from "src/app/models/responses/post-response";
-import { appPostAdapter } from "src/app/states/app-entity-state/app-entity-adapter";
+import { appPostAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
 
 export interface FilterPostsPageState{
   posts : AppEntityState<PostResponse>,
