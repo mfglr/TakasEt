@@ -8,18 +8,6 @@ namespace Models.Entities
         public int NumberOfStoryImage { get; private set; }
 
         public User User { get; }
-        
-
-        public Story(int userId, IEnumerable<StoryImage> images)
-        {
-            UserId = userId;
-            NumberOfStoryImage = 0;
-            foreach (var image in images)
-            {
-                _storyImages.Add(image);
-                NumberOfStoryImage++;
-            }
-        }
 
 		public IReadOnlyCollection<StoryImage> StoryImages => _storyImages;
 		private readonly List<StoryImage> _storyImages = new();

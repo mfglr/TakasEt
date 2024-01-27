@@ -2,7 +2,7 @@ import { createEntityAdapter } from "@ngrx/entity";
 import { BaseResponse } from "src/app/models/responses/base-response";
 import { PostResponse } from "src/app/models/responses/post-response";
 import { UserResponse } from "src/app/models/responses/user-response";
-import { AppEntityState, PageState, takeValueOfPosts, takeValueOfStories, takeValueOfUsers } from "./app-entity-state";
+import { AppEntityState, takeValueOfPosts, takeValueOfStories, takeValueOfUsers } from "./app-entity-state";
 import { StoryResponse } from "src/app/models/responses/story-response";
 
 class AppEntityAdapter<T extends BaseResponse>{
@@ -13,12 +13,6 @@ class AppEntityAdapter<T extends BaseResponse>{
   constructor(take : number) {
     this.adapter = createEntityAdapter<T>();
     this.take = take
-  }
-
-  private loadPage(pageStates : PageState[]) : PageState[] {
-    let r = [...pageStates]
-    r[r.length - 1].loadStatus = true;
-    return r;
   }
 
   private _selectResponses =

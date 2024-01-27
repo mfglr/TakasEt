@@ -1,6 +1,6 @@
-﻿using Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models.Entities;
 
 namespace Repository.ModelBuilders
 {
@@ -51,7 +51,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.LikedPosts)
+				.HasMany(x => x.PostsLiked)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -69,7 +69,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.LikedComments)
+				.HasMany(x => x.CommentsLiked)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -81,7 +81,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UserPostExplorings)
+				.HasMany(x => x.PostsExplored)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
@@ -99,13 +99,13 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UserStoryImageLikings)
+				.HasMany(x => x.StoryImagesLiked)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
 			
 			builder
-				.HasMany(x => x.UserStoryImageViewing)
+				.HasMany(x => x.StoryImagesViewed)
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);

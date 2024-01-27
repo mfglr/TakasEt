@@ -8,11 +8,6 @@ export const takeValueOfPostImages = 10;
 export const takeValueOfCategories = 10;
 export const takeValueOfStories = 10;
 
-export interface PageState{
-  index : number;
-  loadStatus : boolean;
-}
-
 export interface Page{
   take : number;
   lastId : number | undefined;
