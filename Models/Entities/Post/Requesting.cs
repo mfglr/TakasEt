@@ -7,7 +7,7 @@ namespace Models.Entities
     {
         public int RequesterId { get; private set; }
         public int RequestedId { get; private set; }
-        public RequestingStatus Status { get; private set; }
+        public RequestingState Status { get; private set; }
 
         public Post Requester { get; }
         public Post Requested { get; }
@@ -21,21 +21,21 @@ namespace Models.Entities
         {
             RequesterId = requesterId;
             RequestedId = requestedId;
-            Status = RequestingStatus.Waiting;
+            Status = RequestingState.Waiting;
         }
 
         public void ApproveRequest()
         {
-            Status = RequestingStatus.Approved;
+            Status = RequestingState.Approved;
             AddDomainEvent(new RequestingDomainEvent(this));
         }
         public void CancelRequest()
         {
-            Status = RequestingStatus.Canceled;
+            Status = RequestingState.Canceled;
         }
         public void UnApproveRequest()
         {
-            Status = RequestingStatus.UnApproved;
+            Status = RequestingState.UnApproved;
         }
 
 

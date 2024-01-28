@@ -8,5 +8,6 @@ export const selectPosts = (props : {postId : number}) => createSelector(
   state => state.entities[props.postId]?.posts
 )
 export const selectPostResponses = (props : {postId : number}) => createSelector(
-  selectPosts({postId : props.postId}),state => appPostAdapter.selectResponses(state)
+  selectPosts({postId : props.postId}),
+  state => state != undefined ? appPostAdapter.selectResponses(state) : undefined
 )

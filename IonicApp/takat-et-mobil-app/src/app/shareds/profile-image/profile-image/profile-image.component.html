@@ -1,7 +1,7 @@
 <div class="root-wrapper" [style]='style'>
 
   <ng-container *ngIf="loadStatus$ | async; else loadingTemplate">
-    <img class="image" [src]="url$ | async" [alt]="userName">
+    <img class="image" [src]="url$ | async" [alt]="">
   </ng-container>
 
   <ng-template #loadingTemplate>

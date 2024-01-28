@@ -36,13 +36,13 @@ export class UserService {
 
   getFollowers(userId : number,page : Page) : Observable<UserResponse[]>{
     return this.httpClient.get<UserResponse[]>(
-      `user/get-followers/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+      `user/get-followers?loggedInUserId=${userId}&${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 
   getFolloweds(userId : number,page : Page) : Observable<UserResponse[]>{
     return this.httpClient.get<UserResponse[]>(
-      `user/get-followeds/${userId}?${UrlHelper.createPaginationQueryString(page)}`
+      `user/get-followeds?loggedInUserId=${userId}&${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 

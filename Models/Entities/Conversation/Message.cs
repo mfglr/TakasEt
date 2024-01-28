@@ -1,4 +1,5 @@
 ﻿using Models.Extentions;
+using Models.ValueObjects;
 
 namespace Models.Entities
 {
@@ -8,22 +9,26 @@ namespace Models.Entities
         public int ConversationId { get; private set; }
         public string Content { get; private set; }
         public string NormalizeContent { get; private set; }
-        public DateTime ArrivalDate { get; private set; }
-        public DateTime ViewingDate { get; private set; }
+        public DateTime? ArrivedDate { get; private set; }
+		public DateTime? ViewedDate { get; private set; }
+		public int NumberOfMessageImage { get; private set; }
+		public MessageState MessageState { get; private set; }
 
+		public IReadOnlyCollection<MessageImage> MessageImages { get; }
 		public Conversation Conversation { get; }
 		public User User { get; }
 
-        public Message(int userId, string content)
+        public Message(int userId,string content)
         {
-            UserId = userId;
+			UserId = userId;
             Content = content;
             NormalizeContent = content.CustomNormalize()!;
         }
 
-        public void ArrivaMessage()
+        public void Arrive()
         {
-            ArrivalDate = DateTime.Now;
+			ArrivedDate = DateTime.Now;
+			MessageState = MessageState.Arrived;
         }
 
 		//ILikeable
@@ -49,7 +54,7 @@ namespace Models.Entities
 		public void View(int userId)
 		{
 			_usersWhoViewed.Add(new MessageUserViewing(Id, userId));
-			ViewingDate = DateTime.Now;
+			ViewedDate = DateTime.Now;
 		}
 		public bool IsViewed(int userId)
 		{

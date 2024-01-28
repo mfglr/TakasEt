@@ -7,7 +7,7 @@ namespace Repository.Repositories
 	public class ReadRepository<T> : IReadRepository<T> where T : class
 	{
 
-		private readonly DbSet<T> _dbSet;
+		protected readonly DbSet<T> _dbSet;
 
 		public ReadRepository(AppDbContext context)
 		{

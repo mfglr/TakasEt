@@ -15,11 +15,7 @@ class AppEntityAdapter<T extends BaseResponse>{
     this.take = take
   }
 
-  private _selectResponses =
-    (state : AppEntityState<T> | undefined) =>
-      state != undefined ?
-        this.adapter.getSelectors().selectAll(state.entities) :
-        undefined
+  private _selectResponses = (state : AppEntityState<T>) => this.adapter.getSelectors().selectAll(state.entities)
 
   public get selectResponses(){ return this._selectResponses; }
 

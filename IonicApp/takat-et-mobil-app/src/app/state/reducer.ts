@@ -4,7 +4,7 @@ import { PostResponse } from "../models/responses/post-response";
 import { UserResponse } from "../models/responses/user-response";
 import { AppEntityState } from "./app-entity-state/app-entity-state";
 import { createReducer, on } from "@ngrx/store";
-import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesSuccessAction, loadUserSuccessAction, loginSuccessAction } from "./actions";
+import { loadConversationImagesSuccess, loadPostImageUrlSuccessAction, loadPostImagesByPostResponsesSuccessAction, loadPostImagesSuccessAction, loadUserImageSuccessAction, loadUserImageUrlSuccessAction, loadUserImagesByPostResponsesSuccessAction, loadUserImagesByUserResponsesSuccessAction, loadUserImagesSuccessAction, loadUserSuccessAction, loginSuccessAction, messageHubConnectionFailAction, messageHubConnectionSuccessAction } from "./actions";
 import { appPostAdapter, appUserAdapter } from "./app-entity-state/app-entity-adapter";
 
 interface ImageState{
@@ -30,8 +30,13 @@ interface ProfileState{
   followeds : AppEntityState<UserResponse>;
 }
 
+interface MessageHubState{
+  status : boolean
+}
+
 export interface AppState{
-  user : UserResponse | undefined;
+  user : UserResponse | undefined,
+  messageHubState : MessageHubState,
   userImages : EntityState<UserImageState>,
   postImages : EntityState<PostImageState>,
   conversationImages : EntityState<ConversationImageState>,
@@ -45,6 +50,7 @@ const conversationImagesAdapter = createEntityAdapter<ConversationImageState>({s
 
 const initialState : AppState = {
   user : undefined,
+  messageHubState : { status : false },
   postImages : postImagesAdapter.getInitialState(),
   userImages : userImagesAdapter.getInitialState(),
   conversationImages : conversationImagesAdapter.getInitialState(),
@@ -124,11 +130,25 @@ export const appReducer = createReducer(
     })
   ),
   on(
+    loadUserImagesByUserResponsesSuccessAction,
+    (state,action) => ({
+      ...state,
+      userImages : userImagesAdapter.addMany(
+        action.payload
+          .filter(x => x.userImage != undefined)
+          .map( (x) : UserImageState => ({id : x.userImage!.id,loadStatus : false,url : undefined})),
+        state.userImages
+      )
+    })
+  ),
+  on(
     loadUserImagesByPostResponsesSuccessAction,
     (state,action) => ({
       ...state,
       userImages : userImagesAdapter.addMany(
-        action.payload.filter(x => x.userImage != undefined).map( (x) : UserImageState => ({id : x.userImage!.id,loadStatus : false,url : undefined})),
+        action.payload
+          .filter(x => x.userImage != undefined)
+          .map( (x) : UserImageState => ({id : x.userImage!.id,loadStatus : false,url : undefined})),
         state.userImages
       )
     })
@@ -162,5 +182,8 @@ export const appReducer = createReducer(
         changes : { loadStatus : true,url : action.url }
       },state.userImages)
     })
-  )
+  ),
+  //Message hub state
+  on( messageHubConnectionSuccessAction, state => ({ ...state, messageHubState : { status : true } }) ),
+  on( messageHubConnectionFailAction, state => ({ ...state, messageHubState : { status : false }}) )
 )

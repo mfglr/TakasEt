@@ -244,7 +244,7 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ArrivalDate")
+                    b.Property<DateTime?>("ArrivedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Content")
@@ -264,6 +264,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(512)");
 
+                    b.Property<int>("NumberOfMessageImage")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
 
@@ -273,7 +276,7 @@ namespace Repository.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ViewingDate")
+                    b.Property<DateTime?>("ViewedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -283,6 +286,44 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("Models.Entities.MessageImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BlobName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("MessageImage");
                 });
 
             modelBuilder.Entity("Models.Entities.MessageUserLiking", b =>
@@ -928,6 +969,34 @@ namespace Repository.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("Models.Entities.UserAppState", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("InternetState")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LoginState")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserAppState");
+                });
+
             modelBuilder.Entity("Models.Entities.UserImage", b =>
                 {
                     b.Property<int>("Id")
@@ -1026,6 +1095,32 @@ namespace Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("Models.Entities.UserSignalRState", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserSignalRState");
                 });
 
             modelBuilder.Entity("Models.Entities.UserUserViewing", b =>
@@ -1213,7 +1308,87 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Models.ValueObjects.MessageState", "MessageState", b1 =>
+                        {
+                            b1.Property<int>("MessageId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("int")
+                                .HasColumnName("Status");
+
+                            b1.HasKey("MessageId");
+
+                            b1.ToTable("Message");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MessageId");
+                        });
+
                     b.Navigation("Conversation");
+
+                    b.Navigation("MessageState")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Entities.MessageImage", b =>
+                {
+                    b.HasOne("Models.Entities.Message", "Message")
+                        .WithMany("MessageImages")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("Models.ValueObjects.ContainerName", "ContainerName", b1 =>
+                        {
+                            b1.Property<int>("MessageImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContainerName");
+
+                            b1.HasKey("MessageImageId");
+
+                            b1.ToTable("MessageImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MessageImageId");
+                        });
+
+                    b.OwnsOne("Models.ValueObjects.Dimension", "Dimension", b1 =>
+                        {
+                            b1.Property<int>("MessageImageId")
+                                .HasColumnType("int");
+
+                            b1.Property<float>("AspectRatio")
+                                .HasColumnType("real")
+                                .HasColumnName("AspectRatio");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int")
+                                .HasColumnName("Height");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("MessageImageId");
+
+                            b1.ToTable("MessageImage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MessageImageId");
+                        });
+
+                    b.Navigation("ContainerName")
+                        .IsRequired();
+
+                    b.Navigation("Dimension")
+                        .IsRequired();
+
+                    b.Navigation("Message");
                 });
 
             modelBuilder.Entity("Models.Entities.MessageUserLiking", b =>
@@ -1397,7 +1572,7 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.OwnsOne("Application.ValueObjects.RequestingStatus", "Status", b1 =>
+                    b.OwnsOne("Application.ValueObjects.RequestingState", "Status", b1 =>
                         {
                             b1.Property<int>("RequestingRequesterId")
                                 .HasColumnType("int");
@@ -1559,7 +1734,7 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.OwnsOne("Models.ValueObjects.SwappingStatus", "Status", b1 =>
+                    b.OwnsOne("Models.ValueObjects.SwappingState", "Status", b1 =>
                         {
                             b1.Property<int>("SwappingRequesterId")
                                 .HasColumnType("int");
@@ -1604,6 +1779,17 @@ namespace Repository.Migrations
                     b.Navigation("Swapping");
 
                     b.Navigation("SwappingCommentContent");
+                });
+
+            modelBuilder.Entity("Models.Entities.UserAppState", b =>
+                {
+                    b.HasOne("Models.Entities.User", "User")
+                        .WithOne("UserAppState")
+                        .HasForeignKey("Models.Entities.UserAppState", "Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Entities.UserImage", b =>
@@ -1696,6 +1882,17 @@ namespace Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Models.Entities.UserSignalRState", b =>
+                {
+                    b.HasOne("Models.Entities.User", "User")
+                        .WithOne("UserSignalRState")
+                        .HasForeignKey("Models.Entities.UserSignalRState", "Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Models.Entities.UserUserViewing", b =>
                 {
                     b.HasOne("Models.Entities.User", null)
@@ -1730,6 +1927,8 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Models.Entities.Message", b =>
                 {
+                    b.Navigation("MessageImages");
+
                     b.Navigation("UsersWhoLiked");
 
                     b.Navigation("UsersWhoViewed");
@@ -1818,12 +2017,17 @@ namespace Repository.Migrations
 
                     b.Navigation("StoryImagesViewed");
 
+                    b.Navigation("UserAppState")
+                        .IsRequired();
+
                     b.Navigation("UserConversations");
 
                     b.Navigation("UserImages");
 
                     b.Navigation("UserRefreshToken")
                         .IsRequired();
+
+                    b.Navigation("UserSignalRState");
 
                     b.Navigation("UsersViewed");
 

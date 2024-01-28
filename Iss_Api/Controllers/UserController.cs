@@ -45,8 +45,8 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/get-followers/{userId}")]
-		public async Task<AppResponseDto> GetFollowers(int userId)
+		[HttpGet("user/get-followers")]
+		public async Task<AppResponseDto> GetFollowers()
 		{
 			return await _sender.Send(new GetFollowersDto(Request.Query));
 		}

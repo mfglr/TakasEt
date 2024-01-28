@@ -7,22 +7,8 @@ const routes: Routes = [
     redirectTo: 'place',
     pathMatch: 'full'
   },
-  {
-    path: 'place',
-    loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule)
-  },
-  {
-    path: 'create-message',
-    loadChildren: () => import('./message/create-message/create-message.module').then( m => m.CreateMessagePageModule)
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'create-story',
-    loadChildren: () => import('./home/create-story/create-story.module').then( m => m.CreateStoryPageModule)
-  },
+  { path: 'place', loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule) },
+  { path : 'messages', loadChildren: () => import('src/app/message/message.module').then( m => m.MessageModule) },
 ];
 
 @NgModule({

@@ -1,18 +1,24 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
+using Models.Dtos.Conversation;
 
 namespace Iss_Api.Hubs
 {
 	public class MessageHub : Hub
 	{
 
-		public async Task SendMessageAsync(string messageContent)
+		private readonly ISender _sender;
+
+		public MessageHub(ISender sender)
 		{
-			await Clients.All.SendAsync("ReceiveMessage", messageContent);
+			_sender = sender;
 		}
 
-		//public async Task<string> ReceiveMessageAsync()
-		//{
-		//	//return await Clients.All.SendAsync("")
-		//}
+		public async Task AddUserSignalRState(int userId)
+		{
+			await Clients.Caller.SendAsync("RecieveConnectionId", Context.ConnectionId);
+			await _sender.Send(new AddUserSignalRStateDto(userId, Context.ConnectionId));
+		}
+		
 	}
 }

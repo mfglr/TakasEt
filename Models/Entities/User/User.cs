@@ -15,6 +15,7 @@ namespace Models.Entities
         public int NumberOfPost { get; private set; }
 
         public UserRefreshToken UserRefreshToken { get; }
+        public UserAppState UserAppState { get; }
         public IReadOnlyCollection<Message> Messages { get; }
         public IReadOnlyCollection<ConversationUser> UserConversations { get; }
         
@@ -54,6 +55,17 @@ namespace Models.Entities
 
 		public IReadOnlyCollection<UserRole> Roles => _roles;
 		private readonly List<UserRole> _roles = new();
+
+
+		//User signalR State
+		public UserSignalRState? UserSignalRState => _userSignalRState;
+        private UserSignalRState? _userSignalRState;
+		public void AddUserSignalRState(string connectionId)
+        {
+            if(_userSignalRState == null) _userSignalRState = new UserSignalRState(connectionId);
+            else _userSignalRState.Update(connectionId);
+        }
+
 
 		//IEntity
 		public int Id { get; protected set; }

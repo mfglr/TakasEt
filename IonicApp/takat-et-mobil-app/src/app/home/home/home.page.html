@@ -1,6 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+
+    <ion-buttons slot="secondary">
+      <ion-button routerLink="/messages/home">
+        <ion-icon name="chatbubble-ellipses-outline" class="message-icon"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="notifications-outline"  class="notification-icon" ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>{{userName$ | async}}</ion-title>
+
+
   </ion-toolbar>
 </ion-header>
 

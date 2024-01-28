@@ -19,10 +19,15 @@ export const loadUserImagesSuccessAction = createAction(
   "[App Store] load user images success",
   props<{userImageIds : number[]}>()
 )
+export const loadUserImagesByUserResponsesSuccessAction = createAction(
+  "[App Store] load user images by user responses success",
+  props<{payload : UserResponse[]}>()
+)
 export const loadUserImagesByPostResponsesSuccessAction = createAction(
   "[App Store] load user images by post responses success",
   props<{payload : PostResponse[]}>()
 )
+
 export const loadPostImagesSuccessAction = createAction(
   "[App Store] load post images success",
   props<{postImageIds : number[]}>()
@@ -107,3 +112,7 @@ export const loginSuccessAction = createAction(
   props<{payload : LoginResponse}>()
 )
 export const loginFailedAction = createAction('[App Store] login from local storage failed');
+
+//message hub state
+export const messageHubConnectionSuccessAction = createAction("[App Store] connect message hub");
+export const messageHubConnectionFailAction = createAction("[App Store] disconnect message hub");

@@ -5,6 +5,7 @@ import { appPostAdapter } from "./app-entity-state/app-entity-adapter";
 const selectStore = createFeatureSelector<AppState>("AppStore")
 
 export const selectUser = createSelector(selectStore,state => state.user)
+export const selectUserName = createSelector(selectUser,state => state?.userName)
 
 const selectProfileState = createSelector(selectStore,state => state.profileState)
 export const selectPosts = createSelector(selectProfileState,state => state.posts)

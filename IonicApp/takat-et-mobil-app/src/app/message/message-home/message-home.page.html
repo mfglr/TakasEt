@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+
     <ion-title>messages</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/place/home"></ion-back-button>
+    </ion-buttons>
+
     <ion-buttons slot="primary">
       <ion-button routerLink="/place/messages/search">
         <ion-icon name="search-outline"></ion-icon>
@@ -13,7 +18,7 @@
 <ion-content [fullscreen]="true">
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button routerLink="/place/messages/create">
+    <ion-fab-button routerLink="/messages/create">
       <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

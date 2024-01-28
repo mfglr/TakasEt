@@ -22,7 +22,7 @@ namespace Queries
 				.DbSet
 				.AsNoTracking()
 				.IncludeUser()
-				.Where(user => user.Followings.Any(followed => followed.FollowingId == request.LoggedInUserId))
+				.Where(user => user.Followings.Any(x => x.FollowingId == request.LoggedInUserId))
 				.ToPage(request)
 				.ToUserResponseDto(request.LoggedInUserId)
 				.ToListAsync(cancellationToken);

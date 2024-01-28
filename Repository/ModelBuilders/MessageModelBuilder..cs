@@ -11,6 +11,14 @@ namespace Repository.ModelBuilders
 			builder.Property(x => x.Content).HasColumnType("varchar(512)");
 			builder.Property(x => x.NormalizeContent).HasColumnType("varchar(512)");
 
+			builder.OwnsOne(
+				message => message.MessageState,
+				x =>
+				{
+					x.Property(messageState => messageState.Status).HasColumnName("Status");
+				}
+			);
+
 			builder
 				.HasMany(x => x.UsersWhoLiked)
 				.WithOne(x => x.Message)
@@ -19,6 +27,12 @@ namespace Repository.ModelBuilders
 
 			builder
 				.HasMany(x => x.UsersWhoViewed)
+				.WithOne(x => x.Message)
+				.HasForeignKey(x => x.MessageId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasMany(x => x.MessageImages)
 				.WithOne(x => x.Message)
 				.HasForeignKey(x => x.MessageId)
 				.OnDelete(DeleteBehavior.NoAction);

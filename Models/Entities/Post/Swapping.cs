@@ -7,7 +7,7 @@ namespace Models.Entities
     {
         public int RequesterId { get; private set; }
         public int RequestedId { get; private set; }
-        public SwappingStatus Status { get; private set; }
+        public SwappingState Status { get; private set; }
 
         public Post Requester { get; }
         public Post Requested { get; }
@@ -24,12 +24,12 @@ namespace Models.Entities
         {
             RequesterId = requesterId;
             RequestedId = requestedId;
-            Status = SwappingStatus.Approved;
+            Status = SwappingState.Approved;
         }
 
         public void Cancel()
         {
-            Status = SwappingStatus.Canceled;
+            Status = SwappingState.Canceled;
         }
 
 

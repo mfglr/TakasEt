@@ -1,0 +1,9 @@
+<ion-card class="card">
+  <a  routerLink="/messages/conversation" class="root" [state]="user">
+    <app-profile-image [diameter]="3" [userImage]="user?.userImage"></app-profile-image>
+    <div class="names">
+      <span class="username">{{user?.userName | toShortText:25}}</span>
+      <span class="name">{{user?.name + ' ' + user?.lastName | toShortText:25}}</span>
+    </div>
+  </a>
+</ion-card>

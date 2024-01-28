@@ -1,12 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-
 const routes: Routes = [
-  {
-    path: '',
-    loadChildren : () => import('./message-home/message-home.module').then( m => m.MessageHomePageModule)
-  },
+  { path: '', redirectTo : "home", pathMatch : "full" },
   {
     path: 'home',
     loadChildren : () => import("./message-home/message-home.module").then(m => m.MessageHomePageModule)
@@ -17,7 +13,11 @@ const routes: Routes = [
   },
   {
     path : 'create',
-    loadChildren : () => import("./create-message/create-message-routing.module").then(m => m.CreateMessagePageRoutingModule)
+    loadChildren : () => import("./create-message/create-message.module").then(m => m.CreateMessagePageModule)
+  },
+  {
+    path : 'conversation',
+    loadChildren : () => import("./conversation/conversation.module").then(m => m.ConversationPageModule)
   }
 ];
 

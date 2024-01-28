@@ -109,6 +109,19 @@ namespace Repository.ModelBuilders
 				.WithOne(x => x.User)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasOne(x => x.UserAppState)
+				.WithOne(x => x.User)
+				.HasForeignKey<UserAppState>(x => x.Id)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder
+				.HasOne(x => x.UserSignalRState)
+				.WithOne(x => x.User)
+				.HasForeignKey<UserSignalRState>(x => x.Id)
+				.OnDelete(DeleteBehavior.NoAction);
+
 		}
 	}
 }
