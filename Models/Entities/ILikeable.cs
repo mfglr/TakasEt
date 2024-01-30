@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    //Users are able to like and dislike likeable entities or check Entities is liked or disliked.
+    //Users are able to like and dislike likeable entities or check Entities are liked or disliked.
     public interface ILikeable<TCrossEntity> where TCrossEntity : CrossEntity
     {
         IReadOnlyCollection<TCrossEntity> UsersWhoLiked { get; }
