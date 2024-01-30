@@ -18,8 +18,5 @@ namespace Models.Entities
             Extention = extention;
             Dimension = dimension;
         }
-
-
-
-    }
+	}
 }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Models.Entities
 {
-    public abstract class CrossEntity : IBaseEntity, IEntityDomainEvent 
+    public abstract class CrossEntity : IBaseEntity, IEntityDomainEvent,IRemovable
     {
 
         //IBaseEntity
@@ -42,5 +42,15 @@ namespace Models.Entities
         {
             return _domainEvents.Any();
         }
-    }
+
+		//IRemovable
+		public bool IsRemoved { get; protected set; }
+		public DateTime? RemovedDate { get; protected set; }
+		public void Remove()
+		{
+			IsRemoved = true;
+			RemovedDate = DateTime.Now;
+		}
+
+	}
 }

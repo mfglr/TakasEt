@@ -16,12 +16,6 @@ namespace Iss_Api.Controllers
 		{
 			_sender = sender;
 		}
-
-		[Authorize(Roles = "User")]
-		[HttpPost("conversation/add-conversation-image")]
-		public async Task<AppResponseDto> AddConversationImage([FromForm] IFormCollection form)
-		{
-			return await _sender.Send(new AddConversationImageDto(form));
-		}
+		
 	}
 }

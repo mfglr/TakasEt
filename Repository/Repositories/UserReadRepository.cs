@@ -14,7 +14,7 @@ namespace Repository.Repositories
 		public async Task<User> GetUserWithSignalRStateAsync(int userId, CancellationToken cancellationToken)
 		{
 			return await _dbSet
-				.Include(x => x.UserSignalRState)
+				.Include(x => x.MessageHubState)
 				.FirstAsync(x => x.Id == userId, cancellationToken);
 		}
 	}

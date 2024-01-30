@@ -2,15 +2,13 @@
 {
 	public class UserAppState : Entity
 	{
-		public bool LoginState { get; private set; }
-		public bool InternetState { get; private set; }
+		public bool IsUserInApp { get; private set; }
 
-		public User User { get;}
+		public User User { get; }
 
-		public UserAppState(bool loginState, bool internetState)
+		public UserAppState(bool isUserInApp)
 		{
-			LoginState = loginState;
-			InternetState = internetState;
+			IsUserInApp = isUserInApp;
 		}
 	}
 }

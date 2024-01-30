@@ -1,67 +1,51 @@
-﻿using Models.ValueObjects;
-
-namespace Models.Entities
+﻿namespace Models.Entities
 {
-    public class Conversation : Entity, IAggregateRoot
-    {
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+	public class Conversation : CrossEntity, IRemovableByManyUsers<ConversationUserRemoving>
+	{
+		public override int[] GetKey() => new[] { SenderId, ReceiverId };
+		public int SenderId { get; private set; }
+		public User Sender { get; }
 
-        protected Conversation(string title,string description)
-        {
-            Title = title;
-            Description = description;
-        }
+		public int ReceiverId { get; private set; }
+		public User Receiver { get; }
 
-        //Images
-        public IReadOnlyCollection<ConversationImage> Images => _images;
-        private readonly List<ConversationImage> _images = new();
-        protected void AddImage(string blobName, string extention, Dimension dimension)
-        {
-            _images.Add(new ConversationImage(blobName, extention, dimension));
-        }
-        protected void RemoveImage(int id)
-        {
-            var image = _images.First(x => x.Id == id);
-            image.Remove();
-        }
-        protected void DeleteImage(int id)
-        {
-			int index = _images.FindIndex(x => x.Id == id);
-			_images.RemoveAt(index);
+		public Conversation(int senderId,int receiverId)
+		{
+			SenderId = senderId;
+			ReceiverId = receiverId;
 		}
 
-        //Users
-		public IReadOnlyCollection<ConversationUser> Users => _users;
-		private readonly List<ConversationUser> _users = new();
-		protected void AddUser(int userId)
-        {
-            _users.Add(new ConversationUser(Id, userId));
-        }
-        protected void DeleteUser(int userId)
-        {
-            int index = _users.FindIndex(x => x.UserId == userId);
-            _users.RemoveAt(index);
-        }
-        
-        //Messages
+		//messages
+		private readonly List<Message> _messages = new ();
 		public IReadOnlyCollection<Message> Messages => _messages;
-		private readonly List<Message> _messages = new();
-		public void AddMessage(int userId, string content)
-        {
-            _messages.Add(new Message(userId, content));
-        }
-		public void RemoveMessage(int id)
+		public void AddMessage(int userId,string content)
 		{
-			var message = _messages.First(m => m.Id == id);
+			_messages.Add(new Message(userId, content));
+		}
+		public void RemoveMessage(int messageId)
+		{
+			var message = _messages.First(x => x.Id == messageId);
 			message.Remove();
 		}
-		public void DeleteMessage(int id)
-        {
-			var index = _messages.FindIndex(m => m.Id == id);
-			_messages!.RemoveAt(index);
+		public void RemoveMessageFromUser(int messageId,int userId)
+		{
+			var message = _messages.First(x => x.Id == messageId);
+			message.RemoveFromUser(userId);
 		}
-        
+		public void DeleteMessage(int messageId)
+		{
+			var index = _messages.FindIndex(x => x.Id == messageId);
+			_messages.RemoveAt(index);
+		}
 
-    }
+		//IRemovableByManyUsers
+		private readonly List<ConversationUserRemoving> _usersWhoRemoved = new ();
+		public IReadOnlyCollection<ConversationUserRemoving> UsersWhoRemoved => _usersWhoRemoved;
+		public void RemoveFromUser(int removerId)
+		{
+			_usersWhoRemoved.Add(new ConversationUserRemoving(SenderId, ReceiverId, removerId));
+			foreach(var message in _messages)
+				message.RemoveFromUser(removerId);
+		}
+	}
 }

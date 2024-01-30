@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Models.Entities
 {
-    public abstract class Entity : IEntity, IRemovable, IEntityDomainEvent
+    public abstract class Entity : IEntity, IEntityDomainEvent, IRemovable
     {
 		public int Id { get; protected set; }
 
@@ -18,15 +18,6 @@ namespace Models.Entities
         public void SetUpdatedDate(DateTime date)
         {
             UpdatedDate = date;
-        }
-
-		//IRemovable
-		public bool IsRemoved { get; protected set; }
-		public DateTime? RemovedDate { get; protected set; }
-		public void Remove()
-        {
-            IsRemoved = true;
-            RemovedDate = DateTime.Now;
         }
 
 		//IEntityDomainEvent
@@ -52,5 +43,14 @@ namespace Models.Entities
         {
             return _domainEvents.Any();
         }
-    }
+
+		//IRemovable
+		public bool IsRemoved { get; protected set; }
+		public DateTime? RemovedDate { get; protected set; }
+		public void Remove()
+		{
+			IsRemoved = true;
+			RemovedDate = DateTime.Now;
+		}
+	}
 }

@@ -22,6 +22,6 @@ namespace Models.Entities
             _storyImages.RemoveAt(index);
             NumberOfStoryImage--;
         }
-
-    }
+		
+	}
 }

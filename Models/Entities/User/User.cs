@@ -5,7 +5,7 @@ using Models.DomainEventModels;
 
 namespace Models.Entities
 {
-    public class User : IdentityUser<int>, IEntity, IEntityDomainEvent, IViewable<UserUserViewing>, IRemovable, IAggregateRoot
+    public class User : IdentityUser<int>, IEntity, IEntityDomainEvent, IViewable<UserUserViewing>, IAggregateRoot
     {
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
@@ -14,32 +14,24 @@ namespace Models.Entities
         public bool? Gender { get; private set; }
         public int NumberOfPost { get; private set; }
 
+        public UserAppState? UserAppState { get; }
         public UserRefreshToken UserRefreshToken { get; }
-        public UserAppState UserAppState { get; }
-        public IReadOnlyCollection<Message> Messages { get; }
-        public IReadOnlyCollection<ConversationUser> UserConversations { get; }
-        
-        public IReadOnlyCollection<UserImage> UserImages => _userImages;
-        public IReadOnlyCollection<Searching> Searchings => _searchings;
 
-		public IReadOnlyCollection<Comment> Comments { get; }
-		public IReadOnlyCollection<CommentUserLiking> CommentsLiked { get; }
-
-		
-		public IReadOnlyCollection<PostUserExploring> PostsExplored { get; }
-		public IReadOnlyCollection<PostUserLiking> PostsLiked { get; }
-
-		public IReadOnlyCollection<Story> Stories { get; }
+        public IReadOnlyCollection<Comment> Comments { get; }
+        public IReadOnlyCollection<CommentUserLiking> CommentsLiked { get; }
+        public IReadOnlyCollection<PostUserExploring> PostsExplored { get; }
+        public IReadOnlyCollection<PostUserLiking> PostsLiked { get; }
+        public IReadOnlyCollection<Story> Stories { get; }
         public IReadOnlyCollection<StoryImageUserLiking> StoryImagesLiked { get; }
         public IReadOnlyCollection<StoryImageUserViewing> StoryImagesViewed { get; }
+        public IReadOnlyCollection<ConversationUserRemoving> ConversationsRemoved { get; }
+        public IReadOnlyCollection<MessageUserRemoving> MessagesRemoved { get; }
+		public IReadOnlyCollection<RoleUser> Roles { get; }
+        public IReadOnlyCollection<GroupUser> Groups { get; }
 
-        
-        
-        private readonly List<UserImage> _userImages = new();
-        private readonly List<Searching> _searchings = new();
-
-
-        public int[] GetKey() => new[] { Id };
+		public User()
+        {
+        }
 
         public User(string email, string userName)
         {
@@ -47,25 +39,44 @@ namespace Models.Entities
             Email = email;
             SetCreatedDate(DateTime.Now);
         }
-        public User()
-        {
 
+
+        //IBaseEntity
+        public int[] GetKey() => new[] { Id };
+
+        //Searchings
+		public IReadOnlyCollection<Searching> Searchings => _searchings;
+		private readonly List<Searching> _searchings = new();
+
+		//Conversations
+		private readonly List<Conversation> _conversationsSent = new ();
+        private readonly List<Conversation> _conversationsReceived = new ();
+        public IReadOnlyCollection<Conversation> ConversationsSent => _conversationsSent;
+        public IReadOnlyCollection<Conversation> ConversationsReceived => _conversationsReceived;
+        public void AddConversation(int receiverId)
+        {
+            _conversationsSent.Add(new Conversation(Id,receiverId));
+        }
+        public void RemoveConversationFromUser(int userId)
+        {
+            int index = _conversationsSent.FindIndex(x => x.ReceiverId == userId);
+            if (index != -1)
+                _conversationsSent[index].RemoveFromUser(userId);
+            else
+            {
+                index = _conversationsReceived.FindIndex(x => x.SenderId == userId);
+                _conversationsReceived[index].RemoveFromUser(userId);
+            }
         }
 
-
-		public IReadOnlyCollection<UserRole> Roles => _roles;
-		private readonly List<UserRole> _roles = new();
-
-
-		//User signalR State
-		public UserSignalRState? UserSignalRState => _userSignalRState;
-        private UserSignalRState? _userSignalRState;
-		public void AddUserSignalRState(string connectionId)
+        //User Message Hub State
+		public MessageHubState? MessageHubState => _messageHubState;
+        private MessageHubState? _messageHubState;
+		public void SetMessageHubState(string connectionId)
         {
-            if(_userSignalRState == null) _userSignalRState = new UserSignalRState(connectionId);
-            else _userSignalRState.Update(connectionId);
+            if(_messageHubState == null) _messageHubState = new MessageHubState(connectionId);
+            else _messageHubState.Update(connectionId);
         }
-
 
 		//IEntity
 		public int Id { get; protected set; }
@@ -80,6 +91,7 @@ namespace Models.Entities
 			UpdatedDate = date;
 		}
 
+        //Posts
 		public IReadOnlyCollection<Post> Posts => _posts;
 		private readonly List<Post> _posts = new();
 		public void AddPost(Post post)
@@ -95,7 +107,8 @@ namespace Models.Entities
         {
 
         }
-
+        
+        //Following
         public IReadOnlyCollection<Following> Followings => _followings;
 		public IReadOnlyCollection<Following> Followers => _followers;
         private readonly List<Following> _followings = new();
@@ -123,8 +136,10 @@ namespace Models.Entities
             return _followings.Any(x => x.FollowingId != userId);
         }
 
-        //user image
-        public void AddUserImage(string blobName, string extention, Dimension dimension)
+		//user image
+		public IReadOnlyCollection<UserImage> UserImages => _userImages;
+		private readonly List<UserImage> _userImages = new();
+		public void AddUserImage(string blobName, string extention, Dimension dimension)
         {
             //deactive user image
             var activeUserImage = _userImages.FirstOrDefault(x => x.IsActive);
@@ -146,15 +161,6 @@ namespace Models.Entities
             _userImages.Remove(userImage!);
         }
         
-        //IRemovable
-        public bool IsRemoved { get; protected set; }
-        public DateTime? RemovedDate { get; protected set; }
-        public void Remove()
-        {
-            IsRemoved = true;
-            RemovedDate = DateTime.Now;
-        }
-
         //IDomainEvent
         private List<INotification> _domainEvents = new();
         public void AddDomainEvent(INotification domainEvent)

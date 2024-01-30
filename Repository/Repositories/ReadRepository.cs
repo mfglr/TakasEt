@@ -13,7 +13,7 @@ namespace Repository.Repositories
 		{
 			_dbSet = context.Set<T>();
 		}
-
+		
 		public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
 		{
 			return await _dbSet.FindAsync(id, cancellationToken);

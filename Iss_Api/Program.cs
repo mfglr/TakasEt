@@ -9,6 +9,7 @@ using Queries;
 using Commands;
 using Iss_Api.Hubs;
 using Models.Configurations;
+using Iss_Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,7 @@ var app = builder.Build();
 app.UseCors("local");
 app.UseRouting();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseEndpoints(
 	endpoints =>
 	{

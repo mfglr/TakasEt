@@ -6,6 +6,6 @@ namespace Application.Interfaces
 	{
 		IEnumerable<T> GetEntities<T>(Func<EntityEntry<T>, bool> expression) where T : class;
 		bool HasChanges();
-		Task<DateTime> CommitAsync(CancellationToken cancellationToken);
+		Task<DateTime> CommitAsync(CancellationToken cancellationToken = default);
 	}
 }

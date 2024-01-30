@@ -3,7 +3,7 @@ import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/reducer';
 import { selectUserId } from '../state/selector';
-import { filter, first } from 'rxjs';
+import { Observable, Subject, first } from 'rxjs';
 import { messageHubConnectionFailAction, messageHubConnectionSuccessAction } from '../state/actions';
 
 @Injectable({
@@ -14,18 +14,22 @@ export class MessageHubConnectionService {
   private baseUrl : string = "https://localhost:7160/message";
   private hubConnection = new HubConnectionBuilder().withUrl(`${this.baseUrl}`).build();
 
-  userId$ = this.appStore.select(selectUserId);
+  private subjects : {[key : string] : Subject<any>} = {};
+  private mehtodNames : string[] = []
+  private index = 0;
 
-  constructor(private appStore : Store<AppState>) {
-  }
+  userId$ = this.appStore.select(selectUserId);
+  constructor(private appStore : Store<AppState>) {}
 
   start(){
     this.userId$.pipe(first()).subscribe(
       userId => {
         if(userId != undefined){
           if(this.hubConnection.state == HubConnectionState.Disconnected){
+
             this.hubConnection.start()
-              .then( () => {
+              .then(
+                () => {
                   this.hubConnection.invoke("AddUserSignalRState",userId);
                   this.appStore.dispatch(messageHubConnectionSuccessAction());
                 }
@@ -38,10 +42,15 @@ export class MessageHubConnectionService {
     )
   }
 
-  on(methodName : string){
-    this.hubConnection.on(methodName,(data) => {
-      console.log(data);
-    })
+  on<T>(methodName : string) : Observable<T>{
+    if(!this.subjects[methodName]){
+      this.mehtodNames[this.index++] = methodName;
+      this.subjects[methodName] = new Subject<T>();
+      this.hubConnection.on( methodName, data => {
+        this.subjects[methodName].next(data)
+      });
+    }
+    return this.subjects[methodName]
   }
 
   invoke(methodName : string,data : string){
@@ -50,6 +59,8 @@ export class MessageHubConnectionService {
 
   stop(){
     this.hubConnection.stop();
+    for(let i = 0; i < this.index;i++)
+      this.subjects[this.mehtodNames[i]].complete();
   }
 
 }

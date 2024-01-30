@@ -105,8 +105,8 @@ namespace Models.Entities
             return _usersWhoExplored.Any(x => x.UserId == userId);
         }
 
-        //swapping
-        public void CreateSwapping(int requestedPostId)
+		//swapping
+		public void CreateSwapping(int requestedPostId)
         {
             _requesterSwappings.Add(new Swapping(Id, requestedPostId));
         }

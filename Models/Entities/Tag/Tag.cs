@@ -19,5 +19,6 @@ namespace Models.Entities
             Name = name;
             NormalizeName = name.CustomNormalize();
         }
-    }
+
+	}
 }
