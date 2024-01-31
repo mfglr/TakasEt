@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using MediatR;
 using Models.Dtos;
 using Models.Entities;
@@ -7,16 +7,19 @@ namespace Commands
 {
     public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleDto, AppResponseDto>
 	{
-		private readonly IWriteRepository<Role> _roles;
+		private readonly IRepository<Role> _roles;
 
-		public DeleteRoleCommandHandler(IWriteRepository<Role> roles)
+		public DeleteRoleCommandHandler(IRepository<Role> roles)
 		{
 			_roles = roles;
 		}
 
 		public async Task<AppResponseDto> Handle(DeleteRoleDto request, CancellationToken cancellationToken)
 		{
-			await _roles.DeleteAsync(request.Id, cancellationToken);
+			var role = await _roles
+				.DbSet
+				.FindAsync(request.Id, cancellationToken);
+			_roles.DbSet.Remove(role!);
 			return AppResponseDto.Success();
 		}
 	}

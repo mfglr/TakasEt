@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-	public class MessageUserLiking : CrossEntity
+	public class MessageUserLiking : CrossEntity<Message,User>
 	{
 		public override int[] GetKey() => new int[] { MessageId, UserId };
 		public int MessageId { get; private set; }

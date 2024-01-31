@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-	public class GroupUser : CrossEntity
+	public class GroupUser : CrossEntity<Group,User>
 	{
 		public override int[] GetKey() => new int[] { GroupId, UserId };
 		public int GroupId { get; private set; }

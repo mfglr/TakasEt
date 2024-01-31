@@ -41,8 +41,7 @@ namespace Models.Entities
 		}
 		public void RemoveMessageFromUser(int messageId,int removerId)
 		{
-			var message = _messages.First(x => x.Id == messageId);
-			message.RemoveFromUser(removerId);
+			
 		}
 		public void DeleteMessage(int messageId)
 		{

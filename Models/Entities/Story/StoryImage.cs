@@ -2,7 +2,7 @@
 
 namespace Models.Entities
 {
-    public class StoryImage : Image, ILikeable<StoryImageUserLiking>, IViewable<StoryImageUserViewing>
+    public class StoryImage : Image, ILikeable<StoryImageUserLiking,StoryImage,User>, IViewable<StoryImageUserViewing,StoryImage,User>
     {
         public int Index { get; private set; }
         public int StoryId { get; private set; }

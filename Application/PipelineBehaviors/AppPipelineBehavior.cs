@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Models.Interfaces;
 using FluentValidation;
 using MediatR;
 using Models.Dtos;

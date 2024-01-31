@@ -1,6 +1,6 @@
 ﻿using Models.Entities;
 
-namespace Application.Interfaces.Services
+namespace Models.Interfaces.Services
 {
 	public interface ISmtpService
 	{

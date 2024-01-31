@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Services;
+﻿using Models.Interfaces.Services;
 using ImageProcessor;
 using Models.ValueObjects;
 

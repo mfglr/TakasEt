@@ -1,9 +1,8 @@
-﻿using Application.Interfaces.Services;
-using Application.ValueObjects;
+﻿using Models.Interfaces.Services;
+using Models.ValueObjects;
 using Microsoft.IdentityModel.Tokens;
 using Models.Configurations;
 using Models.Entities;
-using Models.ValueObjects;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;

@@ -30,7 +30,7 @@ export class MessageHubConnectionService {
             this.hubConnection.start()
               .then(
                 () => {
-                  this.hubConnection.invoke("AddUserSignalRState",userId);
+                  this.hubConnection.invoke("SetMessageHubState",userId);
                   this.appStore.dispatch(messageHubConnectionSuccessAction());
                 }
               )
@@ -53,7 +53,7 @@ export class MessageHubConnectionService {
     return this.subjects[methodName]
   }
 
-  invoke(methodName : string,data : string){
+  invoke<T>(methodName : string,data : T){
     this.hubConnection.invoke(methodName,data)
   }
 

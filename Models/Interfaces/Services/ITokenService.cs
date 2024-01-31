@@ -2,7 +2,7 @@
 using Models.Entities;
 using Models.ValueObjects;
 
-namespace Application.Interfaces.Services
+namespace Models.Interfaces.Services
 {
     public interface ITokenService
     {

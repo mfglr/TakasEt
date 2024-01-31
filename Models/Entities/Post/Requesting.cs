@@ -3,7 +3,7 @@ using Models.DomainEventModels;
 
 namespace Models.Entities
 {
-    public class Requesting : CrossEntity
+    public class Requesting : CrossEntity<Post,Post>
     {
         public int RequesterId { get; private set; }
         public int RequestedId { get; private set; }

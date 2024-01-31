@@ -1,16 +1,11 @@
 ﻿namespace Models.Dtos
 {
-	public class MessageResponseDto
+	public class MessageResponseDto : BaseResponseDto
 	{
-		public int UserId { get; private set; }
-		public string Content { get; private set; }
-		public string ConnectionId { get; private set; }
-
-		public MessageResponseDto(int userId, string content, string connectionId)
-		{
-			UserId = userId;
-			Content = content;
-			ConnectionId = connectionId;
-		}
+		public int? SenderId { get; set; }
+		public int? ReceiverId { get; set; }
+		public int? GroupId { get; set; }
+		public string Content { get; set; }
+		public int Status { get; set; }
 	}
 }

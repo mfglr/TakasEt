@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class Following : CrossEntity
+    public class Following : CrossEntity<User,User>
     {
 		public override int[] GetKey() => new[] { FollowerId, FollowingId };
 		public int FollowerId { get; private set; }

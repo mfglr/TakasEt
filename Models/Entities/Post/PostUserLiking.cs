@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class PostUserLiking : CrossEntity
+    public class PostUserLiking : CrossEntity<Post,User>
     {
         public int UserId { get; private set; }
         public int PostId { get; private set; }

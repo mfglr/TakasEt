@@ -1,6 +1,5 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
+﻿using Models.Extentions;
+using Models.Interfaces.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Models.Dtos;

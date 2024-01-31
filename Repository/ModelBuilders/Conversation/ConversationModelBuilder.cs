@@ -9,18 +9,16 @@ namespace Repository.ModelBuilders
 		public void Configure(EntityTypeBuilder<Conversation> builder)
 		{
 
-			builder.HasKey(x => new { x.SenderId, x.ReceiverId });
-
 			builder
 				.HasMany(x => x.Messages)
 				.WithOne(x => x.Conversation)
-				.HasForeignKey(x => new { x.SenderId,x.ReceiverId } )
+				.HasForeignKey(x => x.ConversationId )
 				.OnDelete(DeleteBehavior.NoAction);
 			
 			builder
-				.HasMany(x => x.UsersWhoRemoved)
+				.HasMany(x => x.UsersWhoRemovedTheEntity)
 				.WithOne(x => x.Conversation)
-				.HasForeignKey(x => new { x.SenderId,x.ReceiverId } )
+				.HasForeignKey(x => x.ConversationId)
 				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}

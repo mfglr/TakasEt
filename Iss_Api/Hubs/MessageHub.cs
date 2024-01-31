@@ -1,30 +1,33 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Models.Dtos;
 using Models.Entities;
-using Models.Exceptions;
 
 namespace Iss_Api.Hubs
 {
 	public class MessageHub : Hub
 	{
 
-		private IRepository<User> _users;
-		private IUnitOfWork _unitOfWork;
+		private readonly ISender _sender;
+		private readonly IRepository<User> _users;
 
-		public MessageHub(IRepository<User> users, IUnitOfWork unitOfWork)
+		public MessageHub(ISender sender, IRepository<User> users)
 		{
+			_sender = sender;
 			_users = users;
-			_unitOfWork = unitOfWork;
 		}
 
-		public async Task SetMessageHubState(int userId)
+		public async Task SetMessageHubState(SetMessageHubStateDto request)
 		{
-			var user = await _users.DbSet.FindAsync(userId);
-			if (user == null) throw new UserNotFoundException();
-			user.SetMessageHubState(Context.ConnectionId);
-			await _unitOfWork.CommitAsync();
+			await _sender.Send(request);
 		}
-		
+
+		public async Task SaveMessage(SaveMessageDto request)
+		{
+			var response = await _sender.Send(request);
+			await Clients.Caller.SendAsync("SavedMessageSuccess", response);
+		}
+
 	}
 }

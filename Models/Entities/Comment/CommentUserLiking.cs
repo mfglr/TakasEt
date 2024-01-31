@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class CommentUserLiking : CrossEntity
+    public class CommentUserLiking : CrossEntity<Comment,User>
     {
 		public override int[] GetKey() => new[] { CommentId, UserId };
 		public int CommentId { get; private set; }

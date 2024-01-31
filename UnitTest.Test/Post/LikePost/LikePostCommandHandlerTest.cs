@@ -1,10 +1,10 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Repositories;
-using Application.Pipelines;
+﻿using Models.Interfaces;
+using Models.Interfaces.Repositories;
 using Commands;
 using Models.Dtos;
 using Models.Entities;
 using Repository.Contexts;
+using Application.Pipelines;
 
 namespace UnitTest.Test
 {

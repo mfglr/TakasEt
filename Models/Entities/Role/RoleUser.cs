@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class RoleUser : CrossEntity
+    public class RoleUser : CrossEntity<Role,User>
     {
 		public override int[] GetKey() => new int[] { RoleId, UserId };
 		public int RoleId { get; private set; }

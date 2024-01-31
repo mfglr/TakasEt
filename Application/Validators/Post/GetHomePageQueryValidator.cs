@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using FluentValidation;
 using Models.Dtos;
 using Models.Entities;

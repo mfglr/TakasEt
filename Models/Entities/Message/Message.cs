@@ -3,7 +3,7 @@ using Models.ValueObjects;
 
 namespace Models.Entities
 {
-	public class Message : Entity, ILikeable<MessageUserLiking>, IViewable<MessageUserViewing>, IRemovableByManyUsers<MessageUserRemoving>
+	public class Message : Entity, ILikeable<MessageUserLiking,Message,User>, IViewable<MessageUserViewing,Message,User>, IRemovableByManyUsers<MessageUserRemoving,Message,User>
     {
         
         public string Content { get; private set; }
@@ -18,11 +18,10 @@ namespace Models.Entities
             NormalizeContent = content.CustomNormalize()!;
         }
 		
-		public void Save() => MessageState = MessageState.Saved;
+		public void SaveMessage() => MessageState = MessageState.Saved;
 
 		//Conversation
-		public int? SenderId { get; private set; }
-		public int? ReceiverId { get; private set; }
+		public int? ConversationId { get; private set; }
 		public Conversation? Conversation { get; }
 		
 		//Group
@@ -34,12 +33,19 @@ namespace Models.Entities
 		public User User { get; }
 
 		//IRemovableByManyUsers
-		private readonly List<MessageUserRemoving> _usersWhoRemoved = new ();
-		public IReadOnlyCollection<MessageUserRemoving> UsersWhoRemoved => _usersWhoRemoved;
-		public void RemoveFromUser(int userId)
+		private readonly List<MessageUserRemoving> _usersWhoRemovedTheEntity = new ();
+		public IReadOnlyCollection<MessageUserRemoving> UsersWhoRemovedTheEntity => _usersWhoRemovedTheEntity;
+		public void RemoveTheEntityFromUser(int removerId)
 		{
-			_usersWhoRemoved.Add(new MessageUserRemoving(Id, userId));
-		} 
+			_usersWhoRemovedTheEntity.Add(new MessageUserRemoving(Id, removerId));
+		}
+		public void AddAgainTheEntityToUser(int removerId)
+		{
+			var index = _usersWhoRemovedTheEntity.FindIndex(x => x.RemoverId == removerId);
+			if (index == -1)
+				throw new Exception("error");
+			_usersWhoRemovedTheEntity.RemoveAt(index);
+		}
 		
 		//ILikeable
 		public IReadOnlyCollection<MessageUserLiking> UsersWhoLiked => _usersWhoLiked;

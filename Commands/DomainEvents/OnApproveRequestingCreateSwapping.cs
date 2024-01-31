@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using MediatR;
 using Models.DomainEventModels;
 using Models.Entities;

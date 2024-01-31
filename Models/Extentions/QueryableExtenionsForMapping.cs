@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Models.Dtos;
 using Models.Entities;
 
-namespace Application.Extentions
+namespace Models.Extentions
 {
 	public static class QueryableExtenionsForMapping
 	{

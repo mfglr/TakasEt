@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Models.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

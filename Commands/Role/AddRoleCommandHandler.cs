@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using MediatR;
 using Models.Dtos;
 using Models.Entities;
@@ -7,9 +7,9 @@ namespace Commands
 {
 	public class AddRoleCommandHandler : IRequestHandler<AddRoleDto, AppResponseDto>
 	{
-		private readonly IWriteRepository<Role> _roles;
+		private readonly IRepository<Role> _roles;
 
-		public AddRoleCommandHandler(IWriteRepository<Role> roles)
+		public AddRoleCommandHandler(IRepository<Role> roles)
 		{
 			_roles = roles;
 		}
@@ -17,7 +17,8 @@ namespace Commands
 		public async Task<AppResponseDto> Handle(AddRoleDto request, CancellationToken cancellationToken)
 		{
 			var role = new Role(request.Name);
-			return AppResponseDto.Success(await _roles.CreateAsync(role, cancellationToken));
+			var entity = (await _roles.DbSet.AddAsync(role, cancellationToken)).Entity;
+			return AppResponseDto.Success(entity);
 		}
 	}
 }

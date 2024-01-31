@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
+﻿using Models.Interfaces.Repositories;
+using Models.Interfaces.Services;
 using MediatR;
 using Models.Dtos;
 using Models.Entities;

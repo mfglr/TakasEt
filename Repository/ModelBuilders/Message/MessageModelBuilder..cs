@@ -32,7 +32,7 @@ namespace Repository.ModelBuilders
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder
-				.HasMany(x => x.UsersWhoRemoved)
+				.HasMany(x => x.UsersWhoRemovedTheEntity)
 				.WithOne(x => x.Message)
 				.HasForeignKey(x => x.MessageId)
 				.OnDelete(DeleteBehavior.NoAction);

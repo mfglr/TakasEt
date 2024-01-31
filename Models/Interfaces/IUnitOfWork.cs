@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Application.Interfaces
+namespace Models.Interfaces
 {
 	public interface IUnitOfWork
 	{

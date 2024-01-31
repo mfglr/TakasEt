@@ -5,8 +5,6 @@ using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using WebApi.Extentions;
-using Queries;
-using Commands;
 using Iss_Api.Hubs;
 using Models.Configurations;
 using Iss_Api.Middlewares;
@@ -14,16 +12,13 @@ using Iss_Api.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOptions();
-Configuration configuration = builder.Configuration.GetSection("Configuration").Get<Configuration>();
+var configuration = builder.Configuration.GetSection("Configuration").Get<Configuration>();
 builder.Services.AddSingleton(configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
-builder.Services.AddSqlDbContext();
 builder.Services.AddApplication();
-builder.Services.AddModels();
-builder.Services.AddQueries();
-builder.Services.AddCommands();
+builder.Services.AddSqlDbContext();
 builder.Services.AddServices();
 
 builder.Services.AddAuthentication(

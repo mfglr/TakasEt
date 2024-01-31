@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Repositories;
+﻿using Models.Interfaces;
+using Models.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Configurations;
@@ -28,9 +28,6 @@ namespace Repository
 
 			serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-			serviceCollection.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
-			serviceCollection.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
-			serviceCollection.AddScoped<IUserReadRepository, UserReadRepository>();
 		}
 
 	}

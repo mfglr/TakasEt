@@ -1,4 +1,4 @@
-﻿namespace Application.Helpers
+﻿namespace Models.Helpers
 {
 	public class CreateMessageHelper
 	{

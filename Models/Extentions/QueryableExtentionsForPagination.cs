@@ -1,7 +1,7 @@
 ﻿using Models.Dtos;
 using Models.Entities;
 
-namespace Application.Extentions
+namespace Models.Extentions
 {
 	public static class QueryableExtentionsForPagination
 	{
@@ -15,5 +15,6 @@ namespace Application.Extentions
 				return r.Take((int)page.Take);
 			return r.Take(10);
 		}
+
 	}
 }

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Services;
+﻿using Models.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 

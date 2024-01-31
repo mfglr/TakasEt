@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class PostTag : CrossEntity
+    public class PostTag : CrossEntity<Post,Tag>
     {
         public int PostId { get; private set; }
         public int TagId { get; private set; }

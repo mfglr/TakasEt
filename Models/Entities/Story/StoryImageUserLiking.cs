@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class StoryImageUserLiking : CrossEntity
+    public class StoryImageUserLiking : CrossEntity<StoryImage,User>
     {
 		public override int[] GetKey() => new int[] { StoryImageId, UserId };
 		public int StoryImageId { get; private set; }

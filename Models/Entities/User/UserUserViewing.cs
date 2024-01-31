@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class UserUserViewing : CrossEntity
+    public class UserUserViewing : CrossEntity<User,User>
     {
 		public override int[] GetKey() => new[] { ViewerId, ViewedId };
 		public int ViewerId { get; private set; }

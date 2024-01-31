@@ -3,7 +3,7 @@ using Models.ValueObjects;
 
 namespace Models.Entities
 {
-    public class Swapping : CrossEntity
+    public class Swapping : CrossEntity<Post,Post>
     {
         public int RequesterId { get; private set; }
         public int RequestedId { get; private set; }

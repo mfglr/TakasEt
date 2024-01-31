@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class PostUserExploring : CrossEntity
+    public class PostUserExploring : CrossEntity<Post,User>
     {
 		public override int[] GetKey() => new int[] { PostId, UserId };
 		public int PostId { get; private set; }

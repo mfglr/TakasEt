@@ -3,7 +3,9 @@ using MediatR;
 
 namespace Models.Entities
 {
-    public abstract class CrossEntity : IBaseEntity, IEntityDomainEvent,IRemovable
+    public abstract class CrossEntity<T,V> : IBaseEntity, IEntityDomainEvent,IRemovable
+        where T : IBaseEntity
+        where V : IBaseEntity
     {
 
         //IBaseEntity

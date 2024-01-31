@@ -3,7 +3,7 @@ using Models.ValueObjects;
 
 namespace Models.Entities
 {
-	public class Post : Entity, IAggregateRoot, ILikeable<PostUserLiking>, IViewable<PostUserViewing>, IExplorable<PostUserExploring>
+	public class Post : Entity, IAggregateRoot, ILikeable<PostUserLiking,Post,User>, IViewable<PostUserViewing,Post,User>, IExplorable<PostUserExploring,Post,User>
     {
         public string Title { get; private set; }
         public string NormalizedTitle { get; private set; }

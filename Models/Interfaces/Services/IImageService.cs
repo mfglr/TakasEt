@@ -1,6 +1,6 @@
 ﻿using Models.ValueObjects;
 
-namespace Application.Interfaces.Services
+namespace Models.Interfaces.Services
 {
 	public interface IImageService
 	{

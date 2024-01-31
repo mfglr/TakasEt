@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Application.Interfaces.Repositories
+namespace Models.Interfaces.Repositories
 {
     public interface IRepository<T> where T : class
     {

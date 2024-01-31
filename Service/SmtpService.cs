@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Services;
+﻿using Models.Interfaces.Services;
 using Models.Entities;
 using Service.CustomMailMessages;
 using System.Net;

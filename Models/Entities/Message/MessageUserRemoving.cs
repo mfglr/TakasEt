@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-	public class MessageUserRemoving : CrossEntity
+	public class MessageUserRemoving : CrossEntity<Message,User>
 	{
 		public override int[] GetKey() => new[] { MessageId, RemoverId }; 
 		public int MessageId { get; private set; }

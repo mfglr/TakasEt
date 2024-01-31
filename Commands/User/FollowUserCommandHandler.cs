@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using MediatR;
 using Models.Dtos;
 using Models.Entities;
@@ -9,9 +9,9 @@ namespace Commands
     {
 
 
-        private readonly IReadRepository<User> _users;
+        private readonly IRepository<User> _users;
 
-        public FollowUserCommandHandler(IReadRepository<User> users)
+        public FollowUserCommandHandler(IRepository<User> users)
         {
 			_users = users;
         }
@@ -19,7 +19,9 @@ namespace Commands
         public async Task<AppResponseDto> Handle(FollowUserDto request, CancellationToken cancellationToken)
         {
 
-            var user = await _users.GetByIdAsync(request.FollowingId, cancellationToken);
+            var user = await _users
+                .DbSet
+                .FindAsync(request.FollowingId, cancellationToken);
             user!.Follow(request.LoggedInUserId);
             return AppResponseDto.Success();
         }

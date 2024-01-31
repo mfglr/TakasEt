@@ -5,7 +5,7 @@ using Models.DomainEventModels;
 
 namespace Models.Entities
 {
-    public class User : IdentityUser<int>, IEntity, IEntityDomainEvent, IViewable<UserUserViewing>, IAggregateRoot
+    public class User : IdentityUser<int>, IEntity, IEntityDomainEvent, IViewable<UserUserViewing,User,User>, IAggregateRoot
     {
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
@@ -24,14 +24,12 @@ namespace Models.Entities
         public IReadOnlyCollection<Story> Stories { get; }
         public IReadOnlyCollection<StoryImageUserLiking> StoryImagesLiked { get; }
         public IReadOnlyCollection<StoryImageUserViewing> StoryImagesViewed { get; }
-        public IReadOnlyCollection<ConversationUserRemoving> ConversationsRemoved { get; }
+        
         public IReadOnlyCollection<MessageUserRemoving> MessagesRemoved { get; }
 		public IReadOnlyCollection<RoleUser> Roles { get; }
         public IReadOnlyCollection<GroupUser> Groups { get; }
 
-		public User()
-        {
-        }
+		public User() { }
 
         public User(string email, string userName)
         {
@@ -39,7 +37,6 @@ namespace Models.Entities
             Email = email;
             SetCreatedDate(DateTime.Now);
         }
-
 
         //IBaseEntity
         public int[] GetKey() => new[] { Id };
@@ -49,27 +46,11 @@ namespace Models.Entities
 		private readonly List<Searching> _searchings = new();
 
 		//Conversations
-		private readonly List<Conversation> _conversationsSent = new ();
-        private readonly List<Conversation> _conversationsReceived = new ();
-        public IReadOnlyCollection<Conversation> ConversationsSent => _conversationsSent;
-        public IReadOnlyCollection<Conversation> ConversationsReceived => _conversationsReceived;
-        public void AddConversation(int receiverId)
-        {
-            _conversationsSent.Add(new Conversation(Id,receiverId));
-        }
-        public void RemoveConversationFromUser(int userId)
-        {
-            int index = _conversationsSent.FindIndex(x => x.ReceiverId == userId);
-            if (index != -1)
-                _conversationsSent[index].RemoveFromUser(userId);
-            else
-            {
-                index = _conversationsReceived.FindIndex(x => x.SenderId == userId);
-                _conversationsReceived[index].RemoveFromUser(userId);
-            }
-        }
+        public IReadOnlyCollection<ConversationUserRemoving> ConversationsRemoved { get; }
+        public IReadOnlyCollection<Conversation> ConversationsSent { get; }
+		public IReadOnlyCollection<Conversation> ConversationsReceived { get; }
 
-        //User Message Hub State
+		//User Message Hub State
 		public MessageHubState? MessageHubState => _messageHubState;
         private MessageHubState? _messageHubState;
 		public void SetMessageHubState(string connectionId)
@@ -77,19 +58,6 @@ namespace Models.Entities
             if(_messageHubState == null) _messageHubState = new MessageHubState(connectionId);
             else _messageHubState.Update(connectionId);
         }
-
-		//IEntity
-		public int Id { get; protected set; }
-		public DateTime CreatedDate { get; protected set; }
-		public DateTime? UpdatedDate { get; protected set; }
-		public void SetCreatedDate(DateTime date)
-		{
-			CreatedDate = date;
-		}
-		public void SetUpdatedDate(DateTime date)
-		{
-			UpdatedDate = date;
-		}
 
         //Posts
 		public IReadOnlyCollection<Post> Posts => _posts;
@@ -136,6 +104,19 @@ namespace Models.Entities
             return _followings.Any(x => x.FollowingId != userId);
         }
 
+		//IViewable
+		public IReadOnlyCollection<UserUserViewing> UsersWhoViewed => _usersWhoViewed;
+		public IReadOnlyCollection<UserUserViewing> UsersViewed { get; }
+		private readonly List<UserUserViewing> _usersWhoViewed = new();
+		public void View(int viewerId)
+		{
+			_usersWhoViewed.Add(new UserUserViewing(viewerId, Id));
+		}
+		public bool IsViewed(int viewerId)
+		{
+			return _usersWhoViewed.Any(x => x.ViewerId == viewerId);
+		}
+
 		//user image
 		public IReadOnlyCollection<UserImage> UserImages => _userImages;
 		private readonly List<UserImage> _userImages = new();
@@ -160,9 +141,22 @@ namespace Models.Entities
             var userImage = _userImages.FirstOrDefault(x => x.Id == id);
             _userImages.Remove(userImage!);
         }
-        
-        //IDomainEvent
-        private List<INotification> _domainEvents = new();
+
+		//IEntity
+		public int Id { get; protected set; }
+		public DateTime CreatedDate { get; protected set; }
+		public DateTime? UpdatedDate { get; protected set; }
+		public void SetCreatedDate(DateTime date)
+		{
+			CreatedDate = date;
+		}
+		public void SetUpdatedDate(DateTime date)
+		{
+			UpdatedDate = date;
+		}
+
+		//IDomainEvent
+		private List<INotification> _domainEvents = new();
         public void AddDomainEvent(INotification domainEvent)
         {
             _domainEvents.Add(domainEvent);
@@ -184,18 +178,6 @@ namespace Models.Entities
         {
             return _domainEvents.Any();
         }
-
-        //IViewable
-        public IReadOnlyCollection<UserUserViewing> UsersWhoViewed => _usersWhoViewed;
-		public IReadOnlyCollection<UserUserViewing> UsersViewed { get; }
-		private readonly List<UserUserViewing> _usersWhoViewed = new();
-		public void View(int viewerId)
-        {
-            _usersWhoViewed.Add(new UserUserViewing(viewerId, Id));
-		}
-        public bool IsViewed(int viewerId)
-        {
-            return _usersWhoViewed.Any(x => x.ViewerId == viewerId);
-        }
+        
     }
 }

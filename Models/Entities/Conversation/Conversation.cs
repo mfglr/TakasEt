@@ -1,8 +1,11 @@
 ﻿namespace Models.Entities
 {
-	public class Conversation : CrossEntity, IRemovableByManyUsers<ConversationUserRemoving>
+
+	/*if a conversation has been created by a user then the receiver can't create the conversation between itself and the user. it means : 
+                Conversation( senderId : 1, receiverId : 2 ) == Conversation( senderId : 2, receiverId : 1 )
+        */
+	public class Conversation : Entity, IRemovableByManyUsers<ConversationUserRemoving,Conversation,User>
 	{
-		public override int[] GetKey() => new[] { SenderId, ReceiverId };
 		public int SenderId { get; private set; }
 		public User Sender { get; }
 
@@ -18,19 +21,19 @@
 		//messages
 		private readonly List<Message> _messages = new ();
 		public IReadOnlyCollection<Message> Messages => _messages;
-		public void AddMessage(int userId,string content)
+		public Message AddMessage(int userId,string content)
 		{
-			_messages.Add(new Message(userId, content));
+			if (userId != SenderId && userId != ReceiverId)
+				throw new Exception("error");
+			var message = new Message(userId, content);
+			message.SaveMessage();
+			_messages.Add(message);
+			return message;
 		}
 		public void RemoveMessage(int messageId)
 		{
 			var message = _messages.First(x => x.Id == messageId);
 			message.Remove();
-		}
-		public void RemoveMessageFromUser(int messageId,int userId)
-		{
-			var message = _messages.First(x => x.Id == messageId);
-			message.RemoveFromUser(userId);
 		}
 		public void DeleteMessage(int messageId)
 		{
@@ -39,13 +42,24 @@
 		}
 
 		//IRemovableByManyUsers
-		private readonly List<ConversationUserRemoving> _usersWhoRemoved = new ();
-		public IReadOnlyCollection<ConversationUserRemoving> UsersWhoRemoved => _usersWhoRemoved;
-		public void RemoveFromUser(int removerId)
+		private readonly List<ConversationUserRemoving> _usersWhoRemovedTheEntity = new ();
+		public IReadOnlyCollection<ConversationUserRemoving> UsersWhoRemovedTheEntity => _usersWhoRemovedTheEntity;
+		public void RemoveTheEntityFromUser(int removerId)
 		{
-			_usersWhoRemoved.Add(new ConversationUserRemoving(SenderId, ReceiverId, removerId));
+			if (removerId != SenderId && removerId != ReceiverId)
+				throw new Exception("error");
+			_usersWhoRemovedTheEntity.Add(new ConversationUserRemoving(Id, removerId));
 			foreach(var message in _messages)
-				message.RemoveFromUser(removerId);
+				message.RemoveTheEntityFromUser(removerId);
+		}
+		public void AddAgainTheEntityToUser(int removerId)
+		{
+			if (removerId != SenderId && removerId != ReceiverId)
+				throw new Exception("error");
+			var index = _usersWhoRemovedTheEntity.FindIndex(x => x.RemoverId == removerId);
+			if(index == -1)
+				throw new Exception("error");
+			_usersWhoRemovedTheEntity.RemoveAt(index);
 		}
 	}
 }

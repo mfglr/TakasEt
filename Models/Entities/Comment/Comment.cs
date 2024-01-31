@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class Comment : Entity, IAggregateRoot, ILikeable<CommentUserLiking>
+    public class Comment : Entity, IAggregateRoot, ILikeable<CommentUserLiking,Comment,User>
     {
         public int? PostId { get; private set; }
 		public int? ParentId { get; private set; }

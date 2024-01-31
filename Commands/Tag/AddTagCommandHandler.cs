@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Models.Interfaces.Repositories;
 using MediatR;
 using Models.Dtos;
 using Models.Entities;
@@ -7,9 +7,9 @@ namespace Commands
 {
 	public class AddTagCommandHandler : IRequestHandler<AddTagDto, AppResponseDto>
 	{
-		private readonly IWriteRepository<Tag> _tags;
+		private readonly IRepository<Tag> _tags;
 
-		public AddTagCommandHandler(IWriteRepository<Tag> tags)
+		public AddTagCommandHandler(IRepository<Tag> tags)
 		{
 			_tags = tags;
 		}
@@ -17,7 +17,8 @@ namespace Commands
 		public async Task<AppResponseDto> Handle(AddTagDto request, CancellationToken cancellationToken)
 		{
 			var tag = new Tag(request.Name!);
-			return AppResponseDto.Success(  await _tags.CreateAsync(tag, cancellationToken) );
+			var entity = (await _tags.DbSet.AddAsync(tag, cancellationToken)).Entity;
+			return AppResponseDto.Success(entity);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Repository.ModelBuilders
 	{
 		public void Configure(EntityTypeBuilder<ConversationUserRemoving> builder)
 		{
-			builder.HasKey( x => new { x.SenderId, x.ReceiverId, x.RemoverId } );
+			builder.HasKey( x => new { x.ConversationId, x.RemoverId } );
 		}
 	}
 }
