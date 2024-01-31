@@ -12,7 +12,7 @@
 	 *			      1	-	      1
 	 *		***************************
 	 *		
-	 *		So the message is able to be read the users except the user with id 1.
+	 *		So the message is able to be read by users except the user with id 1.
 	 */
 
 	/* We can use the entity User instead of The generic type V :
