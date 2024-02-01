@@ -1,9 +1,7 @@
 ﻿namespace Models.Dtos
 {
-	public class UserImageResponseDto
+	public class UserImageResponseDto : ImageResponDto
 	{
-		public int Id { get; set; }
-		public string Extention { get; set; }
-		public float AspectRatio { get; set; }
+		public bool IsActive { get; set; }
 	}
 }

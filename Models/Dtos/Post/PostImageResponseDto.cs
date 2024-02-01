@@ -1,9 +1,7 @@
 ﻿namespace Models.Dtos
 {
-	public class PostImageResponseDto
+	public class PostImageResponseDto : ImageResponDto
 	{
-        public int Id { get; set; }
-        public string Extention { get; set; }
-        public float AspectRatio { get; set; }
-    }
+		public int Index { get; set; }
+	}
 }

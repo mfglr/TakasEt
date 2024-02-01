@@ -1,4 +1,4 @@
-﻿namespace Models.Dtos.Story
+﻿namespace Models.Dtos
 {
 	public class StoryResponseDto
 	{

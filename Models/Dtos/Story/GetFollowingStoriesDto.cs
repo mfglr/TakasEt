@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Models.Extentions;
 
-namespace Models.Dtos.Story
+namespace Models.Dtos
 {
 	public class GetFollowingStoriesDto : IPage,IRequest<AppResponseDto>
 	{
