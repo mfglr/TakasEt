@@ -7,16 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Service\Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="message-image\" />
     <Folder Include="group-image\" />
     <Folder Include="story-image\" />
     <Folder Include="user-image\" />
     <Folder Include="post-image\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Comman\Comman.csproj" />
   </ItemGroup>
 
 </Project>

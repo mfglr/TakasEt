@@ -6,6 +6,7 @@ import { AppState } from './state/reducer';
 import { loadUserAction, loginFromLocalStorageAction } from './state/actions';
 import { selectIsLogin } from './state/selector';
 import { MessageHubConnectionService } from './services/message-hub-connection.service';
+import { AuthService } from './services/auth.service';
 register();
 
 @Component({
@@ -19,7 +20,8 @@ export class AppComponent {
 
   constructor(
     private appStore : Store<AppState>,
-    private messageHub : MessageHubConnectionService
+    private messageHub : MessageHubConnectionService,
+    private authService : AuthService
   ) {}
 
   ngOnInit() {
@@ -32,6 +34,13 @@ export class AppComponent {
       }
     })
 
+    this.authService.userManager.getUser().then(user => console.log(user));
+
+
+  }
+
+  login(){
+    this.authService.userManager.signinRedirect();
   }
 
   ngOnDestroy(){

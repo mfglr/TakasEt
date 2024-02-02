@@ -19,7 +19,7 @@ namespace Repository
 			{
 				optionsAction.UseSqlServer(configuration.Local.SqlConnectionString);
 			});
-			
+
 			serviceCollection.AddIdentityCore<User>(opt =>
 			{
 				opt.User.RequireUniqueEmail = true;
