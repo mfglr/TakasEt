@@ -6,6 +6,6 @@
 		public string Extention { get; set; }
 		public int Height { get; set; }
 		public int Width { get; set; }
-		public int AspectRatio { get; set; }
+		public float AspectRatio { get; set; }
 	}
 }

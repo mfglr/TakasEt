@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Models.Dtos;
 using Models.Entities;
-using Models.Exceptions;
+using Common.Exceptions;
 using Models.ValueObjects;
 
 namespace Commands

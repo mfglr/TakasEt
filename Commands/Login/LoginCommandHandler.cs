@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.Dtos;
 using Models.Entities;
-using Models.Exceptions;
+using Common.Exceptions;
 
 namespace Commands
 {

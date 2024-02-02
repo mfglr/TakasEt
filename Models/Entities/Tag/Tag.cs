@@ -1,4 +1,4 @@
-﻿using Models.Extentions;
+﻿using Common.Extentions;
 
 namespace Models.Entities
 {

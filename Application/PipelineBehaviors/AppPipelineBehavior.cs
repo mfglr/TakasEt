@@ -27,7 +27,7 @@ namespace Application.Pipelines
 				if (!validationResult.IsValid)
 				{
 					var errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-					throw Models.Exceptions.ValidationException.Create(errorMessages, request.GetType());
+					throw Common.Exceptions.ValidationException.Create(errorMessages, request.GetType());
 				}
 			}
 

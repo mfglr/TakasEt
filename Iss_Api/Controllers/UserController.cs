@@ -59,13 +59,6 @@ namespace WebApi.Controllers
 		}
 
 		[Authorize(Roles = "user")]
-		[HttpGet("user/get-user-image/{id}")]
-		public async Task GetUserImage(int id)
-		{
-			await Response.Body.WriteAsync(await _sender.Send(new GetUserImageDto(id)));
-		}
-
-		[Authorize(Roles = "user")]
 		[HttpPut("user/follow-user")]
 		public async Task<AppResponseDto> FollowUser(FollowUserDto request)
 		{

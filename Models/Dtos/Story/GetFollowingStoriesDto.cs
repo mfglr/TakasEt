@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using Models.Extentions;
+using Common.Extentions;
 
 namespace Models.Dtos
 {

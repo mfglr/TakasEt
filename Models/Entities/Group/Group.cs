@@ -1,4 +1,4 @@
-﻿using Models.Extentions;
+﻿using Common.Extentions;
 using Models.ValueObjects;
 
 namespace Models.Entities
