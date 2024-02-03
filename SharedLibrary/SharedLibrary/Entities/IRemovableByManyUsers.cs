@@ -1,5 +1,6 @@
-﻿namespace Models.Entities
+﻿namespace SharedLibrary.Entities
 {
+
 	/* Entities which has been derived 'IRemovableByManyUsers' interface are able to removed many users.
 	 * For example :
 	 *		if A Message of a conversation or a group is deleted by a user, the other users are able to read the message.
@@ -24,13 +25,16 @@
 	 * But, entities that are derived the Entity User may be created.
 	 */
 
-	public interface IRemovableByManyUsers<TCrossEntity,T,V> 
-		where T : IBaseEntity
-		where V : User
-		where TCrossEntity : CrossEntity<T,V>
+	public interface IGenericRemovableByManyUsers<TCrossEntity,TUserId> where TCrossEntity : Entity
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoRemovedTheEntity { get; }
-		void RemoveTheEntityFromUser(int removerId);
-		void AddAgainTheEntityToUser(int removerId);
+		void Remove(TUserId userId);
+		void Reinsert(TUserId userId);
+		bool IsRemovedByUser(TUserId userId);
+	}
+
+	public interface IRemovableByManyUsers<TCrossEntity> : IGenericRemovableByManyUsers<TCrossEntity,Guid> where TCrossEntity : Entity
+	{
+		
 	}
 }
