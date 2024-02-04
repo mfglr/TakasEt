@@ -15,9 +15,9 @@ namespace Repository
 		public static void AddSqlDbContext(this IServiceCollection serviceCollection)
 		{
 			Configuration configuration = serviceCollection.BuildServiceProvider().GetRequiredService<Configuration>();
-			serviceCollection.AddDbContext<AppDbContext>(optionsAction =>
+			serviceCollection.AddDbContext<AppDbContext>(options =>
 			{
-				optionsAction.UseSqlServer(configuration.Local.SqlConnectionString);
+				options.UseSqlServer(configuration.Local.SqlConnectionString);
 			});
 
 			serviceCollection.AddIdentityCore<User>(opt =>

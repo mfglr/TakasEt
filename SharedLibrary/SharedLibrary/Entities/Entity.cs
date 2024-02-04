@@ -6,6 +6,9 @@
 		public DateTime CreatedDate { get; protected set; }
 		public DateTime? UpdatedDate { get; protected set; }
 
+		public void SetCreatedDate() => CreatedDate = DateTime.Now;
+		public void SetUpdatedDate() => UpdatedDate = DateTime.Now;
+
 		//IRemovable
 		public bool IsRemoved { get; protected set; }
 		public DateTime? RemovedDate { get; protected set; }

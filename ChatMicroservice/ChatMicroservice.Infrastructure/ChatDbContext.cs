@@ -1,4 +1,5 @@
-﻿using ChatMicroservice.Domain.ConversationAggregate;
+﻿using ChatMicroservice.Domain.ConnectionAggregate;
+using ChatMicroservice.Domain.ConversationAggregate;
 using ChatMicroservice.Domain.GroupAggregate;
 using ChatMicroservice.Domain.MessageEntity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,8 @@ namespace ChatMicroservice.Infrastructure
 		public DbSet<Conversation> Conversations { get; set; }
 		public DbSet<Group> Groups { get; set; }
 		public DbSet<Message> Messages { get; set; }
-
+		public DbSet<Connection> Connections { get; set; }
+		
         public ChatDbContext(DbContextOptions<ChatDbContext> options ) : base( options ) { }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

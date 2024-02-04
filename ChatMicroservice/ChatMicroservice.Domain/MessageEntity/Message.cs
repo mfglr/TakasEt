@@ -6,15 +6,15 @@ namespace ChatMicroservice.Domain.MessageEntity
 {
     public class Message : Entity, ILikeable<MessageUserLiking>, IViewable<MessageUserViewing>, IRemovableByManyUsers<MessageUserRemoving>
     {
-		public Guid UserId { get; private set; }
+		public Guid SenderId { get; private set; }
 		public string Content { get; private set; }
         public string NormalizeContent { get; private set; }
 		public int NumberOfImages { get; private set; }
 		public MessageState MessageState { get; private set; }
         
-		public Message(Guid userId,string content)
+		public Message(Guid senderId,string content)
         {
-			UserId = userId;
+			SenderId = senderId;
             Content = content;
             NormalizeContent = content.CustomNormalize();
         }
