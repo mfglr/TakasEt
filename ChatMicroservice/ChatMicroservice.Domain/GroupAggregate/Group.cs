@@ -125,5 +125,19 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			if (index == -1) throw new Exception("error");
 			_images.RemoveAt(index);
 		}
+
+		//GroupUserRequestToJoin
+		private readonly List<GroupUserRequestToJoin> _usersWhoWantToJoinTheGroup = new ();
+		public IReadOnlyCollection<GroupUserRequestToJoin> UsersWhoWantsToJoinTheGroup => _usersWhoWantToJoinTheGroup;
+		public GroupUserRequestToJoin MakeRequestToJoin(Guid userId)
+		{
+			if(_users.Any(x => x.UserId == userId)) throw new Exception("error");
+
+			var request = new GroupUserRequestToJoin(userId);
+			request.MarkAsPendingApproval();
+			_usersWhoWantToJoinTheGroup.Add(request);
+			return request;
+		}
+
 	}
 }

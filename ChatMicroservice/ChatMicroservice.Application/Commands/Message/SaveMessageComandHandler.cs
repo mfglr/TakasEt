@@ -7,6 +7,7 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
+using SharedLibrary.ValueObjects;
 
 namespace ChatMicroservice.Application.Commands
 {
@@ -43,6 +44,9 @@ namespace ChatMicroservice.Application.Commands
 			}
             else
 				message = conversation.AddMessage(request.SenderId, request.Content);
+
+			foreach (var image in request.MessageImages)
+				message.AddImage(image.BlobName, image.Extention, new Dimension(image.Height, image.Width));
 
 			var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
 			if (numberOfChanges <= 0) throw new Exception("error");

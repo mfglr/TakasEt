@@ -35,17 +35,20 @@ namespace ChatMicroservice.Domain.MessageEntity
 		public void AddImage(string blobName, string extention, Dimension dimension)
 		{
 			_images.Add(new MessageImage(blobName, extention, dimension));
+			NumberOfImages++;
 		}
 		public void RemoveImage(Guid imageId)
 		{
 			var image = _images.FirstOrDefault(x => x.Id == imageId) ?? throw new Exception("error");
 			image.Remove();
+			NumberOfImages--;
 		}
 		public void DeleteImage(Guid imageId)
 		{
 			var index = _images.FindIndex(x => x.Id == imageId);
 			if(index == -1) throw new Exception("error");
 			_images.RemoveAt(index);
+			NumberOfImages--;
 		}
 
 		//ILikeable

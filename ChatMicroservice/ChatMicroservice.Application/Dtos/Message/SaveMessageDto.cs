@@ -8,5 +8,6 @@ namespace ChatMicroservice.Application.Dtos
 		public Guid SenderId { get; set; }
 		public Guid ReceiverId { get; set; }
 		public string Content { get; set; }
+		public List<MessageImageRequestDto> MessageImages { get; set; }
 	}
 }
