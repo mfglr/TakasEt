@@ -10,7 +10,7 @@
 	 *		[message]UserRemoving Table
 	 *		***************************
 	 *		[Message]Id - RemoverId
-	 *			      1	-	      1
+	 *		**********1 - ********1
 	 *		***************************
 	 *		
 	 *		So the message is able to be read by users except the user with id 1.
