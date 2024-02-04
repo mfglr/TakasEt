@@ -4,7 +4,7 @@ namespace ChatMicroservice.Domain.MessageEntity
 {
 	public class MessageUserViewing : MessageUserCrossEntity
 	{
-		public MessageUserViewing(Guid messageId, Guid userId) : base(messageId, userId)
+		public MessageUserViewing(Guid userId) : base(userId)
 		{
 		}
 	}

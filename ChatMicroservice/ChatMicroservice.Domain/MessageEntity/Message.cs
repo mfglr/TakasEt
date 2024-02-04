@@ -17,14 +17,20 @@ namespace ChatMicroservice.Domain.MessageEntity
 			SenderId = senderId;
             Content = content;
             NormalizeContent = content.CustomNormalize();
-        }
+
+			_images = new();
+			_usersWhoLikedTheEntity = new();
+			_usersWhoViewedTheEntity = new();
+			_usersWhoReceivedTheMessage = new();
+			_usersWhoRemovedTheEntity = new();
+		}
 		
-		public void SaveMessage() => MessageState = MessageState.Saved;
-		public void ArriveMessage() => MessageState = MessageState.Arrived;
-		public void ViewMessage() => MessageState = MessageState.Viewed;
+		public void MarkAsSaved() => MessageState = MessageState.Saved;
+		public void MarkAsReceived() => MessageState = MessageState.Received;
+		public void MarkAsViewed() => MessageState = MessageState.Viewed;
 
 		//message images
-		private readonly List<MessageImage> _images = new ();
+		private readonly List<MessageImage> _images;
 		public IReadOnlyCollection<MessageImage> MessageImages { get; }
 		public void AddImage(string blobName, string extention, Dimension dimension)
 		{
@@ -32,8 +38,7 @@ namespace ChatMicroservice.Domain.MessageEntity
 		}
 		public void RemoveImage(Guid imageId)
 		{
-			var image = _images.FirstOrDefault(x => x.Id == imageId);
-			if (image == null) throw new Exception("error");
+			var image = _images.FirstOrDefault(x => x.Id == imageId) ?? throw new Exception("error");
 			image.Remove();
 		}
 		public void DeleteImage(Guid imageId)
@@ -44,11 +49,11 @@ namespace ChatMicroservice.Domain.MessageEntity
 		}
 
 		//ILikeable
-		private readonly List<MessageUserLiking> _usersWhoLikedTheEntity = new();
+		private readonly List<MessageUserLiking> _usersWhoLikedTheEntity;
 		public IReadOnlyCollection<MessageUserLiking> UsersWhoLikedTheEntity => _usersWhoLikedTheEntity;
 		public void Like(Guid userId)
 		{
-			_usersWhoLikedTheEntity.Add(new MessageUserLiking(Id, userId));
+			_usersWhoLikedTheEntity.Add(new MessageUserLiking(userId));
 		}
 		public void Dislike(Guid userId)
 		{
@@ -62,23 +67,35 @@ namespace ChatMicroservice.Domain.MessageEntity
 		}
 
 		//IViewable
-		public IReadOnlyCollection<MessageUserViewing> UsersWhoViewedTheEntiy => _usersWhoViewedTheEntiy;
-		private readonly List<MessageUserViewing> _usersWhoViewedTheEntiy;
+		private readonly List<MessageUserViewing> _usersWhoViewedTheEntity;
+		public IReadOnlyCollection<MessageUserViewing> UsersWhoViewedTheEntity => _usersWhoViewedTheEntity;
 		public void View(Guid userId)
 		{
-			_usersWhoViewedTheEntiy.Add(new MessageUserViewing(Id, userId));
+			_usersWhoViewedTheEntity.Add(new MessageUserViewing(userId));
 		}
 		public bool IsViewed(Guid userId)
 		{
-			return _usersWhoViewedTheEntiy.Any(x => x.UserId == userId);
+			return _usersWhoViewedTheEntity.Any(x => x.UserId == userId);
+		}
+
+		//message user receiving
+		private readonly List<MessageUserReceiving> _usersWhoReceivedTheMessage;
+		public IReadOnlyCollection<MessageUserReceiving> UsersWhoReceivedTheMessage => _usersWhoReceivedTheMessage;
+		public void MarkAsReceived(Guid userId)
+		{
+			_usersWhoReceivedTheMessage.Add(new MessageUserReceiving(userId));
+		}
+		public bool IsReceivedBy(Guid userId)
+		{
+			return _usersWhoReceivedTheMessage.Any(x => x.UserId == userId);
 		}
 
 		//IRemovableByManyUsers
-		private readonly List<MessageUserRemoving> _usersWhoRemovedTheEntity = new();
+		private readonly List<MessageUserRemoving> _usersWhoRemovedTheEntity;
 		public IReadOnlyCollection<MessageUserRemoving> UsersWhoRemovedTheEntity => _usersWhoRemovedTheEntity;
 		public void Remove(Guid userId)
 		{
-			_usersWhoRemovedTheEntity.Add(new MessageUserRemoving(Id, userId));
+			_usersWhoRemovedTheEntity.Add(new MessageUserRemoving(userId));
 		}
 		public void Reinsert(Guid userId)
 		{
@@ -97,14 +114,14 @@ namespace ChatMicroservice.Domain.MessageEntity
 			base.Remove();
 			foreach(var item in _usersWhoRemovedTheEntity) item.Remove();
 			foreach (var item in _usersWhoLikedTheEntity) item.Remove();
-			foreach (var item in _usersWhoViewedTheEntiy) item.Remove();
+			foreach (var item in _usersWhoViewedTheEntity) item.Remove();
 		}
 		public override void Reinsert()
 		{
 			base.Reinsert();
 			foreach (var item in _usersWhoRemovedTheEntity) item.Reinsert();
 			foreach (var item in _usersWhoLikedTheEntity) item.Reinsert();
-			foreach (var item in _usersWhoViewedTheEntiy) item.Reinsert();
+			foreach (var item in _usersWhoViewedTheEntity) item.Reinsert();
 		}
 
 	}

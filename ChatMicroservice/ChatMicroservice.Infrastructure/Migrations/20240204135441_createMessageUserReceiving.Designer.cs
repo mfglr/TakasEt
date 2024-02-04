@@ -4,6 +4,7 @@ using ChatMicroservice.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatMicroservice.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240204135441_createMessageUserReceiving")]
+    partial class createMessageUserReceiving
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,7 +93,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ConversationId")
+                    b.Property<Guid>("ConversationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -315,7 +318,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
+                    b.Property<Guid>("MessageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("RemovedDate")
@@ -346,7 +349,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
+                    b.Property<Guid>("MessageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("RemovedDate")
@@ -377,7 +380,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
+                    b.Property<Guid>("MessageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("RemovedDate")
@@ -408,7 +411,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
+                    b.Property<Guid>("MessageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("RemovedDate")
@@ -431,7 +434,9 @@ namespace ChatMicroservice.Infrastructure.Migrations
                 {
                     b.HasOne("ChatMicroservice.Domain.ConversationAggregate.Conversation", null)
                         .WithMany("UsersWhoRemovedTheEntity")
-                        .HasForeignKey("ConversationId");
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.GroupImage", b =>
@@ -588,28 +593,36 @@ namespace ChatMicroservice.Infrastructure.Migrations
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoLikedTheEntity")
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserReceiving", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoReceivedTheMessage")
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserRemoving", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoRemovedTheEntity")
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserViewing", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
-                        .WithMany("UsersWhoViewedTheEntity")
-                        .HasForeignKey("MessageId");
+                        .WithMany("UsersWhoViewedTheEntiy")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.ConversationAggregate.Conversation", b =>
@@ -638,7 +651,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.Navigation("UsersWhoRemovedTheEntity");
 
-                    b.Navigation("UsersWhoViewedTheEntity");
+                    b.Navigation("UsersWhoViewedTheEntiy");
                 });
 #pragma warning restore 612, 618
         }

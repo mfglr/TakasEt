@@ -17,8 +17,4 @@
     <ProjectReference Include="..\ChatMicroservice.Infrastructure\ChatMicroservice.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
 </Project>

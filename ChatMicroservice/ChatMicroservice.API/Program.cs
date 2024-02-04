@@ -1,4 +1,6 @@
 using ChatMicroservice.API.Hubs;
+using ChatMicroservice.Infrastructure;
+using ChatMicroservice.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,9 @@ builder.Services.AddCors(
 		);
 	}
 );
+
+builder.Services.AddSqlDbContext();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

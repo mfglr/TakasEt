@@ -23,74 +23,83 @@ namespace ChatMicroservice.Domain.ConversationAggregate
 		private readonly List<Message> _messages = new ();
 		public IReadOnlyCollection<Message> Messages => _messages;
 
-		private void throwExceptionIfIsNotOwnerId(Guid userId)
+		private void ThrowExceptionIfIsNotOwnerId(Guid userId)
 		{
 			if (userId != SenderId && userId != ReceiverId) throw new Exception("error");
 		}
-		private Message getMessageOrThrowExceptionIfIsNotExist(Guid messageId)
+		private Message GetMessageOrThrowExceptionIfIsNotExist(Guid messageId)
 		{
 			var message = _messages.FirstOrDefault(x => x.Id == messageId);
-			if (message == null) throw new Exception("error");
-			return message;
+			return message ?? throw new Exception("error");
 		}
-		
+
 		public Message AddMessage(Guid userId,string content)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
 
 			var message = new Message(userId, content);
-			message.SaveMessage();
+			message.MarkAsSaved();
 
 			_messages.Add(message);
 			return message;
 		}
 		public void RemoveMessage(Guid messageId)
 		{
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Remove();
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Remove();
 		}
 		public void ReinsertMessage(Guid messageId)
 		{
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert();
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert();
 		}
 		public void RemoveMessageForUser(Guid messageId,Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Remove(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Remove(userId);
 		}
 		public void ReinsertMessageForUser(Guid messageId,Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert(userId);
 		}
 		public void DeleteMessage(Guid messageId)
 		{
-			var message = getMessageOrThrowExceptionIfIsNotExist(messageId);
+			var message = GetMessageOrThrowExceptionIfIsNotExist(messageId);
 			_messages.Remove(message);
 		}
 		public void LikeMessage(Guid messageId,Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Like(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Like(userId);
 		}
 		public void DislikeMessage(Guid messageId,Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			getMessageOrThrowExceptionIfIsNotExist(messageId).Dislike(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).Dislike(userId);
 		}
 		public bool IsLiked(Guid messageId, Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			return getMessageOrThrowExceptionIfIsNotExist(messageId).IsLiked(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			return GetMessageOrThrowExceptionIfIsNotExist(messageId).IsLiked(userId);
+		}
+		public void MarkAsReceived(Guid messageId, Guid userId)
+		{
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).MarkAsReceived(userId);
+		}
+		public bool IsReceivedBy(Guid messageId, Guid userId)
+		{
+			ThrowExceptionIfIsNotOwnerId(userId);
+			return GetMessageOrThrowExceptionIfIsNotExist(messageId).IsReceivedBy(userId);
 		}
 		public void ViewMessage(Guid messageId,Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			getMessageOrThrowExceptionIfIsNotExist(messageId).View(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			GetMessageOrThrowExceptionIfIsNotExist(messageId).View(userId);
 		}
 		public bool IsViewed(Guid messageId, Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			return getMessageOrThrowExceptionIfIsNotExist(messageId).IsViewed(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
+			return GetMessageOrThrowExceptionIfIsNotExist(messageId).IsViewed(userId);
 		}
 
 		//IRemovableByManyUsers
@@ -98,22 +107,22 @@ namespace ChatMicroservice.Domain.ConversationAggregate
 		public IReadOnlyCollection<ConversationUserRemoving> UsersWhoRemovedTheEntity => _usersWhoRemovedTheEntity;
 		public void Remove(Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
-			_usersWhoRemovedTheEntity.Add(new ConversationUserRemoving(Id, userId));
+			ThrowExceptionIfIsNotOwnerId(userId);
+			_usersWhoRemovedTheEntity.Add(new ConversationUserRemoving(userId));
 			foreach(var message in _messages)
 				message.Remove(userId);
 
 		}
 		public void Reinsert(Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
 			var index = _usersWhoRemovedTheEntity.FindIndex(x => x.UserId == userId);
 			if(index == -1) throw new Exception("error");
 			_usersWhoRemovedTheEntity.RemoveAt(index);
 		}
 		public bool IsRemovedByUser(Guid userId)
 		{
-			throwExceptionIfIsNotOwnerId(userId);
+			ThrowExceptionIfIsNotOwnerId(userId);
 			return _usersWhoRemovedTheEntity.Any(x => x.UserId == userId);
 		}
 	}

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ChatMicroservice.Core.Interfaces;
+using ChatMicroservice.Infrastructure.Concreats;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,13 +14,10 @@ namespace ChatMicroservice.Infrastructure
 			var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
 			var connectionString = configuration.GetConnectionString("sqlConnectionString");
 
-			services.AddDbContext<ChatDbContext>(
-				options =>{
-					options.UseSqlServer(connectionString);
-				}
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
+			return services.AddDbContext<ChatDbContext>(
+				options => options.UseSqlServer(connectionString)
 			);
-
-			return services;
 		}
 	}
 }

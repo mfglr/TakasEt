@@ -3,7 +3,7 @@
 	public interface IGenericViewable<TCrossEntity,TUserId>
 		where TCrossEntity : Entity
 	{
-		IReadOnlyCollection<TCrossEntity> UsersWhoViewedTheEntiy { get; }
+		IReadOnlyCollection<TCrossEntity> UsersWhoViewedTheEntity { get; }
 		void View(TUserId userId);
 		bool IsViewed(TUserId userId);
 	}

@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using ChatMicroservice.Application.Dtos;
+﻿using ChatMicroservice.Application.Dtos;
 using ChatMicroservice.Core.Interfaces;
-using ChatMicroservice.Domain.ConnectionAggregate;
 using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +12,7 @@ namespace ChatMicroservice.Application.Commands
 		private readonly ChatDbContext _context;
 		private readonly IUnitOfWork _unitOfWork;
 
+
 		public DisconnectCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork)
 		{
 			_context = context;
@@ -25,10 +24,14 @@ namespace ChatMicroservice.Application.Commands
 			var connection = await _context
 				.Connections
 				.FirstOrDefaultAsync(x => x.UserId == request.UserId, cancellationToken);
+
+			if (connection != null)
+			{
+				connection.Disconnect();
+				var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
+				if (numberOfChanges <= 0) throw new Exception("error");
+			}
 			
-			if (connection != null) connection.Disconnect();
-			
-			await _unitOfWork.CommitAsync(cancellationToken);
 			return AppResponseDto.Success();
 		}
 	}

@@ -20,7 +20,7 @@ namespace ChatMicroservice.Infrastructure.Concreats
 			return _chatDbContext.ChangeTracker.Entries<Entity>().Where(expression).Select(x => x.Entity);
 		}
 
-		public async Task CommitAsync(CancellationToken cancellationToken)
+		public async Task<int> CommitAsync(CancellationToken cancellationToken)
 		{
 			var createdEntities = GetEntities(x => x.State == EntityState.Added);
             foreach (var item in createdEntities) item.SetCreatedDate();
@@ -28,7 +28,7 @@ namespace ChatMicroservice.Infrastructure.Concreats
 			var updatedEntities = GetEntities(x => x.State == EntityState.Modified);
 			foreach (var item in updatedEntities) item.SetUpdatedDate();
 
-			await _chatDbContext.SaveChangesAsync(cancellationToken);
+			return await _chatDbContext.SaveChangesAsync(cancellationToken);
 		}
 
 		public bool HasChanges() => _chatDbContext.ChangeTracker.HasChanges();

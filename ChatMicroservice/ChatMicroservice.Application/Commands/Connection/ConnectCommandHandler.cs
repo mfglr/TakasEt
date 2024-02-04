@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using ChatMicroservice.Application.Dtos;
 using ChatMicroservice.Core.Interfaces;
 using ChatMicroservice.Domain.ConnectionAggregate;
@@ -30,13 +31,17 @@ namespace ChatMicroservice.Application.Commands
 			if (connection == null)
 			{
 				connection = new Connection(request.UserId, request.ConnectionId);
+				connection.Connect();
 				await _context.Connections.AddAsync(connection,cancellationToken);
 			}
 			else
+			{
 				connection.UpdateConnectionId(request.ConnectionId);
-			connection.Connect();
-
-			await _unitOfWork.CommitAsync(cancellationToken);
+				connection.Connect();
+			}
+			
+			var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
+			if (numberOfChanges <= 0) throw new Exception("error");
 
 			return AppResponseDto.Success(_mapper.Map<ConnectionResponseDto>(connection));
 

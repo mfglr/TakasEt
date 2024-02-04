@@ -10,20 +10,20 @@ using SharedLibrary.Dtos;
 
 namespace ChatMicroservice.Application.Commands
 {
-	public class SendMessageComandHandler : IRequestHandler<SendMessageDto, AppResponseDto>
+	public class SaveMessageComandHandler : IRequestHandler<SaveMessageDto, AppResponseDto>
 	{
 		private readonly ChatDbContext _context;
-		private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
 
-		public SendMessageComandHandler(ChatDbContext context, IMapper mapper, IUnitOfWork unitOfWork)
+		public SaveMessageComandHandler(ChatDbContext context, IMapper mapper, IUnitOfWork unitOfWork)
 		{
 			_context = context;
 			_mapper = mapper;
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<AppResponseDto> Handle(SendMessageDto request, CancellationToken cancellationToken)
+		public async Task<AppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
 		{
 			Message message;
 			var conversation = await _context
@@ -35,13 +35,17 @@ namespace ChatMicroservice.Application.Commands
 					)
 				);
 			
-			if ( conversation == null )
+			if ( conversation == null)
+			{
 				conversation = new Conversation(request.SenderId, request.ReceiverId);
-			
-			message = conversation.AddMessage(request.SenderId, request.Content);
-			await _context.Conversations.AddAsync(conversation, cancellationToken);
+				message = conversation.AddMessage(request.SenderId, request.Content);
+				await _context.Conversations.AddAsync(conversation, cancellationToken);
+			}
+            else
+				message = conversation.AddMessage(request.SenderId, request.Content);
 
-			await _unitOfWork.CommitAsync(cancellationToken);
+			var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
+			if (numberOfChanges <= 0) throw new Exception("error");
 
 			return AppResponseDto.Success(_mapper.Map<MessageResponseDto>(message));
 		}
