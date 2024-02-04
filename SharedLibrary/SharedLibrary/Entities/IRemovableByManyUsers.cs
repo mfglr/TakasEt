@@ -15,16 +15,7 @@
 	 *		
 	 *		So the message is able to be read by users except the user with id 1.
 	 */
-
-	/* We can use the entity User instead of The generic type V :
-	 * 
-	 * public interface IRemovableByManyUsers<TCrossEntity,T> 
-	 *		where T : IBaseEntity
-	 *		where TCrossEntity : CrossEntity<T, User>
-	 * 
-	 * But, entities that are derived the Entity User may be created.
-	 */
-
+  
 	public interface IGenericRemovableByManyUsers<TCrossEntity,TUserId> where TCrossEntity : Entity
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoRemovedTheEntity { get; }
