@@ -36,6 +36,11 @@ namespace ChatMicroservice.API.Controllers
 			return await _sender.Send(request, cancellationToken);
 		}
 
+		[HttpPut]
+		public async Task<AppResponseDto> LeaveGroup(LeaveGroupDto request,CancellationToken cancellationToken)
+		{
+			return await _sender.Send(request, cancellationToken);
+		}
 
 	}
 }

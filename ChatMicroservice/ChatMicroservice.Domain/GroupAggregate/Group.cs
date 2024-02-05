@@ -32,20 +32,32 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		public IReadOnlyCollection<GroupUser> Users => _users;
 		public void AddUser(Guid userId)
 		{
-			if (_users.Any(x => x.UserId == userId)) throw new Exception("error");
+			if (_users.Any(x => x.UserId == userId))
+				throw new Exception($"User is already a member of Group {Name}!");
 			_users.Add(new GroupUser(userId));
+		}
+		public void AddAdmin(Guid userId)
+		{
+			if (_users.Any(x => x.UserId == userId))
+				throw new Exception($"User is already a member of Group {Name}!");
+			var user = new GroupUser(userId);
+			user.MakeAdmin();
+			_users.Add(user);
 		}
 		public void RemoveUser(Guid userId)
 		{
-			var user = _users.FirstOrDefault(x => x.UserId == userId) ?? throw new Exception("error");
+			var user = _users.FirstOrDefault(x => x.UserId == userId);
+			if(user == null)
+				throw new Exception("error");
 			user.Remove();
 		}
-		public void DeleteUser(Guid userId)
+		public void Leave(Guid userId)
 		{
-			int index = _users.FindIndex(x => x.UserId == userId);
-			if (index == -1) throw new Exception("error");
-			_users.RemoveAt(index);
+			var user = _users.FirstOrDefault(x => x.UserId == userId);
+			if (user == null) throw new Exception($"You are not a member of group {Name}!");
+			_users.Remove(user);
 		}
+		
 
 		//messages
 		private readonly List<Message> _messages = new();

@@ -1,7 +1,7 @@
 ﻿using ChatMicroservice.Application.Dtos.Group;
 using FluentValidation;
 
-namespace ChatMicroservice.Application.Validators.Group
+namespace ChatMicroservice.Application.Validators
 {
 	public class ApproveRequestToJoinGroupCommandValidator : AbstractValidator<ApproveRequestToJoinGroupDto>
 	{
