@@ -32,6 +32,7 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		public IReadOnlyCollection<GroupUser> Users => _users;
 		public void AddUser(Guid userId)
 		{
+			if (_users.Any(x => x.UserId == userId)) throw new Exception("error");
 			_users.Add(new GroupUser(userId));
 		}
 		public void RemoveUser(Guid userId)
@@ -153,15 +154,38 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		//GroupUserRequestToJoin
 		private readonly List<GroupUserRequestToJoin> _usersWhoWantToJoinTheGroup = new ();
 		public IReadOnlyCollection<GroupUserRequestToJoin> UsersWhoWantsToJoinTheGroup => _usersWhoWantToJoinTheGroup;
-		public GroupUserRequestToJoin MakeRequestToJoin(Guid userId)
+		public GroupUserRequestToJoin MakeRequestToJoin(Guid idOfUserWhoWantsToJoinGroup)
 		{
-			if(_users.Any(x => x.UserId == userId)) throw new Exception("error");
+			if(_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup)) throw new Exception("error");
 
-			var request = new GroupUserRequestToJoin(userId);
+			var request = new GroupUserRequestToJoin(idOfUserWhoWantsToJoinGroup);
 			request.MarkAsPendingApproval();
 			_usersWhoWantToJoinTheGroup.Add(request);
 			return request;
 		}
+		public GroupUserRequestToJoin ApproveRequestToJoin(Guid approverId,Guid idOfUserWhoWantsToJoinGroup)
+		{
+			if (_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup))
+				throw new Exception("The user is already a member");
 
+			var request = _usersWhoWantToJoinTheGroup.FirstOrDefault(x => x.UserId == idOfUserWhoWantsToJoinGroup);
+			if (request == null)
+				throw new Exception("There is no a request!");
+			if (request.State == StateOfGroupJoinRequest.Approved)
+				throw new Exception("The request is already approved!");
+			if (request.State == StateOfGroupJoinRequest.Cancelled)
+				throw new Exception("The request is aldready cancelled!");
+
+			var approver = _users.FirstOrDefault(x => x.UserId == approverId);
+			if (approver == null)
+				throw new Exception("The approver is not a member");
+			if (approver.Role != UserRole.Admin)
+				throw new Exception("The approver is not an admin");
+
+			request.MarkAsApproved(approverId);
+			_users.Add(new GroupUser(idOfUserWhoWantsToJoinGroup));
+
+			return request;
+		}
 	}
 }

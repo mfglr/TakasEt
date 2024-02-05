@@ -1,4 +1,5 @@
 ﻿using ChatMicroservice.Application.Dtos;
+using ChatMicroservice.Application.Dtos.Group;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.Dtos;
@@ -28,6 +29,13 @@ namespace ChatMicroservice.API.Controllers
 		{
 			return await _sender.Send(request, cancellationToken);
 		}
+
+		[HttpPut]
+		public async Task<AppResponseDto> ApproveRequestToJoinGroup(ApproveRequestToJoinGroupDto request,CancellationToken cancellationToken)
+		{
+			return await _sender.Send(request, cancellationToken);
+		}
+
 
 	}
 }
