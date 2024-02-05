@@ -12,6 +12,12 @@
 			Width = width;
 			AspectRatio = width / height;
 		}
-		
+
+		protected override IEnumerable<object> GetEqualityComponents()
+		{
+			yield return Height;
+			yield return Width;
+			yield return AspectRatio;
+		}
 	}
 }

@@ -12,13 +12,20 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		public string Name { get; private set; }
 		public string NormalizedName { get; private set; }
 		public string Description { get; private set; }
-		
+
 		public Group(string name, string description)
 		{
 			Name = name;
 			Description = description;
 			NormalizedName = name.CustomNormalize();
 		}
+
+		//GroupType
+		public GroupType GroupType { get; private set; }
+		public void MakePublicAnnouncement() => GroupType = GroupType.PublicAnnouncement;
+		public void MakePrivateAnnouncement() => GroupType = GroupType.PrivateAnnouncement;
+		public void MakePublicGroup() => GroupType = GroupType.PublicGroup;
+		public void MakePrivateGroup() => GroupType = GroupType.PrivateGroup;
 
 		//users
 		private readonly List<GroupUser> _users = new();
@@ -43,10 +50,11 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		private readonly List<Message> _messages = new();
 		public IReadOnlyCollection<Message> Messages => _messages;
 
-		private void ThrowExceptionIfIsNotOwnerId(Guid userId)
+		private GroupUser ThrowExceptionIfIsNotOwnerId(Guid userId)
 		{
 			foreach(var user in _users)
-				if (user.UserId == userId) return;
+				if (user.UserId == userId)
+					return user;
 			throw new Exception("error");
 		}
 		private Message GetMessageOrThrowExceptionIfIsNotExist(Guid messageId)
@@ -55,7 +63,23 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			return message ?? throw new Exception("error");
 		}
 
-		public void AddMessage(Guid userId,string content)  => _messages.Add(new Message(userId,content));
+		public Message AddMessage(Guid userId, string content)
+		{
+			var user = ThrowExceptionIfIsNotOwnerId(userId);
+
+			if(
+					(
+						GroupType == GroupType.PublicAnnouncement || 
+						GroupType == GroupType.PrivateAnnouncement
+					)&&
+					user.Role != UserRole.Admin
+			) throw new Exception("error");
+			
+			var message = new Message(userId, content);
+			_messages.Add(message);
+			
+			return message;
+		}
 		public void RemoveMessage(Guid messageId)
 		{
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Remove();
