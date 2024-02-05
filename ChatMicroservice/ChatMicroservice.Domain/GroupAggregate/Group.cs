@@ -51,6 +51,21 @@ namespace ChatMicroservice.Domain.GroupAggregate
 				throw new Exception("error");
 			user.Remove();
 		}
+		public void RemoveUserPermanently(Guid removerId,Guid userId)
+		{
+			var remover = _users.FirstOrDefault(x => x.UserId == removerId);
+			if (remover == null)
+				throw new Exception($"The user({removerId}) is not a member of the Group {Name}!");
+			if (remover.Role != UserRole.Admin)
+				throw new Exception($"The user({removerId}) is not admin!");
+
+			var user = _users.FirstOrDefault(x => x.UserId == userId);
+			if (user == null)
+				throw new Exception($"The user({userId}) is not a member of the Group {Name}!");
+
+			_users.Remove(user);
+
+		}
 		public void Leave(Guid userId)
 		{
 			var user = _users.FirstOrDefault(x => x.UserId == userId);

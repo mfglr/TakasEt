@@ -24,7 +24,7 @@ namespace ChatMicroservice.Application.Commands
 		public async Task<AppResponseDto> Handle(CreateGroupDto request, CancellationToken cancellationToken)
 		{
 			var group = new Group(request.Name, request.Description);
-			group.AddUser(request.UserId);
+			group.AddAdmin(request.UserId);
 			foreach (var userId in request.Users) group.AddUser(userId);
 
 			await _context.Groups.AddAsync(group, cancellationToken);

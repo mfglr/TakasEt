@@ -42,5 +42,11 @@ namespace ChatMicroservice.API.Controllers
 			return await _sender.Send(request, cancellationToken);
 		}
 
+		[HttpPut]
+		public async Task<AppResponseDto> RemoveUserFromGroup(RemoveUserFromGroupDto request,CancellationToken cancellationToken)
+		{
+			return await _sender.Send(request, cancellationToken);
+		}
+
 	}
 }
