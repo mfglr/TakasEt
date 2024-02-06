@@ -24,7 +24,7 @@
 		bool IsRemovedByUser(TUserId userId);
 	}
 
-	public interface IRemovableByManyUsers<TCrossEntity> : IGenericRemovableByManyUsers<TCrossEntity,Guid> where TCrossEntity : Entity
+	public interface IRemovableByManyUsers<TCrossEntity> : IGenericRemovableByManyUsers<TCrossEntity,int> where TCrossEntity : Entity
 	{
 		
 	}

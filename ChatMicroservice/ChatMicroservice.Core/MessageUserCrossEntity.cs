@@ -4,9 +4,9 @@ namespace ChatMicroservice.Core
 {
 	public abstract class MessageUserCrossEntity : Entity
 	{
-		public Guid UserId { get; protected set; }
+		public int UserId { get; protected set; }
 
-		protected MessageUserCrossEntity(Guid userId)
+		protected MessageUserCrossEntity(int userId)
 		{
 			UserId = userId;
 		}

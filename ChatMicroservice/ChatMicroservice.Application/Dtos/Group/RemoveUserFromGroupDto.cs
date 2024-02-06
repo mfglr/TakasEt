@@ -5,8 +5,8 @@ namespace ChatMicroservice.Application.Dtos.Group
 {
 	public class RemoveUserFromGroupDto : IRequest<AppResponseDto>
 	{
-		public Guid GrupId { get; set; }
-		public Guid RemoverId { get; set; }
-		public Guid UserId { get; set; }
+		public int GrupId { get; set; }
+		public int RemoverId { get; set; }
+		public int UserId { get; set; }
 	}
 }

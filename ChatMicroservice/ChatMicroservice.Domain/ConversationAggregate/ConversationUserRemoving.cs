@@ -4,9 +4,9 @@ namespace ChatMicroservice.Domain.ConversationAggregate
 {
 	public class ConversationUserRemoving : Entity
 	{
-		public Guid UserId { get; private set; }
+		public int UserId { get; private set; }
 
-		public ConversationUserRemoving(Guid userId)
+		public ConversationUserRemoving(int userId)
 		{
 			UserId = userId;
 		}

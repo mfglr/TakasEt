@@ -8,7 +8,7 @@
 		bool IsViewed(TUserId userId);
 	}
 
-	public interface IViewable<TCrossEntity> : IGenericViewable<TCrossEntity,Guid>
+	public interface IViewable<TCrossEntity> : IGenericViewable<TCrossEntity,int>
 		where TCrossEntity : Entity
 	{
 	}

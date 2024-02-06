@@ -2,7 +2,7 @@
 {
 	public abstract class Entity : IRemovable
 	{
-		public Guid Id { get; protected set; }
+		public int Id { get; protected set; }
 		public DateTime CreatedDate { get; protected set; }
 		public DateTime? UpdatedDate { get; protected set; }
 

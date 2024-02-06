@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatMicroservice.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20240204135441_createMessageUserReceiving")]
-    partial class createMessageUserReceiving
+    [Migration("20240206112658_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.ConnectionAggregate.Connection", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Connected")
                         .HasColumnType("bit");
@@ -50,8 +52,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -60,9 +62,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.ConversationAggregate.Conversation", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -70,14 +74,14 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -89,12 +93,14 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.ConversationAggregate.ConversationUserRemoving", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ConversationId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ConversationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -108,8 +114,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -120,9 +126,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.Group", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -155,9 +163,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.GroupImage", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BlobName")
                         .IsRequired()
@@ -170,8 +180,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -194,15 +204,17 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.GroupUser", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
@@ -213,8 +225,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -223,24 +235,62 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.ToTable("GroupUser");
                 });
 
+            modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.GroupUserRequestToJoin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdOfUserApprovingOrCancellingRequest")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupUserRequestToJoin");
+                });
+
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.Message", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ConversationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ConversationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
@@ -255,8 +305,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -272,9 +322,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageImage", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BlobName")
                         .IsRequired()
@@ -290,8 +342,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -308,9 +360,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserLiking", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -318,8 +372,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -327,8 +381,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -339,9 +393,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserReceiving", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -349,8 +405,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -358,8 +414,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -370,9 +426,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserRemoving", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -380,8 +438,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -389,8 +447,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -401,9 +459,11 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserViewing", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -411,8 +471,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -420,8 +480,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -434,8 +494,29 @@ namespace ChatMicroservice.Infrastructure.Migrations
                 {
                     b.HasOne("ChatMicroservice.Domain.ConversationAggregate.Conversation", null)
                         .WithMany("UsersWhoRemovedTheEntity")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ConversationId");
+                });
+
+            modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.Group", b =>
+                {
+                    b.OwnsOne("ChatMicroservice.Domain.GroupAggregate.GroupType", "GroupType", b1 =>
+                        {
+                            b1.Property<int>("GroupId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("int")
+                                .HasColumnName("Type");
+
+                            b1.HasKey("GroupId");
+
+                            b1.ToTable("Groups");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GroupId");
+                        });
+
+                    b.Navigation("GroupType")
                         .IsRequired();
                 });
 
@@ -447,8 +528,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.ContainerName", "ContainerName", b1 =>
                         {
-                            b1.Property<Guid>("GroupImageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("GroupImageId")
+                                .HasColumnType("int");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
@@ -465,8 +546,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.Dimension", "Dimension", b1 =>
                         {
-                            b1.Property<Guid>("GroupImageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("GroupImageId")
+                                .HasColumnType("int");
 
                             b1.Property<float>("AspectRatio")
                                 .HasColumnType("real")
@@ -500,6 +581,53 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.HasOne("ChatMicroservice.Domain.GroupAggregate.Group", null)
                         .WithMany("Users")
                         .HasForeignKey("GroupId");
+
+                    b.OwnsOne("ChatMicroservice.Domain.GroupAggregate.UserRole", "Role", b1 =>
+                        {
+                            b1.Property<int>("GroupUserId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Role")
+                                .HasColumnType("int")
+                                .HasColumnName("Role");
+
+                            b1.HasKey("GroupUserId");
+
+                            b1.ToTable("GroupUser");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GroupUserId");
+                        });
+
+                    b.Navigation("Role")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChatMicroservice.Domain.GroupAggregate.GroupUserRequestToJoin", b =>
+                {
+                    b.HasOne("ChatMicroservice.Domain.GroupAggregate.Group", null)
+                        .WithMany("UsersWhoWantsToJoinTheGroup")
+                        .HasForeignKey("GroupId");
+
+                    b.OwnsOne("ChatMicroservice.Domain.GroupAggregate.StateOfGroupJoinRequest", "State", b1 =>
+                        {
+                            b1.Property<int>("GroupUserRequestToJoinId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("int")
+                                .HasColumnName("Status");
+
+                            b1.HasKey("GroupUserRequestToJoinId");
+
+                            b1.ToTable("GroupUserRequestToJoin");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GroupUserRequestToJoinId");
+                        });
+
+                    b.Navigation("State")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.Message", b =>
@@ -514,8 +642,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.OwnsOne("ChatMicroservice.Domain.MessageEntity.MessageState", "MessageState", b1 =>
                         {
-                            b1.Property<Guid>("MessageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("MessageId")
+                                .HasColumnType("int");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int")
@@ -541,8 +669,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.ContainerName", "ContainerName", b1 =>
                         {
-                            b1.Property<Guid>("MessageImageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("MessageImageId")
+                                .HasColumnType("int");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
@@ -559,8 +687,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.Dimension", "Dimension", b1 =>
                         {
-                            b1.Property<Guid>("MessageImageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("MessageImageId")
+                                .HasColumnType("int");
 
                             b1.Property<float>("AspectRatio")
                                 .HasColumnType("real")
@@ -593,36 +721,28 @@ namespace ChatMicroservice.Infrastructure.Migrations
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoLikedTheEntity")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MessageId");
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserReceiving", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoReceivedTheMessage")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MessageId");
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserRemoving", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
                         .WithMany("UsersWhoRemovedTheEntity")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MessageId");
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.MessageUserViewing", b =>
                 {
                     b.HasOne("ChatMicroservice.Domain.MessageEntity.Message", null)
-                        .WithMany("UsersWhoViewedTheEntiy")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("UsersWhoViewedTheEntity")
+                        .HasForeignKey("MessageId");
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.ConversationAggregate.Conversation", b =>
@@ -639,6 +759,8 @@ namespace ChatMicroservice.Infrastructure.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("Users");
+
+                    b.Navigation("UsersWhoWantsToJoinTheGroup");
                 });
 
             modelBuilder.Entity("ChatMicroservice.Domain.MessageEntity.Message", b =>
@@ -651,7 +773,7 @@ namespace ChatMicroservice.Infrastructure.Migrations
 
                     b.Navigation("UsersWhoRemovedTheEntity");
 
-                    b.Navigation("UsersWhoViewedTheEntiy");
+                    b.Navigation("UsersWhoViewedTheEntity");
                 });
 #pragma warning restore 612, 618
         }

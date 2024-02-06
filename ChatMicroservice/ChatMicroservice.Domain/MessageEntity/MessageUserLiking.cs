@@ -4,7 +4,7 @@ namespace ChatMicroservice.Domain.MessageEntity
 {
 	public class MessageUserLiking : MessageUserCrossEntity
 	{
-		public MessageUserLiking(Guid userId) : base(userId)
+		public MessageUserLiking(int userId) : base(userId)
 		{
 		}
 	}

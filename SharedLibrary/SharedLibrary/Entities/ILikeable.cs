@@ -23,7 +23,7 @@
 		bool IsLiked(TUserId userId);
 	}
 
-	public interface ILikeable<TCrossEntity> : IGenericLikeable<TCrossEntity,Guid> where TCrossEntity : Entity
+	public interface ILikeable<TCrossEntity> : IGenericLikeable<TCrossEntity,int> where TCrossEntity : Entity
 	{
 	}
 

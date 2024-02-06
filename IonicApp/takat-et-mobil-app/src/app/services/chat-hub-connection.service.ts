@@ -9,7 +9,7 @@ import { messageHubConnectionFailAction, messageHubConnectionSuccessAction } fro
 @Injectable({
   providedIn : "root"
 })
-export class MessageHubConnectionService {
+export class ChatHubConnectionService {
 
   private baseUrl : string = "https://localhost:7160/message";
   private hubConnection = new HubConnectionBuilder().withUrl(`${this.baseUrl}`).build();

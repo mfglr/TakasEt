@@ -5,7 +5,7 @@ namespace ChatMicroservice.Application.Dtos
 {
 	public class LeaveGroupDto : IRequest<AppResponseDto>
 	{
-		public Guid UserId { get; set; }
-		public Guid GroupId { get; set; }
+		public int UserId { get; set; }
+		public int GroupId { get; set; }
 	}
 }

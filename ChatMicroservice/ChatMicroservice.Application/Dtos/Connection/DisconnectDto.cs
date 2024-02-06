@@ -5,6 +5,6 @@ namespace ChatMicroservice.Application.Dtos
 {
 	public class DisconnectDto : IRequest<AppResponseDto>
 	{
-		public Guid UserId { get; set; }
+		public int UserId { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
+using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
 
 namespace SharedLibrary.Extentions
@@ -55,7 +56,6 @@ namespace SharedLibrary.Extentions
 				return null;
 			return data.Value.ToString().Split(',');
 		}
-
 
 	}
 }

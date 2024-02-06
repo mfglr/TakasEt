@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, first } from 'rxjs';
 import { UserResponse } from 'src/app/models/responses/user-response';
-import { MessageHubConnectionService } from 'src/app/services/message-hub-connection.service';
+import { ChatHubConnectionService } from 'src/app/services/chat-hub-connection.service';
 import { AppState } from 'src/app/state/reducer';
 import { selectUserId } from 'src/app/state/selector';
 
@@ -21,7 +21,7 @@ export class ConversationPage implements OnInit {
 
   constructor(
     private router : Router,
-    private messageHub : MessageHubConnectionService,
+    private messageHub : ChatHubConnectionService,
     private appStore : Store<AppState>
   ) {
     this.user = this.router.getCurrentNavigation()?.extras.state as UserResponse

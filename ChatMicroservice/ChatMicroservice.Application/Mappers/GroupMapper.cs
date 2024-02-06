@@ -9,7 +9,11 @@ namespace ChatMicroservice.Application.Mappers
 	{
         public GroupMapper()
         {
-            CreateMap<Group, GroupResponseDto>();
+            CreateMap<Group, GroupResponseDto>()
+                .ForMember(
+                    x => x.NumberOfUnviewedMessages,
+                    x => x.MapFrom(x => x.Messages.Count())
+                );
             CreateMap<GroupUser, GroupUserResponseDto>();
         }
     }

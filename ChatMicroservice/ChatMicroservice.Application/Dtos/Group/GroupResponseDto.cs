@@ -7,6 +7,6 @@ namespace ChatMicroservice.Application.Dtos
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public List<GroupUserResponseDto> Users { get; set; }
+		public int NumberOfUnviewedMessages { get; set; }
 	}
 }

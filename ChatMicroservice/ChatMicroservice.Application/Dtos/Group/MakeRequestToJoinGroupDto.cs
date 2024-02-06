@@ -5,7 +5,7 @@ namespace ChatMicroservice.Application.Dtos
 {
 	public class MakeRequestToJoinGroupDto : IRequest<AppResponseDto>
 	{
-		public Guid GroupId { get; set; }
-		public Guid UserId { get; set; }
+		public int GroupId { get; set; }
+		public int UserId { get; set; }
 	}
 }

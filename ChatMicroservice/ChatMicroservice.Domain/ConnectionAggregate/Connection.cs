@@ -5,11 +5,11 @@ namespace ChatMicroservice.Domain.ConnectionAggregate
 {
 	public class Connection : Entity, IAggregateRoot
 	{
-		public Guid UserId { get; private set; }
+		public int UserId { get; private set; }
 		public string ConnectionId { get; private set; }
 		public bool Connected { get; private set; }
 
-        public Connection(Guid userId,string connectionId)
+        public Connection(int userId,string connectionId)
         {
 			UserId = userId;
 			ConnectionId = connectionId;

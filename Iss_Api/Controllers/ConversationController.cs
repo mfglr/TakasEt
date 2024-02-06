@@ -17,7 +17,6 @@ namespace Iss_Api.Controllers
 			_sender = sender;
 		}
 
-		[Authorize(Roles = "user")]
 		[HttpGet("conversation/get-conversations")]
 		public async Task<AppResponseDto> GetConversations()
 		{

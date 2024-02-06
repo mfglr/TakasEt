@@ -30,13 +30,13 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		//users
 		private readonly List<GroupUser> _users = new();
 		public IReadOnlyCollection<GroupUser> Users => _users;
-		public void AddUser(Guid userId)
+		public void AddUser(int userId)
 		{
 			if (_users.Any(x => x.UserId == userId))
 				throw new Exception($"User is already a member of Group {Name}!");
 			_users.Add(new GroupUser(userId));
 		}
-		public void AddAdmin(Guid userId)
+		public void AddAdmin(int userId)
 		{
 			if (_users.Any(x => x.UserId == userId))
 				throw new Exception($"User is already a member of Group {Name}!");
@@ -44,14 +44,14 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			user.MakeAdmin();
 			_users.Add(user);
 		}
-		public void RemoveUser(Guid userId)
+		public void RemoveUser(int userId)
 		{
 			var user = _users.FirstOrDefault(x => x.UserId == userId);
 			if(user == null)
 				throw new Exception("error");
 			user.Remove();
 		}
-		public void RemoveUserPermanently(Guid removerId,Guid userId)
+		public void RemoveUserPermanently(int removerId,int userId)
 		{
 			var remover = _users.FirstOrDefault(x => x.UserId == removerId);
 			if (remover == null)
@@ -66,7 +66,7 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			_users.Remove(user);
 
 		}
-		public void Leave(Guid userId)
+		public void Leave(int userId)
 		{
 			var user = _users.FirstOrDefault(x => x.UserId == userId);
 			if (user == null) throw new Exception($"You are not a member of group {Name}!");
@@ -78,20 +78,20 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		private readonly List<Message> _messages = new();
 		public IReadOnlyCollection<Message> Messages => _messages;
 
-		private GroupUser ThrowExceptionIfIsNotOwnerId(Guid userId)
+		private GroupUser ThrowExceptionIfIsNotOwnerId(int userId)
 		{
 			foreach(var user in _users)
 				if (user.UserId == userId)
 					return user;
 			throw new Exception("error");
 		}
-		private Message GetMessageOrThrowExceptionIfIsNotExist(Guid messageId)
+		private Message GetMessageOrThrowExceptionIfIsNotExist(int messageId)
 		{
 			var message = _messages.FirstOrDefault(x => x.Id == messageId);
 			return message ?? throw new Exception("error");
 		}
 
-		public Message AddMessage(Guid userId, string content)
+		public Message AddMessage(int userId, string content)
 		{
 			var user = ThrowExceptionIfIsNotOwnerId(userId);
 
@@ -108,50 +108,50 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			
 			return message;
 		}
-		public void RemoveMessage(Guid messageId)
+		public void RemoveMessage(int messageId)
 		{
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Remove();
 		}
-		public void ReinsertMessage(Guid messageId)
+		public void ReinsertMessage(int messageId)
 		{
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert();
 		}
-		public void RemoveMessageForUser(Guid messageId,Guid userId)
+		public void RemoveMessageForUser(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Remove(userId);
 		}
-		public void ReinsertMessageForUser(Guid messageId,Guid userId)
+		public void ReinsertMessageForUser(int messageId,int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Reinsert(userId);
 		}
-		public void DeleteMessage(Guid messageId)
+		public void DeleteMessage(int messageId)
 		{
 			var message = GetMessageOrThrowExceptionIfIsNotExist(messageId);
 			_messages.Remove(message);
 		}
-		public void LikeMessage(Guid messageId,Guid userId)
+		public void LikeMessage(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Like(userId);
 		}
-		public void DislikeMessage(Guid messageId,Guid userId)
+		public void DislikeMessage(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).Dislike(userId);
 		}
-		public bool IsLiked(Guid messageId,Guid userId)
+		public bool IsLiked(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			return GetMessageOrThrowExceptionIfIsNotExist(messageId).IsLiked(userId);
 		}
-		public void ViewMessage(Guid messageId,Guid userId)
+		public void ViewMessage(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			GetMessageOrThrowExceptionIfIsNotExist(messageId).View(userId);
 		}
-		public bool IsViewed(Guid messageId,Guid userId)
+		public bool IsViewed(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
 			return GetMessageOrThrowExceptionIfIsNotExist(messageId).IsViewed(userId);
@@ -166,12 +166,12 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			image.Activate();
 			_images.Add(image);
 		}
-		public void RemoveImage(Guid imageId)
+		public void RemoveImage(int imageId)
 		{
 			var image = _images.FirstOrDefault(x => x.Id == imageId) ?? throw new Exception("error");
 			_images.Remove(image);
 		}
-		public void DeleteImage(Guid imageId)
+		public void DeleteImage(int imageId)
 		{
 			var index = _images.FindIndex(x => x.Id == imageId);
 			if (index == -1) throw new Exception("error");
@@ -181,7 +181,7 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		//GroupUserRequestToJoin
 		private readonly List<GroupUserRequestToJoin> _usersWhoWantToJoinTheGroup = new ();
 		public IReadOnlyCollection<GroupUserRequestToJoin> UsersWhoWantsToJoinTheGroup => _usersWhoWantToJoinTheGroup;
-		public GroupUserRequestToJoin MakeRequestToJoin(Guid idOfUserWhoWantsToJoinGroup)
+		public GroupUserRequestToJoin MakeRequestToJoin(int idOfUserWhoWantsToJoinGroup)
 		{
 			if(_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup)) throw new Exception("error");
 
@@ -190,7 +190,7 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			_usersWhoWantToJoinTheGroup.Add(request);
 			return request;
 		}
-		public GroupUserRequestToJoin ApproveRequestToJoin(Guid approverId,Guid idOfUserWhoWantsToJoinGroup)
+		public GroupUserRequestToJoin ApproveRequestToJoin(int approverId, int idOfUserWhoWantsToJoinGroup)
 		{
 			if (_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup))
 				throw new Exception("The user is already a member");
