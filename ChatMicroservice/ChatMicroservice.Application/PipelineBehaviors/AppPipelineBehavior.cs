@@ -1,5 +1,4 @@
-﻿using ChatMicroservice.Core.Interfaces;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 
 namespace ChatMicroservice.Application.PipelineBehaviors
@@ -8,12 +7,10 @@ namespace ChatMicroservice.Application.PipelineBehaviors
 		where TRequest : IRequest<TResponse>
 	{
 		private readonly IEnumerable<IValidator<TRequest>> _validators;
-		private readonly IUnitOfWork _unitOfWork;
 
-		public AppPipelineBehavior(IEnumerable<IValidator<TRequest>> validators, IUnitOfWork unitOfWork)
+		public AppPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)
 		{
 			_validators = validators;
-			_unitOfWork = unitOfWork;
 		}
 
 		public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -22,7 +19,8 @@ namespace ChatMicroservice.Application.PipelineBehaviors
 			if(_validators.Any())
 			{
                 var result = await _validators.First().ValidateAsync(request);
-				if (!result.IsValid) throw new Exception("error");
+				var errors = string.Join("\n",result.Errors.Select(x => x.ErrorMessage).ToList());
+				if (!result.IsValid) throw new Exception(errors);
             }
 
 			//wait for the handler 

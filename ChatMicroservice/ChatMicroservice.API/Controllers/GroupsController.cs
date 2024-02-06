@@ -62,5 +62,18 @@ namespace ChatMicroservice.API.Controllers
 			return await _sender.Send(request, cancellationToken);
 		}
 
+		[HttpGet("{groupId}")]
+		public async Task<AppResponseDto> GetGroupMessagesByGroupId(int groupId, CancellationToken cancellationToken)
+		{
+			var request = new GetGroupMessagesByGroupIdDto()
+			{
+				GroupId = groupId,
+				UserId = Request.Query.ReadInt("userId"),
+				LastId = Request.Query.ReadInt("lastId"),
+				Take = Request.Query.ReadInt("take")
+			};
+			return await _sender.Send(request, cancellationToken);
+		}
+
 	}
 }

@@ -57,7 +57,7 @@ namespace ChatMicroservice.Application.Queries
 						)
 				)
 				.ToPage(request)
-				.ToGroupResponseDto(request.UserId)
+				.ToGroupResponseDto((int)request.UserId!)
 				.ToListAsync(cancellationToken);
 			return AppResponseDto.Success(groups);
 		}
