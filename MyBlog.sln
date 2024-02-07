@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoStockMicroservice", "PhotoStockMicroservice\PhotoStockMicroservice.csproj", "{9D6B8878-15FD-42E5-9147-3999641A275C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{AD860C5F-7102-452A-AB06-44727F8BE90C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatMicroservice", "ChatMicroservice", "{2E7AE60F-D162-467A-850B-E196B353CF83}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatMicroservice.API", "ChatMicroservice\ChatMicroservice.API\ChatMicroservice.API.csproj", "{9455C9F7-1597-465F-8A67-7738B2E85A42}"
@@ -39,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatMicroservice.Infrastruc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{5CB76936-699F-4155-AF07-22293AFFE687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary\SharedLibrary.csproj", "{A1B54A6E-1668-44A4-B80A-586C114EAC04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "SharedLibrary\SharedLibrary\SharedLibrary.csproj", "{A1B54A6E-1668-44A4-B80A-586C114EAC04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +85,6 @@ Global
 		{9D6B8878-15FD-42E5-9147-3999641A275C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D6B8878-15FD-42E5-9147-3999641A275C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D6B8878-15FD-42E5-9147-3999641A275C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD860C5F-7102-452A-AB06-44727F8BE90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD860C5F-7102-452A-AB06-44727F8BE90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD860C5F-7102-452A-AB06-44727F8BE90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD860C5F-7102-452A-AB06-44727F8BE90C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9455C9F7-1597-465F-8A67-7738B2E85A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9455C9F7-1597-465F-8A67-7738B2E85A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9455C9F7-1597-465F-8A67-7738B2E85A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
