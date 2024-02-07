@@ -183,7 +183,10 @@ namespace ChatMicroservice.Domain.GroupAggregate
 		public IReadOnlyCollection<GroupUserRequestToJoin> UsersWhoWantsToJoinTheGroup => _usersWhoWantToJoinTheGroup;
 		public GroupUserRequestToJoin MakeRequestToJoin(int idOfUserWhoWantsToJoinGroup)
 		{
-			if(_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup)) throw new Exception("error");
+			if(_users.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup))
+				throw new Exception("You are already a member of the group!");
+			if (_usersWhoWantToJoinTheGroup.Any(x => x.UserId == idOfUserWhoWantsToJoinGroup && x.State == StateOfGroupJoinRequest.PendingApproval))
+				throw new Exception("You have already sent a request to join the group!");
 
 			var request = new GroupUserRequestToJoin(idOfUserWhoWantsToJoinGroup);
 			request.MarkAsPendingApproval();
