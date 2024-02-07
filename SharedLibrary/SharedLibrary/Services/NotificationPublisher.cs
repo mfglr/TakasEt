@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
+using SharedLibrary.ValueObjects;
 
 namespace SharedLibrary.Services
 {
@@ -9,37 +10,39 @@ namespace SharedLibrary.Services
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
-        private string _routeKey;
 
-        private static string ExchangeName = "NotificationDirectExchange";
+        private static string ExchangeName = "NotificationExchange";
 
 
         public NotificationPublisher(ConnectionFactory connectionFactory)
         {
-               _connectionFactory = connectionFactory;
+            _connectionFactory = connectionFactory;
+            Connect();
+            CreateQueue(Queue.ReqeustToJoinGroup);
         }
 
-        public void Connect(string queueName,string routKey)
+        public void Connect()
         {
-
-            _routeKey = routKey;
-
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.CreateBasicProperties().Persistent = true;
 
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true, false, null);
-            _channel.QueueDeclare(queueName, true, false, false, null);
-            _channel.QueueBind(queueName, ExchangeName, routKey);
+        }
+
+        public void CreateQueue(Queue queue)
+        {
+            _channel.QueueDeclare(queue.QueueName, true, false, false, null);
+            _channel.QueueBind(queue.QueueName, ExchangeName, queue.RouteKey);
         }
 
         public bool ConnectionIsOpen() => _connection != null && _connection.IsOpen;
 
-
-        public void Publish(object message)
+        public void Publish(object message,Queue queue)
         {
+            if(!ConnectionIsOpen()) throw new Exception("Connection is down");
             var bodyBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-            _channel.BasicPublish(ExchangeName, _routeKey, null, bodyBytes);
+            _channel.BasicPublish(ExchangeName, queue.RouteKey, null, bodyBytes);
         }
 
 

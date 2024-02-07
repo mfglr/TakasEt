@@ -1,6 +1,9 @@
 using ChatMicroservice.API.Hubs;
 using ChatMicroservice.Infrastructure;
 using ChatMicroservice.Application;
+using RabbitMQ.Client;
+using SharedLibrary.Services;
+using SharedLibrary.ValueObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,15 +23,25 @@ builder.Services.AddCors(
 		);
 	}
 );
-
 builder.Services.AddSqlDbContext();
 builder.Services.AddApplication();
+builder.Services.AddSingleton(
+	sp =>
+	{
+		var configuration = sp.GetRequiredService<IConfiguration>();
+		var hostName = configuration.GetConnectionString("RabbitMQHostName");
+		return new ConnectionFactory() { HostName = hostName };
+	}
+);
+builder.Services.AddSingleton<NotificationPublisher>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+	// Configure the HTTP request pipeline.
+
+	app.UseHttpsRedirection();
 app.UseCors("local");
 app.UseRouting();
 app.UseAuthorization();
