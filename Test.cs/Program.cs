@@ -1,19 +1,21 @@
 ﻿
-string getGroupName( Guid senderId,Guid receiverId)
+
+
+using Newtonsoft.Json;
+
+
+var a = new Person { Name = "ali", LastName = "guler" };
+var text = JsonConvert.SerializeObject(a);
+
+var obje = JsonConvert.DeserializeObject(text);
+
+var person = (Person)obje;
+
+Console.WriteLine(person.Name);
+
+
+class Person
 {
-	return string.Join(
-		"_",
-		new List<string> {
-					senderId.ToString(),
-					receiverId.ToString()
-		}
-		.OrderBy(x => x)
-	);
-
+    public string Name { get; set; }
+    public string LastName { get; set; }
 }
-
-var a = Guid.NewGuid();
-var b = Guid.NewGuid();
-
-Console.WriteLine(getGroupName(a, b));
-Console.WriteLine(getGroupName(b,a));
