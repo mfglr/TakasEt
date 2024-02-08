@@ -23,6 +23,7 @@ namespace NotificationMicroservice.SharedLibrary.Services
         public async Task<NotificationResponseDto<T>> CreateNotificationAsync(int ownerId, T content, CancellationToken cancellationToken = default)
         {
             var notification = new Notification<T>(ownerId, content);
+            notification.SetCreatedDate();
             await _notifications.InsertOneAsync(notification, cancellationToken:cancellationToken);
             return _mapper.Map<NotificationResponseDto<T>>(notification);
         }
@@ -30,6 +31,7 @@ namespace NotificationMicroservice.SharedLibrary.Services
         public async Task<List<NotificationResponseDto<T>>> CreateNotificationsAsync(List<int> ownerIds,T content,CancellationToken cancellationToken = default)
         {
             var notifications = ownerIds.Select(ownerId => new Notification<T>(ownerId, content));
+            foreach(var notification in notifications) notification.SetCreatedDate();
             await _notifications.InsertManyAsync(notifications, cancellationToken: cancellationToken);
             return _mapper.Map<List<NotificationResponseDto<T>>>(notifications);
         }

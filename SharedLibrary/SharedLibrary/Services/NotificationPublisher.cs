@@ -19,6 +19,7 @@ namespace SharedLibrary.Services
             _connectionFactory = connectionFactory;
             Connect();
             CreateQueue(Queue.ReqeustToJoinGroup);
+            CreateQueue(Queue.ApproveRequestToJoinGroup);
         }
 
         public void Connect()

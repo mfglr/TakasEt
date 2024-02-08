@@ -33,11 +33,10 @@ namespace NotificationMicroservice.SharedLibrary.Services
             consumer.Received += (object sender, BasicDeliverEventArgs @event) =>
             {
                 callback(sender, @event);
+                _channel.BasicAck(@event.DeliveryTag, false);
                 return Task.CompletedTask;
             };
         }
-
-        public void CompleteNotification(ulong deliveryTag) => _channel.BasicAck(deliveryTag, false);
 
         public void Dispose()
         {

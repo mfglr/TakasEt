@@ -16,6 +16,12 @@
             QueueName = "ReqeustToJoinGroup",
             RouteKey = "reqeust_to_join_group"
         };
+        
+        public static readonly Queue ApproveRequestToJoinGroup = new()
+        {
+            QueueName = "ApproveRequestToJoinGroup",
+            RouteKey = "approve_request_to_join_group"
+        };
 
     }
 }

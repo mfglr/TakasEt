@@ -24,6 +24,9 @@ namespace NotificationMicroservice.SharedLibrary.Entities
             Type = typeof(T).Name;
         }
 
+        public void SetCreatedDate() => CreatedDate = DateTime.Now;
+        public void SetUpdatedDate() => UpdatedDate = DateTime.Now;
+
         //IViewableByUser
         public bool IsViewed { get; private set; }
         [BsonRepresentation(BsonType.DateTime)]

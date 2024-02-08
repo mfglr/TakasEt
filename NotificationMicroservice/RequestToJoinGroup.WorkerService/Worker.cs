@@ -45,7 +45,6 @@ namespace RequestToJoinGroup.WorkerService
             };
             await _service.CreateNotificationsAsync(request.AdminIds, content);
 
-            _subscriber.CompleteNotification(@event.DeliveryTag);
         }
     }
 }

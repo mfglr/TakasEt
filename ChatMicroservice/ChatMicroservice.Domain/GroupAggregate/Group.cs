@@ -213,7 +213,9 @@ namespace ChatMicroservice.Domain.GroupAggregate
 				throw new Exception("The approver is not an admin");
 
 			request.MarkAsApproved(approverId);
-			_users.Add(new GroupUser(idOfUserWhoWantsToJoinGroup));
+			var user = new GroupUser(idOfUserWhoWantsToJoinGroup);
+			user.MakeUser();
+            _users.Add(user);
 
 			return request;
 		}

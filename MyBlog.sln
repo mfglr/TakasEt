@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMicroservice.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMicroservice.SharedLibrary", "NotificationMicroservice\NotificationMicroservice.SharedLibrary\NotificationMicroservice.SharedLibrary.csproj", "{C9C41C18-8805-4059-B079-01B4D6922692}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApproveRequestToJoinGroup.WorkerServie", "NotificationMicroservice\ApproveRequestToJoinGroup.WorkerServie\ApproveRequestToJoinGroup.WorkerServie.csproj", "{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{C9C41C18-8805-4059-B079-01B4D6922692}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9C41C18-8805-4059-B079-01B4D6922692}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9C41C18-8805-4059-B079-01B4D6922692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{FD439732-53B6-45A9-8C47-BEE91EF14299} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 		{DB51C71A-F682-4E28-8973-192BFD6D14E1} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 		{C9C41C18-8805-4059-B079-01B4D6922692} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
+		{AFE4E0B0-90A6-4D68-AC09-4B6DE28AE9B5} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04D8AFC5-FAC9-46B2-B99F-889B617C6D9E}
