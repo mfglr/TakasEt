@@ -1,8 +1,8 @@
 ﻿namespace SharedLibrary.Entities
 {
-	public abstract class Entity : IRemovable
+	public abstract class Entity<TId> : IRemovable 
 	{
-		public int Id { get; protected set; }
+		public virtual TId Id { get; protected set; }
 		public DateTime CreatedDate { get; protected set; }
 		public DateTime? UpdatedDate { get; protected set; }
 
@@ -23,4 +23,11 @@
 			RemovedDate = null;
 		}
 	}
+
+	public abstract class Entity : Entity<int>
+	{
+
+	}
+
+
 }

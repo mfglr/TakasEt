@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Entities
 {
-	public interface IGenericViewable<TCrossEntity,TUserId>
+	public interface IViewableByUsers<TCrossEntity,TUserId>
 		where TCrossEntity : Entity
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoViewedTheEntity { get; }
@@ -8,7 +8,7 @@
 		bool IsViewed(TUserId userId);
 	}
 
-	public interface IViewable<TCrossEntity> : IGenericViewable<TCrossEntity,int>
+	public interface IViewableByUsers<TCrossEntity> : IViewableByUsers<TCrossEntity,int>
 		where TCrossEntity : Entity
 	{
 	}

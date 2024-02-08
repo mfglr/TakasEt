@@ -4,7 +4,7 @@ using SharedLibrary.ValueObjects;
 
 namespace ChatMicroservice.Domain.MessageEntity
 {
-    public class Message : Entity, ILikeable<MessageUserLiking>, IViewable<MessageUserViewing>, IRemovableByManyUsers<MessageUserRemoving>
+    public class Message : Entity, ILikeableByUsers<MessageUserLiking>, IViewableByUsers<MessageUserViewing>, IRemovableByUsers<MessageUserRemoving>
     {
 		public int? GroupId { get; private set; }
 		public int? ConversationId { get; private set; }

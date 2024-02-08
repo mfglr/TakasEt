@@ -15,7 +15,7 @@
 	 * 
 	*/
 
-	public interface IGenericLikeable<TCrossEntity,TUserId> where TCrossEntity : Entity
+	public interface ILikeableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoLikedTheEntity { get; }
 		void Like(TUserId userId);
@@ -23,7 +23,7 @@
 		bool IsLiked(TUserId userId);
 	}
 
-	public interface ILikeable<TCrossEntity> : IGenericLikeable<TCrossEntity,int> where TCrossEntity : Entity
+	public interface ILikeableByUsers<TCrossEntity> : ILikeableByUsers<TCrossEntity,int> where TCrossEntity : Entity
 	{
 	}
 
