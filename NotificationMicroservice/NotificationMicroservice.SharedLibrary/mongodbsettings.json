@@ -1,0 +1,6 @@
+{
+  "NotificationCollectionName": "Notifications",
+  "NotificationContainerCollectionName": "NotificationContainers",
+  "ConnectionString": "mongodb://localhost:27017",
+  "DatabaseName": "NotificationDb"
+}

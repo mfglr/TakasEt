@@ -41,7 +41,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "SharedLibr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NotificationMicroservice", "NotificationMicroservice", "{5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMicroservice.Api", "NotificationMicroservice.Api\NotificationMicroservice.Api.csproj", "{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestToJoinGroup.WorkerService", "NotificationMicroservice\RequestToJoinGroup.WorkerService\RequestToJoinGroup.WorkerService.csproj", "{FD439732-53B6-45A9-8C47-BEE91EF14299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMicroservice.Api", "NotificationMicroservice\NotificationMicroservice.Api\NotificationMicroservice.Api.csproj", "{DB51C71A-F682-4E28-8973-192BFD6D14E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMicroservice.SharedLibrary", "NotificationMicroservice\NotificationMicroservice.SharedLibrary\NotificationMicroservice.SharedLibrary.csproj", "{C9C41C18-8805-4059-B079-01B4D6922692}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,10 +117,18 @@ Global
 		{A1B54A6E-1668-44A4-B80A-586C114EAC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B54A6E-1668-44A4-B80A-586C114EAC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B54A6E-1668-44A4-B80A-586C114EAC04}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD439732-53B6-45A9-8C47-BEE91EF14299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD439732-53B6-45A9-8C47-BEE91EF14299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD439732-53B6-45A9-8C47-BEE91EF14299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD439732-53B6-45A9-8C47-BEE91EF14299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB51C71A-F682-4E28-8973-192BFD6D14E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB51C71A-F682-4E28-8973-192BFD6D14E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB51C71A-F682-4E28-8973-192BFD6D14E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB51C71A-F682-4E28-8973-192BFD6D14E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9C41C18-8805-4059-B079-01B4D6922692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C41C18-8805-4059-B079-01B4D6922692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C41C18-8805-4059-B079-01B4D6922692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C41C18-8805-4059-B079-01B4D6922692}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,7 +140,9 @@ Global
 		{43FBC1E1-AFA5-4110-AD32-B7E59F65D159} = {2E7AE60F-D162-467A-850B-E196B353CF83}
 		{2C64A8F3-3CB0-4789-87D8-641C6AFBF75F} = {2E7AE60F-D162-467A-850B-E196B353CF83}
 		{A1B54A6E-1668-44A4-B80A-586C114EAC04} = {5CB76936-699F-4155-AF07-22293AFFE687}
-		{7F8BA5DE-870C-4FFF-8EDD-F2009401ADC1} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
+		{FD439732-53B6-45A9-8C47-BEE91EF14299} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
+		{DB51C71A-F682-4E28-8973-192BFD6D14E1} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
+		{C9C41C18-8805-4059-B079-01B4D6922692} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04D8AFC5-FAC9-46B2-B99F-889B617C6D9E}

@@ -30,6 +30,7 @@ namespace ChatMicroservice.Application.Commands
 			var group = await _context
 				.Groups
 				.Include(x => x.Users)
+				.Include(x => x.UsersWhoWantsToJoinTheGroup)
 				.FirstOrDefaultAsync(x => x.Id == request.GroupId, cancellationToken);
 
 			if (group == null) throw new Exception("Group is not found!");
@@ -40,11 +41,11 @@ namespace ChatMicroservice.Application.Commands
 			if (numberOfChanges <= 0) throw new Exception("error");
 
 			_notificationPublisher.Publish(
-				new RequestedJoinToGroup()
+				new RequestedJoinToGroupEvent()
 				{
-					AdminIds = group.Users.Where(x => x.Role == UserRole.Admin).Select(x=> x.Id).ToList(),
+					AdminIds = group.Users.Where(x => x.Role == UserRole.Admin).Select(x=> x.UserId).ToList(),
 					GroupId = request.GroupId,
-					UserId = request.UserId
+					IdOfUserWhoWantsToJoinGroup = request.UserId
 				},
 				Queue.ReqeustToJoinGroup
 			);

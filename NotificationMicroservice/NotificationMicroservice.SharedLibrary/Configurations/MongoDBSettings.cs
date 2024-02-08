@@ -1,6 +1,6 @@
-﻿namespace NotificationMicroservice.Api.Configurations
+﻿namespace NotificationMicroservice.SharedLibrary.Configurations
 {
-    public class DatabaseSettings
+    public class MongoDBSettings : IMongoDBSettings
     {
         public string NotificationCollectionName { get; set; }
         public string NotificationContainerCollectionName { get; set; }
