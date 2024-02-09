@@ -3,6 +3,8 @@ using FluentValidation;
 using MediatR;
 using Models.Dtos;
 using System.Data;
+using SharedLibrary.Exceptions;
+using System.Net;
 
 namespace Application.Pipelines
 {
@@ -27,7 +29,7 @@ namespace Application.Pipelines
 				if (!validationResult.IsValid)
 				{
 					var errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-					throw Common.Exceptions.ValidationException.Create(errorMessages, request.GetType());
+					throw new AppException("error",HttpStatusCode.BadRequest);
 				}
 			}
 

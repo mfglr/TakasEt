@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace ChatMicroservice.Application.Validators
 {
-    public class SaveMessageCommandValidator : AbstractValidator<SaveMessageDto>
+    public class SaveMessageCommandValidator : AbstractValidator<SaveGroupMessageDto>
     {
         public SaveMessageCommandValidator()
         {

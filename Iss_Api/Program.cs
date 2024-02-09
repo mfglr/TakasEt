@@ -5,9 +5,9 @@ using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using WebApi.Extentions;
-using Iss_Api.Hubs;
 using Models.Configurations;
 using Iss_Api.Middlewares;
+using SharedLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,7 @@ builder.Services.AddSignalR();
 builder.Services.AddApplication();
 builder.Services.AddSqlDbContext();
 builder.Services.AddServices();
+builder.Services.AddAppSharedLibrary();
 
 builder.Services.AddAuthentication(
 	options =>
@@ -68,13 +69,7 @@ app.UseCors("local");
 app.UseRouting();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseEndpoints(
-	endpoints =>
-	{
-		endpoints.MapControllers();
-		endpoints.MapHub<MessageHub>("/message");
-	}
-);
+app.MapControllers();
 app.Run();
 
 

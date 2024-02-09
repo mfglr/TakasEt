@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.Dtos;
 using Models.Entities;
-using Common.Exceptions;
+using SharedLibrary.Exceptions;
+using System.Net;
 
 namespace Commands
 {
@@ -31,10 +32,10 @@ namespace Commands
                 .Include(x => x.UserRefreshToken)
                 .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
-            if (user == null) throw new UserNotFoundException();
+            if (user == null) throw new AppException("error",HttpStatusCode.BadRequest);
 
             var result = await _users.CheckPasswordAsync(user, request.Password);
-            if (!result) throw new FailedLoginException();
+            if (!result) throw new AppException("error", HttpStatusCode.BadRequest);
 
             var refreshToken = _tokenService.CreateRefreshToken();
             var accessToken = _tokenService.CreateAccessTokenByUser(user);

@@ -3,7 +3,7 @@ using ChatMicroservice.Infrastructure;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatMicroservice.Application.Validators.Group
+namespace ChatMicroservice.Application.Validators
 {
 	public class GetGroupMessagesByGroupIdQueryValidator : AbstractValidator<GetGroupMessagesByGroupIdDto>
 	{

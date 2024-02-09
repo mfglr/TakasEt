@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SharedLibrary.Dtos;
 
-namespace ChatMicroservice.Application.Dtos.Message
+namespace ChatMicroservice.Application.Dtos
 {
 	public class MarkMessageAsReceivedDto : IRequest<AppResponseDto>
 	{

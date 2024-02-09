@@ -7,7 +7,7 @@ using SharedLibrary.Extentions;
 
 namespace ChatMicroservice.API.Controllers
 {
-	[Route("api/[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
 	[ApiController]
 	public class GroupsController : ControllerBase
 	{

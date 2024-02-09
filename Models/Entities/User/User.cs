@@ -25,9 +25,9 @@ namespace Models.Entities
         public IReadOnlyCollection<StoryImageUserLiking> StoryImagesLiked { get; }
         public IReadOnlyCollection<StoryImageUserViewing> StoryImagesViewed { get; }
         
-        public IReadOnlyCollection<MessageUserRemoving> MessagesRemoved { get; }
+      
 		public IReadOnlyCollection<RoleUser> Roles { get; }
-        public IReadOnlyCollection<GroupUser> Groups { get; }
+       
 
 		public User() { }
 
@@ -44,11 +44,7 @@ namespace Models.Entities
         //Searchings
 		public IReadOnlyCollection<Searching> Searchings => _searchings;
 		private readonly List<Searching> _searchings = new();
-
-		//Conversations
-        public IReadOnlyCollection<ConversationUserRemoving> ConversationsRemoved { get; }
-        public IReadOnlyCollection<Conversation> ConversationsSent { get; }
-		public IReadOnlyCollection<Conversation> ConversationsReceived { get; }
+       
 
 		//User Message Hub State
 		public MessageHubState? MessageHubState => _messageHubState;

@@ -6,7 +6,7 @@ using SharedLibrary.ValueObjects;
 
 namespace ChatMicroservice.Domain.GroupAggregate
 {
-	public class Group : Entity, IAggregateRoot
+    public class Group : Entity, IAggregateRoot
 	{
 
 		public string Name { get; private set; }

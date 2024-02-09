@@ -1,11 +1,12 @@
-﻿using Models.Interfaces.Repositories;
-using Models.Interfaces.Services;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Models.Dtos;
 using Models.Entities;
-using Common.Exceptions;
+using Models.Interfaces.Repositories;
+using Models.Interfaces.Services;
 using Models.ValueObjects;
+using SharedLibrary.Exceptions;
+using System.Net;
 
 namespace Commands
 {
@@ -32,7 +33,7 @@ namespace Commands
                     cancellationToken
                 );
 
-            if (user == null) throw new InValidRefreshTokenException();
+            if (user == null) throw new AppException("error", HttpStatusCode.BadRequest);
             Token accessToken = _tokenService.CreateAccessTokenByUser(user);
             Token refreshToken = _tokenService.CreateRefreshToken();
             var loginResponse = new LoginResponseDto()

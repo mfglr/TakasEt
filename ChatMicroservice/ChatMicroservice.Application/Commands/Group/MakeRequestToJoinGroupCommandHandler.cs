@@ -6,7 +6,7 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Messages;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 

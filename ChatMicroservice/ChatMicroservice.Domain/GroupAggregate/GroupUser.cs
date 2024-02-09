@@ -5,6 +5,8 @@ namespace ChatMicroservice.Domain.GroupAggregate
 	public class GroupUser : Entity
 	{
 		public int UserId { get; private set; }
+		public int GroupId { get; private set; }
+		
 		public UserRole Role { get; private set; }
 
 		public GroupUser(int userId)

@@ -7,7 +7,7 @@ using SharedLibrary.Dtos;
 
 namespace ChatMicroservice.Application.Commands
 {
-	internal class RemoveUserFromGroupCommandHandler : IRequestHandler<RemoveUserFromGroupDto, AppResponseDto>
+    internal class RemoveUserFromGroupCommandHandler : IRequestHandler<RemoveUserFromGroupDto, AppResponseDto>
 	{
 		private readonly ChatDbContext _context;
 		private readonly IUnitOfWork _unitOfWork;

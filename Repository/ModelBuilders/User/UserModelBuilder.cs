@@ -116,20 +116,6 @@ namespace Repository.ModelBuilders
 				.HasForeignKey<MessageHubState>(x => x.Id)
 				.OnDelete(DeleteBehavior.NoAction);
 
-			
-
-			builder
-				.HasMany(x => x.MessagesRemoved)
-				.WithOne(x => x.Remover)
-				.HasForeignKey(x => x.RemoverId)
-				.OnDelete(DeleteBehavior.NoAction);
-
-			builder
-				.HasMany(x => x.Groups)
-				.WithOne(x => x.User)
-				.HasForeignKey(x => x.UserId)
-				.OnDelete(DeleteBehavior.NoAction);
-
 			builder
 				.HasMany(x => x.UsersWhoViewed)
 				.WithOne(x => x.Viewed)
@@ -140,23 +126,6 @@ namespace Repository.ModelBuilders
 				.HasMany(x => x.UsersViewed)
 				.WithOne(x => x.Viewer)
 				.HasForeignKey(x => x.ViewerId)
-				.OnDelete(DeleteBehavior.NoAction);
-
-			//Conversation
-			builder
-				.HasMany(x => x.ConversationsSent)
-				.WithOne(x => x.Receiver)
-				.HasForeignKey(x => x.ReceiverId)
-				.OnDelete(DeleteBehavior.NoAction);
-			builder
-				.HasMany(x => x.ConversationsReceived)
-				.WithOne(x => x.Sender)
-				.HasForeignKey(x => x.SenderId)
-				.OnDelete (DeleteBehavior.NoAction);
-			builder
-				.HasMany(x => x.ConversationsRemoved)
-				.WithOne(x => x.Remover)
-				.HasForeignKey(x => x.RemoverId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 		}

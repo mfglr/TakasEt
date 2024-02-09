@@ -10,7 +10,7 @@ using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Net;
 
-namespace ChatMicroservice.Application.Commands.Message
+namespace ChatMicroservice.Application.Commands
 {
     public class LikeGroupMessageCommandHandler : IRequestHandler<LikeGroupMessageDto, AppResponseDto>
     {

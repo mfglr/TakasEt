@@ -1,6 +1,6 @@
-using ChatMicroservice.API.Hubs;
-using ChatMicroservice.Infrastructure;
 using ChatMicroservice.Application;
+using ChatMicroservice.Application.Hubs;
+using ChatMicroservice.Infrastructure;
 using SharedLibrary;
 using System.Text.Json.Serialization;
 
