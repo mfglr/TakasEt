@@ -1,5 +1,7 @@
 ﻿using ChatMicroservice.Application.Dtos;
 using ChatMicroservice.Application.Dtos.Message;
+using ChatMicroservice.Domain.ConnectionAggregate;
+using ChatMicroservice.Domain.GroupAggregate;
 using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -30,20 +32,45 @@ namespace ChatMicroservice.API.Hubs
 			await Clients.Caller.SendAsync("disconnectionSuccessNotification", response, cancellationToken);
 		}
 
-		public async Task SendMessageToUser(SaveMessageDto request,CancellationToken cancellationToken)
+		public async Task SendMessage(SaveMessageDto request,CancellationToken cancellationToken)
 		{
 			//save message
 			var response = await _sender.Send(request, cancellationToken);
 			await Clients.Caller.SendAsync("savedMessageSuccessNotification", response, cancellationToken);
 
-			//send the message if receiver is connected;
-			var receiverConnection = await _context
-				.Connections
-				.FirstOrDefaultAsync(x => x.UserId == request.ReceiverId, cancellationToken);
+			if(request.ReceiverId != null)
+			{
+                //send the message if receiver is connected;
+                var receiverConnection = await _context
+                    .Connections
+                    .FirstOrDefaultAsync(x => x.UserId == request.ReceiverId, cancellationToken);
 
-			if (receiverConnection != null && receiverConnection.Connected)
-				await Clients.Client(receiverConnection.ConnectionId).SendAsync("getMessage",response,cancellationToken);
-		}
+                if (receiverConnection != null && receiverConnection.Connected)
+                    await Clients
+						.Client(receiverConnection.ConnectionId)
+						.SendAsync("getMessage", response, cancellationToken);
+            }
+			
+			if(request.GroupId != null)
+			{
+				var connections = 
+					await (
+						from connection in _context.Set<Connection>()
+						join groupUser in _context.Set<GroupUser>()
+						on connection.UserId equals groupUser.UserId
+						select connection
+					)
+					.ToListAsync(cancellationToken);
+				
+				foreach(var connection in connections)
+					if (connection.Connected)
+                        await Clients
+							.Client(connection.ConnectionId)
+							.SendAsync("getMessage", response, cancellationToken);
+            }
+
+
+        }
 
 		public async Task MarkMessageAsReceived(MarkMessageAsReceivedDto request,CancellationToken cancellationToken)
 		{

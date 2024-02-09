@@ -31,11 +31,9 @@ export class AppComponent {
         this.messageHub.start()
       }
     })
-
   }
 
-  login(){
-  }
+  login(){}
 
   ngOnDestroy(){
     this.messageHub.stop();

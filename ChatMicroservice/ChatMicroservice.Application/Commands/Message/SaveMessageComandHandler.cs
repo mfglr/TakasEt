@@ -11,7 +11,7 @@ using SharedLibrary.ValueObjects;
 
 namespace ChatMicroservice.Application.Commands
 {
-	public class SaveMessageComandHandler : IRequestHandler<SaveMessageDto, AppResponseDto>
+    public class SaveMessageComandHandler : IRequestHandler<SaveMessageDto, AppResponseDto>
 	{
 		private readonly ChatDbContext _context;
 		private readonly IUnitOfWork _unitOfWork;
@@ -27,7 +27,10 @@ namespace ChatMicroservice.Application.Commands
 		public async Task<AppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
 		{
 			Message message;
-			var conversation = await _context
+
+			if (request.ReceiverId != null)
+			{
+				var conversation = await _context
 				.Conversations
 				.FirstOrDefaultAsync(
 					x => (
@@ -35,21 +38,32 @@ namespace ChatMicroservice.Application.Commands
 						x.SenderId == request.ReceiverId && x.ReceiverId == request.SenderId
 					)
 				);
-			
-			if ( conversation == null)
-			{
-				conversation = new Conversation(request.SenderId, request.ReceiverId);
-				message = conversation.AddMessage(request.SenderId, request.Content);
-				await _context.Conversations.AddAsync(conversation, cancellationToken);
+
+				if (conversation == null)
+				{
+					conversation = new Conversation(request.SenderId, (int)request.ReceiverId);
+					message = conversation.AddMessage(request.SenderId, request.Content);
+					await _context.Conversations.AddAsync(conversation, cancellationToken);
+				}
+				else
+					message = conversation.AddMessage(request.SenderId, request.Content);
 			}
-            else
-				message = conversation.AddMessage(request.SenderId, request.Content);
+			else if (request.GroupId != null)
+			{
+				var group = await _context
+					.Groups
+					.Include(x => x.Users)
+					.FirstOrDefaultAsync(x => x.Id == request.GroupId, cancellationToken);
+				if (group == null) throw new Exception("Group is not found!");
+				message = group.AddMessage(request.SenderId, request.Content);
+			}
+			else
+				throw new Exception("Either ReciverId or GroupId is required!");
 
 			foreach (var image in request.MessageImages)
 				message.AddImage(image.BlobName, image.Extention, new Dimension(image.Height, image.Width));
 
-			var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
-			if (numberOfChanges <= 0) throw new Exception("error");
+			await _unitOfWork.CommitAsync(cancellationToken);
 
 			return AppResponseDto.Success(_mapper.Map<MessageResponseDto>(message));
 		}
