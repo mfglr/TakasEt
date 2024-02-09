@@ -39,10 +39,7 @@ namespace ChatMicroservice.Application.Commands
 				connection.UpdateConnectionId(request.ConnectionId);
 				connection.Connect();
 			}
-			
-			var numberOfChanges = await _unitOfWork.CommitAsync(cancellationToken);
-			if (numberOfChanges <= 0) throw new Exception("error");
-
+			await _unitOfWork.CommitAsync(cancellationToken);
 			return AppResponseDto.Success(_mapper.Map<ConnectionResponseDto>(connection));
 
 		}
