@@ -1,4 +1,4 @@
-﻿namespace SharedLibrary.Messages
+﻿namespace SharedLibrary.Events
 {
     public class RequestedJoinToGroupEvent
     {

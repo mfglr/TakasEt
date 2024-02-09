@@ -10,6 +10,8 @@ namespace SharedLibrary.Services
         private IConnection _connection;
         private IModel _channel;
 
+        private static string ExchangeName = "NotificationExchange";
+
         public NotificationSubscriber(ConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
@@ -20,6 +22,8 @@ namespace SharedLibrary.Services
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.BasicQos(0, 1, false);
+
+            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true, false, null);
         }
 
         public bool ConnectionIsOpen() => _connection != null && _connection.IsOpen;
@@ -27,6 +31,9 @@ namespace SharedLibrary.Services
 
         public void Subscribe(Queue queue,Func<object, BasicDeliverEventArgs, Task> callback)
         {
+            _channel.QueueDeclare(queue.QueueName, true, false, false, null);
+            _channel.QueueBind(queue.QueueName, ExchangeName, queue.RouteKey);
+
             var consumer = new AsyncEventingBasicConsumer(_channel);
             _channel.BasicConsume(queue.QueueName,false,consumer);
 

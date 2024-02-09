@@ -23,5 +23,10 @@
             RouteKey = "approve_request_to_join_group"
         };
 
+        public static readonly Queue LikeMessage = new()
+        {
+            QueueName = "LikeMessage",
+            RouteKey = "like_message"
+        };
     }
 }

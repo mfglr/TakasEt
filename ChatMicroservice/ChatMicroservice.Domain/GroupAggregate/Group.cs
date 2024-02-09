@@ -131,10 +131,12 @@ namespace ChatMicroservice.Domain.GroupAggregate
 			var message = GetMessageOrThrowExceptionIfIsNotExist(messageId);
 			_messages.Remove(message);
 		}
-		public void LikeMessage(int messageId, int userId)
+		public Message LikeMessage(int messageId, int userId)
 		{
 			ThrowExceptionIfIsNotOwnerId(userId);
-			GetMessageOrThrowExceptionIfIsNotExist(messageId).Like(userId);
+			var message = GetMessageOrThrowExceptionIfIsNotExist(messageId);
+			message.Like(userId);
+			return message;
 		}
 		public void DislikeMessage(int messageId, int userId)
 		{

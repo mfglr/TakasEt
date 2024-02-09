@@ -1,12 +1,13 @@
 ﻿using ChatMicroservice.Application.Dtos;
-using ChatMicroservice.Application.Hubs;
 using ChatMicroservice.Core.Interfaces;
 using ChatMicroservice.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
+using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
+using SharedLibrary.Services;
+using SharedLibrary.ValueObjects;
 using System.Net;
 
 namespace ChatMicroservice.Application.Commands.Message
@@ -16,11 +17,13 @@ namespace ChatMicroservice.Application.Commands.Message
 
         private readonly ChatDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly NotificationPublisher _publisher;
 
-        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork)
+        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, NotificationPublisher publisher)
         {
             _context = context;
             _unitOfWork = unitOfWork;
+            _publisher = publisher;
         }
 
         public async Task<AppResponseDto> Handle(LikeGroupMessageDto request, CancellationToken cancellationToken)
@@ -33,9 +36,18 @@ namespace ChatMicroservice.Application.Commands.Message
             if (group == null)
                 throw new AppException("The group was not found!", HttpStatusCode.NotFound);
             
-            group.LikeMessage(request.MessageId,request.UserId);
+            var message = group.LikeMessage(request.MessageId,request.LikerId);
             
             await _unitOfWork.CommitAsync(cancellationToken);
+
+            var e = new LikedMessageEvent()
+            {
+                IdOfMessageOwner = message.SenderId,
+                MessageId = message.Id,
+                IdOfUserWhoLikedTheMessage = request.LikerId
+            };
+            
+            _publisher.Publish(e, Queue.LikeMessage);
             return AppResponseDto.Success();
 
         }

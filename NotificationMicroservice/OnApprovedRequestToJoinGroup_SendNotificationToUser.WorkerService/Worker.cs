@@ -2,10 +2,10 @@ using OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService.Contents
 using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using RabbitMQ.Client.Events;
-using SharedLibrary.Messages;
 using SharedLibrary.ValueObjects;
 using System.Text;
 using SharedLibrary.Services;
+using SharedLibrary.Events;
 
 namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
 {
