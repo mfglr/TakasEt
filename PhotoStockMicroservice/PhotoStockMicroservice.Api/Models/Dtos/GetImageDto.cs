@@ -1,4 +1,4 @@
-﻿namespace PhotoStockMicroservice.Models.Dtos
+﻿namespace PhotoStockMicroservice.Api.Models.Dtos
 {
 	public class GetImageDto
 	{

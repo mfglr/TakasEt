@@ -1,8 +1,8 @@
-﻿using Common.Extentions;
+﻿using SharedLibrary.Extentions;
 using Microsoft.AspNetCore.Mvc;
-using PhotoStockMicroservice.Services.Abstracts;
+using PhotoStockMicroservice.Api.Services.Abstracts;
 
-namespace PhotoStockMicroservice.Controllers
+namespace PhotoStockMicroservice.Api.Controllers
 {
 	[Route("api")]
 	[ApiController]
@@ -26,15 +26,12 @@ namespace PhotoStockMicroservice.Controllers
 		public async Task UploadImage([FromForm] IFormCollection form,CancellationToken cancellationToken)
 		{
 			var containerName = form.ReadString("containerName");
-			if (containerName == null) throw new Exception("error");
-
-			var blobName = form.ReadString("blobName");
-			if (blobName == null) throw new Exception("error");
+			if (containerName == null) throw new Exception("A container name is required!");
 
 			var file = form.Files.FirstOrDefault();
-			if (file == null) throw new Exception("error");
+			if (file == null) throw new Exception("A file is required!");
 
-			await _blobService.UploadAsync(file.OpenReadStream(), containerName, blobName, cancellationToken);
+			await _blobService.UploadImageAsync(file, containerName, cancellationToken);
 		}
 		
 		[HttpPost("upload-images")]
