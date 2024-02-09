@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.SharedLibrary.Configurations
+﻿namespace SharedLibrary.Configurations
 {
     public class RabbitMQSettings : IRabbitMQSettings
     {

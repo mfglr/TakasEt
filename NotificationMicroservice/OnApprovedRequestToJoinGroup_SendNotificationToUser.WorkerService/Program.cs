@@ -5,7 +5,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddShared();
+        services.AddNotificationSharedLibrary();
     })
     .Build();
 

@@ -1,6 +1,6 @@
-﻿using ImageProcessor;
-using PhotoStockMicroservice.Api.Services.Abstracts;
+﻿using PhotoStockMicroservice.Api.Services.Abstracts;
 using SharedLibrary.ValueObjects;
+using System.Drawing;
 
 namespace PhotoStockMicroservice.Api.Services.Concreate
 {
@@ -8,11 +8,8 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
     {
         public Dimension GetDimension(Stream image)
         {
-            using (var imageFactory = new ImageFactory())
-            {
-                imageFactory.Load(image).AutoRotate();
-                return new Dimension(imageFactory.Image.Height, imageFactory.Image.Width);
-            }
+            using var i = Image.FromStream(image);
+            return new Dimension(i.Height, i.Width);
         }
     }
 }

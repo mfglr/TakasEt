@@ -1,10 +1,13 @@
-﻿using SharedLibrary.Extentions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PhotoStockMicroservice.Api.Services.Abstracts;
+using SharedLibrary.Dtos;
+using SharedLibrary.Exceptions;
+using SharedLibrary.Extentions;
+using System.Net;
 
 namespace PhotoStockMicroservice.Api.Controllers
 {
-	[Route("api")]
+    [Route("api/[Controller]/[Action]")]
 	[ApiController]
 	public class ImageController : ControllerBase
 	{
@@ -15,63 +18,43 @@ namespace PhotoStockMicroservice.Api.Controllers
 			_blobService = blobService;
 		}
 
-		[HttpGet("{containerName}/{blobName}")]
-		public async Task GetImage(string containerName, string blobName,CancellationToken cancellationToken)
+        [HttpPost("{containerName}")]
+        public void CreateContainer(string containerName)
+        {
+            _blobService.CreateContainer(containerName);
+        }
+
+        [HttpGet("{containerName}/{blobName}")]
+		public async Task DownloadImage(string containerName, string blobName,CancellationToken cancellationToken)
 		{
 			var bytes = await _blobService.DownloadAsync(containerName, blobName, cancellationToken);
 			await Response.Body.WriteAsync(bytes,cancellationToken);
 		}
 
-		[HttpPost("upload-image")]
-		public async Task UploadImage([FromForm] IFormCollection form,CancellationToken cancellationToken)
+		[HttpPost]
+		public async Task<AppResponseDto> UploadImage([FromForm] IFormCollection form,CancellationToken cancellationToken)
 		{
 			var containerName = form.ReadString("containerName");
-			if (containerName == null) throw new Exception("A container name is required!");
+			if (containerName == null) throw new AppException("A container name is required!",HttpStatusCode.BadRequest);
 
 			var file = form.Files.FirstOrDefault();
-			if (file == null) throw new Exception("A file is required!");
+			if (file == null) throw new AppException("A file is required!", HttpStatusCode.BadRequest);
 
-			await _blobService.UploadImageAsync(file, containerName, cancellationToken);
+			return await _blobService.UploadImageAsync(file, containerName, cancellationToken);
 		}
 		
-		[HttpPost("upload-images")]
-		public async Task UploadImages([FromForm]IFormCollection form,CancellationToken cancellationToken)
+		[HttpPost]
+		public async Task<AppResponseDto> UploadImages([FromForm] IFormCollection form,CancellationToken cancellationToken)
 		{
-			
-			var containerNames = form.ReadStringList("containerNames");
-			if (containerNames == null || containerNames.Count < 1) throw new Exception("error");
-			
-			var blobNames = form.ReadStringList("blobNames");
-			if (blobNames == null) throw new Exception("error");
-			if (containerNames.Count != blobNames.Count) throw new Exception("error");
-			
-			var streams = form.ReadStreams();
-			if (blobNames.Count != streams.Count) throw new Exception("error");
-
-			int i = 0;
-			try
-			{
-				for(; i < streams.Count;i++)
-					await _blobService.UploadAsync(
-						streams[i],
-						containerNames[i],
-						blobNames[i],
-						cancellationToken
-					);
-			}
-			catch (Exception e)
-			{
-				//if there is an error when uploading files, delete the uploaded files. All or none!
-				for (int j = 0; j < i; j++)
-					_blobService.Delete(containerNames[j], blobNames[j]);
-				throw;
-			}
+			var containerName = form.ReadString("containerName");
+			if (containerName == null ) throw new AppException("A container name is required!", HttpStatusCode.BadRequest);
+			return await _blobService.UploadImagesAsync(form.Files, containerName, cancellationToken);
 		}
 
 		[HttpDelete("{containerName}/{blobName}")]
-		public void DeleteImage(string containerName,string blobName)
+		public AppResponseDto DeleteImage(string containerName,string blobName)
 		{
-			_blobService.Delete(containerName, blobName);
+			return _blobService.Delete(containerName, blobName);
 		}
 
 	}

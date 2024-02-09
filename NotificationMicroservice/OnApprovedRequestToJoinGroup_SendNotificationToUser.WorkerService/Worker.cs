@@ -5,6 +5,7 @@ using RabbitMQ.Client.Events;
 using SharedLibrary.Messages;
 using SharedLibrary.ValueObjects;
 using System.Text;
+using SharedLibrary.Services;
 
 namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
 {

@@ -3,6 +3,7 @@ using NotificationMicroservice.SharedLibrary.Services;
 using OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService.Contents;
 using RabbitMQ.Client.Events;
 using SharedLibrary.Messages;
+using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
 
@@ -12,7 +13,6 @@ namespace OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService
     {
         private readonly NotificationSubscriber _subscriber;
         private readonly NotificationService<RequestToJoinGroupContent> _service;
-
 
         public Worker(NotificationSubscriber subscriber, NotificationService<RequestToJoinGroupContent> service)
         {

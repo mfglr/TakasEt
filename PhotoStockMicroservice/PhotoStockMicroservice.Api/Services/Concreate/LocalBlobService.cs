@@ -1,88 +1,107 @@
-﻿using PhotoStockMicroservice.Api.Services.Abstracts;
+﻿using PhotoStockMicroservice.Api.Configurations;
+using PhotoStockMicroservice.Api.Services.Abstracts;
 using SharedLibrary.Dtos;
+using SharedLibrary.Exceptions;
+using SharedLibrary.Helpers;
 using SharedLibrary.ValueObjects;
-using System.Reflection;
+using System.Net;
 
 namespace PhotoStockMicroservice.Api.Services.Concreate
 {
-	public class LocalBlobService : IBlobService
+    public class LocalBlobService : IBlobService
 	{
 
 		private readonly IImageService _imageService;
+		private readonly IContainerSettings _containerSettings;
 
-        public LocalBlobService(IImageService imageService)
+        public LocalBlobService(IImageService imageService, IContainerSettings containerSettings)
         {
             _imageService = imageService;
+            _containerSettings = containerSettings;
         }
 
-		private string getPath(string path)
+
+		private string GetPath(string containerName)
 		{
-            Assembly asm = Assembly.GetExecutingAssembly();
-            return $"{Path.GetDirectoryName(asm.Location)}/{path}";
+            return GetPathHelper.Run($"{_containerSettings.RootPath}/{containerName}");
+        }
+		private string GetPath(string containerName,string blobName)
+		{
+			return GetPathHelper.Run($"{_containerSettings.RootPath}/{containerName}/{blobName}");
         }
 
-        private string getPath(string containerName,string blobName)
-		{
-			Assembly asm = Assembly.GetExecutingAssembly();
-			return $"{Path.GetDirectoryName(asm.Location)}/{containerName}/{blobName}";
-		}
-
-		private string CreateUniqBlobName(string extention)
-		{
-			return $"{Guid.NewGuid()}_{DateTime.Now.Ticks}_{Guid.NewGuid()}.{extention}";
-		}
-
-        public void CreateContainer(string containerName)
+        public AppResponseDto CreateContainer(string containerName)
         {
-			var path = getPath(containerName);
+			var path = GetPath(containerName);
+            if (Directory.Exists(path))
+				throw new AppException($"The container ({containerName}) was already created!",HttpStatusCode.BadRequest);
 			Directory.CreateDirectory(path);
+			return AppResponseDto.Success();
         }
 
-        public void Delete(string containerName, string blobName)
+        public AppResponseDto Delete(string containerName, string blobName)
 		{
-			string path = getPath(containerName, blobName);
-			if (!File.Exists(path)) throw new Exception("File is not found");
+			string path = GetPath(containerName, blobName);
 			File.Delete(path);
+			return AppResponseDto.Success();
 		}
 
 		public async Task<byte[]> DownloadAsync(string containerName, string blobName,  CancellationToken cancellationToken)
 		{
-			string path = getPath(containerName,blobName);
-
-			var stream = File.OpenRead(path);
+			string path = GetPath(containerName, blobName);
+			if (!File.Exists(path)) throw new AppException("The file was not found!", HttpStatusCode.NotFound);
+            using var stream = File.OpenRead(path);
 			var bytes = new byte[stream.Length];
 			await stream.ReadAsync(bytes,0,bytes.Length,cancellationToken);
 			return bytes;
 		}
 
-		public async Task<ImageResponDto> UploadImageAsync(IFormFile file, string containerName,CancellationToken cancellationToken)
+
+		private async Task<ImageResponDto> SaveImageAsync(IFormFile file, string containerName, CancellationToken cancellationToken)
 		{
-			using var stream = file.OpenReadStream();
-			if(stream == null || stream.Length == 0) throw new Exception("A stream is required");
-			
-			var extention = Path.GetExtension(file.Name) ?? throw new Exception("The extention of file undefined");
+            using var stream = file.OpenReadStream();
+            if (stream == null || stream.Length == 0) throw new AppException("A stream is required", HttpStatusCode.BadRequest);
 
-			var blobName = CreateUniqBlobName(extention);
-			string path = getPath(containerName, blobName);
+			var extention = Path.GetExtension(file.FileName);
+			if(extention == null || extention == "")
+				throw new AppException("The extention of file undefined",HttpStatusCode.BadRequest);
 
-            Dimension dimension;
-			using var fileStream = File.Create(path);
-			await stream.CopyToAsync(fileStream, cancellationToken);
-			dimension = _imageService.GetDimension(fileStream);
+            var blobName = CreateUniqFileNameHelper.Run(extention);
+            string path = GetPath(containerName, blobName);
 
-			return new ImageResponDto()
+
+			Dimension dimension;
+            try
 			{
+				using var fileStream = File.Create(path);
+                await stream.CopyToAsync(fileStream, cancellationToken);
+                fileStream.Close();
+                dimension = _imageService.GetDimension(stream);
+            }
+            catch (Exception ex)
+			{
+                Delete(containerName, blobName);
+                throw new AppException("There have been some issues while uploading the file. Upload failed!", HttpStatusCode.BadRequest);
+            }
+
+			return new ImageResponDto(){
 				ContainerName = containerName,
 				BlobName = blobName,
-                Extention = extention,
-                Height = dimension.Height,
+				Extention = extention,
+				Height = dimension.Height,
 				Width = dimension.Width,
 				AspectRatio = dimension.AspectRatio,
 			};
+        }
 
+		public async Task<AppResponseDto> UploadImageAsync(IFormFile file, string containerName,CancellationToken cancellationToken)
+		{
+            return AppResponseDto.Success(
+				await SaveImageAsync(file, containerName, cancellationToken)
+			);
 		}
 
-        public async Task<List<ImageResponDto>> UploadImagesAsync(IFormFileCollection files, string containerName, CancellationToken cancellationToken)
+        public async Task<AppResponseDto> UploadImagesAsync(IFormFileCollection files, string containerName, CancellationToken cancellationToken)
         {
 			if (files.Count == 0) throw new Exception("A file is required!");
 			
@@ -90,17 +109,17 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
 			try
 			{
                 foreach (var file in files)
-                    fileResponses.Add(await UploadImageAsync(file, containerName, cancellationToken));
+                    fileResponses.Add(await SaveImageAsync(file, containerName, cancellationToken));
             }
 			catch (Exception ex)
 			{
                 //if there is an error when uploading files, delete the uploaded files. All or none!
                 foreach (var response in fileResponses)
 					Delete(containerName, response.BlobName);
-				throw new Exception("There have been some issues while uploading files. Upload failed!");
+				throw new AppException("There have been some issues while uploading files. Upload failed!", HttpStatusCode.BadRequest);
 			}
 
-            return fileResponses;
+            return AppResponseDto.Success(fileResponses);
         }
 
         

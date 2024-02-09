@@ -10,7 +10,7 @@
 		{
 			Height = height;
 			Width = width;
-			AspectRatio = width / height;
+			AspectRatio = ((float)width) / ((float)height);
 		}
 
 		protected override IEnumerable<object> GetEqualityComponents()

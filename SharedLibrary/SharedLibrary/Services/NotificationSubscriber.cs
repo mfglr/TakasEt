@@ -2,7 +2,7 @@
 using RabbitMQ.Client.Events;
 using SharedLibrary.ValueObjects;
 
-namespace NotificationMicroservice.SharedLibrary.Services
+namespace SharedLibrary.Services
 {
     public class NotificationSubscriber : IDisposable
     {
