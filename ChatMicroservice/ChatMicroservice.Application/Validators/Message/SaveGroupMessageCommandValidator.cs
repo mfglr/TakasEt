@@ -3,15 +3,13 @@ using FluentValidation;
 
 namespace ChatMicroservice.Application.Validators
 {
-    public class SaveMessageCommandValidator : AbstractValidator<SaveGroupMessageDto>
+    public class SaveGroupMessageCommandValidator : AbstractValidator<SaveGroupMessageDto>
     {
-        public SaveMessageCommandValidator()
+        public SaveGroupMessageCommandValidator()
         {
             RuleFor(x => x.Content).NotNull().WithMessage("Content is required!");
             RuleFor(x => x.SenderId).NotNull().WithMessage("SenderId is required!");
-            RuleFor(x => x)
-                .Must(x => x.ReceiverId != null || x.GroupId != null)
-                .WithMessage("Either ReciverId or GroupId is required!");
+            RuleFor(x => x.GroupId).NotNull().WithMessage("GroupId is required!");
         }
     }
 }

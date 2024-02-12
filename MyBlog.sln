@@ -51,7 +51,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhotoStockMicroservice", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoStockMicroservice.Api", "PhotoStockMicroservice\PhotoStockMicroservice.Api\PhotoStockMicroservice.Api.csproj", "{EE583458-C7CB-494E-A0F8-0D0900075F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnLikedMessage_SendNotificationToTheOwner.WorkerService", "NotificationMicroservice\OnLikedMessage_SendNotificationToTheOwner.WorkerService\OnLikedMessage_SendNotificationToTheOwner.WorkerService.csproj", "{A4F7328B-FCBF-47D4-9060-0793A50F2D81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnLikedMessage_SendNotificationToTheOwner.WorkerService", "NotificationMicroservice\OnLikedMessage_SendNotificationToTheOwner.WorkerService\OnLikedMessage_SendNotificationToTheOwner.WorkerService.csproj", "{A4F7328B-FCBF-47D4-9060-0793A50F2D81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthService", "AuthService", "{0E830FD2-DC0C-4C95-8F70-8B28545B3B78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Api", "AuthService\AuthService.Api\AuthService.Api.csproj", "{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Application", "AuthService\AuthService.Application\AuthService.Application.csproj", "{F2B18B69-693A-4547-A874-987278E5BB2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Core", "AuthService\AuthService.Core\AuthService.Core.csproj", "{A4377B67-F13A-468E-AFDC-A18C451BBAC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Domain", "AuthService\AuthService.Domain\AuthService.Domain.csproj", "{75286FD3-51BB-4A68-89E4-3D6578E05264}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Infrastructure", "AuthService\AuthService.Infrastructure\AuthService.Infrastructure.csproj", "{13DE6D49-E09B-448F-9E4F-0D25985DC687}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +155,26 @@ Global
 		{A4F7328B-FCBF-47D4-9060-0793A50F2D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4F7328B-FCBF-47D4-9060-0793A50F2D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4F7328B-FCBF-47D4-9060-0793A50F2D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B18B69-693A-4547-A874-987278E5BB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B18B69-693A-4547-A874-987278E5BB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B18B69-693A-4547-A874-987278E5BB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B18B69-693A-4547-A874-987278E5BB2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4377B67-F13A-468E-AFDC-A18C451BBAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4377B67-F13A-468E-AFDC-A18C451BBAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4377B67-F13A-468E-AFDC-A18C451BBAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4377B67-F13A-468E-AFDC-A18C451BBAC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75286FD3-51BB-4A68-89E4-3D6578E05264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75286FD3-51BB-4A68-89E4-3D6578E05264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75286FD3-51BB-4A68-89E4-3D6578E05264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75286FD3-51BB-4A68-89E4-3D6578E05264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DE6D49-E09B-448F-9E4F-0D25985DC687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DE6D49-E09B-448F-9E4F-0D25985DC687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DE6D49-E09B-448F-9E4F-0D25985DC687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DE6D49-E09B-448F-9E4F-0D25985DC687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,6 +192,11 @@ Global
 		{316F3686-AD64-4F50-BC21-6587D823045D} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 		{EE583458-C7CB-494E-A0F8-0D0900075F8D} = {A7F93942-58F7-4D16-B2B0-B10920D6AC62}
 		{A4F7328B-FCBF-47D4-9060-0793A50F2D81} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
+		{372ADCC6-BA34-4E90-AA0D-341CB13EAE2A} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
+		{F2B18B69-693A-4547-A874-987278E5BB2A} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
+		{A4377B67-F13A-468E-AFDC-A18C451BBAC7} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
+		{75286FD3-51BB-4A68-89E4-3D6578E05264} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
+		{13DE6D49-E09B-448F-9E4F-0D25985DC687} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04D8AFC5-FAC9-46B2-B99F-889B617C6D9E}
