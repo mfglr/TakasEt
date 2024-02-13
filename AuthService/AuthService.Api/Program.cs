@@ -1,4 +1,6 @@
 using SharedLibrary;
+using AuthService.Infrastructure;
+using AuthService.Api.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddAppSharedLibrary();
-
-
+builder.Services.AddCustomDbContext();
+builder.Services.AddCustomIdentity();
+builder.Services.AddJWTConfiguration();
 
 var app = builder.Build();
 

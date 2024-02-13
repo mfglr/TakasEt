@@ -19,4 +19,8 @@
     <ProjectReference Include="..\AuthService.Domain\AuthService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModelBuilder.cs\" />
+  </ItemGroup>
+
 </Project>

@@ -25,6 +25,7 @@ namespace Service
 		{
 
 			var data = new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.Role.Name)));
+			
 			var claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -32,6 +33,7 @@ namespace Service
 				new Claim(ClaimTypes.Name, user.UserName),
 				new Claim(ClaimTypes.Role, string.Join(",",user.Roles.Select(x => x.Role.Name)))
 			};
+
 			claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 			return claims;
 		}
@@ -59,8 +61,11 @@ namespace Service
 		public Token CreateAccessTokenByClient(Client client)
 		{
 			var expirationOfAccessToken = DateTime.Now.AddMinutes(_configuration.CustomTokenOptions.ExprationOfAccessToken);
+			
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.CustomTokenOptions.SecurityKey));
+			
 			var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+			
 			var jwtSecurityToken = new JwtSecurityToken(
 				issuer: _configuration.CustomTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
@@ -68,6 +73,7 @@ namespace Service
 				claims: GetClaimsByClient(client),
 				signingCredentials: signingCredentials
 			);
+
 			var token = _jwtHandler.WriteToken(jwtSecurityToken);
 			return new Token(token, expirationOfAccessToken);
 		}
@@ -75,8 +81,11 @@ namespace Service
 		public Token CreateAccessTokenByUser(User user)
 		{
 			var expirationOfAccessToken = DateTime.Now.AddMinutes(_configuration.CustomTokenOptions.ExprationOfAccessToken);
+			
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.CustomTokenOptions.SecurityKey));
+			
 			var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+			
 			var jwtSecurityToken = new JwtSecurityToken(
 				issuer: _configuration.CustomTokenOptions.Issuer,
 				expires: expirationOfAccessToken,
@@ -84,6 +93,7 @@ namespace Service
 				claims: GetClaimsByUser(user, _configuration.CustomTokenOptions.Audiences),
 				signingCredentials: signingCredentials
 			);
+
 			var token = _jwtHandler.WriteToken(jwtSecurityToken);
 			return new Token(token, expirationOfAccessToken);
 		}

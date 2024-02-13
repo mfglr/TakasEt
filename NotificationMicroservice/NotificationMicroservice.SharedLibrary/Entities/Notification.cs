@@ -4,7 +4,7 @@ using SharedLibrary.Entities;
 
 namespace NotificationMicroservice.SharedLibrary.Entities
 {
-    public class Notification<T> : IViewableByUser, IRemovable
+    public class Notification<T> : IViewable, IRemovable
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Entities
 {
-    public interface IViewableByUser
+    public interface IViewable
     {
         void View();
         bool IsViewed { get; }
