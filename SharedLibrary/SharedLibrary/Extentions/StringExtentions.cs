@@ -15,5 +15,12 @@ namespace SharedLibrary.Extentions
 			return result.ToString();
 		}
 		
+		public static string GetFirstSectionOfEmail(this string input)
+		{
+			int i = 0;
+			while(input[i] != '@') i++;
+			return input.Substring(0,i);
+		}
+
 	}
 }

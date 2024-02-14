@@ -1,10 +1,16 @@
-﻿using AuthService.Domain.UserAggregate;
-using AuthService.Infrastructure;
+﻿using AuthService.Api.Entities;
+using AuthService.Api.Interfaces;
+using AuthService.Api.Models;
+using AuthService.Infrastructure.Services;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.PipelineBehaviors;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Text;
 
 namespace AuthService.Api.Extentions
@@ -12,14 +18,24 @@ namespace AuthService.Api.Extentions
     public static class ServiceCollectionsExtetions
     {
 
+        public static IServiceCollection AddCustomDbContext(this IServiceCollection services)
+        {
+            return services
+                .AddDbContext<AppDbContext>(
+                    (sp, builder) => {
+                        var configuration = sp.GetRequiredService<IConfiguration>();
+                        builder.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+                    }
+                );
+        }
+
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
         {
             services
-                .AddIdentity<User,IdentityRole>(
+                .AddIdentity<User, IdentityRole>(
                     opt =>
                     {
                         opt.User.RequireUniqueEmail = true;
-                        opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz1234567890_";
                         opt.Password.RequiredLength = 9;
                         opt.Password.RequireLowercase = true;
                         opt.Password.RequireUppercase = true;
@@ -30,12 +46,13 @@ namespace AuthService.Api.Extentions
                         opt.Lockout.MaxFailedAccessAttempts = 5;
                     }
                 )
-                .AddEntityFrameworkStores<DbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             return services;
         }
 
-        public static IServiceCollection AddJWTConfiguration(this IServiceCollection services)
+        public static IServiceCollection AddJWT(this IServiceCollection services)
         {
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
@@ -54,7 +71,17 @@ namespace AuthService.Api.Extentions
                             SecurityAlgorithms.HmacSha256Signature
                         );
                     }
-                );
+                )
+                .AddScoped<ITokenService, TokenService>();
+        }
+
+        public static IServiceCollection AddCustomMediatR(this IServiceCollection services)
+        {
+            return services
+                .AddMediatR(
+                    cnfg => cnfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
+                )
+                .AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationPipelineBehavior<,>));
         }
 
     }

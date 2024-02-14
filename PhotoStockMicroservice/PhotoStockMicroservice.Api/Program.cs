@@ -32,7 +32,7 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

@@ -1,6 +1,4 @@
-﻿using AuthService.Core.Interfaces;
-using AuthService.Domain.UserAggregate;
-using Microsoft.AspNetCore.Identity;
+﻿using AuthService.Api.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
 using SharedLibrary.ValueObjects;
@@ -13,18 +11,14 @@ namespace AuthService.Infrastructure.Services
     public class TokenService : ITokenService
     {
 
-        private readonly UserManager<User> _userManager;
         private readonly ITokenConfiguration _tokenConfiguration;
-        private readonly ISignService _signService;
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
 
-        public TokenService(UserManager<User> userManager, ITokenConfiguration tokenConfiguration, ISignService signService, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler)
         {
-            _userManager = userManager;
             _tokenConfiguration = tokenConfiguration;
-            _signService = signService;
             _signingCredentials = signingCredentials;
             _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
         }

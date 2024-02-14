@@ -1,9 +1,9 @@
-﻿using Models.Interfaces;
-using Models.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Configurations;
 using Models.Entities;
+using Models.Interfaces;
+using Models.Interfaces.Repositories;
 using Repository.Contexts;
 using Repository.Repositories;
 using Repository.UnitOfWorks;

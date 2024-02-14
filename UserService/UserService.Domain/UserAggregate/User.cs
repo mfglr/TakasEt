@@ -1,35 +1,56 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SharedLibrary;
+﻿using SharedLibrary;
 using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
+using SharedLibrary.Extentions;
+using SharedLibrary.ValueObjects;
 using System.Net;
 
-namespace AuthService.Domain.UserAggregate
+namespace UserService.Domain.UserAggregate
 {
-    public class User : 
-        IdentityUser,
-        IEntity<string>,
+    public class User :
+        Entity<string>,
         IAggregateRoot,
-        IViewableByUsers<UserUserViewing,string>,
-        IFollowableByUsers<UserUserFollowing,string>
+        IViewableByUsers<UserUserViewing, string>,
+        IFollowableByUsers<UserUserFollowing, string>,
+        IBlockableByUsers<UserUserBlocking,string>
     {
-
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
         public string? NormalizedFullName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
-        public int NumberOfPost { get; private set; }
+        
+        public void Update(string? name,string? lastName,DateTime? dateOfBirth,bool? gender) {
+            Name = name;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            Gender = gender;
 
-        public void IncreaseNumberOfPost() => NumberOfPost++;
-        public void DecreaseNumberOfPost() => NumberOfPost--;
-        public void ConfirmEmail() => EmailConfirmed = true;
+            if(name != null && lastName != null)
+                NormalizedFullName = $"{name + " " ?? ""}{lastName ?? ""}".CustomNormalize();
+        }
 
-        //IEntity
-        public DateTime CreatedDate { get; private set; }
-        public DateTime? UpdatedDate { get; private set; }
-        public void SetCreatedDate() => CreatedDate = DateTime.Now;
-        public void SetUpdatedDate() => UpdatedDate = DateTime.Now;
+        //user images
+        private readonly List<UserImage> _userImages = new ();
+        public IReadOnlyCollection<UserImage> UserImages => _userImages;
+        public void AddImage(string blobName,string extention,Dimension dimension)
+        {
+            _userImages.Add(new UserImage(blobName, extention, dimension));
+        }
+        public void RemoveImage(string imageId)
+        {
+            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            if(image == null || image.IsRemoved)
+                throw new AppException("User image was not found!",HttpStatusCode.NotFound);
+            image.Remove();
+        }
+        public void DeleteImage(string imageId)
+        {
+            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            if (image == null)
+                throw new AppException("User image was not found!", HttpStatusCode.NotFound);
+            _userImages.Remove(image);
+        }
 
         //IRemovable
         public bool IsRemoved { get; private set; }
@@ -81,6 +102,7 @@ namespace AuthService.Domain.UserAggregate
             return _usersWhoViewedTheEntity.Any(x => x.ViewerId == viewerId);
         }
 
+        //IBlockableByUsers
         private readonly List<UserUserBlocking> _usersWhoBlockedTheEntity = new();
         public IReadOnlyCollection<UserUserBlocking> UsersWhoBlockedTheEntity => _usersWhoBlockedTheEntity;
         public IReadOnlyCollection<UserUserBlocking> UsersTheEntityBlocked { get; }
@@ -98,7 +120,7 @@ namespace AuthService.Domain.UserAggregate
             _usersWhoBlockedTheEntity.Add(blocking);
             return blocking;
         }
-        public void DeleteBlock(string blockerId)
+        public void RemoveBlock(string blockerId)
         {
             var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
             if (record == null)

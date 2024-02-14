@@ -1,6 +1,6 @@
 ﻿using SharedLibrary.ValueObjects;
 
-namespace AuthService.Core.Interfaces
+namespace AuthService.Api.Interfaces
 {
     public interface ITokenService
     {

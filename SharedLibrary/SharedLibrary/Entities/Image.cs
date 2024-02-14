@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Entities
 {
-	public abstract class Image : Entity
+	public abstract class Image<TKey> : Entity<TKey>
 	{
 		public ContainerName ContainerName { get; private set; }
 		public string BlobName { get; private set; }
@@ -19,4 +19,17 @@ namespace SharedLibrary.Entities
 			Dimension = dimension;
 		}
 	}
+
+	public abstract class Image : Image<int> {
+
+        public Image() { }
+
+        public Image(ContainerName containerName, string blobName, string extention, Dimension dimension)
+        : base(containerName, blobName, extention, dimension)
+		{
+
+		}
+
+    }
+
 }

@@ -10,7 +10,6 @@ namespace SharedLibrary
     public static class DependecyInjection
     {
 
-
         private static IServiceCollection AddRabbitMQ(this IServiceCollection services)
         {
             var path = GetPathHelper.Run("rabbitmqsettings.json");
@@ -46,5 +45,17 @@ namespace SharedLibrary
                 );
                
         }
+
+        public static IServiceCollection AddJsonSerializerSettingsForCustomExceptionMiddleware(this IServiceCollection services)
+        {
+            return services
+                .AddSingleton(
+                    sp => new JsonSerializerSettings()
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                    }
+                );
+        }
+
     }
 }

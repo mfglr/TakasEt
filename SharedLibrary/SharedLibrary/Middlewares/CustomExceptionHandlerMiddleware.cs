@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
-using System.Text;
 
 namespace SharedLibrary.Middlewares
 {
-    public class ExceptionHandlerMiddleware
+    public class CustomExceptionHandlerMiddleware
     {
 
         private readonly RequestDelegate _next;
         private JsonSerializerSettings _settings;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, JsonSerializerSettings settings)
+        public CustomExceptionHandlerMiddleware(RequestDelegate next, JsonSerializerSettings settings)
         {
             _next = next;
             _settings = settings;

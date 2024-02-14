@@ -1,6 +1,6 @@
 ﻿using SharedLibrary.Entities;
 
-namespace AuthService.Domain.UserAggregate
+namespace UserService.Domain.UserAggregate
 {
     public class UserUserBlocking : Entity<string>
     {

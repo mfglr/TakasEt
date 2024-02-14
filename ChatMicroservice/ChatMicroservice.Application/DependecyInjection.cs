@@ -11,11 +11,11 @@ namespace ChatMicroservice.Application
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
-			services.AddAutoMapper(assembly);
-			services.AddValidatorsFromAssembly(assembly, ServiceLifetime.Scoped);
-			services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
-			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AppPipelineBehavior<,>));
-			return services;
+            return services
+                .AddAutoMapper(assembly)
+				.AddValidatorsFromAssembly(assembly, ServiceLifetime.Scoped)
+				.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly))
+				.AddTransient(typeof(IPipelineBehavior<,>), typeof(AppPipelineBehavior<,>));
 		}
 	}
 }

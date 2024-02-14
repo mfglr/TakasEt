@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService.Contents;
 using RabbitMQ.Client.Events;
-using SharedLibrary.Messages;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
