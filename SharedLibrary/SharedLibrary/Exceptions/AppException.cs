@@ -8,6 +8,10 @@ namespace SharedLibrary.Exceptions
         public AppException(string message,HttpStatusCode statusCode) : base(message){
             StatusCode = statusCode;
         }
+        public AppException(IEnumerable<string> messages,HttpStatusCode statusCode) : base(string.Join(", ", messages))
+        {
+            StatusCode = statusCode;
+        }
 
     }
 }
