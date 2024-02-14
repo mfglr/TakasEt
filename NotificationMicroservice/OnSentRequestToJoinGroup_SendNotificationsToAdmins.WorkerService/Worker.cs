@@ -11,10 +11,10 @@ namespace OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService
 {
     public class Worker : BackgroundService
     {
-        private readonly NotificationSubscriber _subscriber;
+        private readonly AppEventsSubscriber _subscriber;
         private readonly NotificationService<RequestToJoinGroupContent> _service;
 
-        public Worker(NotificationSubscriber subscriber, NotificationService<RequestToJoinGroupContent> service)
+        public Worker(AppEventsSubscriber subscriber, NotificationService<RequestToJoinGroupContent> service)
         {
             _subscriber = subscriber;
             _service = service;

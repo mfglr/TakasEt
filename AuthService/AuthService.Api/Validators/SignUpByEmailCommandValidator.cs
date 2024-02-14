@@ -1,4 +1,4 @@
-﻿using AuthService.Api.Models.Dtos;
+﻿using AuthService.Api.Dtos;
 using FluentValidation;
 
 namespace AuthService.Api.Validators

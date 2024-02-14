@@ -12,9 +12,9 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
     public class Worker : BackgroundService
     {
         private readonly NotificationService<ApprovedRequestToJoinGroupContent> _notifications;
-        private readonly NotificationSubscriber _subscriber;
+        private readonly AppEventsSubscriber _subscriber;
 
-        public Worker(NotificationService<ApprovedRequestToJoinGroupContent> notifications, NotificationSubscriber subscriber)
+        public Worker(NotificationService<ApprovedRequestToJoinGroupContent> notifications, AppEventsSubscriber subscriber)
         {
             _notifications = notifications;
             _subscriber = subscriber;

@@ -21,6 +21,7 @@ builder.Services.AddCustomIdentity();
 builder.Services.AddJWT();
 builder.Services.AddCustomMediatR();
 builder.Services.AddJsonSerializerSettingsForCustomExceptionMiddleware();
+builder.Services.AddAppEventsPublisher();
 
 var app = builder.Build();
 

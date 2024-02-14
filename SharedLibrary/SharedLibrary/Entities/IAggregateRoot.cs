@@ -1,4 +1,4 @@
-﻿namespace SharedLibrary
+﻿namespace SharedLibrary.Entities
 {
     public interface IAggregateRoot
     {

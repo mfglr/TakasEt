@@ -1,11 +1,13 @@
-﻿namespace SharedLibrary.Entities
+﻿using MediatR;
+
+namespace SharedLibrary.Entities
 {
     public abstract class Entity : Entity<int>
     {
 
     }
 
-    public abstract class Entity<TKey> : IEntity<TKey> 
+	public abstract class Entity<TKey> : IEntity<TKey>
 	{
 		public TKey Id { get; protected set; }
 		public DateTime CreatedDate { get; protected set; }
@@ -26,6 +28,17 @@
 		{
 			IsRemoved = false;
 			RemovedDate = null;
+		}
+
+		//IDomainEventContainer
+		private readonly List<INotification> _domainEvents = new();
+		public void AddDomainEvent(INotification domainEvent) => _domainEvents.Add(domainEvent);
+		public void ClearAllDomainEvents() => _domainEvents.Clear();
+		public bool AnyDomainEvents() => _domainEvents.Any();
+		public async Task PublishAllDomainEventsAsync(IPublisher publisher, CancellationToken cancellationToken)
+		{
+			foreach (var domainEvent in _domainEvents)
+				await publisher.Publish(domainEvent, cancellationToken);
 		}
 	}
 }

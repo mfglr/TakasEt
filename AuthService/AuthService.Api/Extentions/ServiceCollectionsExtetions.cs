@@ -1,6 +1,6 @@
 ﻿using AuthService.Api.Entities;
-using AuthService.Api.Interfaces;
-using AuthService.Api.Models;
+using AuthService.Api.PipelineBehaviors;
+using AuthService.Api.Services;
 using AuthService.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +26,8 @@ namespace AuthService.Api.Extentions
                         var configuration = sp.GetRequiredService<IConfiguration>();
                         builder.UseSqlServer(configuration.GetConnectionString("SqlServer"));
                     }
-                );
+                )
+                .AddScoped<IUnitOfWork,UnitOfWork>();
         }
 
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
@@ -81,7 +82,7 @@ namespace AuthService.Api.Extentions
                 .AddMediatR(
                     cnfg => cnfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
                 )
-                .AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationPipelineBehavior<,>));
+                .AddTransient(typeof(IPipelineBehavior<,>),typeof(AppPipelineBehavior<,>));
         }
 
     }

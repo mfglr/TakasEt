@@ -28,5 +28,11 @@
             QueueName = "LikeMessage",
             RouteKey = "like_message"
         };
+
+        public static readonly Queue SendEmailConfirmationMail = new()
+        {
+            QueueName = "SendEmailConfirmationMail",
+            RouteKey = "send_email_confirmation_mail"
+        };
     }
 }

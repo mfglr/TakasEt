@@ -1,4 +1,4 @@
-﻿using AuthService.Api.Models.Dtos;
+﻿using AuthService.Api.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.Dtos;
@@ -22,6 +22,11 @@ namespace AuthService.Api.Controllers
             return await _sender.Send(request, cancellationToken);
         }
 
+        [HttpPost]
+        public string ConfirmEmail()
+        {
+            return "merhaba";
+        }
 
     }
 }

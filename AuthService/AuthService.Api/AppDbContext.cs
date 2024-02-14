@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace AuthService.Api.Models
+namespace AuthService.Api
 {
     public class AppDbContext : IdentityDbContext<User, IdentityRole, string>
     {

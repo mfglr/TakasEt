@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Entities
 {
-    public interface IFollowableByUsers<TCrossEntity,TUserId> where TCrossEntity : IEntity<TUserId>
+    public interface IFollowableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
     {
         IReadOnlyCollection<TCrossEntity> UsersWhoFollowedTheEntity { get; }
         TCrossEntity Follow(TUserId followerId);

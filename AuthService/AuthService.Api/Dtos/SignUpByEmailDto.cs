@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SharedLibrary.Dtos;
 
-namespace AuthService.Api.Models.Dtos
+namespace AuthService.Api.Dtos
 {
     public class SignUpByEmailDto : IRequest<AppResponseDto>
     {

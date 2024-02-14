@@ -1,4 +1,6 @@
-﻿namespace SharedLibrary.Entities
+﻿using SharedLibrary.Entities.DomainEventModels;
+
+namespace SharedLibrary.Entities
 {
 
     public interface IEntity : IEntity<int>
@@ -6,7 +8,7 @@
 
     }
 
-    public interface IEntity<TKey> : IRemovable
+    public interface IEntity<TKey> : IRemovable,IDomainEventContainer
     {
         TKey Id { get; }
         DateTime CreatedDate { get; }

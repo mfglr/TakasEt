@@ -1,5 +1,4 @@
 ﻿using ChatMicroservice.Domain.MessageEntity;
-using SharedLibrary;
 using SharedLibrary.Entities;
 using SharedLibrary.Extentions;
 using SharedLibrary.ValueObjects;

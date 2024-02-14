@@ -1,14 +1,13 @@
 ﻿using ChatMicroservice.Domain.MessageEntity;
-using SharedLibrary;
 using SharedLibrary.Entities;
 
 namespace ChatMicroservice.Domain.ConversationAggregate
 {
 
-	/*if a conversation has been created by a user then the receiver can't create the conversation between itself and the user. it means : 
+    /*if a conversation has been created by a user then the receiver can't create the conversation between itself and the user. it means : 
                 Conversation( senderId : 1, receiverId : 2 ) == Conversation( senderId : 2, receiverId : 1 )
         */
-	public class Conversation : Entity, IRemovableByUsers<ConversationUserRemoving>, IAggregateRoot
+    public class Conversation : Entity, IRemovableByUsers<ConversationUserRemoving>, IAggregateRoot
 	{
 		public int SenderId { get; private set; }
 		public int ReceiverId { get; private set; }

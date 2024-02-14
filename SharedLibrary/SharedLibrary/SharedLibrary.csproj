@@ -17,9 +17,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="BodiesOfMailMessages\EmailConfirmationMailMessageBody.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="emailServiceSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="rabbitmqsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BodiesOfMailMessages\" />
   </ItemGroup>
 
 </Project>

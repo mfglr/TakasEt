@@ -17,9 +17,9 @@ namespace ChatMicroservice.Application.Commands
 
         private readonly ChatDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationPublisher _publisher;
+        private readonly AppEventsPublisher _publisher;
 
-        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, NotificationPublisher publisher)
+        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, AppEventsPublisher publisher)
         {
             _context = context;
             _unitOfWork = unitOfWork;

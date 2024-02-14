@@ -1,4 +1,4 @@
-﻿using AuthService.Api.Interfaces;
+﻿using AuthService.Api.Services;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
 using SharedLibrary.ValueObjects;

@@ -1,5 +1,4 @@
-﻿using SharedLibrary;
-using SharedLibrary.Entities;
+﻿using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 using SharedLibrary.ValueObjects;

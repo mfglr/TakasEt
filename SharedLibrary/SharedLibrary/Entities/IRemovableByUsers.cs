@@ -16,7 +16,7 @@
 	 *		So the message is able to be read by users except the user with id 1.
 	 */
   
-	public interface IRemovableByUsers<TCrossEntity,TUserId> where TCrossEntity : IEntity<TUserId>
+	public interface IRemovableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoRemovedTheEntity { get; }
 		void Remove(TUserId userId);
@@ -24,7 +24,7 @@
 		bool IsRemovedByUser(TUserId userId);
 	}
 
-	public interface IRemovableByUsers<TCrossEntity> : IRemovableByUsers<TCrossEntity,int> where TCrossEntity : IEntity<int>
+	public interface IRemovableByUsers<TCrossEntity> : IRemovableByUsers<TCrossEntity,int> where TCrossEntity : Entity<int>
 	{
 		
 	}

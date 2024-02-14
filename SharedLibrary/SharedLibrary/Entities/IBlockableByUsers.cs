@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Entities
 {
-    public interface IBlockableByUsers<TCrossEntity,TUserId> where TCrossEntity : IEntity<TUserId>
+    public interface IBlockableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
     {
         public IReadOnlyCollection<TCrossEntity> UsersWhoBlockedTheEntity { get; }
         public TCrossEntity Block(string blockerId);

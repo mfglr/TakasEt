@@ -1,9 +1,8 @@
-﻿using SharedLibrary;
-using SharedLibrary.Entities;
+﻿using SharedLibrary.Entities;
 
 namespace ChatMicroservice.Domain.ConnectionAggregate
 {
-	public class Connection : Entity, IAggregateRoot
+    public class Connection : Entity, IAggregateRoot
 	{
 		public int UserId { get; private set; }
 		public string ConnectionId { get; private set; }

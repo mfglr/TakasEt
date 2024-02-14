@@ -1,7 +1,7 @@
 ﻿namespace SharedLibrary.Entities
 {
 	public interface IViewableByUsers<TCrossEntity,TUserId>
-		where TCrossEntity : IEntity<TUserId>
+		where TCrossEntity : Entity<TUserId>
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoViewedTheEntity { get; }
 		void View(TUserId userId);
@@ -9,7 +9,7 @@
 	}
 
 	public interface IViewableByUsers<TCrossEntity> : IViewableByUsers<TCrossEntity,int>
-		where TCrossEntity : IEntity<int>
+		where TCrossEntity : Entity<int>
     {
 	}
 }

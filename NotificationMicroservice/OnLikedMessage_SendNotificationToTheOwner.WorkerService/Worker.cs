@@ -12,9 +12,9 @@ namespace OnLikedMessage_SendNotificationToTheOwner.WorkerService
     public class Worker : BackgroundService
     {
         private readonly NotificationService<LikedMessageContent> _notifications;
-        private readonly NotificationSubscriber _subscriber;
+        private readonly AppEventsSubscriber _subscriber;
 
-        public Worker(NotificationService<LikedMessageContent> notifications, NotificationSubscriber subscriber)
+        public Worker(NotificationService<LikedMessageContent> notifications, AppEventsSubscriber subscriber)
         {
             _notifications = notifications;
             _subscriber = subscriber;

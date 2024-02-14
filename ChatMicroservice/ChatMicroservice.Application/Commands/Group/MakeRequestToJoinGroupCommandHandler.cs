@@ -16,9 +16,9 @@ namespace ChatMicroservice.Application.Commands
 	{
 		private readonly ChatDbContext _context;
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly NotificationPublisher _notificationPublisher;
+		private readonly AppEventsPublisher _notificationPublisher;
 
-        public MakeRequestToJoinGroupCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, NotificationPublisher notificationPublisher)
+        public MakeRequestToJoinGroupCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, AppEventsPublisher notificationPublisher)
         {
             _context = context;
             _unitOfWork = unitOfWork;

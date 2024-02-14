@@ -1,49 +1,49 @@
 ﻿using RabbitMQ.Client;
-using System.Text;
-using Newtonsoft.Json;
+using RabbitMQ.Client.Events;
 using SharedLibrary.ValueObjects;
 
 namespace SharedLibrary.Services
 {
-    public class NotificationPublisher : IDisposable
+    public class AppEventsSubscriber : IDisposable
     {
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
 
-        private static string ExchangeName = "NotificationExchange";
+        private static string ExchangeName = "AppExchange";
 
-
-        public NotificationPublisher(ConnectionFactory connectionFactory)
+        public AppEventsSubscriber(ConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
-            Connect();
         }
 
         public void Connect()
         {
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.CreateBasicProperties().Persistent = true;
+            _channel.BasicQos(0, 1, false);
 
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true, false, null);
         }
 
-        public void CreateQueue(Queue queue)
+        public bool ConnectionIsOpen() => _connection != null && _connection.IsOpen;
+
+
+        public void Subscribe(Queue queue,Func<object, BasicDeliverEventArgs, Task> callback)
         {
             _channel.QueueDeclare(queue.QueueName, true, false, false, null);
             _channel.QueueBind(queue.QueueName, ExchangeName, queue.RouteKey);
+
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            _channel.BasicConsume(queue.QueueName,false,consumer);
+
+            consumer.Received += (object sender, BasicDeliverEventArgs @event) =>
+            {
+                callback(sender, @event);
+                _channel.BasicAck(@event.DeliveryTag, false);
+                return Task.CompletedTask;
+            };
         }
-
-        public bool ConnectionIsOpen() => _connection != null && _connection.IsOpen;
-
-        public void Publish(object message,Queue queue)
-        {
-            if(!ConnectionIsOpen()) throw new Exception("Connection is down");
-            var bodyBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-            _channel.BasicPublish(ExchangeName, queue.RouteKey, null, bodyBytes);
-        }
-
 
         public void Dispose()
         {
