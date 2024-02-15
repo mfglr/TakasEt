@@ -7,11 +7,11 @@ using System.Net;
 namespace UserService.Domain.UserAggregate
 {
     public class User :
-        Entity<string>,
+        Entity<Guid>,
         IAggregateRoot,
-        IViewableByUsers<UserUserViewing, string>,
-        IFollowableByUsers<UserUserFollowing, string>,
-        IBlockableByUsers<UserUserBlocking,string>
+        IViewableByUsers<UserUserViewing, Guid>,
+        IFollowableByUsers<UserUserFollowing, Guid>,
+        IBlockableByUsers<UserUserBlocking, Guid>
     {
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
@@ -29,28 +29,6 @@ namespace UserService.Domain.UserAggregate
                 NormalizedFullName = $"{name + " " ?? ""}{lastName ?? ""}".CustomNormalize();
         }
 
-        //user images
-        private readonly List<UserImage> _userImages = new ();
-        public IReadOnlyCollection<UserImage> UserImages => _userImages;
-        public void AddImage(string blobName,string extention,Dimension dimension)
-        {
-            _userImages.Add(new UserImage(blobName, extention, dimension));
-        }
-        public void RemoveImage(string imageId)
-        {
-            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
-            if(image == null || image.IsRemoved)
-                throw new AppException("User image was not found!",HttpStatusCode.NotFound);
-            image.Remove();
-        }
-        public void DeleteImage(string imageId)
-        {
-            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
-            if (image == null)
-                throw new AppException("User image was not found!", HttpStatusCode.NotFound);
-            _userImages.Remove(image);
-        }
-
         //IRemovable
         public bool IsRemoved { get; private set; }
         public DateTime? RemovedDate { get; private set; }
@@ -61,10 +39,10 @@ namespace UserService.Domain.UserAggregate
 
             foreach (var user in UsersWhoViewedTheEntity)
                 user.Remove();
-            foreach(var user in UsersTheEntityViewed)
+            foreach (var user in UsersTheEntityViewed)
                 user.Remove();
-            
-            foreach(var user in UsersWhoBlockedTheEntity)
+
+            foreach (var user in UsersWhoBlockedTheEntity)
                 user.Remove();
             foreach (var user in UsersTheEntityBlocked)
                 user.Remove();
@@ -86,17 +64,39 @@ namespace UserService.Domain.UserAggregate
 
         }
 
+        //user images
+        private readonly List<UserImage> _userImages = new ();
+        public IReadOnlyCollection<UserImage> UserImages => _userImages;
+        public void AddImage(string blobName,string extention,Dimension dimension)
+        {
+            _userImages.Add(new UserImage(blobName, extention, dimension));
+        }
+        public void RemoveImage(Guid imageId)
+        {
+            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            if(image == null || image.IsRemoved)
+                throw new AppException("User image was not found!",HttpStatusCode.NotFound);
+            image.Remove();
+        }
+        public void DeleteImage(Guid imageId)
+        {
+            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            if (image == null)
+                throw new AppException("User image was not found!", HttpStatusCode.NotFound);
+            _userImages.Remove(image);
+        }
+
         //IViewableByUsers
         private readonly List<UserUserViewing> _usersWhoViewedTheEntity = new();
         public IReadOnlyCollection<UserUserViewing> UsersWhoViewedTheEntity => _usersWhoViewedTheEntity;
         public IReadOnlyCollection<UserUserViewing> UsersTheEntityViewed { get; }
-        public void View(string viewerId)
+        public void View(Guid viewerId)
         {
             if (UsersTheEntityBlocked.Any(x => x.BlockedId == viewerId))
                 throw new AppException("You must not view the user!", HttpStatusCode.Forbidden);
             _usersWhoViewedTheEntity.Add(new(viewerId));
         }
-        public bool IsViewed(string viewerId)
+        public bool IsViewed(Guid viewerId)
         {
             return _usersWhoViewedTheEntity.Any(x => x.ViewerId == viewerId);
         }
@@ -105,7 +105,7 @@ namespace UserService.Domain.UserAggregate
         private readonly List<UserUserBlocking> _usersWhoBlockedTheEntity = new();
         public IReadOnlyCollection<UserUserBlocking> UsersWhoBlockedTheEntity => _usersWhoBlockedTheEntity;
         public IReadOnlyCollection<UserUserBlocking> UsersTheEntityBlocked { get; }
-        public UserUserBlocking Block(string blockerId)
+        public UserUserBlocking Block(Guid blockerId)
         {
             var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
             if (record != null)
@@ -119,14 +119,14 @@ namespace UserService.Domain.UserAggregate
             _usersWhoBlockedTheEntity.Add(blocking);
             return blocking;
         }
-        public void RemoveBlock(string blockerId)
+        public void RemoveBlock(Guid blockerId)
         {
             var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
             if (record == null)
                 throw new AppException("You are not blocked the user!", HttpStatusCode.BadRequest);
             _usersWhoBlockedTheEntity.Remove(record);
         }
-        public bool IsBlocked(string blockerId)
+        public bool IsBlocked(Guid blockerId)
         {
             return _usersWhoBlockedTheEntity.Any(x => x.BlockedId == blockerId);
         }
@@ -135,7 +135,7 @@ namespace UserService.Domain.UserAggregate
         private readonly List<UserUserFollowing> _usersWhoFollowedTheEntity = new();
         public IReadOnlyCollection<UserUserFollowing> UsersWhoFollowedTheEntity => _usersWhoFollowedTheEntity;
         public IReadOnlyCollection<UserUserFollowing> UsersTheEntityFollowed { get; }
-        public UserUserFollowing Follow(string followerId)
+        public UserUserFollowing Follow(Guid followerId)
         {
             if (UsersTheEntityBlocked.Any(x => x.BlockedId == followerId))
                 throw new AppException("You don't have any access", HttpStatusCode.Forbidden);
@@ -151,10 +151,10 @@ namespace UserService.Domain.UserAggregate
             _usersWhoFollowedTheEntity.Add(following);
             return following;
         }
-        public void Unfollow(string followerId)
+        public void Unfollow(Guid followerId)
         {
         }
-        public bool IsFollowing(string followerId)
+        public bool IsFollowing(Guid followerId)
         {
             throw new NotImplementedException();
         }

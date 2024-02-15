@@ -2,11 +2,11 @@
 
 namespace UserService.Domain.UserAggregate
 {
-    public class UserUserFollowing : Entity<string>
+    public class UserUserFollowing : Entity<Guid>
     {
-        public string FollowerId { get; private set; }
-        public string FollowingId { get; private set; }
+        public Guid FollowerId { get; private set; }
+        public Guid FollowingId { get; private set; }
 
-        public UserUserFollowing(string followerId) => FollowerId = followerId;
+        public UserUserFollowing(Guid followerId) => FollowerId = followerId;
     }
 }

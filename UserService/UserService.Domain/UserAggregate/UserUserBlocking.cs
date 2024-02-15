@@ -2,11 +2,11 @@
 
 namespace UserService.Domain.UserAggregate
 {
-    public class UserUserBlocking : Entity<string>
+    public class UserUserBlocking : Entity<Guid>
     {
-        public string BlockerId { get; private set; }
-        public string BlockedId { get; private set; }
+        public Guid BlockerId { get; private set; }
+        public Guid BlockedId { get; private set; }
 
-        public UserUserBlocking(string blockerId) => BlockerId = blockerId;
+        public UserUserBlocking(Guid blockerId) => BlockerId = blockerId;
     }
 }

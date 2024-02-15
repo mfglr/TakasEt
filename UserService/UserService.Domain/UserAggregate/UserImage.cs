@@ -3,7 +3,7 @@ using SharedLibrary.ValueObjects;
 
 namespace UserService.Domain.UserAggregate
 {
-    public class UserImage : Image<string>
+    public class UserImage : Image<Guid>
     {
         public UserImage() { }
         public UserImage(string blobName, string extention, Dimension dimension) : base(ContainerName.UserImages, blobName,extention,dimension) { }

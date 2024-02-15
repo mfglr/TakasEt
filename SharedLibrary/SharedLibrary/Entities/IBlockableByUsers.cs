@@ -3,8 +3,8 @@
     public interface IBlockableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
     {
         public IReadOnlyCollection<TCrossEntity> UsersWhoBlockedTheEntity { get; }
-        public TCrossEntity Block(string blockerId);
-        public void RemoveBlock(string blockerId);
-        public bool IsBlocked(string blockerId);
+        public TCrossEntity Block(TUserId blockerId);
+        public void RemoveBlock(TUserId blockerId);
+        public bool IsBlocked(TUserId blockerId);
     }
 }
