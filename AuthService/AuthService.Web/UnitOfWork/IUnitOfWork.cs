@@ -1,8 +1,10 @@
-﻿namespace AuthService.Web
+﻿using System.Data;
+
+namespace AuthService.Web
 {
-    public interface IUnitOfWork
+    internal interface IUnitOfWork
     {
-        Task BeginTransactionAsync(CancellationToken cancellationToken);
+        Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,CancellationToken cancellationToken = default);
         Task CommitAsync(CancellationToken cancellationToken);
         Task PublishDomainEventsAsync(CancellationToken cancellationToken);
     }

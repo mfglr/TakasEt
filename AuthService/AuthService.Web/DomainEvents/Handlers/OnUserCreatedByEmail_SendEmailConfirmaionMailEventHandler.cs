@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AuthService.Web.DomainEvents.Handlers
 {
-    public class OnUserCreatedByEmail_SendEmailConfirmaionMailEventHandler : INotificationHandler<UserCreatedByEmailEvent>
+    internal class OnUserCreatedByEmail_SendEmailConfirmaionMailEventHandler : INotificationHandler<UserCreatedByEmailEvent>
     {
         private readonly UserManager<User> _userManager;
         private readonly AppEventsPublisher _publisher;

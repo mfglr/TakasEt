@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AuthService.Web.Validators
 {
-    public class SignUpByEmailCommandValidator : AbstractValidator<SignUpByEmailDto> 
+    internal class SignUpByEmailCommandValidator : AbstractValidator<SignUpByEmailDto> 
     {
         public SignUpByEmailCommandValidator()
         {

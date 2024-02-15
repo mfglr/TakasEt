@@ -7,7 +7,7 @@ using SharedLibrary.Dtos;
 
 namespace AuthService.Web.Commands
 {
-    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto, AppResponseDto>
+    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;

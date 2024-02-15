@@ -2,7 +2,7 @@
 
 namespace AuthService.Web.Extentions
 {
-    public static class IdentityResultExtentions
+    internal static class IdentityResultExtentions
     {
         public static List<string> GetErrors(this IdentityResult result)
         {

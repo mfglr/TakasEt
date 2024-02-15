@@ -1,33 +1,37 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AuthService.Web.Entities;
+using AuthService.Web.Extentions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.Exceptions;
 using SharedLibrary.ValueObjects;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace AuthService.Web.Services
 {
-    public class TokenService : ITokenService
+    internal class TokenService : ITokenService
     {
 
         private readonly ITokenConfiguration _tokenConfiguration;
+        private readonly UserManager<User> _userManager;
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
-
-        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<User> userManager)
         {
             _tokenConfiguration = tokenConfiguration;
             _signingCredentials = signingCredentials;
             _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
+            _userManager = userManager;
         }
 
-        private IEnumerable<Claim> GetClaims(string userId, string userName)
+        private IEnumerable<Claim> GetClaims(User user)
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, userId),
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Role, Role.User.Name),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())//Token id
             };
@@ -42,34 +46,62 @@ namespace AuthService.Web.Services
             return claims;
         }
 
-        public Token CreateRefreshToken()
+        public async Task<string> CreateRefreshTokenAsync(User user)
         {
-            var bytes = new byte[32];
-            using var rnd = RandomNumberGenerator.Create();
-            rnd.GetBytes(bytes);
-            
-            return new Token(
-                Convert.ToBase64String(bytes),
-                DateTime.Now.AddMinutes(_tokenConfiguration.RefreshTokenExpiration)
-            );
+
+            // update security stamp to revoke previous refresh token.
+            var result = await _userManager.UpdateSecurityStampAsync(user);
+            if (!result.Succeeded)
+                throw new AppException(result.GetErrors(), HttpStatusCode.InternalServerError);
+
+            var refreshToken = await _userManager
+                .GenerateUserTokenAsync(
+                    user,
+                    TokenProvider.RefreshTokenProvider.Name,
+                    "RefreshToken"
+                );
+
+            if (string.IsNullOrEmpty(refreshToken))
+                throw new AppException(
+                    "There are some issues, When creating refresh token!",
+                    HttpStatusCode.InternalServerError
+                );
+            return refreshToken;
         }
 
-        public Token CreateAccessToken(string userId,string userName)
+        public async Task<bool> VerifyRefreshTokenAsync(User user,string token)
         {
-            var expirationDateOfAccessToken = DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration);
-            
+            return await _userManager
+                .VerifyUserTokenAsync(
+                    user,
+                    TokenProvider.RefreshTokenProvider.Name,
+                    "RefreshToken",
+                    token
+                );
+        }
+
+        public string CreateAccessToken(User user)
+        {
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer : _tokenConfiguration.Issuer,
-                expires : expirationDateOfAccessToken,
+                expires : DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration),
                 notBefore : DateTime.Now,
-                claims : GetClaims(userId, userName),
+                claims : GetClaims(user),
                 signingCredentials : _signingCredentials
             );
-
-            return new Token(
-                _jwtSecurityTokenHandler.WriteToken(jwtSecurityToken),
-                expirationDateOfAccessToken
-            );
+            string token;
+            try
+            {
+                token = _jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
+            }
+            catch ( Exception ex )
+            {
+                throw new AppException(
+                    "There are some issues, When creating access token!",
+                    HttpStatusCode.InternalServerError
+                );
+            }
+            return token;
         }
         
     }

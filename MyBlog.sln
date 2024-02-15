@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands", "Commands\Comman
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest.Test", "UnitTest.Test\UnitTest.Test.csproj", "{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{B31EDAE6-91B5-4047-A219-D02D9EF6A472}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatMicroservice", "ChatMicroservice", "{2E7AE60F-D162-467A-850B-E196B353CF83}"
@@ -61,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Domain", "UserS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailConfirmationMail.WorkerService", "AuthService\SendEmailConfirmationMail.WorkerService\SendEmailConfirmationMail.WorkerService.csproj", "{816B8AAC-9AA0-4191-B4E1-07068B577843}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Web", "AuthService\AuthService.Web\AuthService.Web.csproj", "{AE820DB5-A628-40D2-AF07-7B0F91939422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.Web", "AuthService\AuthService.Web\AuthService.Web.csproj", "{AE820DB5-A628-40D2-AF07-7B0F91939422}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,10 +95,6 @@ Global
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7BC29EF-31CB-438F-9C6A-9F67358DE75C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09B6552A-E1BA-41A8-AF4D-5B7A1E138757}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B31EDAE6-91B5-4047-A219-D02D9EF6A472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B31EDAE6-91B5-4047-A219-D02D9EF6A472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31EDAE6-91B5-4047-A219-D02D9EF6A472}.Release|Any CPU.ActiveCfg = Release|Any CPU

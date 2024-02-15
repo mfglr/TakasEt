@@ -3,7 +3,7 @@ using MediatR;
 
 namespace AuthService.Web.DomainEvents.Models
 {
-    public class UserCreatedByEmailEvent : INotification
+    internal class UserCreatedByEmailEvent : INotification
     {
         public User User { get; private set; }
         public UserCreatedByEmailEvent(User user)

@@ -10,7 +10,7 @@ using System.Net;
 
 namespace AuthService.Web.Commands
 {
-    public class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, AppResponseDto>
+    internal class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, AppResponseDto>
     {
         private readonly UserManager<User> _userManager;
 
@@ -28,8 +28,6 @@ namespace AuthService.Web.Commands
 
             if(!result.Succeeded)
                 throw new AppException(result.GetErrors(),HttpStatusCode.BadRequest);
-
-
 
             return AppResponseDto.Success();
         }

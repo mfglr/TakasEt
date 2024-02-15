@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace AuthService.Web
 {
-    public class AppDbContext : IdentityDbContext<User, IdentityRole, string>
+    internal class AppDbContext : IdentityDbContext<User, IdentityRole, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 
-    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    internal class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         public AppDbContext CreateDbContext(string[] args)
         {

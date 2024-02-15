@@ -1,20 +1,20 @@
 ﻿using AuthService.Web.Entities;
 using AuthService.Web.PipelineBehaviors;
 using AuthService.Web.Services;
+using AuthService.Web.TokenProviders;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
-using SharedLibrary.PipelineBehaviors;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
 
 namespace AuthService.Web.Extentions
 {
-    public static class ServiceCollectionsExtetions
+    internal static class ServiceCollectionsExtetions
     {
 
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services)
@@ -31,6 +31,7 @@ namespace AuthService.Web.Extentions
 
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
         {
+            //customize identity
             services
                 .AddIdentity<User, IdentityRole>(
                     opt =>
@@ -47,7 +48,18 @@ namespace AuthService.Web.Extentions
                     }
                 )
                 .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddTokenProvider<RefreshTokenProvider<User>>(TokenProvider.RefreshTokenProvider.Name);
+
+            //configure Refresh token provider;
+            var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+            services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
+            var tokenConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokenConfiguration>>().Value;
+            services.Configure<RefreshTokenProviderOptions>(opt =>
+            {
+                opt.TokenLifespan = TimeSpan.FromMinutes(tokenConfiguration.RefreshTokenExpiration);
+            });
+
 
             return services;
         }
@@ -56,6 +68,8 @@ namespace AuthService.Web.Extentions
         {
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
+
+
 
             return services
                 .AddSingleton<ITokenConfiguration>(
@@ -72,7 +86,8 @@ namespace AuthService.Web.Extentions
                         );
                     }
                 )
-                .AddScoped<ITokenService, TokenService>();
+                .AddScoped<ITokenService, TokenService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         public static IServiceCollection AddCustomMediatR(this IServiceCollection services)

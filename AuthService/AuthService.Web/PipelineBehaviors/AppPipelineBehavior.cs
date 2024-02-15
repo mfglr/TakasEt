@@ -5,7 +5,7 @@ using System.Net;
 
 namespace AuthService.Web.PipelineBehaviors
 {
-    public class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    internal class AppPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -26,11 +26,11 @@ namespace AuthService.Web.PipelineBehaviors
                 var errors = string.Join("\n", result.Errors.Select(x => x.ErrorMessage).ToList());
                 if (!result.IsValid) throw new AppException(errors, HttpStatusCode.BadRequest);
             }
-            
+
             //wait for handler
             var response = await next();
 
-            //publich domain events;
+            //publish domain events;
             await _unitOfWork.PublishDomainEventsAsync(cancellationToken);
 
             return response;

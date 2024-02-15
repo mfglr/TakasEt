@@ -5,7 +5,7 @@ using SharedLibrary.Entities.DomainEventModels;
 
 namespace AuthService.Web.Entities
 {
-    public class User : IdentityUser, IEntity<string>, IDomainEventContainer
+    internal class User : IdentityUser, IEntity<string>, IDomainEventContainer
     {
         public User(string email,string userName)
         {

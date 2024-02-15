@@ -1,10 +1,12 @@
-﻿using SharedLibrary.ValueObjects;
+﻿using AuthService.Web.Entities;
+using SharedLibrary.ValueObjects;
 
 namespace AuthService.Web.Services
 {
-    public interface ITokenService
+    internal interface ITokenService
     {
-        Token CreateRefreshToken();
-        Token CreateAccessToken(string userId, string userName);
+        Task<string> CreateRefreshTokenAsync(User user);
+        Task<bool> VerifyRefreshTokenAsync(User user, string token);
+        string CreateAccessToken(User user);
     }
 }
