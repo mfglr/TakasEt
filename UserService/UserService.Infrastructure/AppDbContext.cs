@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using SharedLibrary.Entities;
 using System.Reflection;
 using UserService.Domain.UserAggregate;
 
 namespace UserService.Infrastructure
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         
@@ -18,9 +19,35 @@ namespace UserService.Infrastructure
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
+
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+
+            //set created date
+            var createdEntities = ChangeTracker
+                .Entries<IEntity<Guid>>()
+                .Where(x => x.State == EntityState.Added)
+                .Select(x => x.Entity);
+
+            foreach (var item in createdEntities)
+                item.SetCreatedDate();
+
+            //set updated date
+            var updatedEntities = ChangeTracker
+                .Entries<IEntity<Guid>>()
+                .Where(x => x.State == EntityState.Modified)
+                .Select(x => x.Entity);
+
+            foreach (var item in updatedEntities)
+                item.SetUpdatedDate();
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
     }
 
-    internal class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         public AppDbContext CreateDbContext(string[] args)
         {
