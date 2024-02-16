@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using OnLikedMessage_SendNotificationToTheOwner.WorkerService.Contents;
 using RabbitMQ.Client.Events;
-using SharedLibrary.Events;
+using SharedLibrary.IntegrationEvents;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
@@ -12,9 +12,9 @@ namespace OnLikedMessage_SendNotificationToTheOwner.WorkerService
     public class Worker : BackgroundService
     {
         private readonly NotificationService<LikedMessageContent> _notifications;
-        private readonly AppEventsSubscriber _subscriber;
+        private readonly IIntegrationEventsSubscriber _subscriber;
 
-        public Worker(NotificationService<LikedMessageContent> notifications, AppEventsSubscriber subscriber)
+        public Worker(NotificationService<LikedMessageContent> notifications, IIntegrationEventsSubscriber subscriber)
         {
             _notifications = notifications;
             _subscriber = subscriber;
@@ -22,20 +22,19 @@ namespace OnLikedMessage_SendNotificationToTheOwner.WorkerService
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _subscriber.Connect();
             return base.StartAsync(cancellationToken);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _subscriber.Subscribe(Queue.LikeMessage, LikedMessageNotifications_Handler);
+            _subscriber.Subscribe(Queue.Message_Liked_Queue, LikedMessageNotifications_Handler);
             return Task.CompletedTask;
         }
 
         private async Task LikedMessageNotifications_Handler(object sender, BasicDeliverEventArgs @event)
         {
             var bytes = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var request = JsonConvert.DeserializeObject<LikedMessageEvent>(bytes);
+            var request = JsonConvert.DeserializeObject<Message_Liked_Event>(bytes);
 
             var content = new LikedMessageContent()
             {

@@ -1,5 +1,4 @@
 using AuthService.Web.Extentions;
-using AuthService.Web.TokenProviders;
 using SharedLibrary;
 using SharedLibrary.Middlewares;
 using System.Text.Json.Serialization;
@@ -24,7 +23,7 @@ builder.Services.AddCustomIdentity();
 
 builder.Services.AddCustomMediatR();
 builder.Services.AddJsonSerializerSettingsForCustomExceptionMiddleware();
-builder.Services.AddAppEventsPublisher();
+builder.Services.AddIntegrationEventsPublisher();
 
 var app = builder.Build();
 

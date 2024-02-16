@@ -4,20 +4,19 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Events;
+using SharedLibrary.IntegrationEvents;
 using SharedLibrary.Services;
-using SharedLibrary.ValueObjects;
 
 namespace ChatMicroservice.Application.Commands
 {
-	public class ApproveRequestToJoinGroupCommandHandler : IRequestHandler<ApproveRequestToJoinGroupDto, AppResponseDto>
+    public class ApproveRequestToJoinGroupCommandHandler : IRequestHandler<ApproveRequestToJoinGroupDto, AppResponseDto>
 	{
 
 		private readonly ChatDbContext _chatDbContext;
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly AppEventsPublisher _publisher;
+		private readonly IIntegrationEventsPublisher _publisher;
 
-        public ApproveRequestToJoinGroupCommandHandler(ChatDbContext chatDbContext, IUnitOfWork unitOfWork, AppEventsPublisher publisher)
+        public ApproveRequestToJoinGroupCommandHandler(ChatDbContext chatDbContext, IUnitOfWork unitOfWork, IIntegrationEventsPublisher publisher)
         {
             _chatDbContext = chatDbContext;
             _unitOfWork = unitOfWork;
@@ -35,15 +34,14 @@ namespace ChatMicroservice.Application.Commands
 			group.ApproveRequestToJoin(request.IdOfUserApprovingRequest, request.IdOfUserWhoWantsToJoin);
 			await _unitOfWork.CommitAsync(cancellationToken);
 
-			_publisher.Publish(
-				new ApprovedRequestToJoinGroupEvent() {
-					ApproverId = request.IdOfUserApprovingRequest,
-					GroupId = request.GroupId,
-					IdOfUserWhoJoinedTheGroup = request.IdOfUserWhoWantsToJoin
-				} ,
-				Queue.ApproveRequestToJoinGroup
+			group.AddIntegrationEvent(
+				new RequestToJoinGroup_Approved_Event()
+				{
+                    ApproverId = request.IdOfUserApprovingRequest,
+                    GroupId = request.GroupId,
+                    IdOfUserWhoJoinedTheGroup = request.IdOfUserWhoWantsToJoin
+                }
 			);
-
 			return AppResponseDto.Success();
 		}
 	}

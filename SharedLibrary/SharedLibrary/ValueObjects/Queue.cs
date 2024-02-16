@@ -11,28 +11,52 @@
             yield return RouteKey;
         }
 
-        public static readonly Queue ReqeustToJoinGroup = new()
+        public static readonly Queue RequestJoinToGroup_Created_Queue = new()
         {
-            QueueName = "ReqeustToJoinGroup",
-            RouteKey = "reqeust_to_join_group"
+            QueueName = "RequestJoinToGroup_Created_Queue",
+            RouteKey = "RequestJoinToGroup_Created_Queue"
         };
         
-        public static readonly Queue ApproveRequestToJoinGroup = new()
+        public static readonly Queue RequestToJoinGroup_Approved_Queue = new()
         {
-            QueueName = "ApproveRequestToJoinGroup",
-            RouteKey = "approve_request_to_join_group"
+            QueueName = "RequestToJoinGroup_Approved_Queue",
+            RouteKey = "RequestToJoinGroup_Approved_Queue"
         };
 
-        public static readonly Queue LikeMessage = new()
+        public static readonly Queue Message_Liked_Queue = new()
         {
-            QueueName = "LikeMessage",
-            RouteKey = "like_message"
+            QueueName = "Message_Liked_Queue",
+            RouteKey = "Message_Liked_Queue"
         };
 
-        public static readonly Queue SendEmailConfirmationMail = new()
+        public static readonly Queue EmailConfirmationMailsWillBeSent = new()
         {
-            QueueName = "SendEmailConfirmationMail",
-            RouteKey = "send_email_confirmation_mail"
+            QueueName = "EmailConfirmationMailsWillBeSent",
+            RouteKey = "EmailConfirmationMailsWillBeSent"
+        };
+
+        public static readonly Queue RequesToFollowUser_Created_TooManyRejectedRequests_Queue = new()
+        {
+            QueueName = "RequesToFollowUser_Created_TooManyRejectedRequests_Queue",
+            RouteKey = "RequesToFollowUser_Created_TooManyRejectedRequests_Queue"
+        };
+
+        public static readonly Queue RequestToFollowUser_Created_Queue = new()
+        {
+            QueueName = "RequestToFollowUser_Created_Queue",
+            RouteKey = "RequestToFollowUser_Created_Queue"
+        };
+
+        public static readonly Queue User_Followed_Queue = new()
+        {
+            QueueName = "User_Followed_Queue",
+            RouteKey = "User_Followed_Queue"
+        };
+
+        public static readonly Queue User_Created_SendEmailConfirmationMail_Queue = new()
+        {
+            QueueName = "User_Created_SendEmailConfirmationMail_Queue",
+            RouteKey = "User_Created_SendEmailConfirmationMail_Queue"
         };
     }
 }

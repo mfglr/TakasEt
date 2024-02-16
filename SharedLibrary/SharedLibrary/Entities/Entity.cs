@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Services;
 
 namespace SharedLibrary.Entities
 {
@@ -40,5 +42,15 @@ namespace SharedLibrary.Entities
 			foreach (var domainEvent in _domainEvents)
 				await publisher.Publish(domainEvent, cancellationToken);
 		}
-	}
+
+		//IIntegrationEventsContainer
+        private readonly List<IntegrationEvent> @events = new();
+        public bool AnyIntegrationEvent() => @events.Any();
+        public void AddIntegrationEvent(IntegrationEvent @event) => @events.Add(@event);
+        public void PublishAllIntegrationEvents(IIntegrationEventsPublisher publisher)
+        {
+			foreach(var @event in @events)
+				publisher.Publish(@event);
+        }
+    }
 }

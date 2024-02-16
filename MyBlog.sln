@@ -57,15 +57,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserService", "UserService"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Domain", "UserService\UserService.Domain\UserService.Domain.csproj", "{B36DDFDE-BB9F-4812-B5FF-5EF8E956FFFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailConfirmationMail.WorkerService", "AuthService\SendEmailConfirmationMail.WorkerService\SendEmailConfirmationMail.WorkerService.csproj", "{816B8AAC-9AA0-4191-B4E1-07068B577843}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.Web", "AuthService\AuthService.Web\AuthService.Web.csproj", "{AE820DB5-A628-40D2-AF07-7B0F91939422}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Infrastructure", "UserService\UserService.Infrastructure\UserService.Infrastructure.csproj", "{8F82FEDB-A921-472F-BA29-6CD60D3459C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Infrastructure", "UserService\UserService.Infrastructure\UserService.Infrastructure.csproj", "{8F82FEDB-A921-472F-BA29-6CD60D3459C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Application", "UserService\UserService.Application\UserService.Application.csproj", "{244F051C-3CAD-4777-A018-BF3E110DA764}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Application", "UserService\UserService.Application\UserService.Application.csproj", "{244F051C-3CAD-4777-A018-BF3E110DA764}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Api", "UserService\UserService.Api\UserService.Api.csproj", "{A99E7E95-6482-4AD0-93F8-7F9767BC24B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Api", "UserService\UserService.Api\UserService.Api.csproj", "{A99E7E95-6482-4AD0-93F8-7F9767BC24B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnUserAccount_Created_SendEmailConfirmationMail.WorkerService", "AuthService\OnUserAccount_Created_SendEmailConfirmationMail.WorkerService\OnUserAccount_Created_SendEmailConfirmationMail.WorkerService.csproj", "{7B6EF515-2C8A-4559-8381-C1554CEED37A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,10 +157,6 @@ Global
 		{B36DDFDE-BB9F-4812-B5FF-5EF8E956FFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B36DDFDE-BB9F-4812-B5FF-5EF8E956FFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B36DDFDE-BB9F-4812-B5FF-5EF8E956FFFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{816B8AAC-9AA0-4191-B4E1-07068B577843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{816B8AAC-9AA0-4191-B4E1-07068B577843}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{816B8AAC-9AA0-4191-B4E1-07068B577843}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{816B8AAC-9AA0-4191-B4E1-07068B577843}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE820DB5-A628-40D2-AF07-7B0F91939422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE820DB5-A628-40D2-AF07-7B0F91939422}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE820DB5-A628-40D2-AF07-7B0F91939422}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -177,6 +173,10 @@ Global
 		{A99E7E95-6482-4AD0-93F8-7F9767BC24B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A99E7E95-6482-4AD0-93F8-7F9767BC24B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A99E7E95-6482-4AD0-93F8-7F9767BC24B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6EF515-2C8A-4559-8381-C1554CEED37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6EF515-2C8A-4559-8381-C1554CEED37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6EF515-2C8A-4559-8381-C1554CEED37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6EF515-2C8A-4559-8381-C1554CEED37A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,11 +195,11 @@ Global
 		{EE583458-C7CB-494E-A0F8-0D0900075F8D} = {A7F93942-58F7-4D16-B2B0-B10920D6AC62}
 		{A4F7328B-FCBF-47D4-9060-0793A50F2D81} = {5F61893B-2AAE-4966-9ED0-D5EB2887E1FA}
 		{B36DDFDE-BB9F-4812-B5FF-5EF8E956FFFD} = {B7A3A983-17C8-4EC9-AE81-43D1827A8F00}
-		{816B8AAC-9AA0-4191-B4E1-07068B577843} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
 		{AE820DB5-A628-40D2-AF07-7B0F91939422} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
 		{8F82FEDB-A921-472F-BA29-6CD60D3459C9} = {B7A3A983-17C8-4EC9-AE81-43D1827A8F00}
 		{244F051C-3CAD-4777-A018-BF3E110DA764} = {B7A3A983-17C8-4EC9-AE81-43D1827A8F00}
 		{A99E7E95-6482-4AD0-93F8-7F9767BC24B5} = {B7A3A983-17C8-4EC9-AE81-43D1827A8F00}
+		{7B6EF515-2C8A-4559-8381-C1554CEED37A} = {0E830FD2-DC0C-4C95-8F70-8B28545B3B78}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04D8AFC5-FAC9-46B2-B99F-889B617C6D9E}

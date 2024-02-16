@@ -1,11 +1,11 @@
-using SendEmailConfirmationMail.WorkerService;
+using OnUserAccount_Created_SendEmailConfirmationMail.WorkerService;
 using SharedLibrary;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddAppEventsSubscriber();
+        services.AddIntegrationEventsSubscriber();
         services.AddSmtpEmailService();
     })
     .Build();

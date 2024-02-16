@@ -1,20 +1,20 @@
-using OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService.Contents;
 using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
+using OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService.Contents;
 using RabbitMQ.Client.Events;
+using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
-using SharedLibrary.Services;
-using SharedLibrary.Events;
 
 namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
 {
     public class Worker : BackgroundService
     {
         private readonly NotificationService<ApprovedRequestToJoinGroupContent> _notifications;
-        private readonly AppEventsSubscriber _subscriber;
+        private readonly IIntegrationEventsSubscriber _subscriber;
 
-        public Worker(NotificationService<ApprovedRequestToJoinGroupContent> notifications, AppEventsSubscriber subscriber)
+        public Worker(NotificationService<ApprovedRequestToJoinGroupContent> notifications, IIntegrationEventsSubscriber subscriber)
         {
             _notifications = notifications;
             _subscriber = subscriber;
@@ -22,8 +22,6 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-
-            _subscriber.Connect();
             return base.StartAsync(cancellationToken);
         }
 
@@ -31,7 +29,7 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
         {
 
             _subscriber.Subscribe(
-                Queue.ApproveRequestToJoinGroup,
+                Queue.RequestToJoinGroup_Approved_Queue,
                 ApprovedRequestToJoinGroupNotifications_Handler
             );
             return Task.CompletedTask;
@@ -40,7 +38,7 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
         private async Task ApprovedRequestToJoinGroupNotifications_Handler(object sender, BasicDeliverEventArgs @event)
         {
             var bytes = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var request = JsonConvert.DeserializeObject<ApprovedRequestToJoinGroupEvent>(bytes);
+            var request = JsonConvert.DeserializeObject<RequestToJoinGroup_Approved_Event>(bytes);
 
             var content = new ApprovedRequestToJoinGroupContent()
             {

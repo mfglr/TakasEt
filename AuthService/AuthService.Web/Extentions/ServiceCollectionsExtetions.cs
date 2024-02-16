@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
@@ -33,7 +34,7 @@ namespace AuthService.Web.Extentions
         {
             //customize identity
             services
-                .AddIdentity<User, IdentityRole>(
+                .AddIdentity<UserAccount, IdentityRole>(
                     opt =>
                     {
                         opt.User.RequireUniqueEmail = true;
@@ -49,7 +50,7 @@ namespace AuthService.Web.Extentions
                 )
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders()
-                .AddTokenProvider<RefreshTokenProvider<User>>(TokenProvider.RefreshTokenProvider.Name);
+                .AddTokenProvider<RefreshTokenProvider<UserAccount>>(TokenProvider.RefreshTokenProvider.Name);
 
             //configure Refresh token provider;
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();

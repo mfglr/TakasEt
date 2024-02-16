@@ -4,7 +4,7 @@ using SharedLibrary.ValueObjects;
 
 namespace SharedLibrary.Services
 {
-    public class AppEventsSubscriber : IDisposable
+    public class IntegrationEventsSubscriber : IIntegrationEventsSubscriber
     {
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
@@ -12,22 +12,16 @@ namespace SharedLibrary.Services
 
         private static string ExchangeName = "AppExchange";
 
-        public AppEventsSubscriber(ConnectionFactory connectionFactory)
+        public IntegrationEventsSubscriber(string hostName,int port)
         {
-            _connectionFactory = connectionFactory;
-        }
-
-        public void Connect()
-        {
+            _connectionFactory = new ConnectionFactory() {
+                HostName = hostName,
+                Port = port,
+                DispatchConsumersAsync = true
+            };
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.BasicQos(0, 1, false);
-
-            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true, false, null);
         }
-
-        public bool ConnectionIsOpen() => _connection != null && _connection.IsOpen;
-
 
         public void Subscribe(Queue queue,Func<object, BasicDeliverEventArgs, Task> callback)
         {

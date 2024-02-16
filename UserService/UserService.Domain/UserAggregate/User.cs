@@ -1,8 +1,8 @@
 ﻿using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
+using SharedLibrary.IntegrationEvents;
 using SharedLibrary.ValueObjects;
-using System.Linq;
 using System.Net;
 
 namespace UserService.Domain.UserAggregate
@@ -169,17 +169,39 @@ namespace UserService.Domain.UserAggregate
                     throw new AppException("You already follow the user!", HttpStatusCode.BadRequest);
                 else
                 {
-                    //Send a notification to the user to be followed when the count of requests is more than a certain number.
+                    if(records.Count > 3)
+                        AddIntegrationEvent(
+                            new RequesToFollowUser_Created_TooManyRejectedRequests_Event()
+                            {
+                                RequestedId = Id,
+                                RequesterId = followerId
+                            }
+                        );
                 }
             }
 
             if (IsPrivateProfile)
+            {
                 following.MakeStatePending();
+                AddIntegrationEvent(
+                    new RequestToFollowUser_Created_Event()
+                    {
+                        RequestedId = Id,
+                        RequesterId = followerId
+                    }
+                );
+            }
             else
+            {
                 following.MakeStateApproved();
-
-            //send a notification to user to be followed.
-
+                AddIntegrationEvent(
+                    new User_Followed_Event()
+                    {
+                        FollowerId = followerId,
+                        FollowingId = Id
+                    }
+                );
+            }
             _usersWhoFollowedTheEntity.Add(following);
             return following;
         }

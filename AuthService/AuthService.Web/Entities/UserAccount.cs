@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Entities;
-using SharedLibrary.Entities.DomainEventModels;
+using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Services;
 
 namespace AuthService.Web.Entities
 {
-    internal class User : IdentityUser, IEntity<string>, IDomainEventContainer
+    internal class UserAccount : IdentityUser, IEntity<string>
     {
-        public User(string email,string userName)
+        public UserAccount(string email,string userName)
         {
             UserName = userName;
             Email = email;
@@ -42,6 +43,17 @@ namespace AuthService.Web.Entities
         {
             foreach (var domainEvent in _domainEvents)
                 await publisher.Publish(domainEvent, cancellationToken);
+        }
+
+        //IIntegrationEventsContainer
+        private readonly List<IntegrationEvent> events = new();
+        public bool AnyIntegrationEvent() => events.Any();
+        public void AddIntegrationEvent(IntegrationEvent @event) => events.Add(@event);
+        public void PublishAllIntegrationEvents(IIntegrationEventsPublisher publisher)
+        {
+            foreach (var @event in @events)
+                publisher.Publish(@event);
+            events.Clear();
         }
     }
 }

@@ -9,10 +9,10 @@ namespace AuthService.Web.Commands
 {
     internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto, AppResponseDto>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserAccount> _userManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ConfirmEmailCommandHandler(UserManager<User> userManager)
+        public ConfirmEmailCommandHandler(UserManager<UserAccount> userManager)
         {
             _userManager = userManager;
         }

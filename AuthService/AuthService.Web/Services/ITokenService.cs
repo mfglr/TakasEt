@@ -5,8 +5,8 @@ namespace AuthService.Web.Services
 {
     internal interface ITokenService
     {
-        Task<string> CreateRefreshTokenAsync(User user);
-        Task<bool> VerifyRefreshTokenAsync(User user, string token);
-        string CreateAccessToken(User user);
+        Task<string> CreateRefreshTokenAsync(UserAccount user);
+        Task<bool> VerifyRefreshTokenAsync(UserAccount user, string token);
+        string CreateAccessToken(UserAccount user);
     }
 }

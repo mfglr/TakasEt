@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace AuthService.Web
 {
-    internal class AppDbContext : IdentityDbContext<User, IdentityRole, string>
+    internal class AppDbContext : IdentityDbContext<UserAccount, IdentityRole, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }

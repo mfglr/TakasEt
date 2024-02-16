@@ -15,11 +15,11 @@ namespace AuthService.Web.Services
     {
 
         private readonly ITokenConfiguration _tokenConfiguration;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserAccount> _userManager;
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
-        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<User> userManager)
+        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<UserAccount> userManager)
         {
             _tokenConfiguration = tokenConfiguration;
             _signingCredentials = signingCredentials;
@@ -27,7 +27,7 @@ namespace AuthService.Web.Services
             _userManager = userManager;
         }
 
-        private IEnumerable<Claim> GetClaims(User user)
+        private IEnumerable<Claim> GetClaims(UserAccount user)
         {
             var claims = new List<Claim>()
             {
@@ -46,7 +46,7 @@ namespace AuthService.Web.Services
             return claims;
         }
 
-        public async Task<string> CreateRefreshTokenAsync(User user)
+        public async Task<string> CreateRefreshTokenAsync(UserAccount user)
         {
 
             // update security stamp to revoke previous refresh token.
@@ -69,7 +69,7 @@ namespace AuthService.Web.Services
             return refreshToken;
         }
 
-        public async Task<bool> VerifyRefreshTokenAsync(User user,string token)
+        public async Task<bool> VerifyRefreshTokenAsync(UserAccount user,string token)
         {
             return await _userManager
                 .VerifyUserTokenAsync(
@@ -80,7 +80,7 @@ namespace AuthService.Web.Services
                 );
         }
 
-        public string CreateAccessToken(User user)
+        public string CreateAccessToken(UserAccount user)
         {
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer : _tokenConfiguration.Issuer,

@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-SendEmailConfirmationMail.WorkerService-ea30d9e6-109b-471a-8341-8bc233799f00</UserSecretsId>
+    <UserSecretsId>dotnet-OnUserAccount_Created_SendEmailConfirmationMail.WorkerService-1597babd-29cc-4a64-aa7c-5c77bebcde62</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

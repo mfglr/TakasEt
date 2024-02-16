@@ -31,8 +31,8 @@ namespace SharedLibrary
                     };
                 }
                 )
-                .AddSingleton<AppEventsPublisher>()
-                .AddSingleton<AppEventsSubscriber>();
+                .AddSingleton<IntegrationEventsPublisher>()
+                .AddSingleton<IntegrationEventsSubscriber>();
         }
 
         public static IServiceCollection AddAppSharedLibrary(this IServiceCollection services)
@@ -59,7 +59,8 @@ namespace SharedLibrary
                 );
         }
 
-        public static IServiceCollection AddAppEventsPublisher(this IServiceCollection services)
+
+        public static IServiceCollection AddIntegrationEventsPublisher(this IServiceCollection services)
         {
             var path = GetPathHelper.Run("rabbitmqsettings.json");
             using var file = File.OpenRead(path);
@@ -69,18 +70,12 @@ namespace SharedLibrary
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
-                .AddSingleton(sp =>
-                {
-                    return new ConnectionFactory()
-                    {
-                        HostName = rabbitMQSettings.HostName,
-                    };
-                }
-                )
-                .AddSingleton<AppEventsPublisher>();
+                .AddSingleton<IIntegrationEventsPublisher>(
+                    new IntegrationEventsPublisher(rabbitMQSettings.HostName, rabbitMQSettings.Port)
+                );
         }
 
-        public static IServiceCollection AddAppEventsSubscriber(this IServiceCollection services)
+        public static IServiceCollection AddIntegrationEventsSubscriber(this IServiceCollection services)
         {
             var path = GetPathHelper.Run("rabbitmqsettings.json");
             using var file = File.OpenRead(path);
@@ -90,16 +85,9 @@ namespace SharedLibrary
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
-                .AddSingleton(sp =>
-                {
-                    return new ConnectionFactory()
-                    {
-                        HostName = rabbitMQSettings.HostName,
-                        DispatchConsumersAsync = true,
-                    };
-                }
-                )
-                .AddSingleton<AppEventsSubscriber>();
+                .AddSingleton<IIntegrationEventsSubscriber>(
+                    new IntegrationEventsSubscriber(rabbitMQSettings.HostName, rabbitMQSettings.Port)
+                );
         }
 
         public static IServiceCollection AddAppEventsPublisherAndSubscriber(this IServiceCollection services)
@@ -121,8 +109,8 @@ namespace SharedLibrary
                     };
                 }
                 )
-                .AddSingleton<AppEventsPublisher>()
-                .AddSingleton<AppEventsSubscriber>();
+                .AddSingleton<IntegrationEventsPublisher>()
+                .AddSingleton<IntegrationEventsSubscriber>();
         }
 
         public static IServiceCollection AddSmtpEmailService(this IServiceCollection services)

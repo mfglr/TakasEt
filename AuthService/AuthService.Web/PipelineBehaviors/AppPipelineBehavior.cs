@@ -30,8 +30,8 @@ namespace AuthService.Web.PipelineBehaviors
             //wait for handler
             var response = await next();
 
-            //publish domain events;
-            await _unitOfWork.PublishDomainEventsAsync(cancellationToken);
+            //publish integration events;
+            _unitOfWork.PublishAllIntegrationEvents();
 
             return response;
         }

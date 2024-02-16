@@ -1,11 +1,11 @@
-using NotificationMicroservice.SharedLibrary;
 using OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService;
+using SharedLibrary;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddNotificationSharedLibrary();
+        services.AddIntegrationEventsSubscriber();
     })
     .Build();
 

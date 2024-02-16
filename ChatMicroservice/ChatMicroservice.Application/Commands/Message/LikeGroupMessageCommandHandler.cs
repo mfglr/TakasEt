@@ -4,10 +4,9 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
+using SharedLibrary.IntegrationEvents;
 using SharedLibrary.Services;
-using SharedLibrary.ValueObjects;
 using System.Net;
 
 namespace ChatMicroservice.Application.Commands
@@ -17,9 +16,9 @@ namespace ChatMicroservice.Application.Commands
 
         private readonly ChatDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AppEventsPublisher _publisher;
+        private readonly IIntegrationEventsPublisher _publisher;
 
-        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, AppEventsPublisher publisher)
+        public LikeGroupMessageCommandHandler(ChatDbContext context, IUnitOfWork unitOfWork, IIntegrationEventsPublisher publisher)
         {
             _context = context;
             _unitOfWork = unitOfWork;
@@ -40,14 +39,14 @@ namespace ChatMicroservice.Application.Commands
             
             await _unitOfWork.CommitAsync(cancellationToken);
 
-            var e = new LikedMessageEvent()
-            {
-                IdOfMessageOwner = message.SenderId,
-                MessageId = message.Id,
-                IdOfUserWhoLikedTheMessage = request.LikerId
-            };
-            
-            _publisher.Publish(e, Queue.LikeMessage);
+            message.AddIntegrationEvent(
+                new Message_Liked_Event()
+                {
+                    IdOfMessageOwner = message.SenderId,
+                    MessageId = message.Id,
+                    IdOfUserWhoLikedTheMessage = request.LikerId
+                } 
+            );
             return AppResponseDto.Success();
 
         }

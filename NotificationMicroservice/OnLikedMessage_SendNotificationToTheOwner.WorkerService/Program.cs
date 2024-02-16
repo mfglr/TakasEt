@@ -1,11 +1,11 @@
-using NotificationMicroservice.SharedLibrary;
 using OnLikedMessage_SendNotificationToTheOwner.WorkerService;
+using SharedLibrary;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddNotificationSharedLibrary();
+        services.AddIntegrationEventsSubscriber();
     })
     .Build();
 

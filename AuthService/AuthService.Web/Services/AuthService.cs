@@ -9,9 +9,9 @@ namespace AuthService.Web.Services
     internal class AuthenticationService : IAuthenticationService
     {
         private readonly ITokenService _tokenService;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserAccount> _userManager;
 
-        public AuthenticationService(ITokenService tokenService, UserManager<User> userManager)
+        public AuthenticationService(ITokenService tokenService, UserManager<UserAccount> userManager)
         {
             _tokenService = tokenService;
             _userManager = userManager;

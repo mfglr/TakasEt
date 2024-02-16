@@ -8,7 +8,7 @@ namespace SharedLibrary.Entities
 
     }
 
-    public interface IEntity<TKey> : IRemovable,IDomainEventContainer
+    public interface IEntity<TKey> : IRemovable, IDomainEventContainer, IIntegrationEventsContainer
     {
         TKey Id { get; }
         DateTime CreatedDate { get; }
