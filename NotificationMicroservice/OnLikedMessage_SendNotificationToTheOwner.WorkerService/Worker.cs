@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using OnLikedMessage_SendNotificationToTheOwner.WorkerService.Contents;
 using RabbitMQ.Client.Events;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
@@ -27,14 +27,18 @@ namespace OnLikedMessage_SendNotificationToTheOwner.WorkerService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _subscriber.Subscribe(Queue.Message_Liked_Queue, LikedMessageNotifications_Handler);
+            _subscriber.Subscribe(
+                ExchangeName.MessageLikedEventExchange,
+                QueueName.MessageLikedQueue,
+                LikedMessageNotifications_Handler
+            );
             return Task.CompletedTask;
         }
 
         private async Task LikedMessageNotifications_Handler(object sender, BasicDeliverEventArgs @event)
         {
             var bytes = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var request = JsonConvert.DeserializeObject<Message_Liked_Event>(bytes);
+            var request = JsonConvert.DeserializeObject<MessageLikedEvent>(bytes);
 
             var content = new LikedMessageContent()
             {

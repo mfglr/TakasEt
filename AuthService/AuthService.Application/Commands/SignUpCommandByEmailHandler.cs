@@ -1,0 +1,50 @@
+﻿using AuthService.Application.Dtos;
+using AuthService.Core.Abstracts;
+using AuthService.Core.Entities;
+using AuthService.Infrastructure.Extentions;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using SharedLibrary.Dtos;
+using SharedLibrary.Events;
+using SharedLibrary.Exceptions;
+using SharedLibrary.ValueObjects;
+using System.Net;
+
+namespace AuthService.Application.Commands
+{
+    internal class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, AppResponseDto>
+    {
+        private readonly UserManager<UserAccount> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
+
+
+        public SignUpCommandByEmailHandler(UserManager<UserAccount> userManager, IUnitOfWork unitOfWork)
+        {
+            _userManager = userManager;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<AppResponseDto> Handle(SignUpByEmailDto request, CancellationToken cancellationToken)
+        {
+            
+            var user = new UserAccount(request.Email,request.UserName);
+            user.SetCreatedDate();
+
+            await _unitOfWork.BeginTransactionAsync(cancellationToken: cancellationToken);
+            
+            var result = await _userManager.CreateAsync( user,request.Password );
+            if(!result.Succeeded)
+                throw new AppException(result.GetErrors(),HttpStatusCode.BadRequest);
+            
+            result = await _userManager.AddToRoleAsync(user, Role.User.Name);
+            if (!result.Succeeded)
+                throw new AppException(result.GetErrors(), HttpStatusCode.BadRequest);
+            
+            await _unitOfWork.CommitAsync(cancellationToken: cancellationToken);
+
+            user.AddIntegrationEvent(new UserAccountCreatedByEmailEvent() { Id = user.Id });
+            
+            return AppResponseDto.Success();
+        }
+    }
+}

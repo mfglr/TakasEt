@@ -10,8 +10,6 @@ namespace SharedLibrary.Services
         private IConnection _connection;
         private IModel _channel;
 
-        private static string ExchangeName = "AppExchange";
-
         public IntegrationEventsSubscriber(string hostName,int port)
         {
             _connectionFactory = new ConnectionFactory() {
@@ -23,13 +21,13 @@ namespace SharedLibrary.Services
             _channel = _connection.CreateModel();
         }
 
-        public void Subscribe(Queue queue,Func<object, BasicDeliverEventArgs, Task> callback)
+        public void Subscribe(ExchangeName exchangeName,QueueName queue,Func<object, BasicDeliverEventArgs, Task> callback)
         {
-            _channel.QueueDeclare(queue.QueueName, true, false, false, null);
-            _channel.QueueBind(queue.QueueName, ExchangeName, queue.RouteKey);
+            _channel.QueueDeclare(queue.Name, true, false, false, null);
+            _channel.QueueBind(queue.Name, exchangeName.Name, queue.RouteKey);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
-            _channel.BasicConsume(queue.QueueName,false,consumer);
+            _channel.BasicConsume(queue.Name, false,consumer);
 
             consumer.Received += (object sender, BasicDeliverEventArgs @event) =>
             {
@@ -41,8 +39,10 @@ namespace SharedLibrary.Services
 
         public void Dispose()
         {
-            _connection?.Dispose();
-            _channel?.Dispose();
+            _connection.Close();
+            _connection.Dispose();
+            _channel.Close();
+            _channel.Dispose();
         }
     }
 }

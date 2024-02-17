@@ -4,7 +4,7 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 
 namespace ChatMicroservice.Application.Commands
@@ -35,7 +35,7 @@ namespace ChatMicroservice.Application.Commands
 			await _unitOfWork.CommitAsync(cancellationToken);
 
 			group.AddIntegrationEvent(
-				new RequestToJoinGroup_Approved_Event()
+				new RequestToJoinGroupApprovedEvent()
 				{
                     ApproverId = request.IdOfUserApprovingRequest,
                     GroupId = request.GroupId,

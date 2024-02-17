@@ -1,4 +1,4 @@
-﻿using AuthService.Web.Dtos;
+﻿using AuthService.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;

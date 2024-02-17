@@ -5,6 +5,6 @@ namespace SharedLibrary.Services
 {
     public interface IIntegrationEventsSubscriber : IDisposable
     {
-        void Subscribe(Queue queue, Func<object, BasicDeliverEventArgs, Task> callback);
+        void Subscribe(ExchangeName exchangeName, QueueName queue, Func<object, BasicDeliverEventArgs, Task> callback);
     }
 }

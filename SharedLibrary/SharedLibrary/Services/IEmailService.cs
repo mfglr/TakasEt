@@ -2,6 +2,6 @@
 {
     public interface IEmailService
     {
-        Task SendEmailConfirmationMail(string receiverEMail,string token,string userId);
+        Task SendEmailConfirmationMail(string receiverEmail, string token, string userId, CancellationToken cancellationToken = default);
     }
 }

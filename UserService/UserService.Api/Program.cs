@@ -1,4 +1,4 @@
-using UserService.Api.Extentions;
+using UserService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

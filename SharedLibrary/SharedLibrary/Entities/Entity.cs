@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 
 namespace SharedLibrary.Entities
@@ -47,6 +47,7 @@ namespace SharedLibrary.Entities
         private readonly List<IntegrationEvent> @events = new();
         public bool AnyIntegrationEvent() => @events.Any();
         public void AddIntegrationEvent(IntegrationEvent @event) => @events.Add(@event);
+        public void ClearAllIntefrationEvents() => events.Clear();
         public void PublishAllIntegrationEvents(IIntegrationEventsPublisher publisher)
         {
 			foreach(var @event in @events)

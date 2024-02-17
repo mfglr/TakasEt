@@ -9,7 +9,6 @@ namespace UserService.Domain.UserAggregate
 
         public static readonly FollowingState Pending = new () { Status = 0 };
         public static readonly FollowingState Rejected = new () { Status = 1 };
-        public static readonly FollowingState Approved = new () { Status = 2 };
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

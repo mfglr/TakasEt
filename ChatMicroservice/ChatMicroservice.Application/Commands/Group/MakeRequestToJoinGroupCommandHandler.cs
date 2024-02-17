@@ -5,7 +5,7 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 
 namespace ChatMicroservice.Application.Commands
@@ -39,7 +39,7 @@ namespace ChatMicroservice.Application.Commands
 			if (numberOfChanges <= 0) throw new Exception("error");
 
 			group.AddIntegrationEvent(
-				new RequestToJoinToGroup_Created_Event()
+				new RequestToJoinToGroupCreatedEvent()
 				{
                     AdminIds = group.Users.Where(x => x.Role == UserRole.Admin).Select(x => x.UserId).ToList(),
                     GroupId = request.GroupId,

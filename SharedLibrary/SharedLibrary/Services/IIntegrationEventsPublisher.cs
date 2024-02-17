@@ -1,4 +1,4 @@
-﻿using SharedLibrary.IntegrationEvents;
+﻿using SharedLibrary.Events;
 
 namespace SharedLibrary.Services
 {

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService.Contents;
 using RabbitMQ.Client.Events;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
@@ -20,16 +20,12 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
             _subscriber = subscriber;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
-        {
-            return base.StartAsync(cancellationToken);
-        }
-
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
 
             _subscriber.Subscribe(
-                Queue.RequestToJoinGroup_Approved_Queue,
+                ExchangeName.RequestToFollowUserApprovedEventExchange,
+                QueueName.RequestToJoinGroupApprovedQueue,
                 ApprovedRequestToJoinGroupNotifications_Handler
             );
             return Task.CompletedTask;
@@ -38,7 +34,7 @@ namespace OnApprovedRequestToJoinGroup_SendNotificationToUser.WorkerService
         private async Task ApprovedRequestToJoinGroupNotifications_Handler(object sender, BasicDeliverEventArgs @event)
         {
             var bytes = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var request = JsonConvert.DeserializeObject<RequestToJoinGroup_Approved_Event>(bytes);
+            var request = JsonConvert.DeserializeObject<RequestToJoinGroupApprovedEvent>(bytes);
 
             var content = new ApprovedRequestToJoinGroupContent()
             {

@@ -4,8 +4,8 @@ using ChatMicroservice.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
+using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
-using SharedLibrary.IntegrationEvents;
 using SharedLibrary.Services;
 using System.Net;
 
@@ -40,7 +40,7 @@ namespace ChatMicroservice.Application.Commands
             await _unitOfWork.CommitAsync(cancellationToken);
 
             message.AddIntegrationEvent(
-                new Message_Liked_Event()
+                new MessageLikedEvent()
                 {
                     IdOfMessageOwner = message.SenderId,
                     MessageId = message.Id,

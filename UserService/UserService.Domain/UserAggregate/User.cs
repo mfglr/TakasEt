@@ -1,7 +1,7 @@
 ﻿using SharedLibrary.Entities;
+using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
-using SharedLibrary.IntegrationEvents;
 using SharedLibrary.ValueObjects;
 using System.Net;
 
@@ -29,6 +29,10 @@ namespace UserService.Domain.UserAggregate
             if(name != null && lastName != null)
                 NormalizedFullName = $"{name + " " ?? ""}{lastName ?? ""}".CustomNormalize();
         }
+
+        public User() { }
+        public User(string accountId) => Id = Guid.Parse(accountId);
+
 
         //IRemovable
         public override void Remove()
@@ -64,12 +68,10 @@ namespace UserService.Domain.UserAggregate
 
         }
 
-
         //profile visibility
         public bool IsPrivateProfile { get; private set; }
         public void HideProfile() => IsPrivateProfile = true;
         public void VisibleProfile() => IsPrivateProfile = false;
-
         
         //user images
         private readonly List<UserImage> _userImages = new ();
@@ -146,62 +148,39 @@ namespace UserService.Domain.UserAggregate
         public Following Follow(Guid followerId)
         {
             if (UsersTheEntityBlocked.Any(x => x.BlockedId == followerId))
-                throw new AppException("You don't have any access", HttpStatusCode.Forbidden);
+                throw new AppException(
+                    "You don't have any access",
+                    HttpStatusCode.Forbidden
+                );
 
             if (_usersWhoBlockedTheEntity.Any(x => x.BlockerId == followerId))
-                throw new AppException("You musn't make a request to follow user before removing the block!", HttpStatusCode.BadRequest);
+                throw new AppException(
+                    "You musn't make a request to follow user before removing the block!",
+                    HttpStatusCode.BadRequest
+                );
 
-            var records = _usersWhoFollowedTheEntity
-                .Where(x => x.FollowerId == followerId)
-                .OrderByDescending(x => x.CreatedDate)
-                .ToList();
+            if (_usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId))
+                throw new AppException(
+                    "You already follow the user!",
+                    HttpStatusCode.BadRequest
+                );
+            
+            var LastRequest = _usersWhoFollowedTheEntity.FirstOrDefault();
+            if (LastRequest != null && LastRequest.State == FollowingState.Pending)
+                throw new AppException(
+                    "You already make a request to follow the user!",
+                    HttpStatusCode.BadRequest
+                );
 
             var following = new Following(followerId);
-
-            if (records != null && records.Count > 0)
-            {
-                var LastRecord = records.First();
-
-                if (LastRecord.State == FollowingState.Pending)
-                    throw new AppException("You already make a request to follow the user!", HttpStatusCode.BadRequest);
-
-                else if (LastRecord.State == FollowingState.Approved)
-                    throw new AppException("You already follow the user!", HttpStatusCode.BadRequest);
-                else
-                {
-                    if(records.Count > 3)
-                        AddIntegrationEvent(
-                            new RequesToFollowUser_Created_TooManyRejectedRequests_Event()
-                            {
-                                RequestedId = Id,
-                                RequesterId = followerId
-                            }
-                        );
-                }
-            }
 
             if (IsPrivateProfile)
             {
                 following.MakeStatePending();
-                AddIntegrationEvent(
-                    new RequestToFollowUser_Created_Event()
-                    {
-                        RequestedId = Id,
-                        RequesterId = followerId
-                    }
-                );
+                AddIntegrationEvent( new RequestToFollowUserCreatedEvent(followerId, Id) );
             }
             else
-            {
-                following.MakeStateApproved();
-                AddIntegrationEvent(
-                    new User_Followed_Event()
-                    {
-                        FollowerId = followerId,
-                        FollowingId = Id
-                    }
-                );
-            }
+                AddIntegrationEvent( new UserFollowedEvent(followerId,Id) );
             _usersWhoFollowedTheEntity.Add(following);
             return following;
         }

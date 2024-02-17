@@ -12,7 +12,6 @@ namespace UserService.Domain.UserAggregate
 
         public void MakeStatePending() => State = FollowingState.Pending;
         public void MakeStateRejected() => State = FollowingState.Rejected;
-        public void MakeStateApproved() => State = FollowingState.Approved;
 
     }
 }

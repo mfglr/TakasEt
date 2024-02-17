@@ -15,14 +15,14 @@ namespace SharedLibrary.Services
             _smtpClient = smtpClient;
         }
 
-        public async Task SendEmailConfirmationMail(string receiverEmail,string token,string userId)
+        public async Task SendEmailConfirmationMail(string receiverEmail,string token,string userId,CancellationToken cancellationToken = default)
         {
             var mailMessagge = await _messageFactory.CreateEmailConfirmationMailMessageAsync(
                 receiverEmail,
                 token,
                 userId
             );
-            await _smtpClient.SendMailAsync(mailMessagge);
+            await _smtpClient.SendMailAsync(mailMessagge, cancellationToken);
         }
     }
 }

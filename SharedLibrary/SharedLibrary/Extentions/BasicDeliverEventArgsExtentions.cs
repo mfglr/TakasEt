@@ -9,9 +9,7 @@ namespace SharedLibrary.Extentions
 
         public static T? Deserialize<T>(this BasicDeliverEventArgs @event)
         {
-            return JsonConvert.DeserializeObject<T>(
-                Encoding.UTF8.GetString(@event.Body.ToArray())
-            );
+            return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(@event.Body.ToArray()));
         }
 
     }

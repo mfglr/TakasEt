@@ -1,16 +1,15 @@
-﻿using AuthService.Web.Entities;
-using AuthService.Web.PipelineBehaviors;
-using AuthService.Web.Services;
+﻿using AuthService.Core.Abstracts;
+using AuthService.Core.Entities;
+using AuthService.Core.ValueObjects;
+using AuthService.Infrastructure;
+using AuthService.Infrastructure.Services;
 using AuthService.Web.TokenProviders;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
-using SharedLibrary.Services;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Text;
 
 namespace AuthService.Web.Extentions
@@ -87,17 +86,7 @@ namespace AuthService.Web.Extentions
                         );
                     }
                 )
-                .AddScoped<ITokenService, TokenService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>();
-        }
-
-        public static IServiceCollection AddCustomMediatR(this IServiceCollection services)
-        {
-            return services
-                .AddMediatR(
-                    cnfg => cnfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
-                )
-                .AddTransient(typeof(IPipelineBehavior<,>),typeof(AppPipelineBehavior<,>));
+                .AddScoped<ITokenService, TokenService>();
         }
 
     }

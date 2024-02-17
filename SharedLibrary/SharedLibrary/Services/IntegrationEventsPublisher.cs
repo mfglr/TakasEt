@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using System.Text;
 
 namespace SharedLibrary.Services
@@ -10,9 +10,7 @@ namespace SharedLibrary.Services
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
-
-        private readonly static string exchangeName = "AppExchange";
-
+        
         public IntegrationEventsPublisher(string hostName,int port)
         {
             _connectionFactory = new ConnectionFactory() { HostName = hostName, Port = port };
@@ -24,8 +22,8 @@ namespace SharedLibrary.Services
         public void Publish(IntegrationEvent @event)
         {
             _channel.BasicPublish(
-                exchangeName,
-                @event.Queue.QueueName,
+                @event.ExchangeName.Name,
+                string.Empty,
                 null,
                 Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event))
             );

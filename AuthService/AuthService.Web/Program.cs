@@ -1,3 +1,4 @@
+using AuthService.Application;
 using AuthService.Web.Extentions;
 using SharedLibrary;
 using SharedLibrary.Middlewares;
@@ -18,10 +19,11 @@ builder.Services
     );
 
 builder.Services.AddCustomDbContext();
-builder.Services.AddJWT();
 builder.Services.AddCustomIdentity();
+builder.Services.AddJWT();
 
-builder.Services.AddCustomMediatR();
+
+builder.Services.AddApp();
 builder.Services.AddJsonSerializerSettingsForCustomExceptionMiddleware();
 builder.Services.AddIntegrationEventsPublisher();
 

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using NotificationMicroservice.SharedLibrary.Services;
 using OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService.Contents;
 using RabbitMQ.Client.Events;
-using SharedLibrary.IntegrationEvents;
+using SharedLibrary.Events;
 using SharedLibrary.Services;
 using SharedLibrary.ValueObjects;
 using System.Text;
@@ -23,7 +23,8 @@ namespace OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _subscriber.Subscribe(
-                Queue.RequestJoinToGroup_Created_Queue,
+                ExchangeName.RequestToJoinToGroupCreatedEventExchange,
+                QueueName.RequestJoinToGroupCreatedQueue,
                 RequestToJoinGroupNotifications_Handler
             );
             return Task.CompletedTask;
@@ -33,7 +34,7 @@ namespace OnSentRequestToJoinGroup_SendNotificationsToAdmins.WorkerService
         {
 
             var bytes = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var request = JsonConvert.DeserializeObject<RequestToJoinToGroup_Created_Event>(bytes);
+            var request = JsonConvert.DeserializeObject<RequestToJoinToGroupCreatedEvent>(bytes);
 
             var content = new RequestToJoinGroupContent()
             {
