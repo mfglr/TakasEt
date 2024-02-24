@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ConversationService.Application.Dtos;
-using ConversationService.Domain.MessageEntity;
+using ConversationService.Domain.ConversationAggregate;
 
 namespace ConversationService.Application.Mappers
 {

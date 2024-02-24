@@ -29,7 +29,6 @@ builder.Services.AddCustomDbContext();
 builder.Services.AddCustomIdentity();
 builder.Services.AddJWT();
 builder.Services.AddApp();
-builder.Services.AddJsonSerializerSettingsForCustomExceptionMiddleware();
 builder.Services.AddIntegrationEventsPublisher();
 
 var app = builder.Build();

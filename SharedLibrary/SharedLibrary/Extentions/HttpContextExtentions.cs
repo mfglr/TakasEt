@@ -12,10 +12,10 @@ namespace SharedLibrary.Extentions
 {
     public static class HttpContextExtentions
     {
-        public static async Task WriteExceptionAsync(this HttpContext context, AppException ex,JsonSerializerSettings settings)
+        public static async Task WriteExceptionAsync(this HttpContext context, AppException ex)
         {
             var body = Encoding.ASCII.GetBytes(
-                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message),settings)
+                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message))
             );
             context.Response.StatusCode = (int)ex.StatusCode;
             await context.Response.Body.WriteAsync(body, 0, body.Length);

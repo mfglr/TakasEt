@@ -1,5 +1,4 @@
 ﻿using ConversationService.Domain.ConversationAggregate;
-using ConversationService.Domain.MessageEntity;
 using ConversationService.Domain.UserConnectionAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;

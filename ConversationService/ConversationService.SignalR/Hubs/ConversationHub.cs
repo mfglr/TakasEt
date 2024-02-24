@@ -1,14 +1,11 @@
-﻿using Azure.Core;
-using ConversationService.Application.Dtos;
+﻿using ConversationService.Application.Dtos;
 using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Extentions;
 
 namespace ConversationService.SignalR.Hubs
 {
@@ -31,14 +28,11 @@ namespace ConversationService.SignalR.Hubs
             {
                 response = await _sender.Send( new ConnectDto() { ConnectionId = Context.ConnectionId } );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await Clients
-                    .Caller
-                    .SendAsync("ConnectionFailedNotification", new AppFailResponseDto(ex.Message));
                 return;
             }
-            await Clients.Caller.SendAsync("ConnectionSuccessNotification", response);
+            await Clients.Caller.SendAsync("ConnectionCompleted", response);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -52,8 +46,7 @@ namespace ConversationService.SignalR.Hubs
             {
                 await Clients
                     .Caller
-                    .SendAsync("DisconnectionFailedNotification", new AppFailResponseDto(ex.Message));
-                return;
+                    .SendAsync("DisconnectionFailed", new AppFailResponseDto(ex.Message));
             }
         }
 
@@ -68,18 +61,18 @@ namespace ConversationService.SignalR.Hubs
             {
                 await Clients
                     .Caller
-                    .SendAsync("messageSavedFailedNotification",new AppFailResponseDto(ex.Message));
+                    .SendAsync("messageSaveFailed",new AppFailResponseDto(ex.Message));
                 return;
             }
 
-            await Clients.Caller.SendAsync("messageSavedSuccessNotification",response);
+            await Clients.Caller.SendAsync("messageSaveCompleted",response);
 
             var receiver = await _context.UserConnections.FirstOrDefaultAsync(x => x.Id == request.ReceiverId);
 
-            if (receiver == null) { 
+            if (receiver == null) {
                 await Clients
                     .Caller
-                    .SendAsync("messageDeleveryFailedNotification", new AppFailResponseDto("User was not found!"));
+                    .SendAsync("messageSendFailed", new AppFailResponseDto("User was not found!"));
                 return;
             }
 
@@ -89,6 +82,68 @@ namespace ConversationService.SignalR.Hubs
                     .SendAsync("receiveMessage",response);
         }
 
+        public async Task SendMessageReceivedNotification(SendMessageReceivedNotificationDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(request);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            var message = await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId);
+            
+            if(message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
+                await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageReceived", response);
+        }
+
+        public async Task SendMessageViewedNotification(SendMessageViewedNotificationDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(request);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            var message = await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId);
+
+            if (message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
+                await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageViewed", response);
+        }
+
+        public async Task LikeMessage(LikeMessageDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(request);
+            }
+            catch (Exception ex)
+            {
+                await Clients
+                    .Caller
+                    .SendAsync("LikeMessageFailed", new AppFailResponseDto(ex.Message));
+                return;
+            }
+            var message = await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId);
+            
+            if (message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
+                await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageLiked", response);
+        }
 
     }
 }

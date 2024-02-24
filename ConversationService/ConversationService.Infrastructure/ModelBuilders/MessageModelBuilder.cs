@@ -1,4 +1,4 @@
-﻿using ConversationService.Domain.MessageEntity;
+﻿using ConversationService.Domain.ConversationAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,13 +8,7 @@ namespace ConversationService.Infrastructure.ModelBuilders
     {
         public void Configure(EntityTypeBuilder<Message> builder)
         {
-            builder.OwnsOne(
-                message => message.MessageState,
-                builder =>
-                {
-                    builder.Property(messageState => messageState.Status).HasColumnName("Status");
-                }
-            );
+            builder.OwnsOne(message => message.State);
         }
     }
 }

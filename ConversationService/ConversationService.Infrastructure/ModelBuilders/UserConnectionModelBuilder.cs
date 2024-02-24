@@ -10,24 +10,8 @@ namespace ConversationService.Infrastructure.ModelBuilders
         public void Configure(EntityTypeBuilder<UserConnection> builder)
         {
             builder
-                .HasMany(x => x.IncomingConversations)
-                .WithOne()
-                .HasForeignKey(x => x.ReceiverId)
-                .OnDelete(DeleteBehavior.NoAction);
-            builder
-                .HasMany(x => x.OutgoingConversations)
-                .WithOne()
-                .HasForeignKey(x => x.SenderId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder
-                .HasMany(x => x.UsersWhoCanSendMessageToTheUser)
-                .WithOne()
-                .HasForeignKey(x => x.ReceiverId)
-                .OnDelete(DeleteBehavior.NoAction);
-            builder
-                .HasMany(x => x.UsersTheUserCanSendMessage)
-                .WithOne()
+                .HasMany(x => x.Messages)
+                .WithOne(x => x.Sender)
                 .HasForeignKey(x => x.SenderId)
                 .OnDelete(DeleteBehavior.NoAction);
         }

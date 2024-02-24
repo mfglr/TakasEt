@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using ConversationService.Application.Dtos;
+using ConversationService.Domain.ConversationAggregate;
 using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 using SharedLibrary.Services;
 using SharedLibrary.UnitOfWork;
-using System.Net;
 
 namespace ConversationService.Application.Commands
 {
@@ -36,18 +35,16 @@ namespace ConversationService.Application.Commands
         public async Task<IAppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            
             await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(request.ReceiverId.ToString());
 
-            var user = await _context
-                .UserConnections
-                .Include(x => x.IncomingConversations.Where(x => x.SenderId == loginUserId))
-                .Include(x => x.OutgoingConversations.Where(x => x.ReceiverId == loginUserId))
-                .Include(x => x.UsersWhoCanSendMessageToTheUser.Where(x => x.SenderId == loginUserId))
-                .FirstOrDefaultAsync(x => x.Id == request.ReceiverId) ??
-                throw new AppException("User was not found!", HttpStatusCode.NotFound);
+            var conversation = await _context
+                .Conversations
+                .FirstOrDefaultAsync(x => x.Id == request.ReceiverId);
 
-            var message = user.SaveMessage(loginUserId, request.Content);
+            if(conversation == null)
+                conversation = new Conversation(loginUserId, request.ReceiverId);
+
+            var message = conversation.AddMessage(loginUserId, request.Content);
             await _unitOfWork.CommitAsync();
 
             return new AppGenericSuccessResponseDto<MessageResponseDto>(_mapper.Map<MessageResponseDto>(message));

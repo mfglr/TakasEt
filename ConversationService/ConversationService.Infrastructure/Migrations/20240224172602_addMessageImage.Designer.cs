@@ -4,6 +4,7 @@ using ConversationService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConversationService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240224172602_addMessageImage")]
+    partial class addMessageImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,8 +92,6 @@ namespace ConversationService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -170,19 +171,14 @@ namespace ConversationService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ConversationService.Domain.UserConnectionAggregate.UserConnection", "Sender")
-                        .WithMany("Messages")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "State", b1 =>
+                    b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "MessageState", b1 =>
                         {
                             b1.Property<Guid>("MessageId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Status")
-                                .HasColumnType("int");
+                                .HasColumnType("int")
+                                .HasColumnName("Status");
 
                             b1.HasKey("MessageId");
 
@@ -192,9 +188,7 @@ namespace ConversationService.Infrastructure.Migrations
                                 .HasForeignKey("MessageId");
                         });
 
-                    b.Navigation("Sender");
-
-                    b.Navigation("State")
+                    b.Navigation("MessageState")
                         .IsRequired();
                 });
 
@@ -258,11 +252,6 @@ namespace ConversationService.Infrastructure.Migrations
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
                     b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("ConversationService.Domain.UserConnectionAggregate.UserConnection", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

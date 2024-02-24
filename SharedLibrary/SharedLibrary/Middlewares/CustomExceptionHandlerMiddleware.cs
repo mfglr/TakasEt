@@ -9,12 +9,11 @@ namespace SharedLibrary.Middlewares
     {
 
         private readonly RequestDelegate _next;
-        private JsonSerializerSettings _settings;
+        
 
-        public CustomExceptionHandlerMiddleware(RequestDelegate next, JsonSerializerSettings settings)
+        public CustomExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
-            _settings = settings;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -25,7 +24,7 @@ namespace SharedLibrary.Middlewares
             }
             catch (AppException ex)
             {
-                await context.WriteExceptionAsync(ex, _settings);
+                await context.WriteExceptionAsync(ex);
             }
         }
 
