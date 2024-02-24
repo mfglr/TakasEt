@@ -18,7 +18,7 @@ namespace SharedLibrary
             using var file = File.OpenRead(path);
             using var reader = new StreamReader(file);
             var json = reader.ReadToEnd();
-            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json);
+            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json)!;
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
@@ -66,7 +66,7 @@ namespace SharedLibrary
             using var file = File.OpenRead(path);
             using var reader = new StreamReader(file);
             var json = reader.ReadToEnd();
-            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json);
+            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json)!;
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
@@ -81,7 +81,7 @@ namespace SharedLibrary
             using var file = File.OpenRead(path);
             using var reader = new StreamReader(file);
             var json = reader.ReadToEnd();
-            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json);
+            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json)!;
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
@@ -96,7 +96,7 @@ namespace SharedLibrary
             using var file = File.OpenRead(path);
             using var reader = new StreamReader(file);
             var json = reader.ReadToEnd();
-            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json);
+            var rabbitMQSettings = JsonConvert.DeserializeObject<RabbitMQSettings>(json)!;
 
             return services
                 .AddSingleton<IRabbitMQSettings>(rabbitMQSettings)
@@ -140,7 +140,5 @@ namespace SharedLibrary
                 .AddSingleton<MailMessageFactory>()
                 .AddSingleton<IEmailService,SmtpEmailService>();
         }
-
-
     }
 }

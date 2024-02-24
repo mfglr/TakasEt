@@ -32,7 +32,7 @@ namespace PhotoStockMicroservice.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<AppResponseDto> UploadImage([FromForm] IFormCollection form,CancellationToken cancellationToken)
+		public async Task<IAppResponseDto> UploadImage([FromForm] IFormCollection form,CancellationToken cancellationToken)
 		{
 			var containerName = form.ReadString("containerName");
 			if (containerName == null) throw new AppException("A container name is required!",HttpStatusCode.BadRequest);
@@ -44,7 +44,7 @@ namespace PhotoStockMicroservice.Api.Controllers
 		}
 		
 		[HttpPost]
-		public async Task<AppResponseDto> UploadImages([FromForm] IFormCollection form,CancellationToken cancellationToken)
+		public async Task<IAppResponseDto> UploadImages([FromForm] IFormCollection form,CancellationToken cancellationToken)
 		{
 			var containerName = form.ReadString("containerName");
 			if (containerName == null ) throw new AppException("A container name is required!", HttpStatusCode.BadRequest);
@@ -52,7 +52,7 @@ namespace PhotoStockMicroservice.Api.Controllers
 		}
 
 		[HttpDelete("{containerName}/{blobName}")]
-		public AppResponseDto DeleteImage(string containerName,string blobName)
+		public IAppResponseDto DeleteImage(string containerName,string blobName)
 		{
 			return _blobService.Delete(containerName, blobName);
 		}

@@ -5,11 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
+using SharedLibrary.UnitOfWork;
 using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class LoginByEmailCommandHandler : IRequestHandler<LoginByEmailDto, AppResponseDto>
+    internal class LoginByEmailCommandHandler : IRequestHandler<LoginByEmailDto,IAppResponseDto>
     {
 
         private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +24,7 @@ namespace AuthService.Application.Commands
             _tokenService = tokenService;
         }
 
-        public async Task<AppResponseDto> Handle(LoginByEmailDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(LoginByEmailDto request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted,cancellationToken);
 
@@ -37,12 +38,12 @@ namespace AuthService.Application.Commands
             var response = new LoginResponseDto()
             {
                 UserId = user.Id,
-                AccessToken = _tokenService.CreateAccessToken(user),
-                RefreshToken = await _tokenService.CreateRefreshTokenAsync(user),
+                AccessToken = await _tokenService.CreateAccessTokenAsync(user.Id),
+                RefreshToken = await _tokenService.CreateRefreshTokenAsync(user.Id),
             };
            
             await _unitOfWork.CommitAsync(cancellationToken);
-            return AppResponseDto.Success(response);
+            return new AppGenericSuccessResponseDto<LoginResponseDto>(response);
         }
     }
 }

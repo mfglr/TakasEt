@@ -17,7 +17,7 @@ namespace AuthService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<AppResponseDto> SingUpByEmail(SignUpByEmailDto request,CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> SingUpByEmail(SignUpByEmailDto request,CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }

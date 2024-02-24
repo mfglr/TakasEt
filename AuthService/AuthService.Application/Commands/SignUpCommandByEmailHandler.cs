@@ -1,5 +1,4 @@
 ﻿using AuthService.Application.Dtos;
-using AuthService.Core.Abstracts;
 using AuthService.Core.Entities;
 using AuthService.Infrastructure.Extentions;
 using MediatR;
@@ -7,12 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Dtos;
 using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
+using SharedLibrary.UnitOfWork;
 using SharedLibrary.ValueObjects;
 using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, AppResponseDto>
+    internal class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, IAppResponseDto>
     {
         private readonly UserManager<UserAccount> _userManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -24,11 +24,11 @@ namespace AuthService.Application.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<AppResponseDto> Handle(SignUpByEmailDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(SignUpByEmailDto request, CancellationToken cancellationToken)
         {
             
             var user = new UserAccount(request.Email,request.UserName);
-            user.SetCreatedDate();
+            user.SetId();
 
             await _unitOfWork.BeginTransactionAsync(cancellationToken: cancellationToken);
             
@@ -44,7 +44,7 @@ namespace AuthService.Application.Commands
 
             user.AddIntegrationEvent(new UserAccountCreatedByEmailEvent() { Id = user.Id });
             
-            return AppResponseDto.Success();
+            return new AppSuccessResponseDto();
         }
     }
 }

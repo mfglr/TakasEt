@@ -4,10 +4,12 @@ using AuthService.Infrastructure.Extentions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Dtos;
+using SharedLibrary.Exceptions;
+using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto, AppResponseDto>
+    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto,IAppResponseDto>
     {
         private readonly UserManager<UserAccount> _userManager;
 
@@ -16,19 +18,19 @@ namespace AuthService.Application.Commands
             _userManager = userManager;
         }
 
-        public async Task<AppResponseDto> Handle(ConfirmEmailDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(ConfirmEmailDto request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
-            
+
             if (user == null)
-                return AppResponseDto.Fail("User was not found!");
+                throw new AppException("User was not found!", HttpStatusCode.NotFound);
 
             var result = await _userManager.ConfirmEmailAsync(user, request.Token);
 
             if (!result.Succeeded)
-                return AppResponseDto.Fail(result.GetErrors());
+                throw new AppException(result.GetErrors(), HttpStatusCode.NotFound);
 
-            return AppResponseDto.Success();
+            return new AppSuccessResponseDto();
         }
     }
 }

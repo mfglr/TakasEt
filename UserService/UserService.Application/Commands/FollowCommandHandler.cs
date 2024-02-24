@@ -8,7 +8,7 @@ using UserService.Infrastructure;
 
 namespace UserService.Application.Commands
 {
-    internal class FollowCommandHandler : IRequestHandler<FollowDto, AppResponseDto>
+    internal class FollowCommandHandler : IRequestHandler<FollowDto, IAppResponseDto>
     {
 
         private readonly AppDbContext _context;
@@ -18,7 +18,7 @@ namespace UserService.Application.Commands
             _context = context;
         }
 
-        public async Task<AppResponseDto> Handle(FollowDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(FollowDto request, CancellationToken cancellationToken)
         {
             var user = await _context
                 .Users
@@ -47,7 +47,7 @@ namespace UserService.Application.Commands
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return AppResponseDto.Success();
+            return new AppSuccessResponseDto();
 
 
         }

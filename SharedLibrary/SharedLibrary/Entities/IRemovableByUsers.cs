@@ -17,7 +17,7 @@
 	 */
   
 	public interface IRemovableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
-	{
+    {
 		IReadOnlyCollection<TCrossEntity> UsersWhoRemovedTheEntity { get; }
 		void Remove(TUserId userId);
 		void Reinsert(TUserId userId);

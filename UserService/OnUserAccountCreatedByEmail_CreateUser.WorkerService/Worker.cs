@@ -25,13 +25,13 @@ namespace OnUserAccountCreatedByEmail_CreateUser.WorkerService
                 .Subscribe(
                     ExchangeName.UserAccountCreatedEventExchange,
                     QueueName.UserAccountCreated_CreateUserQueue,
-                    UserAccountCreated_CreateUserHandler
+                    OnUserAccountCreatedByEmail_CreateUser_Handler
                 );
 
             return Task.CompletedTask;
         }
 
-        private async Task UserAccountCreated_CreateUserHandler(object sender, BasicDeliverEventArgs @event)
+        private async Task OnUserAccountCreatedByEmail_CreateUser_Handler(object sender, BasicDeliverEventArgs @event)
         {
             var evnt = @event.Deserialize<UserAccountCreatedByEmailEvent>();
             

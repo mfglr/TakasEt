@@ -17,13 +17,13 @@ namespace AuthService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<AppResponseDto> LoginByEmail(LoginByEmailDto request,CancellationToken cancellation)
+        public async Task<IAppResponseDto> LoginByEmail(LoginByEmailDto request,CancellationToken cancellation)
         {
             return await _sender.Send(request,cancellation);
         }
 
         [HttpPost]
-        public async Task<AppResponseDto> LoginByRefreshToken(LoginByRefreshTokenDto request,CancellationToken cancellation)
+        public async Task<IAppResponseDto> LoginByRefreshToken(LoginByRefreshTokenDto request,CancellationToken cancellation)
         {
             return await _sender.Send(request,cancellation);
         }

@@ -1,7 +1,7 @@
-﻿using AuthService.Application.PipelineBehaviors;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SharedLibrary.PipelineBehaviors;
 using System.Reflection;
 
 namespace AuthService.Application
@@ -13,10 +13,9 @@ namespace AuthService.Application
             var assembly = Assembly.GetExecutingAssembly();
             return services
                .AddValidatorsFromAssembly(assembly)
-               .AddMediatR(
-                   cnfg => cnfg.RegisterServicesFromAssemblies(assembly)
-               )
-               .AddTransient(typeof(IPipelineBehavior<,>), typeof(AppPipelineBehavior<,>));
+               .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly))
+               .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
+               .AddTransient(typeof(IPipelineBehavior<,>), typeof(EventsPublishPipelineBehavior<,>));
         }
     }
 }

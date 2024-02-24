@@ -5,12 +5,13 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
+using SharedLibrary.UnitOfWork;
 using System.Data;
 using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshTokenDto,AppResponseDto>
+    internal class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshTokenDto,IAppResponseDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;
@@ -23,7 +24,7 @@ namespace AuthService.Application.Commands
             _userManager = userManager;
         }
 
-        public async Task<AppResponseDto> Handle(LoginByRefreshTokenDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(LoginByRefreshTokenDto request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
             
@@ -36,13 +37,13 @@ namespace AuthService.Application.Commands
             var response = new LoginResponseDto()
             {
                 UserId = user.Id,
-                AccessToken = _tokenService.CreateAccessToken(user),
-                RefreshToken = await _tokenService.CreateRefreshTokenAsync(user),
+                AccessToken = await _tokenService.CreateAccessTokenAsync(user.Id),
+                RefreshToken = await _tokenService.CreateRefreshTokenAsync(user.Id),
             };
             
             await _unitOfWork.CommitAsync(cancellationToken);
             
-            return AppResponseDto.Success(response);
+            return new AppGenericSuccessResponseDto<LoginResponseDto>(response);
         }
     }
 }

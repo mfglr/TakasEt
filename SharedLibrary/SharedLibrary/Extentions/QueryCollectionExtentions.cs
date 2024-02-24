@@ -24,7 +24,7 @@ namespace SharedLibrary.Extentions
 			{
 				return int.Parse(data.Value.ToString());
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				throw new InvalidQueryArgumentException(data.Value.ToString(), key);
 			}
@@ -43,7 +43,7 @@ namespace SharedLibrary.Extentions
 					r.Add(int.Parse(value));
 				return r;
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				throw new InvalidQueryArgumentException(data.Value.ToString(),key);
 			}

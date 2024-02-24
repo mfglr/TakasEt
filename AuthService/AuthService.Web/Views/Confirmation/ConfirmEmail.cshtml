@@ -1,29 +1,11 @@
-﻿@using SharedLibrary.Dtos;
-
-@model AppResponseDto
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
 </head>
 <body>
-
-    @if(Model.Errors == null)
-    {
-        <h1>www.takasEt.com</h1>
-        <h4>Your registration is complete.</h4>
-        <p>Thank you for choosing us.</p>
-    }
-    else
-    {
-        <ul>
-            @foreach(var error in Model.Errors)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    }
-
+    <h1>www.takasEt.com</h1>
+    <h4>Your registration is complete.</h4>
+    <p>Thank you for choosing us.</p>
 </body>
 </html>
 

@@ -71,7 +71,7 @@ namespace UserService.Domain.UserAggregate
         //profile visibility
         public bool IsPrivateProfile { get; private set; }
         public void HideProfile() => IsPrivateProfile = true;
-        public void VisibleProfile() => IsPrivateProfile = false;
+        public void MakeProfileVisible() => IsPrivateProfile = false;
         
         //user images
         private readonly List<UserImage> _userImages = new ();
@@ -114,7 +114,7 @@ namespace UserService.Domain.UserAggregate
         private readonly List<Blocking> _usersWhoBlockedTheEntity = new();
         public IReadOnlyCollection<Blocking> UsersWhoBlockedTheEntity => _usersWhoBlockedTheEntity;
         public IReadOnlyCollection<Blocking> UsersTheEntityBlocked { get; }
-        public Blocking Block(Guid blockerId)
+        public void Block(Guid blockerId)
         {
             var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
             if (record != null)
@@ -122,11 +122,9 @@ namespace UserService.Domain.UserAggregate
                 if (!record.IsRemoved)
                     throw new AppException("You are already blocked the user!", HttpStatusCode.BadRequest);
                 record.Reinsert();
-                return record;
             }
             var blocking = new Blocking(blockerId);
             _usersWhoBlockedTheEntity.Add(blocking);
-            return blocking;
         }
         public void RemoveBlock(Guid blockerId)
         {

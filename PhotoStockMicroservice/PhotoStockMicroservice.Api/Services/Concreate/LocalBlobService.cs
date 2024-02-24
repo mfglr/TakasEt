@@ -30,20 +30,20 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
 			return GetPathHelper.Run($"{_containerSettings.RootPath}/{containerName}/{blobName}");
         }
 
-        public AppResponseDto CreateContainer(string containerName)
+        public IAppResponseDto CreateContainer(string containerName)
         {
 			var path = GetPath(containerName);
             if (Directory.Exists(path))
 				throw new AppException($"The container ({containerName}) was already created!",HttpStatusCode.BadRequest);
 			Directory.CreateDirectory(path);
-			return AppResponseDto.Success();
+			return new AppSuccessResponseDto();
         }
 
-        public AppResponseDto Delete(string containerName, string blobName)
+        public IAppResponseDto Delete(string containerName, string blobName)
 		{
 			string path = GetPath(containerName, blobName);
 			File.Delete(path);
-			return AppResponseDto.Success();
+			return new AppSuccessResponseDto();
 		}
 
 		public async Task<byte[]> DownloadAsync(string containerName, string blobName,  CancellationToken cancellationToken)
@@ -94,14 +94,14 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
 			};
         }
 
-		public async Task<AppResponseDto> UploadImageAsync(IFormFile file, string containerName,CancellationToken cancellationToken)
+		public async Task<IAppResponseDto> UploadImageAsync(IFormFile file, string containerName,CancellationToken cancellationToken)
 		{
-            return AppResponseDto.Success(
+            return new AppGenericSuccessResponseDto<ImageResponDto>(
 				await SaveImageAsync(file, containerName, cancellationToken)
 			);
 		}
 
-        public async Task<AppResponseDto> UploadImagesAsync(IFormFileCollection files, string containerName, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> UploadImagesAsync(IFormFileCollection files, string containerName, CancellationToken cancellationToken)
         {
 			if (files.Count == 0) throw new Exception("A file is required!");
 			
@@ -111,7 +111,7 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
                 foreach (var file in files)
                     fileResponses.Add(await SaveImageAsync(file, containerName, cancellationToken));
             }
-			catch (Exception ex)
+			catch (Exception)
 			{
                 //if there is an error when uploading files, delete the uploaded files. All or none!
                 foreach (var response in fileResponses)
@@ -119,7 +119,7 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
 				throw new AppException("There have been some issues while uploading files. Upload failed!", HttpStatusCode.BadRequest);
 			}
 
-            return AppResponseDto.Success(fileResponses);
+            return new AppGenericSuccessResponseDto<List<ImageResponDto>>(fileResponses);
         }
 
         

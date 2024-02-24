@@ -4,11 +4,13 @@ using AuthService.Core.ValueObjects;
 using AuthService.Infrastructure;
 using AuthService.Infrastructure.Services;
 using AuthService.Web.TokenProviders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -69,24 +71,44 @@ namespace AuthService.Web.Extentions
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
 
+            var tokenConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokenConfiguration>>().Value;
 
-
-            return services
-                .AddSingleton<ITokenConfiguration>(
-                    sp => sp.GetRequiredService<IOptions<TokenConfiguration>>().Value
-                )
+            services
+                .AddSingleton<ITokenConfiguration>(sp => tokenConfiguration)
                 .AddSingleton<JwtSecurityTokenHandler>()
                 .AddSingleton(
                     sp =>
                     {
-                        var _tokenConfiguration = sp.GetRequiredService<ITokenConfiguration>();
                         return new SigningCredentials(
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenConfiguration.SecurityKey)),
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.SecurityKey)),
                             SecurityAlgorithms.HmacSha256Signature
                         );
                     }
                 )
                 .AddScoped<ITokenService, TokenService>();
+
+            services
+                .AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,opt =>
+                {
+                    opt.TokenValidationParameters = new()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.SecurityKey)),
+                        ValidIssuer = tokenConfiguration.Issuer,
+                        ValidAudience = tokenConfiguration.Audiences[0],
+
+                        ValidateIssuerSigningKey = true,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidateLifetime = true,
+                    };
+                });
+
+            return services;
         }
 
     }

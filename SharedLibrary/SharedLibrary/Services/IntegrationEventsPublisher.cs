@@ -8,8 +8,8 @@ namespace SharedLibrary.Services
     public class IntegrationEventsPublisher : IIntegrationEventsPublisher
     {
         private readonly ConnectionFactory _connectionFactory;
-        private IConnection _connection;
-        private IModel _channel;
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
         
         public IntegrationEventsPublisher(string hostName,int port)
         {

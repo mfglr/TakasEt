@@ -4,10 +4,11 @@ using SharedLibrary.Services;
 
 namespace SharedLibrary.Entities
 {
-    public abstract class Entity : Entity<int>
-    {
 
-    }
+	public abstract class Entity : Entity<int>
+	{
+
+	}
 
 	public abstract class Entity<TKey> : IEntity<TKey>
 	{
@@ -17,7 +18,6 @@ namespace SharedLibrary.Entities
 
 		public void SetCreatedDate() => CreatedDate = DateTime.Now;
 		public void SetUpdatedDate() => UpdatedDate = DateTime.Now;
-
 		//IRemovable
 		public bool IsRemoved { get; protected set; }
 		public DateTime? RemovedDate { get; protected set; }

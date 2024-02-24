@@ -7,7 +7,7 @@ namespace AuthService.Core.ValueObjects
 
         public string Name { get; private set; }
 
-        public readonly static TokenProvider RefreshTokenProvider = new TokenProvider() { Name = "refresh_token_provider" };
+        public readonly static TokenProvider RefreshTokenProvider = new () { Name = "refresh_token_provider" };
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

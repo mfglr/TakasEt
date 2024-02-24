@@ -18,7 +18,7 @@ namespace NotificationMicroservice.SharedLibrary
 
             using var reader = new StreamReader(file);
             var json = reader.ReadToEnd();
-            var mongoDbSettings = JsonConvert.DeserializeObject<MongoDBSettings>(json);
+            var mongoDbSettings = JsonConvert.DeserializeObject<MongoDBSettings>(json)!;
             return services
                 .AddSingleton<IMongoDBSettings>(mongoDbSettings)
                 .AddSingleton(typeof(NotificationService<>));

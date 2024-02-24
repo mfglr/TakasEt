@@ -18,7 +18,7 @@ namespace UserService.Api.Controllers
 
 
         [HttpPost]
-        public async Task<AppResponseDto> Follow(FollowDto request,CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Follow(FollowDto request,CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }

@@ -4,8 +4,8 @@ namespace AuthService.Core.Abstracts
 {
     public interface ITokenService
     {
-        Task<string> CreateRefreshTokenAsync(UserAccount user);
+        Task<string> CreateRefreshTokenAsync(string userId);
         Task<bool> VerifyRefreshTokenAsync(UserAccount user, string token);
-        string CreateAccessToken(UserAccount user);
+        Task<string> CreateAccessTokenAsync(string userId);
     }
 }

@@ -3,7 +3,7 @@ using SharedLibrary.Dtos;
 
 namespace AuthService.Application.Dtos
 {
-    public class SignUpByEmailDto : IRequest<AppResponseDto>
+    public class SignUpByEmailDto : IRequest<IAppResponseDto>
     {
         public string Email { get; set; }
         public string UserName { get; set; }

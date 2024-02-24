@@ -3,6 +3,7 @@ using AuthService.Core.Entities;
 using AuthService.Core.ValueObjects;
 using AuthService.Infrastructure.Extentions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
 using SharedLibrary.Exceptions;
@@ -21,6 +22,7 @@ namespace AuthService.Infrastructure.Services
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
+
         public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<UserAccount> userManager)
         {
             _tokenConfiguration = tokenConfiguration;
@@ -29,14 +31,21 @@ namespace AuthService.Infrastructure.Services
             _userManager = userManager;
         }
 
-        private IEnumerable<Claim> GetClaims(UserAccount user)
+        private IEnumerable<Claim> GetClaims(UserAccount user,List<string> roles)
         {
+
+            var countOfBlocking = user.UsersWhoBlockedTheEntity.Count() + user.UsersTheEntiyBlocked.Count();
+
             var claims = new List<Claim>()
             {
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Role, Role.User.Name),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())//Token id
+                new Claim(CustomClaimTypes.ProfileVisibility.Value,(!user.IsPrivateAccount).ToString()),
+                new Claim(CustomClaimTypes.CountOfBlocking.Value,countOfBlocking.ToString()),
             };
+
+            foreach(var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
 
             claims.AddRange(
                 _tokenConfiguration
@@ -45,11 +54,23 @@ namespace AuthService.Infrastructure.Services
                         auidence => new Claim(JwtRegisteredClaimNames.Aud, auidence)
                     )
             );
+
+            if (countOfBlocking <= 10)
+            {
+                foreach (var blocker in user.UsersWhoBlockedTheEntity)
+                    claims.Add(new Claim(CustomClaimTypes.BlockerUser.Value, blocker.BlockerId));
+                foreach (var blocked in user.UsersTheEntiyBlocked)
+                    claims.Add(new Claim(CustomClaimTypes.BlockedUser.Value, blocked.BlockedId));
+            }
+            
             return claims;
         }
 
-        public async Task<string> CreateRefreshTokenAsync(UserAccount user)
+        public async Task<string> CreateRefreshTokenAsync(string userId)
         {
+            var user = 
+                await _userManager.FindByIdAsync(userId) ??
+                throw new AppException("User not found!", HttpStatusCode.NotFound);
 
             // update security stamp to revoke previous refresh token.
             var result = await _userManager.UpdateSecurityStampAsync(user);
@@ -82,13 +103,23 @@ namespace AuthService.Infrastructure.Services
                 );
         }
 
-        public string CreateAccessToken(UserAccount user)
+        public async Task<string> CreateAccessTokenAsync(string userId)
         {
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+
+            var user = await _userManager
+                .Users
+                .Include(x => x.UsersWhoBlockedTheEntity)
+                .Include(x => x.UsersTheEntiyBlocked)
+                .FirstOrDefaultAsync(x => x.Id == userId) ?? 
+                throw new AppException("User not found!", HttpStatusCode.NotFound);
+
+            var roles = (await _userManager.GetRolesAsync(user)).ToList();
+
+            JwtSecurityToken jwtSecurityToken = new (
                 issuer : _tokenConfiguration.Issuer,
                 expires : DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration),
                 notBefore : DateTime.Now,
-                claims : GetClaims(user),
+                claims : GetClaims(user,roles),
                 signingCredentials : _signingCredentials
             );
             string token;
@@ -96,7 +127,7 @@ namespace AuthService.Infrastructure.Services
             {
                 token = _jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
             }
-            catch ( Exception ex )
+            catch (Exception)
             {
                 throw new AppException(
                     "There are some issues, When creating access token!",
