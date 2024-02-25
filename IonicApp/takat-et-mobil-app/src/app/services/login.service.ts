@@ -13,11 +13,11 @@ export class LoginService {
   ) { }
 
   login(email : string,password : string): Observable<LoginResponse>{
-    return this.httpClient.post<LoginResponse>("login",{email : email,password : password});
+    return this.httpClient.post<LoginResponse>("7166/login/loginbyemail",{email : email,password : password});
   }
 
   loginByRefreshToken(refreshToken : string): Observable<LoginResponse>{
-    return this.httpClient.post<LoginResponse>("login-by-refresh-token",{refreshToken : refreshToken});
+    return this.httpClient.post<LoginResponse>("7166/loginbyrefreshtoken",{refreshToken : refreshToken});
   }
 
 }

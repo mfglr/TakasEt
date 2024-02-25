@@ -66,8 +66,10 @@ namespace AuthService.Infrastructure.Services
             return claims;
         }
 
-        public async Task<string> CreateRefreshTokenAsync(string userId)
+        public async Task<Token> CreateRefreshTokenAsync(string userId)
         {
+
+            var expirationDate = DateTime.Now.AddMinutes(_tokenConfiguration.RefreshTokenExpiration);
             var user = 
                 await _userManager.FindByIdAsync(userId) ??
                 throw new AppException("User not found!", HttpStatusCode.NotFound);
@@ -77,19 +79,19 @@ namespace AuthService.Infrastructure.Services
             if (!result.Succeeded)
                 throw new AppException(result.GetErrors(), HttpStatusCode.InternalServerError);
 
-            var refreshToken = await _userManager
+            var token = await _userManager
                 .GenerateUserTokenAsync(
                     user,
                     TokenProvider.RefreshTokenProvider.Name,
                     "RefreshToken"
                 );
 
-            if (string.IsNullOrEmpty(refreshToken))
+            if (string.IsNullOrEmpty(token))
                 throw new AppException(
                     "There are some issues, When creating refresh token!",
                     HttpStatusCode.InternalServerError
                 );
-            return refreshToken;
+            return new Token(expirationDate, token);
         }
 
         public async Task<bool> VerifyRefreshTokenAsync(UserAccount user,string token)
@@ -103,9 +105,9 @@ namespace AuthService.Infrastructure.Services
                 );
         }
 
-        public async Task<string> CreateAccessTokenAsync(string userId)
+        public async Task<Token> CreateAccessTokenAsync(string userId)
         {
-
+            var expirationDate = DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration);
             var user = await _userManager
                 .Users
                 .Include(x => x.UsersWhoBlockedTheEntity)
@@ -117,7 +119,7 @@ namespace AuthService.Infrastructure.Services
 
             JwtSecurityToken jwtSecurityToken = new (
                 issuer : _tokenConfiguration.Issuer,
-                expires : DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration),
+                expires : expirationDate,
                 notBefore : DateTime.Now,
                 claims : GetClaims(user,roles),
                 signingCredentials : _signingCredentials
@@ -134,7 +136,7 @@ namespace AuthService.Infrastructure.Services
                     HttpStatusCode.InternalServerError
                 );
             }
-            return token;
+            return new (expirationDate,token);
         }
         
     }

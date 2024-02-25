@@ -74,7 +74,7 @@ namespace AuthService.Web.Extentions
             var tokenConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokenConfiguration>>().Value;
 
             services
-                .AddSingleton<ITokenConfiguration>(sp => tokenConfiguration)
+                .AddSingleton<ITokenConfiguration>(tokenConfiguration)
                 .AddSingleton<JwtSecurityTokenHandler>()
                 .AddSingleton(
                     sp =>

@@ -26,21 +26,27 @@ namespace AuthService.Application.Commands
 
         public async Task<IAppResponseDto> Handle(LoginByRefreshTokenDto request, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
-            
+
             var user = await _userManager.FindByIdAsync(request.UserId);
             if (
                 user == null ||
                 !await _tokenService.VerifyRefreshTokenAsync(user, request.Token)
             )
                 throw new AppException("Invalid token!", HttpStatusCode.BadRequest);
+
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
+            
+            var refreshToken = await _tokenService.CreateRefreshTokenAsync(user.Id);
+            var accessToken = await _tokenService.CreateAccessTokenAsync(user.Id);
             var response = new LoginResponseDto()
             {
                 UserId = user.Id,
-                AccessToken = await _tokenService.CreateAccessTokenAsync(user.Id),
-                RefreshToken = await _tokenService.CreateRefreshTokenAsync(user.Id),
+                AccessToken = accessToken.Value,
+                ExpirationDateOfAccessToken = accessToken.ExpirationDate,
+                RefreshToken = refreshToken.Value,
+                ExpirationDateOfRefreshToken = refreshToken.ExpirationDate
             };
-            
+
             await _unitOfWork.CommitAsync(cancellationToken);
             
             return new AppGenericSuccessResponseDto<LoginResponseDto>(response);

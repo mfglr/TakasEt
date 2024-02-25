@@ -20,6 +20,19 @@ builder.Services
         }
     );
 
+builder.Services.AddCors(
+    options => {
+        options.AddPolicy(
+            "local",
+            policy => policy
+                .WithOrigins("http://localhost:4200", "http://localhost:8100")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+        );
+    }
+);
+
 builder.Services.AddScoped<AccountNotFoundFilter>();
 
 builder.Services.AddScoped<UserAccountService>();
@@ -37,6 +50,7 @@ var app = builder.Build();
 
 app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
+app.UseCors("local");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

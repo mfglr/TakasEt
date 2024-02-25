@@ -4,21 +4,17 @@ import { Observable, first, from, map, mergeMap } from 'rxjs';
 import { AppResponse } from '../models/responses/app-response';
 import { CapacitorHttp } from '@capacitor/core';
 import { NoContentResponse } from '../models/responses/no-content-response';
-import { AppState } from '../state/reducer';
 import { selectAccessToken } from '../state/selector';
+import { LoginState } from '../login/state/reducer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NativeHttpClientService {
 
-  private baseUrl : string = 'https://localhost:7160/api'
+  constructor( private loginStore : Store<LoginState> ) { }
 
-  constructor(
-    private appStore : Store<AppState>
-  ) { }
-
-  private getHttpHeaders$ : Observable<any> = this.appStore.select(selectAccessToken).pipe(
+  private getHttpHeaders$ : Observable<any> = this.loginStore.select(selectAccessToken).pipe(
     first(),
     map(accessToken => {
       if(accessToken) return { "Authorization" : `Bearer ${accessToken}`, 'Content-Type': 'application/json' }
@@ -28,7 +24,7 @@ export class NativeHttpClientService {
 
   get<T>(url : string) : Observable<T>{
     return this.getHttpHeaders$.pipe(
-      mergeMap(headers => from(CapacitorHttp.get({url : `${this.baseUrl}/${url}`,headers : headers}))),
+      mergeMap(headers => from(CapacitorHttp.get({url : url,headers : headers}))),
       map(response => (response.data as AppResponse<T>).data)
     )
   }
@@ -37,7 +33,7 @@ export class NativeHttpClientService {
     return this.getHttpHeaders$.pipe(
       mergeMap(
         (headers) => from(
-          CapacitorHttp.get({ url : `${this.baseUrl}/${url}`, headers : headers, responseType : "blob" })
+          CapacitorHttp.get({ url : url, headers : headers, responseType : "blob" })
         )
       ),
       map(x => `data:image/jpeg;base64,${x.data}`)
@@ -49,7 +45,7 @@ export class NativeHttpClientService {
       mergeMap(
         headers => from(
           CapacitorHttp.post({
-            url : `${this.baseUrl}/${url}`,
+            url : url,
             headers : headers,
             data : request
           })
@@ -64,7 +60,7 @@ export class NativeHttpClientService {
       mergeMap(
         headers => from(
           CapacitorHttp.put({
-            url : `${this.baseUrl}/${url}`,
+            url : url,
             headers : headers,
             data : request
           })
@@ -79,7 +75,7 @@ export class NativeHttpClientService {
       mergeMap(
         headers => from(
           CapacitorHttp.delete({
-            url : `${this.baseUrl}/${url}`,
+            url : url,
             headers : headers,
           })
         )
@@ -87,7 +83,5 @@ export class NativeHttpClientService {
       map(response => (response.data as AppResponse<NoContentResponse>).data)
     )
   }
-
-
 
 }

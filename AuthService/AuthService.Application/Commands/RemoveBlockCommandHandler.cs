@@ -49,11 +49,16 @@ namespace AuthService.Application.Commands
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
             blockedUser.RemoveBlock(loginUserId);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var refreshToken = await _tokenService.CreateRefreshTokenAsync(loginUserId);
+            var accessToken = await _tokenService.CreateAccessTokenAsync(loginUserId);
             var response = new LoginResponseDto()
             {
                 UserId = loginUserId,
-                AccessToken = await _tokenService.CreateAccessTokenAsync(loginUserId),
-                RefreshToken = await _tokenService.CreateRefreshTokenAsync(loginUserId),
+                AccessToken = accessToken.Value,
+                ExpirationDateOfAccessToken = accessToken.ExpirationDate,
+                RefreshToken = refreshToken.Value,
+                ExpirationDateOfRefreshToken = refreshToken.ExpirationDate
             };
             await _unitOfWork.CommitAsync(cancellationToken);
 

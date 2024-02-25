@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { register } from 'swiper/element/bundle';
-import { AppState } from './state/reducer';
-import { loadUserAction, loginFromLocalStorageAction } from './state/actions';
-import { selectIsLogin } from './state/selector';
-import { ChatHubConnectionService } from './services/chat-hub-connection.service';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { LoginState } from './login/state/reducer';
+import { selectIsLogin } from './login/state/selectors';
+import { loginByLocalStorageAction } from './login/state/actions';
+import { Router } from '@angular/router';
 register();
 
 @Component({
@@ -16,50 +15,28 @@ register();
 })
 export class AppComponent {
 
+  isLogin$ : Observable<boolean> = this.loginStore.select(selectIsLogin);
 
-  private baseUrl : string = "https://localhost:7153/conversation";
-  private hubConnection = new HubConnectionBuilder().withUrl(`${this.baseUrl}`).build();
+  constructor(
+    private loginStore : Store<LoginState>,
+    private router : Router
+  ) {}
 
-  constructor() {
+  ngOnInit() {
+    this.loginStore.dispatch(loginByLocalStorageAction())
 
-  }
-
-  ngOnInit(){
-
-    // user 1 : 6ae86a2a-8d86-429f-bb49-f033b6115c6d
-    // user 2
-
-
-    this.hubConnection.start().then(
-      () => {
-        this.hubConnection.invoke("Connect","e293d987-e1a5-487c-87d6-752122b46e03")
+    this.isLogin$.subscribe(
+      islogin => {
+        console.log(islogin);
+        if(!islogin)
+          this.router.navigateByUrl("/login")
+        else
+          this.router.navigateByUrl("/messages")
       }
-    );
+    )
   }
 
-
-  // isLogin$ : Observable<boolean> = this.appStore.select(selectIsLogin);
-
-  // constructor(
-  //   private appStore : Store<AppState>,
-  //   private messageHub : ChatHubConnectionService,
-  // ) {}
-
-  // ngOnInit() {
-  //   this.appStore.dispatch(loginFromLocalStorageAction())
-
-  //   this.isLogin$.subscribe(isLogin => {
-  //     if(isLogin){
-  //       this.appStore.dispatch(loadUserAction())
-  //       this.messageHub.start()
-  //     }
-  //   })
-  // }
-
-  // login(){}
-
-  // ngOnDestroy(){
-  //   this.messageHub.stop();
-  // }
+  ngOnDestroy(){
+  }
 
 }

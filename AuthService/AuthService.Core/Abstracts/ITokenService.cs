@@ -1,11 +1,12 @@
 ﻿using AuthService.Core.Entities;
+using AuthService.Core.ValueObjects;
 
 namespace AuthService.Core.Abstracts
 {
     public interface ITokenService
     {
-        Task<string> CreateRefreshTokenAsync(string userId);
+        Task<Token> CreateRefreshTokenAsync(string userId);
         Task<bool> VerifyRefreshTokenAsync(UserAccount user, string token);
-        Task<string> CreateAccessTokenAsync(string userId);
+        Task<Token> CreateAccessTokenAsync(string userId);
     }
 }

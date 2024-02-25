@@ -9,6 +9,7 @@ const routes: Routes = [
   },
   { path: 'place', loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule) },
   { path : 'messages', loadChildren: () => import('src/app/message/message.module').then( m => m.MessageModule) },
+  { path: 'login',loadChildren: () => import('./login/login.module').then( m => m.LoginModule) },
 ];
 
 @NgModule({

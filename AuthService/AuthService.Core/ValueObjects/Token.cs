@@ -1,25 +1,22 @@
-﻿namespace SharedLibrary.ValueObjects
+﻿using SharedLibrary.ValueObjects;
+
+namespace AuthService.Core.ValueObjects
 {
     public class Token : ValueObject
     {
-
-        public string Key { get; private set; }
         public DateTime ExpirationDate { get; private set; }
+        public string Value { get; private set; }
 
-        public Token(string key, DateTime expirationDate)
+        public Token(DateTime expirationDate, string value)
         {
-            Key = key;
             ExpirationDate = expirationDate;
+            Value = value;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Key;
             yield return ExpirationDate;
+            yield return Value;
         }
-
-
-
-
     }
 }

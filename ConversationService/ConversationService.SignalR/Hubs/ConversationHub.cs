@@ -34,7 +34,6 @@ namespace ConversationService.SignalR.Hubs
             }
             await Clients.Caller.SendAsync("ConnectionCompleted", response);
         }
-
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             IAppResponseDto response;
@@ -49,7 +48,6 @@ namespace ConversationService.SignalR.Hubs
                     .SendAsync("DisconnectionFailed", new AppFailResponseDto(ex.Message));
             }
         }
-
         public async Task SendMessage(SaveMessageDto request)
         {
             IAppResponseDto response;
@@ -81,7 +79,6 @@ namespace ConversationService.SignalR.Hubs
                     .Clients(receiver.ConnectionId!)
                     .SendAsync("receiveMessage",response);
         }
-
         public async Task SendMessageReceivedNotification(SendMessageReceivedNotificationDto request)
         {
             IAppResponseDto response;
@@ -101,7 +98,6 @@ namespace ConversationService.SignalR.Hubs
             if(message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
                 await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageReceived", response);
         }
-
         public async Task SendMessageViewedNotification(SendMessageViewedNotificationDto request)
         {
             IAppResponseDto response;
@@ -121,7 +117,6 @@ namespace ConversationService.SignalR.Hubs
             if (message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
                 await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageViewed", response);
         }
-
         public async Task LikeMessage(LikeMessageDto request)
         {
             IAppResponseDto response;
@@ -144,6 +139,5 @@ namespace ConversationService.SignalR.Hubs
             if (message != null && message.Sender.IsConnected && message.Sender.ConnectionId != null)
                 await Clients.Clients(message.Sender.ConnectionId).SendAsync("messageLiked", response);
         }
-
     }
 }

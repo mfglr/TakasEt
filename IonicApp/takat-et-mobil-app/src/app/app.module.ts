@@ -8,10 +8,10 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { LoginModule } from './shareds/login/login.module';
 import { AppEffect } from './state/effect';
 import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module';
 import { appReducer } from './state/reducer';
+import { LoginModule } from './login/login.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,6 @@ import { appReducer } from './state/reducer';
     EffectsModule.forRoot(),
     EffectsModule.forFeature([AppEffect]),
     SwiperHeaderModule,
-
     LoginModule,
   ],
   providers: [
