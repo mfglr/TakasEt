@@ -24,7 +24,7 @@ class AppEntityAdapter<T extends BaseResponse>{
     return {
       entities : this.adapter.getInitialState(),
       isLastEntities : false,
-      page : { lastId : undefined, take : this.take },
+      page : { lastDate : undefined, take : this.take },
     }
   }
 
@@ -33,7 +33,10 @@ class AppEntityAdapter<T extends BaseResponse>{
       entities : this.adapter.addMany(entities,state.entities),
       isLastEntities : entities.length < this.take,
       page : {
-        lastId : entities.length > 0 ? entities[entities.length - 1].id : state.page.lastId,
+        lastDate :
+          entities.length > 0 ?
+          entities[entities.length - 1].createdDate :
+          state.page.lastDate,
         take : this.take
       }
     }
@@ -44,7 +47,10 @@ class AppEntityAdapter<T extends BaseResponse>{
       entities : this.adapter.addMany(entities,state.entities),
       isLastEntities : entities.length < this.take,
       page : {
-        lastId : entities.length > 0 ? entities[entities.length - 1].id : state.page.lastId,
+        lastDate :
+          entities.length > 0 ?
+          entities[entities.length - 1].createdDate :
+          state.page.lastDate,
         take : this.take
       }
     }

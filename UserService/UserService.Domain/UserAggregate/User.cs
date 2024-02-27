@@ -12,7 +12,6 @@ namespace UserService.Domain.UserAggregate
         IAggregateRoot,
         IViewableByUsers<Viewing, Guid>,
         IFollowableByUsers<Following, Guid>,
-        IBlockableByUsers<Blocking, Guid>
     {
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
@@ -32,7 +31,6 @@ namespace UserService.Domain.UserAggregate
 
         public User() { }
         public User(string accountId) => Id = Guid.Parse(accountId);
-
 
         //IRemovable
         public override void Remove()
@@ -74,8 +72,8 @@ namespace UserService.Domain.UserAggregate
         public void MakeProfileVisible() => IsPrivateProfile = false;
         
         //user images
-        private readonly List<UserImage> _userImages = new ();
-        public IReadOnlyCollection<UserImage> UserImages => _userImages;
+        private readonly List<UserImage> _images = new ();
+        public IReadOnlyCollection<UserImage> Images => _images;
         public void AddImage(string blobName,string extention,Dimension dimension)
         {
             _userImages.Add(new UserImage(blobName, extention, dimension));
@@ -89,10 +87,10 @@ namespace UserService.Domain.UserAggregate
         }
         public void DeleteImage(Guid imageId)
         {
-            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            var image = _images.FirstOrDefault(x => x.Id == imageId);
             if (image == null)
                 throw new AppException("User image was not found!", HttpStatusCode.NotFound);
-            _userImages.Remove(image);
+            _images.Remove(image);
         }
 
         //IViewableByUsers
@@ -110,34 +108,6 @@ namespace UserService.Domain.UserAggregate
             return _usersWhoViewedTheEntity.Any(x => x.ViewerId == viewerId);
         }
 
-        //IBlockableByUsers
-        private readonly List<Blocking> _usersWhoBlockedTheEntity = new();
-        public IReadOnlyCollection<Blocking> UsersWhoBlockedTheEntity => _usersWhoBlockedTheEntity;
-        public IReadOnlyCollection<Blocking> UsersTheEntityBlocked { get; }
-        public void Block(Guid blockerId)
-        {
-            var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
-            if (record != null)
-            {
-                if (!record.IsRemoved)
-                    throw new AppException("You are already blocked the user!", HttpStatusCode.BadRequest);
-                record.Reinsert();
-            }
-            var blocking = new Blocking(blockerId);
-            _usersWhoBlockedTheEntity.Add(blocking);
-        }
-        public void RemoveBlock(Guid blockerId)
-        {
-            var record = _usersWhoBlockedTheEntity.FirstOrDefault(x => x.BlockerId == blockerId);
-            if (record == null)
-                throw new AppException("You are not blocked the user!", HttpStatusCode.BadRequest);
-            _usersWhoBlockedTheEntity.Remove(record);
-        }
-        public bool IsBlocked(Guid blockerId)
-        {
-            return _usersWhoBlockedTheEntity.Any(x => x.BlockedId == blockerId);
-        }
-
         //IFollowableByUsers
         private readonly List<Following> _usersWhoFollowedTheEntity = new();
         private readonly List<Following> _usersTheEntityFollowed = new();
@@ -145,23 +115,8 @@ namespace UserService.Domain.UserAggregate
         public IReadOnlyCollection<Following> UsersTheEntityFollowed => _usersTheEntityFollowed;
         public Following Follow(Guid followerId)
         {
-            if (UsersTheEntityBlocked.Any(x => x.BlockedId == followerId))
-                throw new AppException(
-                    "You don't have any access",
-                    HttpStatusCode.Forbidden
-                );
-
-            if (_usersWhoBlockedTheEntity.Any(x => x.BlockerId == followerId))
-                throw new AppException(
-                    "You musn't make a request to follow user before removing the block!",
-                    HttpStatusCode.BadRequest
-                );
-
             if (_usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId))
-                throw new AppException(
-                    "You already follow the user!",
-                    HttpStatusCode.BadRequest
-                );
+                throw new AppException("You already follow the user!",HttpStatusCode.BadRequest);
             
             var LastRequest = _usersWhoFollowedTheEntity.FirstOrDefault();
             if (LastRequest != null && LastRequest.State == FollowingState.Pending)
@@ -174,7 +129,7 @@ namespace UserService.Domain.UserAggregate
 
             if (IsPrivateProfile)
             {
-                following.MakeStatePending();
+                following.MarkAsPending();
                 AddIntegrationEvent( new RequestToFollowUserCreatedEvent(followerId, Id) );
             }
             else
@@ -184,10 +139,14 @@ namespace UserService.Domain.UserAggregate
         }
         public void Unfollow(Guid followerId)
         {
+            var index = _usersWhoFollowedTheEntity.FindIndex(x => x.FollowerId == followerId);
+            if (index == -1)
+                throw new AppException("You have not followed the user before!", HttpStatusCode.BadRequest);
+            _usersWhoFollowedTheEntity.RemoveAt(index);
         }
         public bool IsFollowing(Guid followerId)
         {
-            throw new NotImplementedException();
+            return _usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId);
         }
 
     }

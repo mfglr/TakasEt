@@ -2,13 +2,17 @@
 
 namespace SharedLibrary.Entities
 {
-    public interface IEntity<TKey> : IRemovable, IDomainEventContainer, IIntegrationEventsContainer
+
+    public interface IEntity
     {
-        TKey Id { get; }
         DateTime CreatedDate { get; }
         DateTime? UpdatedDate { get; }
-
         void SetCreatedDate();
         void SetUpdatedDate();
+    }
+
+    public interface IEntity<TKey> : IEntity, IRemovable, IDomainEventContainer, IIntegrationEventsContainer
+    {
+        TKey Id { get; }
     }
 }

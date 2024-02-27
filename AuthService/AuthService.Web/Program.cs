@@ -25,7 +25,7 @@ builder.Services.AddCors(
         options.AddPolicy(
             "local",
             policy => policy
-                .WithOrigins("http://localhost:4200", "http://localhost:8100")
+                .WithOrigins("http://localhost:4200", "https://localhost:8100")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
@@ -39,7 +39,9 @@ builder.Services.AddScoped<UserAccountService>();
 builder.Services.AddScoped<BlockingCheckerService>();
 
 builder.Services.AddCustomDbContext();
-builder.Services.AddCustomIdentity();
+builder.Services
+    .AddCustomIdentity()
+    .AddThirdPartyAuhentication();
 builder.Services.AddJWT();
 builder.Services.AddApp();
 builder.Services.AddIntegrationEventsPublisher();

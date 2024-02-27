@@ -3,6 +3,6 @@
 	public interface IPage
 	{
 		int? Take { get; }
-		int? LastId { get; }
+		DateTime? LastDate { get; }
 	}
 }

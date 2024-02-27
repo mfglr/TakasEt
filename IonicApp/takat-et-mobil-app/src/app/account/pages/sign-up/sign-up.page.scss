@@ -1,0 +1,29 @@
+.root{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    .login-button{
+      width: 100%;
+    }
+  }
+  .sign-up-card{
+    padding: 0.5rem;
+    .text{
+      font-size: 1.15rem;
+      .link{
+
+      }
+    }
+  }
+}
+
+

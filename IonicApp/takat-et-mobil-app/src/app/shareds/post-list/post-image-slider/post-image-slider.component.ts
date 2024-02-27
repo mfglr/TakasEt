@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/state/reducer';
+import { AppState } from 'src/app/shareds/profile-image/state/reducer';
 import { loadPostImageUrlAction } from 'src/app/state/actions';
 
 

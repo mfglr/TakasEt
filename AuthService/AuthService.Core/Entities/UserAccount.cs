@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using SharedLibrary.Entities;
 using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
+using SharedLibrary.Extentions;
 using SharedLibrary.Services;
 using System.Net;
 
@@ -15,9 +16,9 @@ namespace AuthService.Core.Entities
         IAggregateRoot
     {
         
-        public UserAccount(string email,string userName)
+        public UserAccount(string email)
         {
-            UserName = userName;
+            UserName = $"{email.GetFirstSectionOfEmail()}_{Guid.NewGuid()}";
             Email = email;
         }
 

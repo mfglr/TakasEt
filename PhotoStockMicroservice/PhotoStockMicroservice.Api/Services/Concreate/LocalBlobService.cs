@@ -81,7 +81,7 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
             catch (Exception ex)
 			{
                 Delete(containerName, blobName);
-                throw new AppException("There have been some issues while uploading the file. Upload failed!", HttpStatusCode.BadRequest);
+                throw new AppException($"{ex.Message}.\nUpload failed!", HttpStatusCode.BadRequest);
             }
 
 			return new ImageResponDto(){

@@ -35,31 +35,6 @@ namespace SharedLibrary
                 .AddSingleton<IntegrationEventsSubscriber>();
         }
 
-        public static IServiceCollection AddAppSharedLibrary(this IServiceCollection services)
-        {
-            return services
-                .AddRabbitMQ()
-                .AddSingleton(
-                    sp => new JsonSerializerSettings()
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                    }
-                );
-               
-        }
-
-        public static IServiceCollection AddJsonSerializerSettingsForCustomExceptionMiddleware(this IServiceCollection services)
-        {
-            return services
-                .AddSingleton(
-                    sp => new JsonSerializerSettings()
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                    }
-                );
-        }
-
-
         public static IServiceCollection AddIntegrationEventsPublisher(this IServiceCollection services)
         {
             var path = GetPathHelper.Run("rabbitmqsettings.json");

@@ -1,13 +1,19 @@
 <div class="root-wrapper" [style]='style'>
 
-  <ng-container *ngIf="loadStatus$ | async; else loadingTemplate">
-    <img class="image" [src]="url$ | async" [alt]="">
+  <ng-container *ngIf="user && user.userImage else noProfileImageTemplate">
+    <ng-container *ngIf="url$">
+      <img class="image" [src]="url$ | async" [alt]="user.userName">
+    </ng-container>
+
+    <ng-template #loadingTemplate>
+      <ion-item class="loading" [lines]="false">
+        <ion-spinner name="circular"></ion-spinner>
+      </ion-item>
+    </ng-template>
   </ng-container>
 
-  <ng-template #loadingTemplate>
-    <ion-item class="loading" [lines]="false">
-      <ion-spinner name="circular"></ion-spinner>
-    </ion-item>
+  <ng-template #noProfileImageTemplate>
+    <img class="image" src="/www/assets/images/no_profile_image.png" alt="no profile image">
   </ng-template>
 
 </div>

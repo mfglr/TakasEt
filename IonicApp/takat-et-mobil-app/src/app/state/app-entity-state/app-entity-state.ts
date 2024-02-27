@@ -10,7 +10,7 @@ export const takeValueOfStories = 10;
 
 export interface Page{
   take : number;
-  lastId : number | undefined;
+  lastDate : string | undefined;
 }
 
 export interface AppEntityState<T extends BaseResponse>{

@@ -8,10 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { AppEffect } from './state/effect';
-import { SwiperHeaderModule } from './shareds/swiper-header/swiper-header.module';
-import { appReducer } from './state/reducer';
-import { LoginModule } from './login/login.module';
+import { AccountModule } from './account/account.module';
 
 @NgModule({
   declarations: [
@@ -21,14 +18,10 @@ import { LoginModule } from './login/login.module';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-
     StoreModule.forRoot(),
-    StoreModule.forFeature("AppStore",appReducer),
-
     EffectsModule.forRoot(),
-    EffectsModule.forFeature([AppEffect]),
-    SwiperHeaderModule,
-    LoginModule,
+
+    AccountModule,
   ],
   providers: [
     { provide : RouteReuseStrategy, useClass: IonicRouteStrategy },

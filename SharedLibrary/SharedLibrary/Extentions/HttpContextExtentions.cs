@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
@@ -12,7 +11,7 @@ namespace SharedLibrary.Extentions
 {
     public static class HttpContextExtentions
     {
-        public static async Task WriteExceptionAsync(this HttpContext context, AppException ex)
+        public static async Task WriteAppExceptionAsync(this HttpContext context, AppException ex)
         {
             var body = Encoding.ASCII.GetBytes(
                 JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message))
@@ -20,6 +19,15 @@ namespace SharedLibrary.Extentions
             context.Response.StatusCode = (int)ex.StatusCode;
             await context.Response.Body.WriteAsync(body, 0, body.Length);
         }
+
+        public static async Task WriteExceptionAsync(this HttpContext context, Exception ex)
+        {
+            var body = Encoding.ASCII.GetBytes(
+                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message))
+            );
+            await context.Response.Body.WriteAsync(body, 0, body.Length);
+        }
+
 
         public static int? GetInt(this HttpContext context,string type)
         {

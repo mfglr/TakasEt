@@ -66,13 +66,24 @@ namespace AuthService.Web.Extentions
             return services;
         }
 
+        public static IServiceCollection AddThirdPartyAuhentication(this IServiceCollection services)
+        {
+            var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = configuration["Authentication:Facebook:AppId"]!;
+                facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"]!;
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddJWT(this IServiceCollection services)
         {
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
-
-            var tokenConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokenConfiguration>>().Value;
-
+            var tokenConfiguration = configuration.GetSection("TokenConfiguration").Get<TokenConfiguration>()!;
+      
             services
                 .AddSingleton<ITokenConfiguration>(tokenConfiguration)
                 .AddSingleton<JwtSecurityTokenHandler>()

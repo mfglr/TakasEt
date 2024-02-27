@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="root">
+    <form [formGroup]="signUpForm" class="form">
+
+      <ion-input type="email" labelPlacement="stacked" label="Email *" formControlName="email" placeholder="email@domain.com">
+        <ion-icon slot="start" name="mail-outline" aria-hidden="true" style="font-size: 1.5rem;"></ion-icon>
+      </ion-input>
+      <div *ngIf="!email.valid && (email.dirty || email.touched)">
+        <span *ngIf="email.hasError('required')" style="color:#ee4152">
+          This field is required!
+        </span>
+        <span *ngIf="email.hasError('email')" style="color:#ee4152">
+          It is not an email!
+        </span>
+      </div>
+
+      <ion-input [type]="isVisible ? 'text' : 'password'" labelPlacement="stacked" label="Password *" formControlName="password" placeholder="******">
+        <ion-icon slot="start" name="lock-closed" aria-hidden="true" style="font-size: 1.5rem;"></ion-icon>
+        <ion-button fill="clear" slot="end" aria-label="Show/hide" (click)="changePasswordVisibility()">
+
+          <ng-container *ngIf="!isVisible else template">
+            <ion-icon slot="icon-only" name="eye-off-outline" aria-hidden="true"></ion-icon>
+          </ng-container>
+          <ng-template #template>
+            <ion-icon slot="icon-only" name="eye" aria-hidden="true"></ion-icon>
+          </ng-template>
+
+        </ion-button>
+      </ion-input>
+      <div *ngIf="!password.valid && (password.dirty || password.touched)">
+        <span *ngIf="password.hasError('required')" style="color:#ee4152">
+          This field is required!
+        </span>
+        <span *ngIf="password.hasError('minlength')" style="color:#ee4152">
+          This field must be greater than 9 characters!
+        </span>
+      </div>
+
+      <ion-input [type]="isVisible ? 'text' : 'password'" labelPlacement="stacked" label="Confirm Password *" formControlName="confirmPassword" placeholder="******">
+        <ion-icon slot="start" name="lock-closed" aria-hidden="true" style="font-size: 1.5rem;"></ion-icon>
+      </ion-input>
+      <div *ngIf="!signUpForm.valid && (confirmPassword.dirty || confirmPassword.touched)">
+        <span *ngIf="signUpForm.hasError('notmatch')" style="color:#ee4152">
+          it does not match password!
+        </span>
+      </div>
+
+      <button class="btn btn-primary login-button" (click)="signUp()">Sign Up</button>
+    </form>
+
+    <ion-card class="sign-up-card">
+      <span class="text">Already have an account?<a routerLink="/account/login" class="link"> Sign In</a></span>
+    </ion-card>
+
+  </div>
+
+
+
+</ion-content>

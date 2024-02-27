@@ -24,16 +24,6 @@ namespace UserService.Application.Commands
                 .Users
                 .Include(
                     x => x
-                        .UsersWhoBlockedTheEntity
-                        .Where(x => x.BlockerId == request.FollowerId && !x.IsRemoved)
-                )
-                .Include(
-                    x => x
-                        .UsersTheEntityBlocked
-                        .Where(x => x.BlockedId == request.FollowerId && !x.IsRemoved)
-                )
-                .Include(
-                    x => x
                         .UsersWhoFollowedTheEntity
                         .Where(x => x.FollowerId == request.FollowerId && !x.IsRemoved)
                         .OrderByDescending(x => x.CreatedDate)

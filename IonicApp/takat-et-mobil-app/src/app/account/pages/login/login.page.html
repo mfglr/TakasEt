@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+
+  <div class="root">
+    <form [formGroup]="loginForm" class="form">
+
+      <div class="email-wrapper">
+        <ion-input type="email" labelPlacement="stacked" label="Email *" formControlName="email" placeholder="email@domain.com">
+          <ion-icon slot="start" name="mail-outline" aria-hidden="true" style="font-size: 1.5rem;"></ion-icon>
+        </ion-input>
+        <div *ngIf="!email.valid && (email.dirty || email.touched)" class="email-validation">
+          <span *ngIf="password.hasError('required')" style="color:#ee4152">
+            This field is required!
+          </span>
+          <span *ngIf="email.hasError('email')" style="color:#ee4152">
+            It is not an email!
+          </span>
+        </div>
+      </div>
+
+      <div class="password-wrapper">
+        <ion-input [type]="isVisible ? 'text' : 'password'" labelPlacement="stacked" label="Password *" formControlName="password" placeholder="******">
+          <ion-icon slot="start" name="lock-closed" aria-hidden="true" style="font-size: 1.5rem;"></ion-icon>
+          <ion-button fill="clear" slot="end" aria-label="Show/hide" (click)="changePasswordVisibility()">
+
+            <ng-container *ngIf="!isVisible else template">
+              <ion-icon slot="icon-only" name="eye-off-outline" aria-hidden="true"></ion-icon>
+            </ng-container>
+            <ng-template #template>
+              <ion-icon slot="icon-only" name="eye" aria-hidden="true"></ion-icon>
+            </ng-template>
+
+          </ion-button>
+        </ion-input>
+        <div *ngIf="!password.valid && (password.dirty || password.touched)" class="password-validation">
+          <span *ngIf="password.hasError('required')" style="color:#ee4152">
+            This field is required!
+          </span>
+        </div>
+      </div>
+
+      <div class="reset-password">
+        <a routerLink="/reset-password" class="link">Forgot password?</a>
+      </div>
+
+      <button class="btn btn-primary login-button" (click)="login()">Login</button>
+    </form>
+
+    <div>
+      <span>or</span>
+    </div>
+
+    <ion-card class="sign-up-card">
+      <span class="text">Don't you have an account?<a routerLink="/account/sign-up" class="link"> Sign Up</a></span>
+    </ion-card>
+
+    <ion-buttons>
+      <ion-button (click)="loginByFacebook()">
+        <ion-icon slot="start" name="logo-facebook"></ion-icon>
+        <span>
+          FACEBOOK
+        </span>
+      </ion-button>
+
+      <ion-button>
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        <span>
+          GOOGLE
+        </span>
+      </ion-button>
+    </ion-buttons>
+
+  </div>
+
+
+
+</ion-content>

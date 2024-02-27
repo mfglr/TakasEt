@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, mergeMap } from 'rxjs';
 import { PostResponse } from 'src/app/models/responses/post-response';
 import { loadPostImageUrlAction } from 'src/app/state/actions';
-import { AppState } from 'src/app/state/reducer';
+import { AppState } from 'src/app/shareds/profile-image/state/reducer';
 import { selectPostImage, selectPostImageLoadStatus, selectPostImageUrl } from 'src/app/state/selector';
 
 @Component({

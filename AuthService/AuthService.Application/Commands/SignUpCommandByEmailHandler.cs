@@ -27,7 +27,7 @@ namespace AuthService.Application.Commands
         public async Task<IAppResponseDto> Handle(SignUpByEmailDto request, CancellationToken cancellationToken)
         {
             
-            var user = new UserAccount(request.Email,request.UserName);
+            var user = new UserAccount(request.Email);
             user.SetId();
 
             await _unitOfWork.BeginTransactionAsync(cancellationToken: cancellationToken);

@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, first } from 'rxjs';
 import { UserImageResponse } from 'src/app/models/responses/user-image-response';
+import { UserImageEntityState } from 'src/app/shareds/profile-image/state/reducer';
+import { selectState, selectUrl } from 'src/app/shareds/profile-image/state/selectors';
+import { loadUserImageAction } from '../state/actions';
 import { UserResponse } from 'src/app/models/responses/user-response';
-import { loadUserImageUrlAction } from 'src/app/state/actions';
-import { AppState } from 'src/app/state/reducer';
-import { selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/state/selector';
 
 @Component({
   selector: 'app-profile-image',
@@ -14,22 +14,24 @@ import { selectUserImageLoadStatus, selectUserImageUrl } from 'src/app/state/sel
 })
 export class ProfileImageComponent {
 
-  @Input() userImage? : UserImageResponse
+  @Input() user? : UserResponse
   @Input() diameter : number = 2;
 
-  style? : string;
-  loadStatus$? : Observable<boolean | undefined>
+  style : string = `width:${this.diameter}rem;height:${this.diameter}rem;`;
   url$? : Observable<string | undefined>
 
-  constructor(
-    private appStore : Store<AppState>
-  ) { }
+  constructor(private readonly userImageStore : Store<UserImageEntityState>) { }
 
   ngOnChanges() {
-    if(this.userImage ){
-      this.appStore.dispatch(loadUserImageUrlAction({id : this.userImage.id}))
-      this.loadStatus$ = this.appStore.select(selectUserImageLoadStatus({ id : this.userImage.id}))
-      this.url$ = this.appStore.select(selectUserImageUrl({id : this.userImage.id}))
+    if(this.user && this.user.userImage ){
+
+      this.userImageStore.dispatch(loadUserImageAction({
+        id : this.user.userImage.id,
+        containerName : this.user.userImage.containerName,
+        blobName : this.user.userImage.blobName
+      }));
+
+      this.url$ = this.userImageStore.select(selectUrl({id : this.user.userImage.id}))
     }
     this.style = `width:${this.diameter}rem;height:${this.diameter}rem;`
   }

@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { register } from 'swiper/element/bundle';
-import { LoginState } from './login/state/reducer';
-import { selectIsLogin } from './login/state/selectors';
-import { loginByLocalStorageAction } from './login/state/actions';
 import { Router } from '@angular/router';
+import { LoginState } from './account/state/reducer';
+import { selectIsLogin } from './account/state/selectors';
+import { loginByLocalStorageAction } from './account/state/actions';
 register();
 
 @Component({
@@ -29,9 +29,9 @@ export class AppComponent {
       islogin => {
         console.log(islogin);
         if(!islogin)
-          this.router.navigateByUrl("/login")
+          this.router.navigateByUrl("/account/login")
         else
-          this.router.navigateByUrl("/messages")
+          this.router.navigateByUrl("/chat/home")
       }
     )
   }

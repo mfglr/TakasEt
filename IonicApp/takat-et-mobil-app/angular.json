@@ -78,7 +78,9 @@
               "buildTarget": "app:build:production"
             },
             "development": {
-              "buildTarget": "app:build:development"
+              "buildTarget": "app:build:development",
+              "sslCert": "C:/certificates/localhost.crt",
+              "sslKey": "C:/certificates/localhost.key"
             },
             "ci": {
               "progress": false

@@ -13,10 +13,10 @@ namespace UserService.Infrastructure.ModelBuilders
             builder.Property(x => x.LastName).HasColumnType("varchar(100)");
             builder.Property(x => x.NormalizedFullName).HasColumnType("varchar(200)");
             builder.HasIndex(x => x.NormalizedFullName).HasDatabaseName("fullNameIndexer");
-
+            builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
 
             builder
-                .HasMany(x => x.UserImages)
+                .HasMany(x => x.Images)
                 .WithOne()
                 .OnDelete(DeleteBehavior.NoAction);
             
@@ -31,19 +31,6 @@ namespace UserService.Infrastructure.ModelBuilders
                 .HasForeignKey(x => x.ViewedId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
-            builder
-                .HasMany(x => x.UsersWhoBlockedTheEntity)
-                .WithOne()
-                .HasForeignKey(x => x.BlockerId)
-                .OnDelete(DeleteBehavior.NoAction);
-            builder
-                .HasMany(x => x.UsersTheEntityBlocked)
-                .WithOne()
-                .HasForeignKey(x => x.BlockedId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-
             builder
                 .HasMany(x => x.UsersWhoFollowedTheEntity)
                 .WithOne()
@@ -54,8 +41,6 @@ namespace UserService.Infrastructure.ModelBuilders
                 .WithOne()
                 .HasForeignKey(x => x.FollowingId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-
         }
     }
 }

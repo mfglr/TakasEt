@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 
@@ -24,9 +23,12 @@ namespace SharedLibrary.Middlewares
             }
             catch (AppException ex)
             {
+                await context.WriteAppExceptionAsync(ex);
+            }
+            catch (Exception ex)
+            {
                 await context.WriteExceptionAsync(ex);
             }
         }
-
     }
 }

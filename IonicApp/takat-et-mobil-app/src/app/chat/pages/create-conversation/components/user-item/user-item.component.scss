@@ -1,0 +1,11 @@
+.root-wrapper{
+  display: flex;
+  justify-content: space-between;
+  .profile{
+    display: flex;
+    .names{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

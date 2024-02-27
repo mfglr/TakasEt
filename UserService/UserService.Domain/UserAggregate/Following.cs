@@ -10,8 +10,8 @@ namespace UserService.Domain.UserAggregate
 
         public Following(Guid followerId) => FollowerId = followerId;
 
-        public void MakeStatePending() => State = FollowingState.Pending;
-        public void MakeStateRejected() => State = FollowingState.Rejected;
+        public void MarkAsPending() => State = FollowingState.Pending;
+        public void MarkAsRejected() => State = FollowingState.Rejected;
 
     }
 }

@@ -7,9 +7,8 @@ const routes: Routes = [
     redirectTo: 'place',
     pathMatch: 'full'
   },
-  { path: 'place', loadChildren: () => import('./place/place.module').then( m => m.PlacePageModule) },
-  { path : 'messages', loadChildren: () => import('src/app/message/message.module').then( m => m.MessageModule) },
-  { path: 'login',loadChildren: () => import('./login/login.module').then( m => m.LoginModule) },
+  { path: 'account',loadChildren: () => import('./account/account.module').then( m => m.AccountModule) },
+  { path: 'chat',loadChildren: () => import('./chat/chat.module').then( m => m.ChatModule) },
 ];
 
 @NgModule({

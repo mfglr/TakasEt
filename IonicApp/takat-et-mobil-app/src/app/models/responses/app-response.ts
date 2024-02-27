@@ -1,5 +1,8 @@
-export interface AppResponse<T>{
-    data : T;
-    errors? : string[];
-    isError : boolean;
+export interface BaseAppresponse{
+  errors? : string[];
+  isError : boolean;
+}
+
+export interface AppResponse<T> extends BaseAppresponse{
+  data? : T;
 }

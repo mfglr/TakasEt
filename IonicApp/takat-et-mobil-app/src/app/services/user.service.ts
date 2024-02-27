@@ -1,64 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { UserResponse } from '../models/responses/user-response';
-import { NoContentResponse } from '../models/responses/no-content-response';
-import { UrlHelper } from '../helpers/url-helper';
-import { NativeHttpClientService } from './native-http-client.service';
-import { Page } from '../state/app-entity-state/app-entity-state';
+import { Injectable } from "@angular/core";
+import { NativeHttpClientService } from "./native-http-client.service";
+import { AppResponse } from "../models/responses/app-response";
+import { UserResponse } from "../models/responses/user-response";
+import { Observable } from "rxjs";
+import { UrlHelper } from "../helpers/url-helper";
+import { Page } from "../state/app-entity-state/app-entity-state";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn : "root"
 })
-export class UserService {
+export class UserService{
 
-  constructor(
-    private httpClient: NativeHttpClientService,
-  ) {
-  }
+  private readonly baseUrl : string = "https://localhost:7267/api";
 
-  addUserImage(formData : FormData) : Observable<NoContentResponse>{
-    return this.httpClient.post<NoContentResponse>("user/add-user-image",formData);
-  }
+  constructor(private readonly httpClient : NativeHttpClientService) {}
 
-  getUserByUserName(userName : string) : Observable<UserResponse>{
-    return this.httpClient.get<UserResponse>(`user/get-user-by-username/${userName}`);
-  }
-
-  getUser(userId : number) : Observable<UserResponse>{
-    return this.httpClient.get<UserResponse>(`user/get-user/${userId}`);
-  }
-
-  getUsersWhoLikedPost(postId : number,page : Page) : Observable<UserResponse[]>{
+  getFollowersOrFollowings(page : Page) : Observable<AppResponse<UserResponse[]>>{
     return this.httpClient.get<UserResponse[]>(
-      `user/get-users-who-liked-post/${postId}?${UrlHelper.createPaginationQueryString(page)}`
+      `${this.baseUrl}/user/GetFollowersAndFollowings?${UrlHelper.createPaginationQueryString(page)}`
     )
-  }
-
-  getFollowers(userId : number,page : Page) : Observable<UserResponse[]>{
-    return this.httpClient.get<UserResponse[]>(
-      `user/get-followers?loggedInUserId=${userId}&${UrlHelper.createPaginationQueryString(page)}`
-    )
-  }
-
-  getFolloweds(userId : number,page : Page) : Observable<UserResponse[]>{
-    return this.httpClient.get<UserResponse[]>(
-      `user/get-followeds?loggedInUserId=${userId}&${UrlHelper.createPaginationQueryString(page)}`
-    )
-  }
-
-  addProfileImage(formData:FormData) : Observable<NoContentResponse> {
-    return this.httpClient.post<NoContentResponse>('user/add-profile-image',formData);
-  }
-
-  getSearchPageUsers(key : string | undefined, page : Page) : Observable<UserResponse[]>{
-    let url;
-    if(key) url = `user/get-search-page-users?key=${key}&${UrlHelper.createPaginationQueryString(page)}`;
-    else url = `user/get-search-page-users?${UrlHelper.createPaginationQueryString(page)}`;
-    return this.httpClient.get<UserResponse[]>(url);
-  }
-
-  getUserImage(id : number) : Observable<string>{
-    return this.httpClient.getBlob(`user/get-user-image/${id}`)
   }
 
 }
