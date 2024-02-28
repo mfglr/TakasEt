@@ -11,5 +11,5 @@ export interface UserResponse extends BaseResponse{
   countOfPosts : number;
   isFollower : boolean;
   isFollowed : boolean;
-	userImage? : UserImageResponse;
+	images : UserImageResponse[];
 }

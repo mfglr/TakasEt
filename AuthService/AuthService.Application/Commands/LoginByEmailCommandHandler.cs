@@ -10,7 +10,7 @@ using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class LoginByEmailCommandHandler : IRequestHandler<LoginByEmailDto,IAppResponseDto>
+    public class LoginByEmailCommandHandler : IRequestHandler<LoginByEmailDto,IAppResponseDto>
     {
 
         private readonly IUnitOfWork _unitOfWork;

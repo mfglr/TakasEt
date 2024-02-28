@@ -1,6 +1,6 @@
 <div class="root-wrapper" [style]='style'>
 
-  <ng-container *ngIf="user && user.userImage else noProfileImageTemplate">
+  <ng-container *ngIf="user && user.images.length > 0 else noProfileImageTemplate">
     <ng-container *ngIf="url$">
       <img class="image" [src]="url$ | async" [alt]="user.userName">
     </ng-container>
@@ -13,7 +13,7 @@
   </ng-container>
 
   <ng-template #noProfileImageTemplate>
-    <img class="image" src="/www/assets/images/no_profile_image.png" alt="no profile image">
+    <img class="image" src="/assets/images/no_profile_image.png" alt="no profile image">
   </ng-template>
 
 </div>

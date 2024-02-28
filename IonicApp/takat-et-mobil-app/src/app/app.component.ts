@@ -27,7 +27,6 @@ export class AppComponent {
 
     this.isLogin$.subscribe(
       islogin => {
-        console.log(islogin);
         if(!islogin)
           this.router.navigateByUrl("/account/login")
         else

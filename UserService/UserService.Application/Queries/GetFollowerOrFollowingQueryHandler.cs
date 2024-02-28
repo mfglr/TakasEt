@@ -25,7 +25,7 @@ namespace UserService.Application.Queries
             var logginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             var response = await _context
                 .Users
-                .Include(x => x.Images.FirstOrDefault(x => x.IsActive))
+                .Include(x => x.Images.Where(x => x.IsActive))
                 .Where(
                     x =>
                         x.UsersWhoFollowedTheEntity.Any(x => x.FollowerId == logginUserId) ||

@@ -8,10 +8,11 @@ export interface CreateConversationPageState{
   users : AppEntityState<UserResponse>
 }
 
+
+
 const initialState : CreateConversationPageState = {
   users : appUserAdapter.init()
 }
-
 export const CreateConversationPageReducer = createReducer(
   initialState,
   on(nextPageUsersSuccessAction,(state,action) => ({...state, users : appUserAdapter.addMany(action.payload,state.users)}))

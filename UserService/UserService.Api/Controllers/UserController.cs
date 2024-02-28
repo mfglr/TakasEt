@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.Dtos;
 using UserService.Api.Filters;
@@ -18,30 +19,36 @@ namespace UserService.Api.Controllers
             _sender = sender;
         }
 
+        [Authorize(Roles = "user")]
         [HttpPost]
         public async Task<IAppResponseDto> Follow(FollowDto request,CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }
 
+        [Authorize(Roles = "user")]
         [HttpPost]
         public async Task<IAppResponseDto> Unfollow(UnfollowDto request, CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }
 
+        [Authorize(Roles = "user")]
         [HttpGet]
-        public async Task<IAppResponseDto> GetFollowersAndFollowings(GetFollowersOrFollowingsDto request,CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> GetFollowersAndFollowings(CancellationToken cancellationToken)
         {
-            return await _sender.Send(request,cancellationToken);
+
+            return await _sender.Send(new GetFollowersOrFollowingsDto(HttpContext.Request.Query),cancellationToken);
         }
 
+        [Authorize(Roles = "user")]
         [HttpGet]
         public async Task<IAppResponseDto> GetFollowers(GetFollowersDto request, CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }
 
+        [Authorize(Roles = "user")]
         [HttpGet]
         public async Task<IAppResponseDto> GetFollowings(GetFollowingsDto request, CancellationToken cancellationToken)
         {

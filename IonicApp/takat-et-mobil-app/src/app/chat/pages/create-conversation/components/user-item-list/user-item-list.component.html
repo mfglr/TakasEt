@@ -1,1 +1,3 @@
-<app-user-item *ngFor="let user in users" [user]="user"></app-user-item>
+<div *ngFor="let user of users">
+  <app-user-item [user]="user"></app-user-item>
+</div>

@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Services;
 using SharedLibrary.UnitOfWork;
@@ -13,7 +11,7 @@ namespace ConversationService.Infrastructure
     public class UnitOfWork : AbstractUnitOfWork<AppDbContext,Guid>
     {
 
-        public UnitOfWork(AppDbContext context, IPublisher publisher, IIntegrationEventsPublisher integrationEventsPublisher) : base(context,publisher,integrationEventsPublisher) 
+        public UnitOfWork(AppDbContext context, IPublisher publisher, IntegrationEventPublisher integrationEventsPublisher) : base(context,publisher,integrationEventsPublisher) 
         {
         }
 

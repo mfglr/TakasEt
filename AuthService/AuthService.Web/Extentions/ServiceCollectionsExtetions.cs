@@ -1,24 +1,45 @@
-﻿using AuthService.Core.Abstracts;
+﻿using AuthService.Application.Commands;
+using AuthService.Application.Validators;
+using AuthService.Core.Abstracts;
+using AuthService.Core.Configurations;
 using AuthService.Core.Entities;
 using AuthService.Core.ValueObjects;
 using AuthService.Infrastructure;
 using AuthService.Infrastructure.Services;
+using AuthService.Web.Filters;
 using AuthService.Web.TokenProviders;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.PipelineBehaviors;
+using SharedLibrary.Services;
 using SharedLibrary.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Text;
 
 namespace AuthService.Web.Extentions
 {
     internal static class ServiceCollectionsExtetions
     {
+        public static IServiceCollection AddApplication(this IServiceCollection services)
+        {
 
+            return services
+               .AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(LoginByEmailCommandValidator)))
+               .AddMediatR(
+                    cfg => cfg
+                        .RegisterServicesFromAssembly(
+                            Assembly.GetAssembly(typeof(LoginByEmailCommandHandler))!
+                        )
+                )
+               .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
+               .AddTransient(typeof(IPipelineBehavior<,>), typeof(EventsPublishPipelineBehavior<,>));
+        }
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services)
         {
             return services
@@ -30,7 +51,6 @@ namespace AuthService.Web.Extentions
                 )
                 .AddScoped<IUnitOfWork,UnitOfWork>();
         }
-
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
         {
             //customize identity
@@ -54,18 +74,19 @@ namespace AuthService.Web.Extentions
                 .AddTokenProvider<RefreshTokenProvider<UserAccount>>(TokenProvider.RefreshTokenProvider.Name);
 
             //configure Refresh token provider;
+
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            services.Configure<TokenConfiguration>(configuration.GetSection("TokenConfiguration"));
-            var tokenConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokenConfiguration>>().Value;
+            var tokenProviderOptions = configuration.GetSection("TokenProviderOptions").Get<TokenProviderOptions>()!;
+
+
             services.Configure<RefreshTokenProviderOptions>(opt =>
             {
-                opt.TokenLifespan = TimeSpan.FromMinutes(tokenConfiguration.RefreshTokenExpiration);
+                opt.TokenLifespan = TimeSpan.FromMinutes(tokenProviderOptions.RefreshTokenExpiration);
             });
 
 
             return services;
         }
-
         public static IServiceCollection AddThirdPartyAuhentication(this IServiceCollection services)
         {
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
@@ -78,20 +99,19 @@ namespace AuthService.Web.Extentions
 
             return services;
         }
-
         public static IServiceCollection AddJWT(this IServiceCollection services)
         {
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            var tokenConfiguration = configuration.GetSection("TokenConfiguration").Get<TokenConfiguration>()!;
+            var tokenProviderOptions = configuration.GetSection("TokenProviderOptions").Get<TokenProviderOptions>()!;
       
             services
-                .AddSingleton<ITokenConfiguration>(tokenConfiguration)
+                .AddSingleton<ITokenProviderOptions>(tokenProviderOptions)
                 .AddSingleton<JwtSecurityTokenHandler>()
                 .AddSingleton(
                     sp =>
                     {
                         return new SigningCredentials(
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.SecurityKey)),
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenProviderOptions.SecurityKey)),
                             SecurityAlgorithms.HmacSha256Signature
                         );
                     }
@@ -108,9 +128,9 @@ namespace AuthService.Web.Extentions
                 {
                     opt.TokenValidationParameters = new()
                     {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.SecurityKey)),
-                        ValidIssuer = tokenConfiguration.Issuer,
-                        ValidAudience = tokenConfiguration.Audiences[0],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenProviderOptions.SecurityKey)),
+                        ValidIssuer = tokenProviderOptions.Issuer,
+                        ValidAudience = tokenProviderOptions.Audiences[0],
 
                         ValidateIssuerSigningKey = true,
                         ValidateAudience = true,
@@ -121,6 +141,32 @@ namespace AuthService.Web.Extentions
 
             return services;
         }
-
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+            var options = configuration.GetRequiredSection("RabbitMQOptions").Get<RabbitMQOptions>()!;
+            return services
+                .AddSingleton<IRabbitMQOptions>(options)
+                .AddSingleton<IntegrationEventPublisher>()
+                .AddScoped<AccountNotFoundFilter>()
+                .AddScoped<UserAccountService>()
+                .AddScoped<BlockingCheckerService>();
+        }
+        public static IServiceCollection AddCustomCors(this IServiceCollection services)
+        {
+            return services
+                .AddCors(
+                    options => {
+                        options.AddPolicy(
+                            "local",
+                            policy => policy
+                                .WithOrigins("http://localhost:4200", "https://localhost:8100")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowCredentials()
+                        );
+                    }
+                );
+        }
     }
 }

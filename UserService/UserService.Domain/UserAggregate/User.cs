@@ -1,5 +1,4 @@
 ﻿using SharedLibrary.Entities;
-using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 using SharedLibrary.ValueObjects;
@@ -11,7 +10,7 @@ namespace UserService.Domain.UserAggregate
         Entity<Guid>,
         IAggregateRoot,
         IViewableByUsers<Viewing, Guid>,
-        IFollowableByUsers<Following, Guid>,
+        IFollowableByUsers<Following, Guid>
     {
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
@@ -30,7 +29,7 @@ namespace UserService.Domain.UserAggregate
         }
 
         public User() { }
-        public User(string accountId) => Id = Guid.Parse(accountId);
+        public User(string id) => Id = Guid.Parse(id);
 
         //IRemovable
         public override void Remove()
@@ -40,11 +39,6 @@ namespace UserService.Domain.UserAggregate
             foreach (var user in UsersWhoViewedTheEntity)
                 user.Remove();
             foreach (var user in UsersTheEntityViewed)
-                user.Remove();
-
-            foreach (var user in UsersWhoBlockedTheEntity)
-                user.Remove();
-            foreach (var user in UsersTheEntityBlocked)
                 user.Remove();
         }
         public override void Reinsert()
@@ -58,12 +52,6 @@ namespace UserService.Domain.UserAggregate
                 user.Reinsert();
             foreach (var user in UsersTheEntityViewed)
                 user.Reinsert();
-
-            foreach (var user in UsersWhoBlockedTheEntity)
-                user.Reinsert();
-            foreach (var user in UsersTheEntityBlocked)
-                user.Reinsert();
-
         }
 
         //profile visibility
@@ -76,11 +64,11 @@ namespace UserService.Domain.UserAggregate
         public IReadOnlyCollection<UserImage> Images => _images;
         public void AddImage(string blobName,string extention,Dimension dimension)
         {
-            _userImages.Add(new UserImage(blobName, extention, dimension));
+            _images.Add(new UserImage(blobName, extention, dimension));
         }
         public void RemoveImage(Guid imageId)
         {
-            var image = _userImages.FirstOrDefault(x => x.Id == imageId);
+            var image = _images.FirstOrDefault(x => x.Id == imageId);
             if(image == null || image.IsRemoved)
                 throw new AppException("User image was not found!",HttpStatusCode.NotFound);
             image.Remove();
@@ -99,8 +87,6 @@ namespace UserService.Domain.UserAggregate
         public IReadOnlyCollection<Viewing> UsersTheEntityViewed { get; }
         public void View(Guid viewerId)
         {
-            if (UsersTheEntityBlocked.Any(x => x.BlockedId == viewerId))
-                throw new AppException("You must not view the user!", HttpStatusCode.Forbidden);
             _usersWhoViewedTheEntity.Add(new(viewerId));
         }
         public bool IsViewed(Guid viewerId)
@@ -118,7 +104,7 @@ namespace UserService.Domain.UserAggregate
             if (_usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId))
                 throw new AppException("You already follow the user!",HttpStatusCode.BadRequest);
             
-            var LastRequest = _usersWhoFollowedTheEntity.FirstOrDefault();
+            var LastRequest = _usersWhoFollowedTheEntity.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
             if (LastRequest != null && LastRequest.State == FollowingState.Pending)
                 throw new AppException(
                     "You already make a request to follow the user!",
@@ -130,10 +116,11 @@ namespace UserService.Domain.UserAggregate
             if (IsPrivateProfile)
             {
                 following.MarkAsPending();
-                AddIntegrationEvent( new RequestToFollowUserCreatedEvent(followerId, Id) );
             }
             else
-                AddIntegrationEvent( new UserFollowedEvent(followerId,Id) );
+            {
+
+            }
             _usersWhoFollowedTheEntity.Add(following);
             return following;
         }

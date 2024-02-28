@@ -4,7 +4,6 @@ using SharedLibrary.Entities;
 using SharedLibrary.Events;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
-using SharedLibrary.Services;
 using System.Net;
 
 namespace AuthService.Core.Entities
@@ -21,7 +20,6 @@ namespace AuthService.Core.Entities
             UserName = $"{email.GetFirstSectionOfEmail()}_{Guid.NewGuid()}";
             Email = email;
         }
-
 
         public bool IsPrivateAccount { get; private set; }
         public void HideAccount() => IsPrivateAccount = true;
@@ -60,15 +58,11 @@ namespace AuthService.Core.Entities
         }
 
         //IIntegrationEventsContainer
-        private readonly List<IntegrationEvent> events = new();
-        public bool AnyIntegrationEvent() => events.Any();
-        public void AddIntegrationEvent(IntegrationEvent @event) => events.Add(@event);
-        public void ClearAllIntefrationEvents() => events.Clear();
-        public void PublishAllIntegrationEvents(IIntegrationEventsPublisher publisher)
-        {
-            foreach (var @event in @events)
-                publisher.Publish(@event);
-        }
+        private readonly List<object> @events = new();
+        public IReadOnlyCollection<object> Events => @events;
+        public bool AnyEvent() => @events.Any();
+        public void AddEvent(object @event) => @events.Add(@event);
+        public void ClearAllEvents() => events.Clear();
 
         private readonly List<Blocking> _usersWhoBlockedTheEntity = new();
         public IReadOnlyCollection<Blocking> UsersWhoBlockedTheEntity => _usersWhoBlockedTheEntity;

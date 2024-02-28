@@ -29,6 +29,20 @@ namespace SharedLibrary.Extentions
 				throw new InvalidQueryArgumentException(data.Value.ToString(), key);
 			}
 		}
+		public static DateTime? ReadDateTime(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
+		{
+            var data = collection.Where(x => x.Key == key).FirstOrDefault();
+            if (data.Key == null)
+                return null;
+            try
+            {
+                return DateTime.Parse(data.Value.ToString());
+            }
+            catch (Exception)
+            {
+                throw new InvalidQueryArgumentException(data.Value.ToString(), key);
+            }
+        }
 		
 		public static IReadOnlyList<int>? ReadIntList(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
 		{

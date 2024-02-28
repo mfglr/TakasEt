@@ -1,11 +1,11 @@
 ﻿using AuthService.Core.Abstracts;
+using AuthService.Core.Configurations;
 using AuthService.Core.Entities;
 using AuthService.Core.ValueObjects;
 using AuthService.Infrastructure.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SharedLibrary.Configurations;
 using SharedLibrary.Exceptions;
 using SharedLibrary.ValueObjects;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,13 +17,13 @@ namespace AuthService.Infrastructure.Services
     public class TokenService : ITokenService
     {
 
-        private readonly ITokenConfiguration _tokenConfiguration;
+        private readonly ITokenProviderOptions _tokenConfiguration;
         private readonly UserManager<UserAccount> _userManager;
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
 
-        public TokenService(ITokenConfiguration tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<UserAccount> userManager)
+        public TokenService(ITokenProviderOptions tokenConfiguration, SigningCredentials signingCredentials, JwtSecurityTokenHandler jwtSecurityTokenHandler, UserManager<UserAccount> userManager)
         {
             _tokenConfiguration = tokenConfiguration;
             _signingCredentials = signingCredentials;

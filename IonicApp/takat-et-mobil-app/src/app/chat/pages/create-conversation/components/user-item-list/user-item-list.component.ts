@@ -8,7 +8,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 })
 export class UserItemListComponent  implements OnInit {
 
-  @Input() users? : UserResponse[];
+  @Input() users? : UserResponse[] | null;
   constructor() { }
   ngOnInit() {}
 

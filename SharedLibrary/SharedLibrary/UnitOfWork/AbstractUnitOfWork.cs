@@ -15,9 +15,9 @@ namespace SharedLibrary.UnitOfWork
         protected IDbContextTransaction? _transaction = null;
         protected readonly TDbContext _context;
         private readonly IPublisher _publisher;
-        private readonly IIntegrationEventsPublisher _integrationEventsPublisher;
+        private readonly IntegrationEventPublisher _integrationEventsPublisher;
 
-        public AbstractUnitOfWork(TDbContext context, IPublisher publisher, IIntegrationEventsPublisher integrationEventsPublisher)
+        public AbstractUnitOfWork(TDbContext context, IPublisher publisher, IntegrationEventPublisher integrationEventsPublisher)
         {
             _context = context;
             _publisher = publisher;
@@ -75,13 +75,14 @@ namespace SharedLibrary.UnitOfWork
             var entities = _context
                 .ChangeTracker
                 .Entries<IEntity<TKey>>()
-                .Where(x => x.Entity.AnyIntegrationEvent())
+                .Where(x => x.Entity.AnyEvent())
                 .Select(x => x.Entity);
 
             foreach (var entity in entities)
             {
-                entity.PublishAllIntegrationEvents(_integrationEventsPublisher);
-                entity.ClearAllIntefrationEvents();
+                foreach (var @event in entity.Events)
+                    _integrationEventsPublisher.Publish(@event);
+                entity.ClearAllEvents();
             }
         }
 

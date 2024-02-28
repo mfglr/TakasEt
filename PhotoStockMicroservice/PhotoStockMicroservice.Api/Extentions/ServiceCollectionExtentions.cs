@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using PhotoStockMicroservice.Api.Configurations;
 using PhotoStockMicroservice.Api.Services.Abstracts;
 using PhotoStockMicroservice.Api.Services.Concreate;
+using SharedLibrary.Configurations;
 using System.Text;
 
 namespace PhotoStockMicroservice.Api.Extentions

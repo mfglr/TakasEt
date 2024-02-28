@@ -27,7 +27,6 @@ namespace NotificationMicroservice.SharedLibrary
         public static IServiceCollection AddNotificationSharedLibrary(this IServiceCollection services)
         {
             return services
-                .AddAppSharedLibrary()
                 .AddMongoDb()
                 .AddAutoMapper(Assembly.GetExecutingAssembly());
         }

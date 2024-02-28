@@ -22,7 +22,7 @@ namespace UserService.Api.Filters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var logginUserId = Guid.Parse(_contextAccessor.HttpContext!.GetLoginUserId()!);
-            if (await _context.Users.AnyAsync(x => x.Id == logginUserId))
+            if (!await _context.Users.AnyAsync(x => x.Id == logginUserId))
                 throw new AppException("Account not found!", HttpStatusCode.NotFound);
             await next();
         }

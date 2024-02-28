@@ -9,7 +9,7 @@ using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto,IAppResponseDto>
+    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailDto,IAppResponseDto>
     {
         private readonly UserManager<UserAccount> _userManager;
 

@@ -12,7 +12,7 @@ using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, IAppResponseDto>
+    public class SignUpCommandByEmailHandler : IRequestHandler<SignUpByEmailDto, IAppResponseDto>
     {
         private readonly UserManager<UserAccount> _userManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -42,7 +42,7 @@ namespace AuthService.Application.Commands
             
             await _unitOfWork.CommitAsync(cancellationToken: cancellationToken);
 
-            user.AddIntegrationEvent(new UserAccountCreatedByEmailEvent() { Id = user.Id });
+            user.AddEvent(new UserAccountCreatedEvent() { Id = user.Id, Email = request.Email });
             
             return new AppSuccessResponseDto();
         }

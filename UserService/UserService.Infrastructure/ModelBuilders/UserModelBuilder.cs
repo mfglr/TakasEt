@@ -23,23 +23,23 @@ namespace UserService.Infrastructure.ModelBuilders
             builder
                 .HasMany(x => x.UsersWhoViewedTheEntity)
                 .WithOne()
-                .HasForeignKey(x => x.ViewerId)
+                .HasForeignKey(x => x.ViewedId)
                 .OnDelete(DeleteBehavior.NoAction);
             builder
                 .HasMany(x => x.UsersTheEntityViewed)
                 .WithOne()
-                .HasForeignKey(x => x.ViewedId)
+                .HasForeignKey(x => x.ViewerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .HasMany(x => x.UsersWhoFollowedTheEntity)
                 .WithOne()
-                .HasForeignKey(x => x.FollowerId)
+                .HasForeignKey(x => x.FollowingId)
                 .OnDelete(DeleteBehavior.NoAction);
             builder
                 .HasMany(x => x.UsersTheEntityFollowed)
                 .WithOne()
-                .HasForeignKey(x => x.FollowingId)
+                .HasForeignKey(x => x.FollowerId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

@@ -23,15 +23,15 @@ export class ProfileImageComponent {
   constructor(private readonly userImageStore : Store<UserImageEntityState>) { }
 
   ngOnChanges() {
-    if(this.user && this.user.userImage ){
+    if(this.user && this.user.images.length > 0 ){
 
       this.userImageStore.dispatch(loadUserImageAction({
-        id : this.user.userImage.id,
-        containerName : this.user.userImage.containerName,
-        blobName : this.user.userImage.blobName
+        id : this.user.images[0].id,
+        containerName : this.user.images[0].containerName,
+        blobName : this.user.images[0].blobName
       }));
 
-      this.url$ = this.userImageStore.select(selectUrl({id : this.user.userImage.id}))
+      this.url$ = this.userImageStore.select(selectUrl({id : this.user.images[0].id}))
     }
     this.style = `width:${this.diameter}rem;height:${this.diameter}rem;`
   }

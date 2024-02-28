@@ -11,7 +11,7 @@ using System.Net;
 
 namespace AuthService.Application.Commands
 {
-    internal class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshTokenDto,IAppResponseDto>
+    public class LoginByRefreshTokenCommandHandler : IRequestHandler<LoginByRefreshTokenDto,IAppResponseDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;

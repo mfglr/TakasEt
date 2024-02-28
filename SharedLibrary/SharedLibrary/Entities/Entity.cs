@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using SharedLibrary.Events;
-using SharedLibrary.Services;
 
 namespace SharedLibrary.Entities
 {
 
-	public abstract class Entity : Entity<int>
+    public abstract class Entity : Entity<int>
 	{
 
 	}
@@ -44,14 +43,10 @@ namespace SharedLibrary.Entities
 		}
 
 		//IIntegrationEventsContainer
-        private readonly List<IntegrationEvent> @events = new();
-        public bool AnyIntegrationEvent() => @events.Any();
-        public void AddIntegrationEvent(IntegrationEvent @event) => @events.Add(@event);
-        public void ClearAllIntefrationEvents() => events.Clear();
-        public void PublishAllIntegrationEvents(IIntegrationEventsPublisher publisher)
-        {
-			foreach(var @event in @events)
-				publisher.Publish(@event);
-        }
+        private readonly List<object> @events = new();
+		public IReadOnlyCollection<object> Events => @events;
+        public bool AnyEvent() => @events.Any();
+        public void AddEvent(object @event) => @events.Add(@event);
+        public void ClearAllEvents() => events.Clear();
     }
 }

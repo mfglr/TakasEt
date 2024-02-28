@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Dtos
 {
-	public class ImageResponDto
+	public class ImageResponDto : BaseResponseDto<Guid>
 	{
 		public string ContainerName { get; set; } = null!;
 		public string BlobName { get; set; } = null!;
