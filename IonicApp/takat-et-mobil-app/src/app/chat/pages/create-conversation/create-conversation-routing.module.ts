@@ -4,10 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CreateConversationPage } from './create-conversation.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: CreateConversationPage
-  }
+  { path: '', component: CreateConversationPage }
 ];
 
 @NgModule({

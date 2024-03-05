@@ -3,9 +3,7 @@ using ConversationService.Application.Dtos;
 using ConversationService.Domain.UserConnectionAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
-using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
@@ -15,24 +13,20 @@ namespace ConversationService.Application.Commands
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _contextAccessor;
 
-        public ConnectCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor)
+        public ConnectCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _contextAccessor = contextAccessor;
         }
 
         public async Task<IAppResponseDto> Handle(ConnectDto request, CancellationToken cancellationToken)
         {
-            Guid logginUserid = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-
-            var connection = await _context.UserConnections.FindAsync(logginUserid,cancellationToken);
+            var connection = await _context.UserConnections.FindAsync(request.LoginUserId,cancellationToken);
             if (connection == null)
             {
-                connection = new UserConnection(logginUserid);
+                connection = new UserConnection(request.LoginUserId);
                 connection.Connect(request.ConnectionId);
                 await _context.UserConnections.AddAsync(connection,cancellationToken);
             }

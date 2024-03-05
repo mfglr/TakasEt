@@ -9,7 +9,7 @@ using System.Net;
 
 namespace SharedLibrary.UnitOfWork
 {
-    public abstract class AbstractUnitOfWork<TDbContext, TKey> : IUnitOfWork where TDbContext : DbContext
+    public abstract class AbstractUnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
     {
 
         protected IDbContextTransaction? _transaction = null;
@@ -31,7 +31,7 @@ namespace SharedLibrary.UnitOfWork
             //set created date
             var createdEntities = _context
                 .ChangeTracker
-                .Entries<IEntity<TKey>>()
+                .Entries<IEntity>()
                 .Where(x => x.State == EntityState.Added)
                 .Select(x => x.Entity);
 
@@ -41,7 +41,7 @@ namespace SharedLibrary.UnitOfWork
             //set updated date
             var updatedEntities = _context
                 .ChangeTracker
-                .Entries<IEntity<TKey>>()
+                .Entries<IEntity>()
                 .Where(x => x.State == EntityState.Modified)
                 .Select(x => x.Entity);
 
@@ -59,7 +59,7 @@ namespace SharedLibrary.UnitOfWork
         {
             var entities = _context
                 .ChangeTracker
-                .Entries<IEntity<TKey>>()
+                .Entries<IEntity>()
                 .Where(x => x.Entity.AnyDomainEvents())
                 .Select(x => x.Entity);
 
@@ -74,7 +74,7 @@ namespace SharedLibrary.UnitOfWork
         {
             var entities = _context
                 .ChangeTracker
-                .Entries<IEntity<TKey>>()
+                .Entries<IEntity>()
                 .Where(x => x.Entity.AnyEvent())
                 .Select(x => x.Entity);
 

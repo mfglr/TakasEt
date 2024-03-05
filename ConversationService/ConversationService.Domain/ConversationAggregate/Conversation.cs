@@ -8,6 +8,7 @@ namespace ConversationService.Domain.ConversationAggregate
 	{
         public Guid SenderId { get; private set; }
         public Guid ReceiverId { get; private set; }
+        public DateTime DateTimeOfLastMessageReceived { get; private set; }
 
         public Conversation(Guid senderId, Guid receiverId)
 		{
@@ -17,16 +18,17 @@ namespace ConversationService.Domain.ConversationAggregate
 
         private readonly List<Message> _messages = new ();
 		public IReadOnlyCollection<Message> Messages => _messages;
-		public Message AddMessage(Guid userId, string content)
+		public Message AddMessage(string id, Guid senderId,Guid receiverId, string content)
 		{
-			var message = new Message(userId, content);
+			var message = new Message(id,senderId, receiverId, content);
 			message.ChangeStateToSaved();
 			_messages.Add(message);
+            DateTimeOfLastMessageReceived = DateTime.Now;
             return message;
 		}
-        public Message ChangeMessageStateToReceived(Guid receiverId, Guid messageId)
+        public Message MarkAsReceived(Guid receiverId, string messageId)
         {
-            if(receiverId != ReceiverId)
+            if(receiverId != ReceiverId && receiverId != SenderId)
                 throw new AppException("No access!",HttpStatusCode.Forbidden);
 
             var message = _messages.FirstOrDefault(m => m.Id == messageId);
@@ -36,10 +38,10 @@ namespace ConversationService.Domain.ConversationAggregate
             if (message.State == MessageState.Received)
                 throw new AppException("State of the message is already received!", HttpStatusCode.BadRequest);
 
-            message.ChangeStateToReceived();
+            message.MarkAsReceived();
             return message;
         }
-        public Message ChangeMessageStateToViewed(Guid receiverId, Guid messageId)
+        public Message ChangeMessageStateToViewed(Guid receiverId, string messageId)
         {
             if (receiverId != ReceiverId)
                 throw new AppException("No access!", HttpStatusCode.Forbidden);
@@ -54,7 +56,7 @@ namespace ConversationService.Domain.ConversationAggregate
             message.ChangeStateToViewed();
             return message;
         }
-        public Message LikeMessage(Guid userId, Guid messageId)
+        public Message LikeMessage(Guid userId, string messageId)
         {
             if (userId != ReceiverId && userId != SenderId)
                 throw new AppException("No access!", HttpStatusCode.Forbidden);

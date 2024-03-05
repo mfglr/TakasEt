@@ -1,8 +1,9 @@
 ﻿namespace SharedLibrary.Dtos
 {
-	public interface IPage
+	public interface IPage<TProperty> where TProperty : IComparable<TProperty>
 	{
-		int? Take { get; }
-		DateTime? LastDate { get; }
+		int Take { get; }
+        TProperty LastValue { get; }
+		bool IsDescending { get; }
 	}
 }

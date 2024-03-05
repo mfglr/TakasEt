@@ -8,7 +8,8 @@ namespace ConversationService.Application.Mappers
     {
         public MessageMappers()
         {
-            CreateMap<Message, MessageResponseDto>();
+            CreateMap<Message, MessageResponseDto>()
+                .ForMember(x => x.Status,x => x.MapFrom(x => x.State.Status));
         }
 
     }

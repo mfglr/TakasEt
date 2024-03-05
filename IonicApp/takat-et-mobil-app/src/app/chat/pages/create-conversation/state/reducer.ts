@@ -1,19 +1,31 @@
 import { createReducer, on } from "@ngrx/store";
 import { UserResponse } from "src/app/models/responses/user-response";
-import { appUserAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
-import { AppEntityState } from "src/app/state/app-entity-state/app-entity-state";
+import { AppEntityState, Pagination } from "src/app/state/app-entity-state/app-entity-state";
 import { nextPageUsersSuccessAction } from "./actions";
+import { AppEntityAdapter } from "src/app/state/app-entity-state/app-entity-adapter";
+
+
+export interface UserPageState extends Pagination<UserResponse>{}
+export const userStateAdapter = new AppEntityAdapter<UserResponse,UserPageState>(20,undefined, false);
 
 export interface CreateConversationPageState{
-  users : AppEntityState<UserResponse>
+  users : AppEntityState<UserResponse,UserPageState>
 }
-
-
 
 const initialState : CreateConversationPageState = {
-  users : appUserAdapter.init()
+  users : userStateAdapter.init()
 }
-export const CreateConversationPageReducer = createReducer(
+
+export const createConversationPageReducer = createReducer(
   initialState,
-  on(nextPageUsersSuccessAction,(state,action) => ({...state, users : appUserAdapter.addMany(action.payload,state.users)}))
+  on(
+    nextPageUsersSuccessAction,
+    (state,action) => ({
+      ...state,
+      users : userStateAdapter.nextPage(
+        action.payload.map((x) : UserPageState => ({paginationProperty : x.userName,entity : x})),
+        state.users
+      )
+    })
+  )
 )

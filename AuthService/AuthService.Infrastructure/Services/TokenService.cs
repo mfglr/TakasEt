@@ -40,6 +40,8 @@ namespace AuthService.Infrastructure.Services
             {
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name,user.UserName!),
+                new Claim(ClaimTypes.Email,user.Email!),
                 new Claim(CustomClaimTypes.ProfileVisibility.Value,(!user.IsPrivateAccount).ToString()),
                 new Claim(CustomClaimTypes.CountOfBlocking.Value,countOfBlocking.ToString()),
             };

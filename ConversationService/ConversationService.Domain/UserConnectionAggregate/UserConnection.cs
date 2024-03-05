@@ -5,7 +5,6 @@ namespace ConversationService.Domain.UserConnectionAggregate
 {
     public class UserConnection : Entity<Guid>, IAggregateRoot
     {
-
         public string? ConnectionId { get; private set; }
         public bool IsConnected { get; private set; }
         public void Connect(string connectionId)

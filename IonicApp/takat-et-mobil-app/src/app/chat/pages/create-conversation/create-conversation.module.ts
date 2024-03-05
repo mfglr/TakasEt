@@ -9,18 +9,21 @@ import { UserItemComponent } from './components/user-item/user-item.component';
 import { UserItemListComponent } from './components/user-item-list/user-item-list.component';
 import { ProfileImageModule } from 'src/app/shareds/profile-image/profile-image.module';
 import { StoreModule } from '@ngrx/store';
-import { CreateConversationPageReducer } from './state/reducer';
+import { createConversationPageReducer } from './state/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { CreateConversationPageEffect } from './state/effect';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
     CreateConversationPageRoutingModule,
+    StoreModule.forFeature("CreateConversationPageStore",createConversationPageReducer),
+    EffectsModule.forFeature([CreateConversationPageEffect]),
     ProfileImageModule,
-    StoreModule.forFeature("CreateConversationPageStore",CreateConversationPageReducer),
-    EffectsModule.forFeature([CreateConversationPageEffect])
+    PipesModule,
+
   ],
   declarations: [
     CreateConversationPage,

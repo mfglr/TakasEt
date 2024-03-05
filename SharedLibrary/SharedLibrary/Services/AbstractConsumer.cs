@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SharedLibrary.Configurations;
-using SharedLibrary.Events;
 using System.Text;
 
 namespace SharedLibrary.Services

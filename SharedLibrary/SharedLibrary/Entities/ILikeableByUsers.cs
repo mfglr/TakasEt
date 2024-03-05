@@ -15,16 +15,12 @@
 	 * 
 	*/
 
-	public interface ILikeableByUsers<TCrossEntity,TUserId> where TCrossEntity : Entity<TUserId>
+	public interface ILikeableByUsers<TCrossEntity,TUserId>
 	{
 		IReadOnlyCollection<TCrossEntity> UsersWhoLikedTheEntity { get; }
 		void Like(TUserId userId);
 		void Dislike(TUserId userId);
 		bool IsLiked(TUserId userId);
-	}
-
-	public interface ILikeableByUsers<TCrossEntity> : ILikeableByUsers<TCrossEntity,int> where TCrossEntity : Entity<int>
-	{
 	}
 
 }

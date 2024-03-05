@@ -12,11 +12,21 @@ namespace UserService.Domain.UserAggregate
         IViewableByUsers<Viewing, Guid>,
         IFollowableByUsers<Following, Guid>
     {
+        public string UserName { get; private set; }
+        public string Email { get; private set; }
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
+        public string? FullName { get; private set; }
         public string? NormalizedFullName { get; private set; }
         public DateTime? DateOfBirth { get; private set; }
         public bool? Gender { get; private set; }
+
+        public User(Guid id, string userName, string email)
+        {
+            Id = id;
+            UserName = userName;
+            Email = email;
+        }
 
         public void Update(string? name,string? lastName,DateTime? dateOfBirth,bool? gender) {
             Name = name;
@@ -27,9 +37,6 @@ namespace UserService.Domain.UserAggregate
             if(name != null && lastName != null)
                 NormalizedFullName = $"{name + " " ?? ""}{lastName ?? ""}".CustomNormalize();
         }
-
-        public User() { }
-        public User(string id) => Id = Guid.Parse(id);
 
         //IRemovable
         public override void Remove()
@@ -75,9 +82,8 @@ namespace UserService.Domain.UserAggregate
         }
         public void DeleteImage(Guid imageId)
         {
-            var image = _images.FirstOrDefault(x => x.Id == imageId);
-            if (image == null)
-                throw new AppException("User image was not found!", HttpStatusCode.NotFound);
+            var image = _images.FirstOrDefault(x => x.Id == imageId) ??
+                    throw new AppException("User image was not found!", HttpStatusCode.NotFound);
             _images.Remove(image);
         }
 
@@ -95,34 +101,38 @@ namespace UserService.Domain.UserAggregate
         }
 
         //IFollowableByUsers
+        private readonly List<FollowingRequest> _usersWhoWantToFollowTheUser = new();
         private readonly List<Following> _usersWhoFollowedTheEntity = new();
         private readonly List<Following> _usersTheEntityFollowed = new();
         public IReadOnlyCollection<Following> UsersWhoFollowedTheEntity => _usersWhoFollowedTheEntity;
         public IReadOnlyCollection<Following> UsersTheEntityFollowed => _usersTheEntityFollowed;
+        public IReadOnlyCollection<FollowingRequest> UsersWhoWantToFollowTheUser => _usersWhoWantToFollowTheUser;
+        public IReadOnlyCollection<FollowingRequest> UsersTheUserWantsToFollow { get; }
         public Following Follow(Guid followerId)
         {
-            if (_usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId))
-                throw new AppException("You already follow the user!",HttpStatusCode.BadRequest);
+            //if (_usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId))
+            //    throw new AppException("You already follow the user!",HttpStatusCode.BadRequest);
             
-            var LastRequest = _usersWhoFollowedTheEntity.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-            if (LastRequest != null && LastRequest.State == FollowingState.Pending)
-                throw new AppException(
-                    "You already make a request to follow the user!",
-                    HttpStatusCode.BadRequest
-                );
+            //var LastRequest = _usersWhoFollowedTheEntity.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+            //if (LastRequest != null && LastRequest.State == FollowingRequestState.Pending)
+            //    throw new AppException(
+            //        "You already make a request to follow the user!",
+            //        HttpStatusCode.BadRequest
+            //    );
 
-            var following = new Following(followerId);
+            //var following = new Following(followerId);
 
-            if (IsPrivateProfile)
-            {
-                following.MarkAsPending();
-            }
-            else
-            {
+            //if (IsPrivateProfile)
+            //{
+            //    following.MarkAsPending();
+            //}
+            //else
+            //{
 
-            }
-            _usersWhoFollowedTheEntity.Add(following);
-            return following;
+            //}
+            //_usersWhoFollowedTheEntity.Add(following);
+            //return following;
+            return new Following(followerId);
         }
         public void Unfollow(Guid followerId)
         {
@@ -135,6 +145,9 @@ namespace UserService.Domain.UserAggregate
         {
             return _usersWhoFollowedTheEntity.Any(x => x.FollowerId == followerId);
         }
+
+        //FollowingRequest
+        
 
     }
 }

@@ -1,0 +1,27 @@
+.header{
+  .toolbar{
+    .profile{
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      display: flex;
+      .names{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 0.5rem;
+        .user-name{
+          color : gray;
+          font-size: 0.7rem;
+        }
+        .name{
+          color: white;
+          font-size: 0.90rem;
+        }
+      }
+    }
+  }
+}
+
+.content{
+  display: flex;
+}

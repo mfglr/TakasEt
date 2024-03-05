@@ -20,7 +20,7 @@ namespace OnUserAccountCreated_CreateUser.WorkerService.Consumers
 
         protected override async Task Consume(UserAccountCreatedEvent @event, CancellationToken stoppingToken)
         {
-            var user = new User(@event.Id);
+            var user = new User(Guid.Parse(@event.Id),@event.UserName,@event.Email);
             try
             {
                 await _context.AddAsync(user,stoppingToken);

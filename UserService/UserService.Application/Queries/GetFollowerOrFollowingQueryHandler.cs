@@ -25,13 +25,12 @@ namespace UserService.Application.Queries
             var logginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             var response = await _context
                 .Users
-                .Include(x => x.Images.Where(x => x.IsActive))
                 .Where(
                     x =>
                         x.UsersWhoFollowedTheEntity.Any(x => x.FollowerId == logginUserId) ||
                         x.UsersTheEntityFollowed.Any(x => x.FollowingId == logginUserId)
                 )
-                .ToPage(request)
+                .ToPage(x => x.UserName, request)
                 .ToUserResponseDto(logginUserId)
                 .ToListAsync(cancellationToken);
             return new AppGenericSuccessResponseDto<List<UserResponseDto>>(response);

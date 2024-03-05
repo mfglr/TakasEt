@@ -3,7 +3,7 @@ using SharedLibrary.ValueObjects;
 
 namespace ConversationService.Domain.ConversationAggregate
 {
-    public class MessageImage : Image
+    public class MessageImage : Image<Guid>
     {
         public MessageImage() { }
 

@@ -20,11 +20,11 @@ namespace AuthService.Application.Commands
 
         private readonly UserManager<UserAccount> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly BlockingCheckerService _accessTokenReader;
+        private readonly BlockingService _accessTokenReader;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;
 
-        public BlockUserCommandHandler(UserManager<UserAccount> userManager, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork, ITokenService tokenService, BlockingCheckerService accessTokenReader)
+        public BlockUserCommandHandler(UserManager<UserAccount> userManager, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork, ITokenService tokenService, BlockingService accessTokenReader)
         {
             _userManager = userManager;
             _contextAccessor = contextAccessor;

@@ -1,13 +1,29 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>conversation</ion-title>
+<ion-header [translucent]="true" class="header">
+  <ion-toolbar class="toolbar">
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/chat/create-conversation">
+      </ion-back-button>
+    </ion-buttons>
+
+    <div class="profile">
+      <app-profile-image [diameter]="3" [user]="user"></app-profile-image>
+      <ng-container *ngIf="user">
+        <div class="names">
+          <span class="user-name">{{user.userName | toShortText : 15}}</span>
+          <span class="name">{{user.fullName | toShortText : 20 | toUpperFirstLetterOfAllWords}}</span>
+        </div>
+      </ng-container>
+    </div>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">conversation</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="content" [scrollEvents]="true">
+  <app-message-box-list [messages]="messages$ | async"></app-message-box-list>
+  <div id="bottomOfMessages"></div>
 </ion-content>
+
+<ion-footer style="padding: 0.5rem;">
+  <app-message-input [receiverId]="user?.id"></app-message-input>
+</ion-footer>

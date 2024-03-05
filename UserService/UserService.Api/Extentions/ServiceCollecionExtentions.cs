@@ -84,8 +84,8 @@ namespace UserService.Api.Extentions
                 .AddSingleton<IntegrationEventPublisher>()
                 .AddHttpContextAccessor()
                 .AddScoped<UserNotFoundFilter>()
-                .AddScoped<UserAccountService>()
-                .AddScoped<BlockingCheckerService>();
+                .AddScoped<AccountService>()
+                .AddScoped<BlockingService>();
         }
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {

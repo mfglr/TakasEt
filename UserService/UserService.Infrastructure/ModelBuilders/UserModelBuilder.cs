@@ -8,12 +8,13 @@ namespace UserService.Infrastructure.ModelBuilders
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-
             builder.Property(x => x.Name).HasColumnType("varchar(100)");
             builder.Property(x => x.LastName).HasColumnType("varchar(100)");
             builder.Property(x => x.NormalizedFullName).HasColumnType("varchar(200)");
-            builder.HasIndex(x => x.NormalizedFullName).HasDatabaseName("fullNameIndexer");
+            builder.HasIndex(x => x.NormalizedFullName).HasDatabaseName("FullNameIndexer");
             builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
+            builder.HasIndex(x => x.UserName).HasDatabaseName("UserNameIndexer");
+            builder.HasIndex(x => x.Email).HasDatabaseName("EmailIndexer");
 
             builder
                 .HasMany(x => x.Images)
@@ -40,6 +41,17 @@ namespace UserService.Infrastructure.ModelBuilders
                 .HasMany(x => x.UsersTheEntityFollowed)
                 .WithOne()
                 .HasForeignKey(x => x.FollowerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasMany(x => x.UsersWhoWantToFollowTheUser)
+                .WithOne()
+                .HasForeignKey(x => x.RequestedId)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder
+                .HasMany(x => x.UsersTheUserWantsToFollow)
+                .WithOne()
+                .HasForeignKey(x => x.RequesterId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

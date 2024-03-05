@@ -8,7 +8,7 @@ using System.Net;
 
 namespace ConversationService.Infrastructure
 {
-    public class UnitOfWork : AbstractUnitOfWork<AppDbContext,Guid>
+    public class UnitOfWork : AbstractUnitOfWork<AppDbContext>
     {
 
         public UnitOfWork(AppDbContext context, IPublisher publisher, IntegrationEventPublisher integrationEventsPublisher) : base(context,publisher,integrationEventsPublisher) 

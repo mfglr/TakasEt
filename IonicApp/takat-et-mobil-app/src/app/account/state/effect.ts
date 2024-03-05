@@ -1,16 +1,21 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { mergeMap, of } from "rxjs";
-import { loginAction, loginByLocalStorageAction, loginByRefreshTokenAction, loginCompletedAction, loginFailedAction } from "./actions";
+import { loginAction, loginByLocalStorageAction, loginByRefreshTokenAction, loginCompletedAction, loginFailedAction, signUpByEmailAction } from "./actions";
 import { LoginService } from "../services/login.service";
 import { LoginResponse } from "../models/login-response";
+import { SignUpService } from "../services/sign-up.service";
 
 
 @Injectable()
 export class LoginEffect{
 
   private static readonly timeOffset : number = 3000;
-  constructor(private actions : Actions,private loginService : LoginService) {}
+  constructor(
+    private readonly actions : Actions,
+    private readonly loginService : LoginService,
+    private readonly signUpService : SignUpService
+  ) {}
 
   loging$ = createEffect(
     () => {
@@ -55,6 +60,21 @@ export class LoginEffect{
           if(new Date(response.expirationDateOfRefreshToken).getTime() > (Date.now() - LoginEffect.timeOffset))
             return of(loginByRefreshTokenAction({userId : response.userId,refreshToken : response.refreshToken}))
           return of(loginFailedAction())
+        }
+      )
+    )
+  })
+
+  signUp$ = createEffect( () => {
+    return this.actions.pipe(
+      ofType(signUpByEmailAction),
+      mergeMap(action => this.signUpService.signUpByEmail(action.request)),
+      mergeMap(
+        response =>{
+          if(!response.isError)
+            return of(loginCompletedAction({payload : response.data!}))
+          else
+            return of()
         }
       )
     )

@@ -6,8 +6,11 @@ namespace ConversationService.Infrastructure.ModelBuilders
 {
     public class MessageModelBuilder : IEntityTypeConfiguration<Message>
     {
+
         public void Configure(EntityTypeBuilder<Message> builder)
         {
+            builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
+
             builder.OwnsOne(message => message.State);
         }
     }

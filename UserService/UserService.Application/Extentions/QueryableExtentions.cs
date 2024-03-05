@@ -1,33 +1,36 @@
-﻿using UserService.Application.Dtos;
+﻿using SharedLibrary.Dtos;
 using UserService.Domain.UserAggregate;
 
 namespace UserService.Application.Extentions
 {
     public static class QueryableExtentions
     {
-        public static IQueryable<UserResponseDto> ToUserResponseDto(this IQueryable<User> queryable, Guid logginUserId)
+        public static IQueryable<UserResponseDto> ToUserResponseDto(
+            this IQueryable<User> queryable,
+            Guid logginUserId
+        )
         {
             return queryable
                 .Select(user => new UserResponseDto
                 {
+                    Email = user.Email,
+                    UserName = user.UserName,
                     CreatedDate = user.CreatedDate,
-                    RemovedDate = user.RemovedDate,
                     UpdatedDate = user.UpdatedDate,
                     DateOfBirth = user.DateOfBirth,
                     Gender = user.Gender,
                     Id = user.Id,
-                    IsRemoved = user.IsRemoved,
                     LastName = user.LastName,
                     Name = user.Name,
-                    NormalizedFullName = user.NormalizedFullName,
+                    FullName = user.FullName,
                     IsFollower = user.UsersTheEntityFollowed.Any(x => x.FollowingId == logginUserId),
                     IsFollowing = user.UsersWhoFollowedTheEntity.Any(x => x.FollowerId == logginUserId),
-                    Images = user.Images.Select(image => new UserImageResponseDto()
+                    CountOfFollowers = user.UsersWhoFollowedTheEntity.Count(),
+                    CountOfFollowings = user.UsersTheEntityFollowed.Count(),
+                    Images = user.Images.Where(x => x.IsActive).Select(image => new UserImageResponseDto()
                     {
                         Id = image.Id,
                         CreatedDate = image.CreatedDate,
-                        IsRemoved = image.IsRemoved,
-                        RemovedDate = image.RemovedDate,
                         UpdatedDate = image.UpdatedDate,
                         Extention = image.Extention,
                         ContainerName = image.ContainerName.Value,

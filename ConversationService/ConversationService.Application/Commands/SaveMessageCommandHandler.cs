@@ -4,11 +4,8 @@ using ConversationService.Domain.ConversationAggregate;
 using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
-using SharedLibrary.Extentions;
-using SharedLibrary.Services;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
@@ -19,34 +16,35 @@ namespace ConversationService.Application.Commands
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _contextAccessor;
-        private readonly BlockingCheckerService _blockingChecker;
 
-
-        public SaveMessageCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor, BlockingCheckerService blockingChecker)
+        public SaveMessageCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _contextAccessor = contextAccessor;
-            _blockingChecker = blockingChecker;
         }
 
         public async Task<IAppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
         {
-            var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(request.ReceiverId.ToString());
-
             var conversation = await _context
                 .Conversations
-                .FirstOrDefaultAsync(x => x.Id == request.ReceiverId);
+                .FirstOrDefaultAsync(
+                    x =>
+                        x.ReceiverId == request.ReceiverId && x.SenderId == x.SenderId ||
+                        x.ReceiverId == request.SenderId && x.SenderId == request.ReceiverId,
+                    cancellationToken
+                );
 
+            Message message;
             if(conversation == null)
-                conversation = new Conversation(loginUserId, request.ReceiverId);
-
-            var message = conversation.AddMessage(loginUserId, request.Content);
-            await _unitOfWork.CommitAsync();
-
+            {
+                conversation = new Conversation(request.SenderId, request.ReceiverId);
+                message = conversation.AddMessage(request.Id, request.SenderId, request.ReceiverId, request.Content);
+                await _context.Conversations.AddAsync(conversation, cancellationToken);
+            }
+            else
+                message = conversation.AddMessage(request.Id,request.SenderId, request.ReceiverId, request.Content);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return new AppGenericSuccessResponseDto<MessageResponseDto>(_mapper.Map<MessageResponseDto>(message));
         }
     }

@@ -14,7 +14,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 })
 export class ProfileImageComponent {
 
-  @Input() user? : UserResponse
+  @Input() user? : UserResponse | null
   @Input() diameter : number = 2;
 
   style : string = `width:${this.diameter}rem;height:${this.diameter}rem;`;

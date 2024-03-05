@@ -8,7 +8,7 @@ using System.Net;
 
 namespace AuthService.Infrastructure
 {
-    public class UnitOfWork : AbstractUnitOfWork<AppDbContext,string>
+    public class UnitOfWork : AbstractUnitOfWork<AppDbContext>
     {
         public UnitOfWork(AppDbContext context, IPublisher publisher, IntegrationEventPublisher
             integrationEventsPublisher) : base(context, publisher,integrationEventsPublisher) 

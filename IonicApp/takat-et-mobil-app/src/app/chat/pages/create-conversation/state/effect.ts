@@ -21,7 +21,7 @@ export class CreateConversationPageEffect{
       return this.actions.pipe(
         ofType(nextPageUsersAction),
         withLatestFrom(this.createConversationPageStore.select(selectUsers)),
-        filter(([action,state]) => !state.isLastEntities),
+        filter(([action,state]) => !state.isLast),
         mergeMap(([action,state]) => this.userService.getFollowersOrFollowings(state.page)),
         mergeMap(
           response => {

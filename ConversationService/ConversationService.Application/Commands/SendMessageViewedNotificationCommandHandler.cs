@@ -20,9 +20,9 @@ namespace ConversationService.Application.Commands
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly BlockingCheckerService _blockingChecker;
+        private readonly BlockingService _blockingChecker;
 
-        public SendMessageViewedNotificationCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork, IMapper mapper, BlockingCheckerService blockingChecker)
+        public SendMessageViewedNotificationCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork, IMapper mapper, BlockingService blockingChecker)
         {
             _context = context;
             _contextAccessor = contextAccessor;

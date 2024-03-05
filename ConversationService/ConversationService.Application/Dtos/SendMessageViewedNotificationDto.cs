@@ -6,6 +6,6 @@ namespace ConversationService.Application.Dtos
     public class SendMessageViewedNotificationDto : IRequest<IAppResponseDto>
     {
         public Guid ConversationId { get; set; }
-        public Guid MessageId { get; set; }
+        public string MessageId { get; set; }
     }
 }

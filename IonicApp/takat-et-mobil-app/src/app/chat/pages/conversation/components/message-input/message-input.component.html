@@ -1,0 +1,12 @@
+<div class="root-wrapper">
+  <textarea [formControl]="messageInput"></textarea>
+  <button class="camera-button">
+    <ion-icon name="camera-outline" class="camera-icon"></ion-icon>
+  </button>
+  <button class="mic-button">
+    <ion-icon name="mic-outline" class="mic-icon" ></ion-icon>
+  </button>
+  <button class="plane-button" (click)="sendMessage()">
+    <ion-icon name="paper-plane-outline" class="plane-icon"></ion-icon>
+  </button>
+</div>

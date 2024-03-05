@@ -1,0 +1,21 @@
+<ng-container *ngIf="message">
+  <div class="root" [style]="rootStyle$ | async">
+    <div class="content" [style]="contentStyle$ | async">
+      <span class="message-content">{{message.content}}</span>
+
+      <ng-container *ngIf="isMyMessage$ | async else template;">
+        <div class="footer" [style]="footerStyle$ | async">
+          <app-message-state [messageState]="message.status"></app-message-state>
+          <span class="created-date">{{message.createdDate | dateFormat}}</span>
+        </div>
+      </ng-container>
+
+      <ng-template #template>
+        <div class="footer" [style]="footerStyle$ | async">
+          <span class="created-date">{{message.createdDate | dateFormat}}</span>
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,29 @@
+<ng-container *ngIf="conversation">
+  <div class="root-wrapper" routerLink="/chat/conversation" [state]="conversation.receiver">
+
+    <div class="right">
+      <app-profile-image [diameter]="3" [user]="conversation.receiver"></app-profile-image>
+      <ng-container *ngIf="conversation.receiver">
+        <div class="content">
+          <span class="user-name">{{conversation.receiver.userName | toShortText:15}}</span>
+          <ng-container *ngIf="conversation.lastMessage">
+            <div class="message">
+              <app-message-state [messageState]="conversation.lastMessage.status"></app-message-state>
+              <span class="last-message">
+                {{conversation.lastMessage.content | toUpperFirstLetterOfAllWords | toShortText : 25}}
+              </span>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+    <ng-container *ngIf="conversation.countOfMessagesUnviewed > 0">
+      <div class="left">
+        <span class="unviewed-messages-count">{{conversation.countOfMessagesUnviewed}}</span>
+      </div>
+    </ng-container>
+
+  </div>
+</ng-container>
+

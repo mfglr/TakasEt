@@ -19,9 +19,9 @@ namespace ConversationService.Application.Commands
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly BlockingCheckerService _blockingChecker;
+        private readonly BlockingService _blockingChecker;
 
-        public LikeMessageCommandHandler(AppDbContext context, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, BlockingCheckerService blockingChecker)
+        public LikeMessageCommandHandler(AppDbContext context, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, BlockingService blockingChecker)
         {
             _context = context;
             _mapper = mapper;

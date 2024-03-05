@@ -1,0 +1,19 @@
+<ng-container *ngIf="messageState != undefined">
+
+  <ng-container *ngIf="messageState == notSaved">
+    <ion-icon name="time-outline"></ion-icon>
+  </ng-container>
+
+  <ng-container *ngIf="messageState == saved">
+    <ion-icon name="checkmark-outline"></ion-icon>
+  </ng-container>
+
+  <ng-container *ngIf="messageState == received">
+    <ion-icon name="checkmark-done-outline"></ion-icon>
+  </ng-container>
+
+  <ng-container *ngIf="messageState == viewed">
+    <ion-icon name="checkmark-done-outline" color="primary"></ion-icon>
+  </ng-container>
+
+</ng-container>

@@ -5,16 +5,19 @@ using SharedLibrary.Extentions;
 
 namespace UserService.Application.Dtos
 {
-    public class GetFollowersOrFollowingsDto : IRequest<IAppResponseDto>, IPage
+    public class GetFollowersOrFollowingsDto : IRequest<IAppResponseDto>, IPage<string>
     {
-        public int? Take { get; set; }
-        public DateTime? LastDate { get; set; }
+        public int Take { get; private set; }
+        public string LastValue { get; private set; }
+        public bool IsDescending {get; private set; }
 
-        public GetFollowersOrFollowingsDto(IQueryCollection query)
+        public GetFollowersOrFollowingsDto(IQueryCollection collection)
         {
-            Take = query.ReadInt("take");
-            LastDate = query.ReadDateTime("lastDate");
+            Take = collection.ReadInt("take") ?? 20;
+            LastValue = collection.ReadString("lastValue") ?? string.Empty;
+            IsDescending = collection.ReadBoolean("isDescending") ?? true;
         }
+
 
     }
 }

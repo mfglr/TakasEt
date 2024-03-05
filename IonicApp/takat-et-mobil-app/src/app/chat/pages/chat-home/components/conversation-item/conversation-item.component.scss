@@ -1,0 +1,35 @@
+.root-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  .right{
+    display: flex;
+    align-items: center;
+    .content{
+      margin-left: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      .user-name{
+        font-size: 0.75rem;
+        color:gray;
+      }
+      .message{
+        display: flex;
+        .last-message{
+          margin-left: 0.5rem;
+          font-size: 0.7rem;
+        }
+      }
+
+    }
+  }
+
+  .left{
+    .unviewed-messages-count{
+      font-size: 0.8rem;
+      color : blue;
+    }
+  }
+
+}

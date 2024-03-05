@@ -15,6 +15,14 @@ namespace SharedLibrary.Extentions
 			return data.Value.ToString();
 		}
 
+		public static bool? ReadBoolean(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
+		{
+            var data = collection.Where(x => x.Key == key).FirstOrDefault();
+            if (data.Key == null)
+                return null;
+            return bool.Parse(data.Value.ToString());
+        }
+
 		public static int? ReadInt(this IEnumerable<KeyValuePair<string, StringValues>> collection, string key)
 		{
 			var data = collection.Where(x => x.Key == key).FirstOrDefault();

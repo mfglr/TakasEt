@@ -53,7 +53,7 @@ namespace AuthService.Infrastructure.Migrations
 
                     b.HasIndex("BlockerId");
 
-                    b.ToTable("Blocking");
+                    b.ToTable("Blockings");
                 });
 
             modelBuilder.Entity("AuthService.Core.Entities.UserAccount", b =>

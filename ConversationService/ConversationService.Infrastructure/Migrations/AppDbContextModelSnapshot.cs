@@ -31,6 +31,9 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateTimeOfLastMessageReceived")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
@@ -48,14 +51,16 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedDate")
+                        .HasDatabaseName("CreatedDateIndexer");
+
                     b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -77,6 +82,9 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Property<int>("NumberOfImages")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
 
@@ -90,6 +98,9 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.HasIndex("ConversationId");
 
+                    b.HasIndex("CreatedDate")
+                        .HasDatabaseName("CreatedDateIndexer");
+
                     b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
@@ -97,11 +108,9 @@ namespace ConversationService.Infrastructure.Migrations
 
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BlobName")
                         .IsRequired()
@@ -117,8 +126,8 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
@@ -131,6 +140,37 @@ namespace ConversationService.Infrastructure.Migrations
                     b.HasIndex("MessageId");
 
                     b.ToTable("MessageImage");
+                });
+
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageUserLiking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("MessageUserLiking");
                 });
 
             modelBuilder.Entity("ConversationService.Domain.UserConnectionAggregate.UserConnection", b =>
@@ -178,8 +218,8 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "State", b1 =>
                         {
-                            b1.Property<Guid>("MessageId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("MessageId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int");
@@ -206,8 +246,8 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.ContainerName", "ContainerName", b1 =>
                         {
-                            b1.Property<int>("MessageImageId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("MessageImageId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
@@ -223,8 +263,8 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.OwnsOne("SharedLibrary.ValueObjects.Dimension", "Dimension", b1 =>
                         {
-                            b1.Property<int>("MessageImageId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("MessageImageId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<float>("AspectRatio")
                                 .HasColumnType("real");
@@ -250,6 +290,13 @@ namespace ConversationService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageUserLiking", b =>
+                {
+                    b.HasOne("ConversationService.Domain.ConversationAggregate.Message", null)
+                        .WithMany("UsersWhoLikedTheEntity")
+                        .HasForeignKey("MessageId");
+                });
+
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Conversation", b =>
                 {
                     b.Navigation("Messages");
@@ -258,6 +305,8 @@ namespace ConversationService.Infrastructure.Migrations
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("UsersWhoLikedTheEntity");
                 });
 
             modelBuilder.Entity("ConversationService.Domain.UserConnectionAggregate.UserConnection", b =>

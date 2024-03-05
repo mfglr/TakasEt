@@ -6,10 +6,11 @@ export interface UserResponse extends BaseResponse{
   email : string;
 	name? : string
 	lastName? : string;
-	countOfFolloweds : number;
+  fullName? : string;
+	countOfFollowings : number;
 	countOfFollowers : number;
   countOfPosts : number;
   isFollower : boolean;
-  isFollowed : boolean;
+  isFollowing : boolean;
 	images : UserImageResponse[];
 }

@@ -28,7 +28,7 @@ namespace UserService.Application.Queries
                 .Users
                 .Include(x => x.Images.FirstOrDefault(x => x.IsActive))
                 .Where(x => x.UsersTheEntityFollowed.Any(x => x.FollowingId == loginUserId))
-                .ToPage(request)
+                .ToPage(x => x.CreatedDate, request)
                 .ToUserResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
             return new AppGenericSuccessResponseDto<List<UserResponseDto>>(response);

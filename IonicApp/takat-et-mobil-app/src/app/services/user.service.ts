@@ -5,6 +5,7 @@ import { UserResponse } from "../models/responses/user-response";
 import { Observable } from "rxjs";
 import { UrlHelper } from "../helpers/url-helper";
 import { Page } from "../state/app-entity-state/app-entity-state";
+import { GetUsersByIds } from "../models/requests/get-users-by-ids";
 
 @Injectable({
   providedIn : "root"
@@ -19,6 +20,10 @@ export class UserService{
     return this.httpClient.get<UserResponse[]>(
       `${this.baseUrl}/user/GetFollowersAndFollowings?${UrlHelper.createPaginationQueryString(page)}`
     )
+  }
+
+  getUsersByIds(request : GetUsersByIds) : Observable<AppResponse<UserResponse[]>>{
+    return this.httpClient.get<UserResponse[]>(`${this.baseUrl}/user/getusersbyids`)
   }
 
 }

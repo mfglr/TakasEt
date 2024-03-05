@@ -149,8 +149,8 @@ namespace AuthService.Web.Extentions
                 .AddSingleton<IRabbitMQOptions>(options)
                 .AddSingleton<IntegrationEventPublisher>()
                 .AddScoped<AccountNotFoundFilter>()
-                .AddScoped<UserAccountService>()
-                .AddScoped<BlockingCheckerService>();
+                .AddScoped<AccountService>()
+                .AddScoped<BlockingService>();
         }
         public static IServiceCollection AddCustomCors(this IServiceCollection services)
         {
@@ -160,7 +160,7 @@ namespace AuthService.Web.Extentions
                         options.AddPolicy(
                             "local",
                             policy => policy
-                                .WithOrigins("http://localhost:4200", "https://localhost:8100")
+                                .WithOrigins("https://localhost:8100")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowCredentials()

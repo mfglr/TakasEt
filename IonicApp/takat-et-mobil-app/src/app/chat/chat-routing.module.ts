@@ -9,9 +9,10 @@ const routes: Routes = [
     loadChildren : () => import("src/app/chat/pages/chat-home/chat-home.module").then(m => m.ChatHomePageModule)
   },
   {
-    path : "conversation/:id",
+    path : "conversation",
     loadChildren : () => import("src/app/chat/pages/conversation/conversation.module").then(m => m.ConversationPageModule)
-  },  {
+  },
+  {
     path: 'create-conversation',
     loadChildren: () => import('./pages/create-conversation/create-conversation.module').then( m => m.CreateConversationPageModule)
   }

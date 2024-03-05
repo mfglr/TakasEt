@@ -22,13 +22,13 @@ namespace UserService.Application.Queries
 
         public async Task<IAppResponseDto> Handle(GetFollowingsDto request, CancellationToken cancellationToken)
         {
-            var logginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
+            var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             var response = await _context
                 .Users
                 .Include(x => x.Images.FirstOrDefault(x => x.IsActive))
-                .Where(x => x.UsersWhoFollowedTheEntity.Any(x => x.FollowerId == logginUserId))
-                .ToPage(request)
-                .ToUserResponseDto(logginUserId)
+                .Where(x => x.UsersWhoFollowedTheEntity.Any(x => x.FollowerId == loginUserId))
+                .ToPage(x => x.CreatedDate, request)
+                .ToUserResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
             return new AppGenericSuccessResponseDto<List<UserResponseDto>>(response);
         }

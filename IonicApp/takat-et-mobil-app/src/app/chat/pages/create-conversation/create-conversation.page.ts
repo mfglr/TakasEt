@@ -20,11 +20,9 @@ export class CreateConversationPage implements OnInit {
   ngOnInit() {
 
     this.users$.pipe(first()).subscribe(x => {
-      console.log(x);
       if(x.length == 0)
         this.store.dispatch(nextPageUsersAction())
     })
-
   }
 
 

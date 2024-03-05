@@ -20,14 +20,12 @@ namespace AuthService.Web.Controllers
         private readonly ISender _sender;
         private readonly SignInManager<UserAccount> _signInManager;
         private readonly UserManager<UserAccount> _userManager;
-        private readonly ITokenService _tokenService;
 
-        public LoginController(ISender sender, SignInManager<UserAccount> signInManager, UserManager<UserAccount> userManager, ITokenService tokenService)
+        public LoginController(ISender sender, SignInManager<UserAccount> signInManager, UserManager<UserAccount> userManager)
         {
             _sender = sender;
             _signInManager = signInManager;
             _userManager = userManager;
-            _tokenService = tokenService;
         }
 
         [HttpPost]

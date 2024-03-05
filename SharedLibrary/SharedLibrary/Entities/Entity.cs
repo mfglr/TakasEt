@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using SharedLibrary.Events;
 
 namespace SharedLibrary.Entities
 {
 
-    public abstract class Entity : Entity<int>
+    public abstract class Entity : Entity<Guid>
 	{
 
 	}

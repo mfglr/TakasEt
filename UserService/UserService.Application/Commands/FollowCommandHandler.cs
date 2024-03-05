@@ -16,9 +16,9 @@ namespace UserService.Application.Commands
 
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly BlockingCheckerService _blockingCheckerService;
+        private readonly BlockingService _blockingCheckerService;
 
-        public FollowCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, BlockingCheckerService blockingCheckerService)
+        public FollowCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, BlockingService blockingCheckerService)
         {
             _context = context;
             _contextAccessor = contextAccessor;
@@ -33,7 +33,12 @@ namespace UserService.Application.Commands
             var user = await _context
                 .Users
                 .Include(
-                    x => x.UsersWhoFollowedTheEntity.Where(x => x.FollowerId == logginUserId && !x.IsRemoved)
+                    x => x.UsersWhoFollowedTheEntity.FirstOrDefault(
+                        x => x.FollowerId == logginUserId && !x.IsRemoved
+                    )
+                )
+                .Include(
+                    x => x.UsersWhoWantToFollowTheUser.Where(x => x.RequesterId == logginUserId)
                 )
                 .FirstOrDefaultAsync(x => x.Id == request.UserId && !x.IsRemoved);
             if (user == null)

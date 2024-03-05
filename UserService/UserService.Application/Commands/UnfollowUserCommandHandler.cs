@@ -17,10 +17,10 @@ namespace UserService.Application.Commands
 
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly BlockingCheckerService _blockingChecker;
+        private readonly BlockingService _blockingChecker;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UnfollowUserCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, BlockingCheckerService blockingChecker, IUnitOfWork unitOfWork)
+        public UnfollowUserCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, BlockingService blockingChecker, IUnitOfWork unitOfWork)
         {
             _context = context;
             _contextAccessor = contextAccessor;

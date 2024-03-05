@@ -7,19 +7,21 @@ using System.Net;
 
 namespace ConversationService.Domain.ConversationAggregate
 {
-    public class Message : Entity<Guid>, ILikeableByUsers<MessageUserLiking,Guid>
+    public class Message : Entity<string>, ILikeableByUsers<MessageUserLiking,Guid>
     {
         public Guid ConversationId { get; private set; }
         public string Content { get; private set; }
         public string NormalizeContent { get; private set; }
         public int NumberOfImages { get; private set; }
-
         public Guid SenderId { get; private set; }
+        public Guid ReceiverId { get; private set; }
         public UserConnection Sender { get; }
 
-        public Message(Guid senderId, string content)
+        public Message(string id,Guid senderId,Guid receiverId, string content)
         {
+            Id = id; 
             SenderId = senderId;
+            ReceiverId = receiverId;
             Content = content;
             NormalizeContent = content.CustomNormalize();
         }
@@ -35,7 +37,7 @@ namespace ConversationService.Domain.ConversationAggregate
 
         public MessageState State { get; private set; }
         public void ChangeStateToSaved() => State = MessageState.Saved;
-        public void ChangeStateToReceived() => State = MessageState.Received;
+        public void MarkAsReceived() => State = MessageState.Received;
         public void ChangeStateToViewed() => State = MessageState.Viewed;
 
         //ILikeableByUsers

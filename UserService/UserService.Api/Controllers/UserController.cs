@@ -54,5 +54,12 @@ namespace UserService.Api.Controllers
         {
             return await _sender.Send(request, cancellationToken);
         }
+
+        [Authorize(Roles = "user")]
+        [HttpGet]
+        public async Task<IAppResponseDto> GetUsersByIds(CancellationToken cancellationToken)
+        {
+            return await _sender.Send(new GetUsersByIdsDto(Request.Query), cancellationToken);
+        }
     }
 }

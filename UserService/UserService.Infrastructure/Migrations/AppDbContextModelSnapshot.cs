@@ -22,39 +22,6 @@ namespace UserService.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UserService.Domain.UserAggregate.Blocking", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlockedId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlockerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("RemovedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlockedId");
-
-                    b.HasIndex("BlockerId");
-
-                    b.ToTable("Blocking");
-                });
-
             modelBuilder.Entity("UserService.Domain.UserAggregate.Following", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,6 +55,39 @@ namespace UserService.Infrastructure.Migrations
                     b.ToTable("Following");
                 });
 
+            modelBuilder.Entity("UserService.Domain.UserAggregate.FollowingRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RemovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RequestedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RequesterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestedId");
+
+                    b.HasIndex("RequesterId");
+
+                    b.ToTable("FollowingRequest");
+                });
+
             modelBuilder.Entity("UserService.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -99,6 +99,13 @@ namespace UserService.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Gender")
                         .HasColumnType("bit");
@@ -124,10 +131,23 @@ namespace UserService.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedDate")
+                        .HasDatabaseName("CreatedDateIndexer");
+
+                    b.HasIndex("Email")
+                        .HasDatabaseName("EmailIndexer");
+
                     b.HasIndex("NormalizedFullName")
-                        .HasDatabaseName("fullNameIndexer");
+                        .HasDatabaseName("FullNameIndexer");
+
+                    b.HasIndex("UserName")
+                        .HasDatabaseName("UserNameIndexer");
 
                     b.ToTable("Users");
                 });
@@ -204,50 +224,50 @@ namespace UserService.Infrastructure.Migrations
                     b.ToTable("Viewing");
                 });
 
-            modelBuilder.Entity("UserService.Domain.UserAggregate.Blocking", b =>
-                {
-                    b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersTheEntityBlocked")
-                        .HasForeignKey("BlockedId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersWhoBlockedTheEntity")
-                        .HasForeignKey("BlockerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UserService.Domain.UserAggregate.Following", b =>
                 {
                     b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersWhoFollowedTheEntity")
+                        .WithMany("UsersTheEntityFollowed")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersTheEntityFollowed")
+                        .WithMany("UsersWhoFollowedTheEntity")
                         .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+                });
 
-                    b.OwnsOne("UserService.Domain.UserAggregate.FollowingState", "State", b1 =>
+            modelBuilder.Entity("UserService.Domain.UserAggregate.FollowingRequest", b =>
+                {
+                    b.HasOne("UserService.Domain.UserAggregate.User", null)
+                        .WithMany("UsersWhoWantToFollowTheUser")
+                        .HasForeignKey("RequestedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("UserService.Domain.UserAggregate.User", null)
+                        .WithMany("UsersTheUserWantsToFollow")
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("UserService.Domain.UserAggregate.FollowingRequestState", "State", b1 =>
                         {
-                            b1.Property<Guid>("FollowingId")
+                            b1.Property<Guid>("FollowingRequestId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int")
                                 .HasColumnName("Status");
 
-                            b1.HasKey("FollowingId");
+                            b1.HasKey("FollowingRequestId");
 
-                            b1.ToTable("Following");
+                            b1.ToTable("FollowingRequest");
 
                             b1.WithOwner()
-                                .HasForeignKey("FollowingId");
+                                .HasForeignKey("FollowingRequestId");
                         });
 
                     b.Navigation("State")
@@ -257,7 +277,7 @@ namespace UserService.Infrastructure.Migrations
             modelBuilder.Entity("UserService.Domain.UserAggregate.UserImage", b =>
                 {
                     b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UserImages")
+                        .WithMany("Images")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -314,13 +334,13 @@ namespace UserService.Infrastructure.Migrations
             modelBuilder.Entity("UserService.Domain.UserAggregate.Viewing", b =>
                 {
                     b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersTheEntityViewed")
+                        .WithMany("UsersWhoViewedTheEntity")
                         .HasForeignKey("ViewedId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UserService.Domain.UserAggregate.User", null)
-                        .WithMany("UsersWhoViewedTheEntity")
+                        .WithMany("UsersTheEntityViewed")
                         .HasForeignKey("ViewerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -328,19 +348,19 @@ namespace UserService.Infrastructure.Migrations
 
             modelBuilder.Entity("UserService.Domain.UserAggregate.User", b =>
                 {
-                    b.Navigation("UserImages");
-
-                    b.Navigation("UsersTheEntityBlocked");
+                    b.Navigation("Images");
 
                     b.Navigation("UsersTheEntityFollowed");
 
                     b.Navigation("UsersTheEntityViewed");
 
-                    b.Navigation("UsersWhoBlockedTheEntity");
+                    b.Navigation("UsersTheUserWantsToFollow");
 
                     b.Navigation("UsersWhoFollowedTheEntity");
 
                     b.Navigation("UsersWhoViewedTheEntity");
+
+                    b.Navigation("UsersWhoWantToFollowTheUser");
                 });
 #pragma warning restore 612, 618
         }
