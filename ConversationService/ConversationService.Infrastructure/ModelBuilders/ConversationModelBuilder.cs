@@ -8,14 +8,7 @@ namespace ConversationService.Infrastructure.ModelBuilders
     {
         public void Configure(EntityTypeBuilder<Conversation> builder)
         {
-
             builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
-
-            builder
-                .HasMany(x => x.Messages)
-                .WithOne()
-                .HasForeignKey(x => x.ConversationId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

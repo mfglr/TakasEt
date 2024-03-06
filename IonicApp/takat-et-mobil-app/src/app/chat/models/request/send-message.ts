@@ -3,4 +3,5 @@ export interface SendMessage{
   senderId : string;
   receiverId : string;
   content : string;
+  sendDate : string;
 }

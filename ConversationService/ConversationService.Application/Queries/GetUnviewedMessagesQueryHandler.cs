@@ -36,7 +36,7 @@ namespace ConversationService.Application.Queries
                             x.SenderId == loginUserId && x.ReceiverId == request.UserId ||
                             x.SenderId == request.UserId && x.ReceiverId == loginUserId
                         ) &&
-                        x.State.Status != MessageState.Viewed.Status
+                        x.MessageState.Status != MessageState.Viewed.Status
                 )
                 .ToPage(x => x.CreatedDate, request)
                 .ToListAsync(cancellationToken);

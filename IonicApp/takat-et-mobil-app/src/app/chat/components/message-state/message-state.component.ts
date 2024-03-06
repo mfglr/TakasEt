@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MessageState } from 'src/app/models/responses/message-response';
+import { MessageStatus } from 'src/app/chat/models/responses/message-response';
 
 @Component({
   selector: 'app-message-state',
@@ -8,11 +8,11 @@ import { MessageState } from 'src/app/models/responses/message-response';
 })
 export class MessageStateComponent{
 
-  notSaved = MessageState.NotSaved;
-  saved = MessageState.Saved;
-  received = MessageState.Received;
-  viewed = MessageState.Viewed;
+  notSaved = MessageStatus.NotSaved;
+  saved = MessageStatus.Saved;
+  received = MessageStatus.Received;
+  viewed = MessageStatus.Viewed;
 
-  @Input() messageState? : MessageState;
+  @Input() messageState? : MessageStatus;
 
 }

@@ -18,31 +18,15 @@ namespace SharedLibrary.Extentions
 
             var method = typeof(IComparable<TProperty>).GetMethod("CompareTo")!;
             var right = Expression.Constant(0);
-            var left = Expression.Call(
-                propertyForPagination.Body, 
-                method,
-                Expression.Constant(page.LastValue)
-            );
-            
-            if (page.IsDescending)
-                return queryable
-                    .Where(
-                        Expression.Lambda<Func<TEntity, bool>>(
-                            Expression.LessThan(left, right),
-                            propertyForPagination.Parameters
-                       )
-                    )
-                    .OrderByDescending(propertyForPagination)
-                    .Take(page.Take);
+            var left = Expression.Call(propertyForPagination.Body, method,Expression.Constant(page.LastValue));
 
+            BinaryExpression b;
+            if (page.IsDescending) b = Expression.LessThan(left, right);
+            else b = Expression.GreaterThan(left, right);
+            
             return queryable
-                .Where(
-                    Expression.Lambda<Func<TEntity, bool>>(
-                        Expression.GreaterThan(left, right),
-                        propertyForPagination.Parameters
-                    )
-                )
-                .OrderBy(propertyForPagination)
+                .Where(Expression.Lambda<Func<TEntity, bool>>(b, propertyForPagination.Parameters))
+                .OrderByDescending(propertyForPagination)
                 .Take(page.Take);
         }
     }

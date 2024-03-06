@@ -10,6 +10,8 @@ namespace ConversationService.Domain.ConversationAggregate
         public readonly static MessageState Received = new() { Status = 1 };
         public readonly static MessageState Viewed = new() { Status = 2 };
 
+        public static MessageState CreateMessageState(MessageState state) => new() {  Status = state.Status };
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Status;

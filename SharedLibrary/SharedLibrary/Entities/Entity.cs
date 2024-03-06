@@ -14,8 +14,9 @@ namespace SharedLibrary.Entities
 		public DateTime CreatedDate { get; protected set; }
 		public DateTime? UpdatedDate { get; protected set; }
 
-		public void SetCreatedDate() => CreatedDate = DateTime.Now;
-		public void SetUpdatedDate() => UpdatedDate = DateTime.Now;
+		public void SetCreatedDate() => CreatedDate = DateTime.UtcNow;
+		public void SetUpdatedDate() => UpdatedDate = DateTime.UtcNow;
+		
 		//IRemovable
 		public bool IsRemoved { get; protected set; }
 		public DateTime? RemovedDate { get; protected set; }
@@ -29,7 +30,6 @@ namespace SharedLibrary.Entities
 			IsRemoved = false;
 			RemovedDate = null;
 		}
-
 		//IDomainEventContainer
 		private readonly List<INotification> _domainEvents = new();
 		public void AddDomainEvent(INotification domainEvent) => _domainEvents.Add(domainEvent);
@@ -40,7 +40,6 @@ namespace SharedLibrary.Entities
 			foreach (var domainEvent in _domainEvents)
 				await publisher.Publish(domainEvent, cancellationToken);
 		}
-
 		//IIntegrationEventsContainer
         private readonly List<object> @events = new();
 		public IReadOnlyCollection<object> Events => @events;

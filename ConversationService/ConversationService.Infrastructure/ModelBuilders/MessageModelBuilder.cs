@@ -11,7 +11,7 @@ namespace ConversationService.Infrastructure.ModelBuilders
         {
             builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
 
-            builder.OwnsOne(message => message.State);
+            builder.OwnsOne(message => message.MessageState);
         }
     }
 }

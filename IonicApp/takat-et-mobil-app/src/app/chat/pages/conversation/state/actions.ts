@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { SendMessage } from "src/app/chat/models/request/send-message";
-import { MessageResponse } from "src/app/models/responses/message-response";
+import { MessageResponse } from "src/app/chat/models/responses/message-response";
 
 
 export const noAction = createAction("[Conversation Page Store] no action");
@@ -24,13 +24,22 @@ export const sendMessageAction = createAction(
 )
 export const markAsSavedAction = createAction(
   "[Conversation Page Store] mark as saved",
-  props<{payload : MessageResponse}>()
+  props<{userId : string,messageId : string}>()
 )
+
 export const receiveMessageAction = createAction(
   "[Conversatin Page Store] receive message",
-  props<{receiverId : string,payload : MessageResponse}>()
+  props<{payload : MessageResponse}>()
 )
 export const markAsReceivedAction = createAction(
   "[Conversation Page Store] mark as received",
-  props<{receiverId : string,payload : MessageResponse}>()
+  props<{messageId : string, receiverId : string}>()
+)
+export const markAsViewedAction = createAction(
+  "[Conversation Page Store] mark as Viewed",
+  props<{messageId : string,receiverId : string}>()
+)
+export const markMessagesAsViewedAction = createAction(
+  "[Conversation Page Store] mark messages as viewed",
+  props<{receiverId : string,ids : string[]}>()
 )

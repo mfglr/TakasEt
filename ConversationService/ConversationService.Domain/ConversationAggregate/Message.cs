@@ -9,7 +9,6 @@ namespace ConversationService.Domain.ConversationAggregate
 {
     public class Message : Entity<string>, ILikeableByUsers<MessageUserLiking,Guid>
     {
-        public Guid ConversationId { get; private set; }
         public string Content { get; private set; }
         public string NormalizeContent { get; private set; }
         public int NumberOfImages { get; private set; }
@@ -17,12 +16,13 @@ namespace ConversationService.Domain.ConversationAggregate
         public Guid ReceiverId { get; private set; }
         public UserConnection Sender { get; }
 
-        public Message(string id,Guid senderId,Guid receiverId, string content)
+        public Message(string id,Guid senderId,Guid receiverId, string content,DateTime sendDate)
         {
             Id = id; 
             SenderId = senderId;
             ReceiverId = receiverId;
             Content = content;
+            SendDate = sendDate;
             NormalizeContent = content.CustomNormalize();
         }
 
@@ -35,10 +35,33 @@ namespace ConversationService.Domain.ConversationAggregate
             NumberOfImages++;
         }
 
-        public MessageState State { get; private set; }
-        public void ChangeStateToSaved() => State = MessageState.Saved;
-        public void MarkAsReceived() => State = MessageState.Received;
-        public void ChangeStateToViewed() => State = MessageState.Viewed;
+        public MessageState MessageState { get; private set; }
+        public DateTime SendDate { get; private set; }
+        public DateTime SavedDate { get; private set; }
+        public DateTime ReceivedDate { get; private set; }
+        public DateTime ViewedDate { get; private set; }
+
+        public void MarkAsSaved()
+        {
+            if (MessageState == MessageState.Received || MessageState == MessageState.Viewed)
+                return;
+
+            MessageState = MessageState.CreateMessageState(MessageState.Saved);
+            SavedDate = DateTime.UtcNow;
+        }
+        public void MarkAsReceived()
+        {
+            if (MessageState == MessageState.Viewed)
+                return;
+
+            MessageState = MessageState.CreateMessageState(MessageState.Received);
+            ReceivedDate = DateTime.UtcNow;
+        }
+        public void MarkAsViewed()
+        {
+            MessageState = MessageState.CreateMessageState(MessageState.Viewed);
+            ViewedDate = DateTime.UtcNow;
+        }
 
         //ILikeableByUsers
         private readonly List<MessageUserLiking> _usersWhoLikedTheEntity = new();

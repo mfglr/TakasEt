@@ -5,12 +5,11 @@ using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Dtos;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class SaveMessageCommandHandler : IRequestHandler<SaveMessageDto, IAppResponseDto>
+    public class SaveMessageCommandHandler : IRequestHandler<SaveMessageDto, MessageResponseDto>
     {
 
         private readonly AppDbContext _context;
@@ -24,14 +23,14 @@ namespace ConversationService.Application.Commands
             _mapper = mapper;
         }
 
-        public async Task<IAppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
+        public async Task<MessageResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
         {
             var conversation = await _context
                 .Conversations
                 .FirstOrDefaultAsync(
                     x =>
-                        x.ReceiverId == request.ReceiverId && x.SenderId == x.SenderId ||
-                        x.ReceiverId == request.SenderId && x.SenderId == request.ReceiverId,
+                        x.UserId1 == request.ReceiverId && x.UserId2 == request.SenderId ||
+                        x.UserId1 == request.SenderId && x.UserId2 == request.ReceiverId,
                     cancellationToken
                 );
 
@@ -39,13 +38,13 @@ namespace ConversationService.Application.Commands
             if(conversation == null)
             {
                 conversation = new Conversation(request.SenderId, request.ReceiverId);
-                message = conversation.AddMessage(request.Id, request.SenderId, request.ReceiverId, request.Content);
+                message = conversation.AddMessage(request.Id, request.SenderId, request.ReceiverId, request.Content,request.SendDate);
                 await _context.Conversations.AddAsync(conversation, cancellationToken);
             }
             else
-                message = conversation.AddMessage(request.Id,request.SenderId, request.ReceiverId, request.Content);
+                message = conversation.AddMessage(request.Id,request.SenderId, request.ReceiverId, request.Content,request.SendDate);
             await _unitOfWork.CommitAsync(cancellationToken);
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(_mapper.Map<MessageResponseDto>(message));
+            return _mapper.Map<MessageResponseDto>(message);
         }
     }
 }

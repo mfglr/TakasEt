@@ -9,7 +9,7 @@ namespace ConversationService.Application.Mappers
         public MessageMappers()
         {
             CreateMap<Message, MessageResponseDto>()
-                .ForMember(x => x.Status,x => x.MapFrom(x => x.State.Status));
+                .ForMember(x => x.Status,x => x.MapFrom(x => x.MessageState.Status));
         }
 
     }

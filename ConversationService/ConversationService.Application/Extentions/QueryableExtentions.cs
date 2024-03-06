@@ -14,14 +14,14 @@ namespace ConversationService.Application.Extentions
                     Id = x.Id,
                     CreatedDate = x.CreatedDate,
                     UpdatedDate = x.UpdatedDate,
-                    ReceiverId = x.ReceiverId,
-                    SenderId = x.SenderId,
+                    UserId1 = x.UserId1,
+                    UserId2 = x.UserId2,
                     DateTimeOfLastMessageReceived = x.DateTimeOfLastMessageReceived,
                     CountOfMessagesUnviewed = x
                         .Messages
                         .Count(
                             x => 
-                                x.State.Status != MessageState.Viewed.Status &&
+                                x.MessageState.Status != MessageState.Viewed.Status &&
                                 x.SenderId != loginUserId
                         ),
                     LastMessage = x
@@ -33,10 +33,9 @@ namespace ConversationService.Application.Extentions
                             CreatedDate = x.CreatedDate,
                             ReceiverId = x.ReceiverId,
                             SenderId = x.SenderId,
-                            Status = x.State.Status,
+                            Status = x.MessageState.Status,
                             Content = x.Content,
                             UpdatedDate = x.UpdatedDate,
-                            ConversationId = x.ConversationId,
                             Images = x.Images.Select(x => new MessageImageResponseDto()
                             {
                                 Id = x.Id,

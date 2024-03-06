@@ -32,10 +32,10 @@ namespace ConversationService.Application.Queries
                 .Where(
                     x =>
                         (
-                            x.ReceiverId == logindUserId || 
-                            x.SenderId == logindUserId
+                            x.UserId1 == logindUserId || 
+                            x.UserId2 == logindUserId
                         ) &&
-                        x.Messages.Any(m => m.State == MessageState.Saved)
+                        x.Messages.Any(m => m.MessageState == MessageState.Saved)
                 )
                 .ToPage(x => x.DateTimeOfLastMessageReceived, request)
                 .ToConversationResponseDto(logindUserId)

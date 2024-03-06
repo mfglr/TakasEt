@@ -4,6 +4,7 @@ using ConversationService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConversationService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305194407_addSomeDatesToMessageTable")]
+    partial class addSomeDatesToMessageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,7 +229,7 @@ namespace ConversationService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "MessageState", b1 =>
+                    b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "State", b1 =>
                         {
                             b1.Property<string>("MessageId")
                                 .HasColumnType("nvarchar(450)");
@@ -242,10 +245,10 @@ namespace ConversationService.Infrastructure.Migrations
                                 .HasForeignKey("MessageId");
                         });
 
-                    b.Navigation("MessageState")
-                        .IsRequired();
-
                     b.Navigation("Sender");
+
+                    b.Navigation("State")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageImage", b =>

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MessageResponse } from 'src/app/models/responses/message-response';
+import { MessageResponse } from 'src/app/chat/models/responses/message-response';
 
 @Component({
   selector: 'app-message-box-list',

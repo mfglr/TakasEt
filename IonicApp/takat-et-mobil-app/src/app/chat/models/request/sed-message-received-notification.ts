@@ -1,4 +1,4 @@
 export interface SendMessageReceivedNotification{
-  conversationId: string;
-  messageId : string;
+  messageId : string,
+  receiverId : string
 }

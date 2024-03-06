@@ -42,10 +42,10 @@ namespace ConversationService.Application.Commands
             if (conversation == null)
                 throw new AppException("The conversation was not found!", HttpStatusCode.NotFound);
 
-            if(loginUserId == conversation.SenderId)
-                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.ReceiverId.ToString());
+            if(loginUserId == conversation.UserId1)
+                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.UserId2.ToString());
             else
-                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.SenderId.ToString());
+                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.UserId1.ToString());
             
             var message = conversation.LikeMessage(loginUserId,request.MessageId);
             await _unitOfWork.CommitAsync(cancellationToken);

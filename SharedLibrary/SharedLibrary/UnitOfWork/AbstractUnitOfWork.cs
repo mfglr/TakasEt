@@ -49,8 +49,9 @@ namespace SharedLibrary.UnitOfWork
                 item.SetUpdatedDate();
 
             //save changes;
-            if (_transaction == null)
+            if (_transaction == null) {
                 await _context.SaveChangesAsync(cancellationToken);
+            }
             else
                 await _transaction.CommitAsync(cancellationToken);
         }

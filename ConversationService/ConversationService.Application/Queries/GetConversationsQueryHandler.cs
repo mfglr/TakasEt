@@ -32,13 +32,13 @@ namespace ConversationService.Application.Queries
             
             var conversations = await _context
                 .Conversations
-                .Where(x => x.SenderId == loginUserId || x.ReceiverId == loginUserId)
+                .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
                 .ToPage(x => x.DateTimeOfLastMessageReceived, request)
                 .ToConversationResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
 
             var ids = conversations
-                .Select(x => x.SenderId == loginUserId ? x.ReceiverId : x.SenderId)
+                .Select(x => x.UserId1 == loginUserId ? x.UserId2 : x.UserId1)
                 .ToList();
 
             var users = await _userService.GetUsersByIds(ids,cancellationToken);
@@ -46,7 +46,7 @@ namespace ConversationService.Application.Queries
             foreach ( var conversation in conversations)
                 conversation.Receiver = users
                     .FirstOrDefault(
-                        x => x.Id == conversation.ReceiverId || x.Id == conversation.SenderId 
+                        x => x.Id == conversation.UserId1 || x.Id == conversation.UserId2
                     );
             
             return new AppGenericSuccessResponseDto<List<ConversationResponseDto>>(conversations);

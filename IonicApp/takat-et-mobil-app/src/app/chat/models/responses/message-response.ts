@@ -1,7 +1,7 @@
 import { MessageImageResponse } from "src/app/chat/models/responses/message-image-response";
-import { BaseResponse } from "./base-response";
+import { BaseResponse } from "../../../models/responses/base-response";
 
-export enum MessageState {
+export enum MessageStatus {
   NotSaved = -1,
   Saved = 0,
   Received = 1,
@@ -11,8 +11,7 @@ export enum MessageState {
 export interface MessageResponse extends BaseResponse{
   senderId : string;
   receiverId : string;
-  conversationId : string;
   content : string;
-  status : MessageState;
+  status : MessageStatus;
   images? : MessageImageResponse[]
 }

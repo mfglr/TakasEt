@@ -8,12 +8,11 @@ import { selectAccessToken, selectIsLogin } from './account/state/selectors';
 import { loginByLocalStorageAction } from './account/state/actions';
 import { ChatHubState } from './state/chat-hub-state/reducer';
 import { connectionSuccessAction } from './state/chat-hub-state/actions';
-import { MessageResponse } from './models/responses/message-response';
+import { MessageResponse } from './chat/models/responses/message-response';
 import { ChatHubService } from './services/chat-hub.service';
-import { SendMessageReceivedNotification } from './chat/models/request/sed-message-received-notification';
 import { ConversationPageState } from './chat/pages/conversation/state/reducer';
-import { markAsReceivedAction, markAsSavedAction, receiveMessageAction } from './chat/pages/conversation/state/actions';
-import { AppResponse } from './models/responses/app-response';
+import { markAsReceivedAction, markAsSavedAction, markAsViewedAction, markMessagesAsViewedAction, receiveMessageAction } from './chat/pages/conversation/state/actions';
+
 register();
 
 @Component({
@@ -55,33 +54,36 @@ export class AppComponent {
     var hubConnection = this.chatHub.buildConnection(token)
     await this.chatHub.start();
 
-    hubConnection.on("connectionCompleted",() => {
+    hubConnection.on("connectionCompletedNotification",() => {
       this.chatHubStore.dispatch(connectionSuccessAction())
-      console.log("connected");
     });
 
-    hubConnection.on("messageSaveCompleted",(data : AppResponse<MessageResponse>) => {
-      this.conversationPageStore.dispatch(markAsSavedAction({payload : data.data!}))
+    hubConnection.on("messageSaveCompletedNotification",(message : MessageResponse) => {
+      this.conversationPageStore.dispatch(markAsSavedAction({
+        messageId : message.id,userId : message.receiverId
+      }))
     })
 
-    hubConnection.on("receiveMessage",(data  : AppResponse<MessageResponse>) => {
-
-      var request : SendMessageReceivedNotification = {
-        conversationId : data.data!.conversationId,
-        messageId : data.data!.id
-      }
-      hubConnection.invoke("SendMessageReceivedNotification",request)
-      this.conversationPageStore.dispatch(receiveMessageAction({receiverId : data.data!.senderId, payload : data.data!}))
+    hubConnection.on("receiveMessage",(message : MessageResponse) => {
+      hubConnection.invoke("SendMessageReceivedNotification",message.id,message.senderId)
+      this.conversationPageStore.dispatch(receiveMessageAction({payload : message}))
     })
 
-    hubConnection.on("messageReceived",(data : AppResponse<MessageResponse>) => {
-      this.conversationPageStore.dispatch(markAsReceivedAction({receiverId : data.data!.receiverId,payload : data.data!}))
+    hubConnection.on("messageReceivedNotification",(data : {messageId : string,receiverId : string}) => {
+      this.conversationPageStore.dispatch(markAsReceivedAction(data))
     })
 
+    hubConnection.on("messageViewedNotification",(data : {messageId : string,receiverId : string}) => {
+      this.conversationPageStore.dispatch(markAsViewedAction(data))
+    })
+
+    hubConnection.on("messagesViewedNotification",(data : {receiverId : string,ids : string[]}) => {
+      this.conversationPageStore.dispatch(markMessagesAsViewedAction(data));
+    })
   }
 
-
   ngOnDestroy(){
+    this.chatHub.hubConnection?.stop();
   }
 
 }

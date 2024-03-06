@@ -51,8 +51,13 @@ export class AppEntityAdapter<E extends BaseResponse,T extends Pagination<E>>{
     return { ...state, entities : this.adapter.addOne(entity,state.entities) }
   }
 
-  updateOne(entity : Update<T>,state : AppEntityState<E,T>) : AppEntityState<E,T>{
-    return {...state,entities : this.adapter.updateOne(entity,state.entities)}
+  updateOne(update : Update<T>,state : AppEntityState<E,T>) : AppEntityState<E,T>{
+    return {...state,entities : this.adapter.updateOne(update,state.entities)}
   }
+
+  updateMany(updates : Update<T>[], state : AppEntityState<E,T>) : AppEntityState<E,T>{
+    return {...state,entities : this.adapter.updateMany(updates,state.entities)}
+  }
+
 }
 

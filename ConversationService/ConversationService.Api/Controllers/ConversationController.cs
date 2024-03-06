@@ -33,5 +33,11 @@ namespace ConversationService.Api.Controllers
             );
         }
 
+        [Authorize(Roles = "user")]
+        [HttpPut]
+        public async Task<IAppResponseDto> MarkMessagesAsViewed(MarkMessagesAsViewedDto request, CancellationToken cancellationToken)
+        {
+            return await _sender.Send(request, cancellationToken);
+        }
     }
 }

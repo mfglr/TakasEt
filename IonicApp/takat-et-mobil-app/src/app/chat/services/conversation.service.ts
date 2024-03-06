@@ -3,12 +3,13 @@ import { Store } from "@ngrx/store";
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
 import { GetConversations } from "../pages/chat-home/models/requests/get-conversations";
 import { Observable } from "rxjs";
-import { AppResponse } from "src/app/models/responses/app-response";
+import { AppResponse, BaseAppresponse } from "src/app/models/responses/app-response";
 import { UrlHelper } from "src/app/helpers/url-helper";
 import { GetConversationsThatHaveNewMessages } from "../pages/chat-home/models/requests/get-conversations-that-have-new-messages";
 import { ConversationResponse } from "../pages/chat-home/models/responses/conversation-response";
 import { GetMessages } from "../models/request/get-messages";
-import { MessageResponse } from "src/app/models/responses/message-response";
+import { MessageResponse } from "src/app/chat/models/responses/message-response";
+import { MarkMessagesAsViewed } from "../models/request/mark-messages-as-viewed";
 
 @Injectable({ providedIn : 'root' })
 export class ConversationService{
@@ -31,5 +32,12 @@ export class ConversationService{
       `${this.baseUrl}/getmessages/${request.userId}?${UrlHelper.createPaginationQueryString(request)}`
     )
   }
+
+  markMessagesAsViewed(reqeust : MarkMessagesAsViewed) : Observable<BaseAppresponse>{
+    return this.httpClient.put(`${this.baseUrl}/MarkMessagesAsViewed`,reqeust);
+  }
+
+
+
 
 }

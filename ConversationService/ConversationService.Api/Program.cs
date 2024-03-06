@@ -1,8 +1,8 @@
 using ConversationService.Application;
 using ConversationService.Infrastructure;
 using ConversationService.Api.Extentions;
-using ConversationService.Api.Hubs;
 using SharedLibrary.Middlewares;
+using ConversationService.Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

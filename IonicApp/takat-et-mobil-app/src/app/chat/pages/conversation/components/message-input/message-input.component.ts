@@ -38,6 +38,7 @@ export class MessageInputComponent  implements OnInit {
               senderId : userId!,
               content : this.messageInput.value,
               receiverId : this.receiverId,
+              sendDate : new Date().toISOString()
             }
           })
         )
