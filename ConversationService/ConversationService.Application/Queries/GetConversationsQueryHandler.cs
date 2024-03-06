@@ -27,27 +27,21 @@ namespace ConversationService.Application.Queries
 
         public async Task<IAppResponseDto> Handle(GetConversationsDto request, CancellationToken cancellationToken)
         {
-
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             
             var conversations = await _context
                 .Conversations
                 .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
-                .ToPage(x => x.DateTimeOfLastMessageReceived, request)
+                .ToPage(x => x.DateTimeOfLastMessage, request)
                 .ToConversationResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
 
-            var ids = conversations
-                .Select(x => x.UserId1 == loginUserId ? x.UserId2 : x.UserId1)
-                .ToList();
+            var ids = conversations.Select(x => x.ReceiverId).ToList();
 
             var users = await _userService.GetUsersByIds(ids,cancellationToken);
 
             foreach ( var conversation in conversations)
-                conversation.Receiver = users
-                    .FirstOrDefault(
-                        x => x.Id == conversation.UserId1 || x.Id == conversation.UserId2
-                    );
+                conversation.Receiver = users.FirstOrDefault(x => x.Id == conversation.ReceiverId);
             
             return new AppGenericSuccessResponseDto<List<ConversationResponseDto>>(conversations);
     

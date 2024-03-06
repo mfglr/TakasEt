@@ -9,7 +9,7 @@ namespace ConversationService.Domain.ConversationAggregate
 	{
         public Guid UserId1 { get; private set; }
         public Guid UserId2 { get; private set; }
-        public DateTime DateTimeOfLastMessageReceived { get; private set; }
+        public DateTime DateTimeOfLastMessage { get; private set; }
 
         public Conversation(Guid userId1, Guid userId2)
 		{
@@ -25,7 +25,7 @@ namespace ConversationService.Domain.ConversationAggregate
 			message.MarkAsSaved();
 
 			_messages.Add(message);
-            DateTimeOfLastMessageReceived = DateTime.UtcNow;
+            DateTimeOfLastMessage = DateTime.UtcNow;
             
             return message;
 		}

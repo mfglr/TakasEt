@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ChatHomePageState } from './state/reducer';
-import { selectConversationResponses, selectConversations } from './state/selectors';
 import { first } from 'rxjs';
-import { nextPageConversationsAction } from './state/actions';
+import { Chat } from '../../state/reducer';
+import { nextPageConversationsAction } from '../../state/actions';
+import { selectConversationResponses } from '../../state/selectors';
 
 @Component({
   selector: 'app-chat-home',
@@ -13,15 +13,16 @@ import { nextPageConversationsAction } from './state/actions';
 export class ChatHomePage implements OnInit {
 
   constructor(
-    private chatHomePageStore : Store<ChatHomePageState>
+    private readonly chatStore : Store<Chat>,
   ) { }
 
-  conversations$ = this.chatHomePageStore.select(selectConversationResponses);
+  conversations$ = this.chatStore.select(selectConversationResponses);
 
   ngOnInit() {
     this.conversations$.pipe(first()).subscribe(x => {
-      if(x.length == 0)
-        this.chatHomePageStore.dispatch(nextPageConversationsAction())
+      if(x.length == 0){
+        this.chatStore.dispatch(nextPageConversationsAction())
+      }
     })
   }
 

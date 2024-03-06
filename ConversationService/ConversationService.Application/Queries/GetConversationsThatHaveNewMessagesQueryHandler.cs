@@ -37,7 +37,7 @@ namespace ConversationService.Application.Queries
                         ) &&
                         x.Messages.Any(m => m.MessageState == MessageState.Saved)
                 )
-                .ToPage(x => x.DateTimeOfLastMessageReceived, request)
+                .ToPage(x => x.DateTimeOfLastMessage, request)
                 .ToConversationResponseDto(logindUserId)
                 .ToListAsync(cancellationToken);
 

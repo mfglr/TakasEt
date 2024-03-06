@@ -26,7 +26,7 @@ export class ConversationPageEffect{
           action => this.store.select(selectMessages({userId : action.userId})).pipe(
             filter(state => state != undefined && !state.isLast),
             first(),
-            mergeMap(state => this.conversationService.getMessages({...state!.page,userId : action.userId})),
+            mergeMap(state => this.conversationService.getMessages({...state!.page,receiverId : action.userId})),
             mergeMap(response => {
               if(!response.isError)
                 return of(nextPageMessagesSuccessAction({userId : action.userId, payload : response.data!}))

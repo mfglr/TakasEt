@@ -29,7 +29,7 @@ export class ConversationService{
 
   getMessages(request : GetMessages) : Observable<AppResponse<MessageResponse[]>>{
     return this.httpClient.get<MessageResponse[]>(
-      `${this.baseUrl}/getmessages/${request.userId}?${UrlHelper.createPaginationQueryString(request)}`
+      `${this.baseUrl}/getmessages/${request.receiverId}?${UrlHelper.createPaginationQueryString(request)}`
     )
   }
 

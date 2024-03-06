@@ -14,9 +14,8 @@ namespace ConversationService.Application.Extentions
                     Id = x.Id,
                     CreatedDate = x.CreatedDate,
                     UpdatedDate = x.UpdatedDate,
-                    UserId1 = x.UserId1,
-                    UserId2 = x.UserId2,
-                    DateTimeOfLastMessageReceived = x.DateTimeOfLastMessageReceived,
+                    DateTimeOfLastMessage = x.DateTimeOfLastMessage,
+                    ReceiverId = x.UserId1 == loginUserId ? x.UserId2 : x.UserId1,
                     CountOfMessagesUnviewed = x
                         .Messages
                         .Count(
