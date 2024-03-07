@@ -1,41 +1,69 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Store } from '@ngrx/store';
 import { ChatHubState } from '../state/chat-hub-state/reducer';
-import { connectionFailedAction } from '../state/chat-hub-state/actions';
+import { connectionFailedAction, connectionSuccessAction } from '../state/chat-hub-state/actions';
+import { Chat } from '../chat/state/reducer';
+import { MessageResponse } from '../chat/models/responses/message-response';
+import { markMessageAsCreatedAction, markMessageAsReceivedAction, markMessageAsViewedAction, markMessagesAsViewedAction, receiveMessageAction } from '../chat/state/actions';
+import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn : "root"
-})
+@Injectable({ providedIn : "root" })
 export class ChatHubService {
 
   private baseUrl : string = "https://localhost:7200/conversation";
-  private isStarted : boolean = false;
   hubConnection? : HubConnection
+  private receivedMessagesSubject = new Subject<MessageResponse>();
 
-  constructor( private readonly chatHubStore : Store<ChatHubState>) {}
+  public receivedMessages = this.receivedMessagesSubject.asObservable();
 
-
-  buildConnection(token : string){
-    if(!this.hubConnection)
-      return this.hubConnection = new HubConnectionBuilder()
-        .withUrl(`${this.baseUrl}`,{ accessTokenFactory : () => token })
-        .build()
-    return this.hubConnection;
+  constructor(
+    private readonly chatHubStore : Store<ChatHubState>,
+    private readonly chatStore : Store<Chat>
+  ) {
   }
 
-  async start(){
+  async start(token : string){
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(`${this.baseUrl}`,{ accessTokenFactory : () => token })
+      .build()
 
-    if(!this.isStarted)
-      setInterval(() => {
-        if(this.hubConnection && this.hubConnection.state == HubConnectionState.Disconnected){
-          this.isStarted = true;
-          this.chatHubStore.dispatch(connectionFailedAction())
-          this.hubConnection
-            .start()
-            .catch((e) => this.chatHubStore.dispatch(connectionFailedAction()));
-        }
-      },3000)
+    this.chatHubStore.dispatch(connectionFailedAction())
+    this.hubConnection
+      .start()
+      .catch((e) => this.chatHubStore.dispatch(connectionFailedAction()));
+
+    this.hubConnection.on("connectionCompletedNotification",() => {
+      this.chatHubStore.dispatch(connectionSuccessAction())
+    });
+
+    this.hubConnection.on("messageSaveCompletedNotification",(message : MessageResponse) => {
+      this.chatStore.dispatch(markMessageAsCreatedAction({messageId : message.id,receiverId : message.receiverId}))
+    })
+
+    this.hubConnection.on("receiveMessage",(message : MessageResponse) => {
+
+      message.receivedDate = new Date()
+      this.receivedMessagesSubject.next(message);
+
+      this.chatStore.dispatch(receiveMessageAction({payload : message}))
+      this.hubConnection!.invoke(
+        "SendMessageReceivedNotification",
+        message.id,message.senderId,message.receivedDate
+      )
+    })
+
+    this.hubConnection.on("messageReceivedNotification",(data : {messageId : string,receiverId : string,receivedDate : Date}) => {
+      this.chatStore.dispatch(markMessageAsReceivedAction(data))
+    })
+
+    this.hubConnection.on("messageViewedNotification",(data : {messageId : string,receiverId : string,viewedDate : Date}) => {
+      this.chatStore.dispatch(markMessageAsViewedAction(data))
+    })
+
+    this.hubConnection.on("messagesViewedNotification",(data : {receiverId : string,ids : string[],viewedDate : Date}) => {
+      this.chatStore.dispatch(markMessagesAsViewedAction(data));
+    })
 
   }
 

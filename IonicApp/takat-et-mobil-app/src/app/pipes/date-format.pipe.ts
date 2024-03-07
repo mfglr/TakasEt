@@ -18,7 +18,7 @@ export class DateFormatPipe implements PipeTransform {
   transform(value: Date | undefined | string): string | undefined{
     if(!value)
       return undefined;
-    let time = Date.now() - new Date(value).getTime();
+    let time = new Date().getTime() - new Date(value).getTime();
     if(time >= 0 && time < 1000)
       return '0 saniye';
     let rValue : number = 0;

@@ -22,14 +22,14 @@ namespace ConversationService.Domain.ConversationAggregate
 		public Message AddMessage(string id, Guid senderId,Guid receiverId, string content,DateTime sendDate)
 		{
 			var message = new Message(id,senderId, receiverId, content,sendDate);
-			message.MarkAsSaved();
+			message.MarkAsCreated();
 
 			_messages.Add(message);
             DateTimeOfLastMessage = DateTime.UtcNow;
             
             return message;
 		}
-        public Message MarkAsReceived(string messageId,Guid userId)
+        public Message MarkMessageAsReceived(string messageId,Guid userId,DateTime receivedDate)
         {
             var message = _messages.FirstOrDefault(m => m.Id == messageId);
             
@@ -39,10 +39,10 @@ namespace ConversationService.Domain.ConversationAggregate
             if (message.ReceiverId != userId)
                 throw new AppException("No Access!", HttpStatusCode.Forbidden);
 
-            message.MarkAsReceived();
+            message.MarkAsReceived(receivedDate);
             return message;
         }
-        public Message MarkAsViewed(string messageId,Guid userId)
+        public Message MarkMessageAsViewed(string messageId,Guid userId,DateTime viewedDate)
         {
             var message = _messages.FirstOrDefault(m => m.Id == messageId);
             
@@ -52,7 +52,7 @@ namespace ConversationService.Domain.ConversationAggregate
             if (message.ReceiverId != userId)
                 throw new AppException("No Access!", HttpStatusCode.Forbidden);
 
-            message.MarkAsViewed();
+            message.MarkAsViewed(viewedDate);
             return message;
         }
         public Message LikeMessage(Guid userId, string messageId)
@@ -67,15 +67,26 @@ namespace ConversationService.Domain.ConversationAggregate
             message.Like(userId);
             return message;
         }
-        public void MarkMessagesAsViewed(Guid userId)
+        public void MarkMessagesAsViewed(Guid userId,DateTime viewedDate)
         {
             var messages = _messages.Where(x => x.MessageState != MessageState.Viewed && x.SenderId != userId).ToList();
 
             if (messages.Any())
             {
                 foreach (var message in messages)
-                    message.MarkAsViewed();
+                    message.MarkAsViewed(viewedDate);
                 AddDomainEvent(new MessagesMarkedAsViewedDomainEvent() { Messages = messages });
+            }
+        }
+        public void MarkMessagesAsReceived(Guid userId, DateTime receivedDate)
+        {
+            var messages = _messages.Where(x => x.MessageState == MessageState.Created && x.SenderId != userId).ToList();
+
+            if (messages.Any())
+            {
+                foreach (var message in messages)
+                    message.MarkAsViewed(receivedDate);
+                AddDomainEvent(new MessagesMarkedAsReceivedDomainEvent() { Messages = messages });
             }
         }
 

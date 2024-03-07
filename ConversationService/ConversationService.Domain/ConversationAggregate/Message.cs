@@ -37,30 +37,28 @@ namespace ConversationService.Domain.ConversationAggregate
 
         public MessageState MessageState { get; private set; }
         public DateTime SendDate { get; private set; }
-        public DateTime SavedDate { get; private set; }
-        public DateTime ReceivedDate { get; private set; }
-        public DateTime ViewedDate { get; private set; }
+        public DateTime? ReceivedDate { get; private set; }
+        public DateTime? ViewedDate { get; private set; }
 
-        public void MarkAsSaved()
+        public void MarkAsCreated()
+        {
+            if (MessageState == MessageState.Created || MessageState == MessageState.Received || MessageState == MessageState.Viewed)
+                return;
+            MessageState = MessageState.CreateMessageState(MessageState.Created);
+        }
+        public void MarkAsReceived(DateTime receivedDate)
         {
             if (MessageState == MessageState.Received || MessageState == MessageState.Viewed)
                 return;
-
-            MessageState = MessageState.CreateMessageState(MessageState.Saved);
-            SavedDate = DateTime.UtcNow;
+            MessageState = MessageState.CreateMessageState(MessageState.Received);
+            ReceivedDate = receivedDate;
         }
-        public void MarkAsReceived()
+        public void MarkAsViewed(DateTime viewedDate)
         {
             if (MessageState == MessageState.Viewed)
                 return;
-
-            MessageState = MessageState.CreateMessageState(MessageState.Received);
-            ReceivedDate = DateTime.UtcNow;
-        }
-        public void MarkAsViewed()
-        {
             MessageState = MessageState.CreateMessageState(MessageState.Viewed);
-            ViewedDate = DateTime.UtcNow;
+            ViewedDate = viewedDate;
         }
 
         //ILikeableByUsers

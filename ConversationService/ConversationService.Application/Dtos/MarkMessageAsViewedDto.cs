@@ -8,5 +8,6 @@ namespace ConversationService.Application.Dtos
         public Guid ReceiverId { get; set; }
         public Guid SenderId { get; set; }
         public string MessageId { get; set; }
+        public DateTime ViewedDate { get; set; }
     }
 }

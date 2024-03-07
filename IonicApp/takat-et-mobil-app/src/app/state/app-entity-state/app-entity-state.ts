@@ -18,7 +18,7 @@ export interface Pagination<T extends BaseResponse>{
 
 export interface Page{
   take : number;
-  lastValue : number | string | undefined;
+  lastValue : number | string | Date | undefined;
   isDescending : boolean;
 }
 

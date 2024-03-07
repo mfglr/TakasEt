@@ -39,7 +39,11 @@ namespace ConversationService.Application.Commands
             if (conversation == null) 
                 throw new AppException("The conversation was not found!", HttpStatusCode.NotFound);
 
-            var message = conversation.MarkAsReceived(request.MessageId,request.ReceiverId);
+            var message = conversation.MarkMessageAsReceived(
+                request.MessageId,
+                request.ReceiverId,
+                request.ReceivedDate
+            );
             await _unitOfWork.CommitAsync(cancellationToken);
             return new AppGenericSuccessResponseDto<MessageResponseDto>(
                 _mapper.Map<MessageResponseDto>(message)

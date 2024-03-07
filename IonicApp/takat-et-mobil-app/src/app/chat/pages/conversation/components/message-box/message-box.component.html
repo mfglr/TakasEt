@@ -6,13 +6,13 @@
       <ng-container *ngIf="isMyMessage$ | async else template;">
         <div class="footer" [style]="footerStyle$ | async">
           <app-message-state [messageState]="message.status"></app-message-state>
-          <span class="created-date">{{message.createdDate | dateFormat}}</span>
+          <span class="created-date">{{message.sendDate | date : 'HH:mm'}}</span>
         </div>
       </ng-container>
 
       <ng-template #template>
         <div class="footer" [style]="footerStyle$ | async">
-          <span class="created-date">{{message.createdDate | dateFormat}}</span>
+          <span class="created-date">{{message.sendDate | date : 'HH:mm'}}</span>
         </div>
       </ng-template>
 

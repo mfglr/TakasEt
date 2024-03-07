@@ -8,8 +8,8 @@ import { MessageStatus } from 'src/app/chat/models/responses/message-response';
 })
 export class MessageStateComponent{
 
-  notSaved = MessageStatus.NotSaved;
-  saved = MessageStatus.Saved;
+  notCreated = MessageStatus.NotCreated;
+  saved = MessageStatus.Created;
   received = MessageStatus.Received;
   viewed = MessageStatus.Viewed;
 

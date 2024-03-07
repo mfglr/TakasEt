@@ -35,7 +35,7 @@ namespace ConversationService.Application.Queries
                         x.SenderId == loginUserId && x.ReceiverId == request.UserId ||
                         x.SenderId == request.UserId && x.ReceiverId == loginUserId
                 )
-                .ToPage(x => x.CreatedDate, request)
+                .ToPage(x => x.SendDate, request)
                 .ToListAsync(cancellationToken);
 
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(

@@ -81,7 +81,7 @@ namespace ConversationService.Application.Hubs
                     .Clients(receiver.ConnectionId!)
                     .SendAsync("receiveMessage",response);
         }
-        public async Task SendMessageReceivedNotification(string messageId,Guid senderId)
+        public async Task SendMessageReceivedNotification(string messageId,Guid senderId,DateTime receivedDate)
         {
             Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
             IAppResponseDto response;
@@ -91,7 +91,8 @@ namespace ConversationService.Application.Hubs
                 {
                     MessageId = messageId,
                     SenderId = senderId,
-                    ReceiverId = loginUserId
+                    ReceiverId = loginUserId,
+                    ReceivedDate = receivedDate
                 };
                 response = await _sender.Send(request);
             }
@@ -108,13 +109,10 @@ namespace ConversationService.Application.Hubs
                     .Clients(sender.ConnectionId)
                     .SendAsync(
                         "messageReceivedNotification", 
-                        new {
-                            MessageId = messageId, 
-                            ReceiverId = loginUserId
-                        }
+                        new { MessageId = messageId, ReceiverId = loginUserId, ReceivedDate = receivedDate }
                     );
         }
-        public async Task SendMessageViewedNotification(string messageId, Guid senderId)
+        public async Task SendMessageViewedNotification(string messageId, Guid senderId,DateTime viewedDate)
         {
             Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
             IAppResponseDto response;
@@ -124,7 +122,8 @@ namespace ConversationService.Application.Hubs
                 {
                     MessageId = messageId,
                     SenderId = senderId,
-                    ReceiverId = loginUserId
+                    ReceiverId = loginUserId,
+                    ViewedDate = viewedDate
                 };
                 response = await _sender.Send(request);
             }
@@ -141,11 +140,7 @@ namespace ConversationService.Application.Hubs
                     .Clients(sender.ConnectionId)
                     .SendAsync(
                         "messageViewedNotification",
-                        new
-                        {
-                            MessageId = messageId,
-                            ReceiverId = loginUserId
-                        }
+                        new { MessageId = messageId, ReceiverId = loginUserId, ViewedDate = viewedDate }
                     );
         }
         public async Task LikeMessage(LikeMessageDto request)

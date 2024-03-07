@@ -1,3 +1,7 @@
-.message{
-  margin-bottom: 0.5rem;
+.messages{
+  display: flex;
+  flex-direction: column-reverse;
+  .message{
+    margin-top : 0.5rem;
+  }
 }

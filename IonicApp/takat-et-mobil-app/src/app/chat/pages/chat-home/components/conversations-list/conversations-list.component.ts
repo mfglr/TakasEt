@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ConversationResponse } from '../../models/responses/conversation-response';
+import { ConversationResponse } from '../../../../models/responses/conversation-response';
 
 @Component({
   selector: 'app-conversations-list',

@@ -16,13 +16,7 @@ namespace ConversationService.Application.Extentions
                     UpdatedDate = x.UpdatedDate,
                     DateTimeOfLastMessage = x.DateTimeOfLastMessage,
                     ReceiverId = x.UserId1 == loginUserId ? x.UserId2 : x.UserId1,
-                    CountOfMessagesUnviewed = x
-                        .Messages
-                        .Count(
-                            x => 
-                                x.MessageState.Status != MessageState.Viewed.Status &&
-                                x.SenderId != loginUserId
-                        ),
+                    
                     LastMessage = x
                         .Messages
                         .OrderByDescending(x => x.CreatedDate)
@@ -30,6 +24,9 @@ namespace ConversationService.Application.Extentions
                         {
                             Id = x.Id,
                             CreatedDate = x.CreatedDate,
+                            ReceivedDate = x.ReceivedDate,
+                            SendDate = x.SendDate,
+                            ViewedDate = x.ViewedDate,
                             ReceiverId = x.ReceiverId,
                             SenderId = x.SenderId,
                             Status = x.MessageState.Status,
@@ -48,6 +45,37 @@ namespace ConversationService.Application.Extentions
                             })
                         })
                         .FirstOrDefault(),
+                    
+                    NewMessages = x
+                        .Messages
+                        .OrderByDescending(x => x.SendDate)
+                        .Where(x => x.MessageState.Status != MessageState.Viewed.Status)
+                        .Select(x => new MessageResponseDto()
+                        {
+                            Id = x.Id,
+                            CreatedDate = x.CreatedDate,
+                            ReceiverId = x.ReceiverId,
+                            SenderId = x.SenderId,
+                            Status = x.MessageState.Status,
+                            Content = x.Content,
+                            UpdatedDate = x.UpdatedDate,
+                            ReceivedDate = x.ReceivedDate,
+                            SendDate = x.SendDate,
+                            ViewedDate = x.ViewedDate,
+                            Images = x.Images.Select(x => new MessageImageResponseDto()
+                            {
+                                Id = x.Id,
+                                CreatedDate = x.CreatedDate,
+                                Extention = x.Extention,
+                                ContainerName = x.ContainerName.Value,
+                                BlobName = x.BlobName,
+                                AspectRatio = x.Dimension.AspectRatio,
+                                Width = x.Dimension.Width,
+                                Height = x.Dimension.Height,
+                            })
+                        })
+                        .ToList()
+
                 });
         }
 

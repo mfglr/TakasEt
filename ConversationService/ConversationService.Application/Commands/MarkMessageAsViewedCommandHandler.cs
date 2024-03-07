@@ -40,7 +40,7 @@ namespace ConversationService.Application.Commands
             if (conversation == null)
                 throw new AppException("The conversation was not found!", HttpStatusCode.NotFound);
 
-            var message = conversation.MarkAsViewed(request.MessageId,request.ReceiverId);
+            var message = conversation.MarkMessageAsViewed(request.MessageId,request.ReceiverId,request.ViewedDate);
 
             await _unitOfWork.CommitAsync(cancellationToken);
 

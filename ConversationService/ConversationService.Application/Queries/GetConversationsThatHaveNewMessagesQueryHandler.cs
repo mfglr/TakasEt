@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
+using SharedLibrary.Services;
 
 namespace ConversationService.Application.Queries
 {
@@ -15,33 +16,40 @@ namespace ConversationService.Application.Queries
 
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly UserService _userService;
 
-        public GetConversationsThatHaveNewMessagesQueryHandler(IHttpContextAccessor contextAccessor, AppDbContext context)
+
+        public GetConversationsThatHaveNewMessagesQueryHandler(AppDbContext context, IHttpContextAccessor contextAccessor, UserService userService)
         {
-            _contextAccessor = contextAccessor;
             _context = context;
+            _contextAccessor = contextAccessor;
+            _userService = userService;
         }
 
         public async Task<IAppResponseDto> Handle(GetConversationsThatHaveNewMessagesDto request, CancellationToken cancellationToken)
         {
-
-            var logindUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-
+            var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
+            
             var conversations = await _context
                 .Conversations
                 .Where(
-                    x =>
-                        (
-                            x.UserId1 == logindUserId || 
-                            x.UserId2 == logindUserId
-                        ) &&
-                        x.Messages.Any(m => m.MessageState == MessageState.Saved)
+                    x => 
+                        (x.UserId1 == loginUserId || x.UserId2 == loginUserId) &&
+                        x.Messages.Any(x => x.MessageState.Status != MessageState.Viewed.Status)
                 )
-                .ToPage(x => x.DateTimeOfLastMessage, request)
-                .ToConversationResponseDto(logindUserId)
+                .OrderByDescending(x => x.DateTimeOfLastMessage)
+                .ToConversationResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
 
+            var ids = conversations.Select(x => x.ReceiverId).ToList();
+
+            var users = await _userService.GetUsersByIds(ids,cancellationToken);
+
+            foreach ( var conversation in conversations)
+                conversation.Receiver = users.FirstOrDefault(x => x.Id == conversation.ReceiverId);
+            
             return new AppGenericSuccessResponseDto<List<ConversationResponseDto>>(conversations);
+    
         }
     }
 }

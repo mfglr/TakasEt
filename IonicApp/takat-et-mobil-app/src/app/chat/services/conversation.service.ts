@@ -1,12 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
-import { GetConversations } from "../pages/chat-home/models/requests/get-conversations";
+import { GetConversationsThatHaveNewMessages } from "../pages/chat-home/models/requests/get-conversations";
 import { Observable } from "rxjs";
 import { AppResponse, BaseAppresponse } from "src/app/models/responses/app-response";
 import { UrlHelper } from "src/app/helpers/url-helper";
-import { GetConversationsThatHaveNewMessages } from "../pages/chat-home/models/requests/get-conversations-that-have-new-messages";
-import { ConversationResponse } from "../pages/chat-home/models/responses/conversation-response";
+import { ConversationResponse } from "../models/responses/conversation-response";
 import { GetMessages } from "../models/request/get-messages";
 import { MessageResponse } from "src/app/chat/models/responses/message-response";
 import { MarkMessagesAsViewed } from "../models/request/mark-messages-as-viewed";
@@ -21,9 +19,9 @@ export class ConversationService{
     private readonly httpClient : NativeHttpClientService
   ) {}
 
-  getConversations(request : GetConversations) : Observable<AppResponse<ConversationResponse[]>>{
+  GetConversationsThatHaveNewMessages(request : GetConversationsThatHaveNewMessages) : Observable<AppResponse<ConversationResponse[]>>{
     return this.httpClient.get<ConversationResponse[]>(
-      `${this.baseUrl}/getconversations?${UrlHelper.createPaginationQueryString(request)}`
+      `${this.baseUrl}/GetConversationsThatHaveNewMessages`
     )
   }
 
@@ -36,8 +34,5 @@ export class ConversationService{
   markMessagesAsViewed(reqeust : MarkMessagesAsViewed) : Observable<BaseAppresponse>{
     return this.httpClient.put(`${this.baseUrl}/MarkMessagesAsViewed`,reqeust);
   }
-
-
-
 
 }

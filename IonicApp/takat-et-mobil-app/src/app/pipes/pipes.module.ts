@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DateFormatPipe } from './date-format.pipe';
 import { ToShortTextPipe } from './to-short-text.pipe';
 import { ToUpperFirstLetterOfAllWordsPipe } from './to-upper-first-letter-of-all-words.pipe';
+import { MessageDateFormat } from './message-date-format';
 
 
 
@@ -10,7 +11,8 @@ import { ToUpperFirstLetterOfAllWordsPipe } from './to-upper-first-letter-of-all
   declarations: [
     DateFormatPipe,
     ToShortTextPipe,
-    ToUpperFirstLetterOfAllWordsPipe
+    ToUpperFirstLetterOfAllWordsPipe,
+    MessageDateFormat
   ],
   imports: [
     CommonModule
@@ -18,7 +20,8 @@ import { ToUpperFirstLetterOfAllWordsPipe } from './to-upper-first-letter-of-all
   exports : [
     DateFormatPipe,
     ToShortTextPipe,
-    ToUpperFirstLetterOfAllWordsPipe
+    ToUpperFirstLetterOfAllWordsPipe,
+    MessageDateFormat
   ]
 })
 export class PipesModule { }

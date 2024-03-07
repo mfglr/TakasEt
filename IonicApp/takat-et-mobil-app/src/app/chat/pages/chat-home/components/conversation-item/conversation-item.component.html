@@ -6,23 +6,33 @@
       <ng-container *ngIf="conversation.receiver">
         <div class="content">
           <span class="user-name">{{conversation.receiver.userName | toShortText:15}}</span>
-          <ng-container *ngIf="conversation.lastMessage">
+
+          <ng-container *ngIf="lastMessage$ | async let lastMessage">
             <div class="message">
-              <ng-container *ngIf="lastMessageStateVisibility$ | async">
-                <app-message-state [messageState]="conversation.lastMessage.status"></app-message-state>
+
+              <ng-container *ngIf="((loginUserId | async) == lastMessage.senderId) else noLastMessageState;">
+                <app-message-state [messageState]="lastMessage.status"></app-message-state>
+                <span class="last-message" style="margin-left:0.25rem;">
+                  {{lastMessage.content | toShortText : 25}}
+                </span>
               </ng-container>
-              <span class="last-message">
-                {{conversation.lastMessage.content | toUpperFirstLetterOfAllWords | toShortText : 25}}
-              </span>
+
+              <ng-template #noLastMessageState>
+                <span class="last-message">
+                  {{lastMessage.content | toShortText : 25}}
+                </span>
+              </ng-template>
+
             </div>
           </ng-container>
+
         </div>
       </ng-container>
     </div>
 
-    <ng-container *ngIf="conversation.countOfMessagesUnviewed > 0">
+    <ng-container *ngIf="countOfNewMessages$ | async let countOfNewMessages">
       <div class="left">
-        <span class="unviewed-messages-count">{{conversation.countOfMessagesUnviewed}}</span>
+        <span class="unviewed-messages-count">{{countOfNewMessages}}</span>
       </div>
     </ng-container>
 

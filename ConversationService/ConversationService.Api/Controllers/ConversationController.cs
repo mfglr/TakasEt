@@ -18,9 +18,9 @@ namespace ConversationService.Api.Controllers
 
         [Authorize(Roles = "user")]
         [HttpGet]
-        public async Task<IAppResponseDto> GetConversations(CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> GetConversationsThatHaveNewMessages(CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetConversationsDto(HttpContext.Request.Query), cancellationToken);
+            return await _sender.Send(new GetConversationsThatHaveNewMessagesDto(), cancellationToken);
         }
 
         [Authorize(Roles = "user")]
