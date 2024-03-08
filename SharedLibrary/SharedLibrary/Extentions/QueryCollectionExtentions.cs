@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Primitives;
-using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
 
 namespace SharedLibrary.Extentions

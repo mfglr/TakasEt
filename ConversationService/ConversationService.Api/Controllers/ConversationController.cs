@@ -18,9 +18,9 @@ namespace ConversationService.Api.Controllers
 
         [Authorize(Roles = "user")]
         [HttpGet]
-        public async Task<IAppResponseDto> GetConversationsThatHaveNewMessages(CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> GetConversationsWithNewMessages(CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetConversationsThatHaveNewMessagesDto(), cancellationToken);
+            return await _sender.Send(new GetConversationsWithNewMessagesDto(Request.Query), cancellationToken);
         }
 
         [Authorize(Roles = "user")]
@@ -31,6 +31,20 @@ namespace ConversationService.Api.Controllers
                 new GetMessagesDto(HttpContext.Request.Query){ UserId = userId},
                 cancellationToken
             );
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPut]
+        public async Task<IAppResponseDto> MarkMessagesAsReceived(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
+        {
+            return await _sender.Send(request, cancellationToken);
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPut]
+        public async Task<IAppResponseDto> MarkAllNewMessagesAsReceived(MarkAllNewMessagesAsReceivedDto request, CancellationToken cancellationToken)
+        {
+            return await _sender.Send(request, cancellationToken);
         }
 
         [Authorize(Roles = "user")]

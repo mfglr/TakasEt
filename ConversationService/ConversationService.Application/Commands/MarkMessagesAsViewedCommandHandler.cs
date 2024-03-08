@@ -35,7 +35,7 @@ namespace ConversationService.Application.Commands
                 .Include(x => x.Messages.Where(
                     x =>
                         x.MessageState.Status != MessageState.Viewed.Status &&
-                        x.SenderId == request.UserId
+                        x.SenderId != loginUserId
                 ))
                 .FirstOrDefaultAsync(
                     x => 

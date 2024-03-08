@@ -5,7 +5,7 @@ import { UserResponse } from "src/app/models/responses/user-response";
 export interface ConversationResponse extends BaseResponse{
   receiverId : string;
   receiver? : UserResponse;
-  dateTimeOfLastMessage : string;
+  dateTimeOfLastMessage : Date;
   lastMessage? : MessageResponse;
   newMessages : MessageResponse[];
 }

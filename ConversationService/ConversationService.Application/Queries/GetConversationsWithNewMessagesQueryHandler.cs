@@ -11,7 +11,7 @@ using SharedLibrary.Services;
 
 namespace ConversationService.Application.Queries
 {
-    public class GetConversationsThatHaveNewMessagesQueryHandler : IRequestHandler<GetConversationsThatHaveNewMessagesDto, IAppResponseDto>
+    public class GetConversationsWithNewMessagesQueryHandler : IRequestHandler<GetConversationsWithNewMessagesDto, IAppResponseDto>
     {
 
         private readonly AppDbContext _context;
@@ -19,14 +19,14 @@ namespace ConversationService.Application.Queries
         private readonly UserService _userService;
 
 
-        public GetConversationsThatHaveNewMessagesQueryHandler(AppDbContext context, IHttpContextAccessor contextAccessor, UserService userService)
+        public GetConversationsWithNewMessagesQueryHandler(AppDbContext context, IHttpContextAccessor contextAccessor, UserService userService)
         {
             _context = context;
             _contextAccessor = contextAccessor;
             _userService = userService;
         }
 
-        public async Task<IAppResponseDto> Handle(GetConversationsThatHaveNewMessagesDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(GetConversationsWithNewMessagesDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             
@@ -35,18 +35,24 @@ namespace ConversationService.Application.Queries
                 .Where(
                     x => 
                         (x.UserId1 == loginUserId || x.UserId2 == loginUserId) &&
-                        x.Messages.Any(x => x.MessageState.Status != MessageState.Viewed.Status)
+                        x.Messages.Any(
+                            x => 
+                                x.MessageState.Status != MessageState.Viewed.Status &&
+                                x.CreatedDate < request.TimeStamp
+                        )
                 )
                 .OrderByDescending(x => x.DateTimeOfLastMessage)
                 .ToConversationResponseDto(loginUserId)
                 .ToListAsync(cancellationToken);
 
-            var ids = conversations.Select(x => x.ReceiverId).ToList();
+            if (conversations.Any())
+            {
+                var ids = conversations.Select(x => x.ReceiverId).ToList();
+                List<UserResponseDto> users = await _userService.GetUsersByIds(ids, cancellationToken);
 
-            var users = await _userService.GetUsersByIds(ids,cancellationToken);
-
-            foreach ( var conversation in conversations)
-                conversation.Receiver = users.FirstOrDefault(x => x.Id == conversation.ReceiverId);
+                foreach (var conversation in conversations)
+                    conversation.Receiver = users.FirstOrDefault(x => x.Id == conversation.ReceiverId);
+            }
             
             return new AppGenericSuccessResponseDto<List<ConversationResponseDto>>(conversations);
     

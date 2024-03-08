@@ -3,6 +3,8 @@ import { Chat, conversationAdapter, messageAdapter } from "./reducer";
 import { MessageStatus } from "../models/responses/message-response";
 
 export const selectStore = createFeatureSelector<Chat>("ChatStore");
+export const selectIsConnected = createSelector(selectStore,state => state.isConnected);
+
 export const selectConversations = createSelector(
   selectStore,
   state => conversationAdapter.getSelectors().selectAll(state.conversations)

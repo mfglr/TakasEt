@@ -87,7 +87,7 @@ export class NativeHttpClientService {
   }
 
 
-  put(url: string, request: any): Observable<BaseAppresponse> {
+  put(url: string, request?: any): Observable<BaseAppresponse> {
     return this.getHttpHeadersJson$.pipe(
       mergeMap(
         headers => from(

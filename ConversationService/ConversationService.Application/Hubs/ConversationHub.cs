@@ -52,6 +52,7 @@ namespace ConversationService.Application.Hubs
             MessageResponseDto response;
             try
             {
+                var contex = Context.GetHttpContext().Request.Body;
                 request.SenderId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
                 await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(Context.GetHttpContext()!, request.ReceiverId.ToString());
 

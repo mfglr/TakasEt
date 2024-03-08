@@ -7,6 +7,8 @@ import { LoginState } from './account/state/reducer';
 import { selectAccessToken, selectIsLogin } from './account/state/selectors';
 import { loginByLocalStorageAction } from './account/state/actions';
 import { ChatHubService } from './services/chat-hub.service';
+import { Chat } from './chat/state/reducer';
+import { loadConversationsWithNewMessagesAction } from './chat/state/actions';
 
 register();
 
@@ -22,6 +24,7 @@ export class AppComponent {
 
   constructor(
     private loginStore : Store<LoginState>,
+    private chatStore : Store<Chat>,
     private readonly chatHub : ChatHubService,
     private readonly router : Router,
   ) {}

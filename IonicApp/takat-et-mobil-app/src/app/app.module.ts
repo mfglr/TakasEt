@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AccountModule } from './account/account.module';
+import { ChatModule } from './chat/chat.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { AccountModule } from './account/account.module';
     AppRoutingModule,
     StoreModule.forRoot(),
     EffectsModule.forRoot(),
-
+    ChatModule,
     AccountModule,
   ],
   providers: [

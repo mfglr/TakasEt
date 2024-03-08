@@ -1,50 +1,84 @@
 import { EntityState, Update, createEntityAdapter } from "@ngrx/entity";
-import { Page } from "src/app/state/app-entity-state/app-entity-state";
 import { MessageResponse, MessageStatus } from "../models/responses/message-response";
 import { ConversationResponse } from "../models/responses/conversation-response";
 import { createReducer, on } from "@ngrx/store";
-import { markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction, markMessagesAsViewedSuccessAction, nextPageMessagesSuccessAction, nextPageSuccessConversationAction, receiveMessageAction, sendMessageSuccessAction } from "./actions";
-
+import {
+  markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,
+  markMessagesAsViewedSuccessAction, receiveMessageAction, sendMessageSuccessAction,
+  loadMessagesSuccessAction, nextPageConversationsSuccessAction, loadConversationsWithNewMessagesSuccessAction,
+  connectionFailedAction, connectionSuccessAction,
+} from "./actions";
 
 export const takeValueOfMessage = 50;
 export const takeValueOfConversation = 20;
 
 export interface Conversation{
   isLast : boolean;
-  page : Page;
+  page : {
+    take : number;
+    lastValue : Date | undefined;
+    isDescending : boolean;
+  };
   conversation : ConversationResponse;
   messages : EntityState<MessageResponse>;
 }
+
+export interface Chat{
+  isLast : boolean;
+  page : { take : number; lastValue : Date | undefined; isDescending : boolean;};
+  conversations : EntityState<Conversation>;
+  isConnected : boolean;
+  isNewMessagesLoaded : boolean;
+}
+
 export const messageAdapter = createEntityAdapter<MessageResponse>({
   selectId : state => state.id,
   sortComparer : (x,y) => x.sendDate < y.sendDate ? 1 : -1
 })
-
-export interface Conversations{
-  isLast : boolean;
-  page : Page;
-  conversations : EntityState<Conversation>
-}
 export const conversationAdapter = createEntityAdapter<Conversation>({
   selectId : state => state.conversation.receiverId,
-  sortComparer : (x,y) => x.conversation.dateTimeOfLastMessage.localeCompare(y.conversation.dateTimeOfLastMessage)
+  sortComparer : (x,y) => x.conversation.dateTimeOfLastMessage < y.conversation.dateTimeOfLastMessage ? 1 : -1
 })
-
-export interface Chat extends Conversations{
-
-}
 
 const initialState : Chat = {
   conversations : conversationAdapter.getInitialState(),
   isLast : false,
-  page : { isDescending : true, lastValue : undefined, take : takeValueOfConversation }
+  isNewMessagesLoaded : false,
+  page : { isDescending : true, lastValue : undefined, take : takeValueOfConversation },
+  isConnected : false,
 }
 
 export const chatReducer = createReducer(
   initialState,
   on(
-    nextPageSuccessConversationAction,
+    connectionFailedAction,
+    (state) => ({...state,isConnected : false})
+  ),
+  on(
+    connectionSuccessAction,
+    (state) => ({...state,isConnected : true})
+  ),
+
+  on(
+    loadConversationsWithNewMessagesSuccessAction,
+    (state,action) => ({...state,isNewMessagesLoaded : true,conversations : conversationAdapter.setMany(
+      action.payload.map((x) : Conversation => ({
+        conversation : x,
+        isLast : false,
+        page : {
+          isDescending : true,
+          lastValue : x.newMessages.length > 0 ? x.newMessages[x.newMessages.length - 1].sendDate : undefined,
+          take : 50
+        },
+        messages : messageAdapter.addMany(x.newMessages,messageAdapter.getInitialState())
+      })),state.conversations)
+    })
+  ),
+
+  on(
+    nextPageConversationsSuccessAction,
     (state,action) => ({
+      ...state,
       conversations : conversationAdapter.addMany(action.payload.map(x => responseToConversation(x)),state.conversations),
       isLast : action.payload.length < takeValueOfConversation,
       page : {
@@ -57,8 +91,9 @@ export const chatReducer = createReducer(
       }
     })
   ),
+
   on(
-    nextPageMessagesSuccessAction,
+    loadMessagesSuccessAction,
     (state,action) => ({
       ...state,
       conversations : conversationAdapter.updateOne({
@@ -129,21 +164,42 @@ export const chatReducer = createReducer(
       })
     }
   ),
+
   on(
     receiveMessageAction,
-    (state,action) => ({
-      ...state,
-      conversations : conversationAdapter.updateOne({
-        id : action.payload.senderId,
-        changes : {
-          messages : messageAdapter.addOne(
-            action.payload,
-            state.conversations.entities[action.payload.senderId]!.messages
-          )
+    (state,action) => {
+      if(state.conversations.entities[action.payload.senderId])
+        return {
+          ...state,
+          conversations : conversationAdapter.updateOne({
+            id : action.payload.senderId,
+            changes : {
+              messages : messageAdapter.addOne(
+                action.payload,
+                state.conversations.entities[action.payload.senderId]!.messages
+              )
+            }
+          },state.conversations)
         }
-      },state.conversations)
-    })
+      var date = new Date();
+      return {
+        ...state,
+        conversations : conversationAdapter.addOne({
+          conversation : {
+            id : "",
+            createdDate : date,
+            dateTimeOfLastMessage : date,
+            newMessages : [],
+            receiverId : action.payload.senderId,
+          },
+          isLast : false,
+          messages : messageAdapter.addOne(action.payload,messageAdapter.getInitialState()),
+          page : {isDescending : true,lastValue : action.payload.sendDate,take : takeValueOfMessage}
+        },state.conversations)
+      }
+    }
   ),
+
   on(
     markMessageAsReceivedSuccessAction,
     (state,action) => {
@@ -169,6 +225,52 @@ export const chatReducer = createReducer(
       })
     }
   ),
+  // on(
+  //   markMessagesAsReceivedSuccessAction,
+  //   (state,action) => {
+  //     var conversation
+  //     return ({
+  //       ...state,
+  //       conversations : conversationAdapter.updateOne({
+  //         id : action.receiverId,
+  //         changes : {
+  //       messages : messageAdapter.updateMany(
+  //         action.ids.map((id) : Update<MessageResponse> => {
+
+  //           var message = state.conversations.entities[action.receiverId]!.messages.entities[id]!;
+
+  //           if(message.status == MessageStatus.Received)
+  //             return;
+
+  //           return {
+  //             id : id,
+  //             changes : {status : MessageStatus.Received, receivedDate : action.receivedDate}
+  //           }
+  //         }),
+  //         state.conversations.entities[action.receiverId]!.messages
+  //       )
+  //     }
+  //   },state.conversations)
+  // })
+  //   }
+  // ),
+
+  on(
+    markMessagesAsViewedSuccessAction,
+    (state,action) => ({
+      ...state,
+      conversations : conversationAdapter.updateOne({
+        id : action.receiverId,
+        changes : {
+          messages : messageAdapter.updateMany(
+            action.ids.map((x) : Update<MessageResponse> => ({
+              id : x, changes : {status : MessageStatus.Viewed,viewedDate : action.viewedDate}
+            })),
+            state.conversations.entities[action.receiverId]!.messages)
+        }
+      },state.conversations)
+    })
+  ),
   on(
     markMessageAsViewedSuccessAction,
     (state,action) => {
@@ -188,20 +290,7 @@ export const chatReducer = createReducer(
       })
     }
   ),
-  on(
-    markMessagesAsViewedSuccessAction,
-    (state,action) => ({
-      ...state,
-      conversations : conversationAdapter.updateOne({
-        id : action.receiverId,
-        changes : {
-          messages : messageAdapter.updateMany(
-            action.ids.map((x) : Update<MessageResponse> => ({id : x, changes : {status : MessageStatus.Viewed}})),
-            state.conversations.entities[action.receiverId]!.messages)
-        }
-      },state.conversations)
-    })
-  )
+
 )
 
 function responseToConversation(response : ConversationResponse) : Conversation{

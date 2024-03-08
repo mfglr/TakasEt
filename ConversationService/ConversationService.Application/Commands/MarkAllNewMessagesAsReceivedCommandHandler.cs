@@ -10,21 +10,22 @@ using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class MarkMessagesAsReceivedCommandHandler : IRequestHandler<MarkMessagesAsReceivedDto, IAppResponseDto>
+    public class MarkAllNewMessagesAsReceivedCommandHandler : IRequestHandler<MarkAllNewMessagesAsReceivedDto, IAppResponseDto>
     {
 
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUnitOfWork _unitOfWork;
 
-        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork)
+
+        public MarkAllNewMessagesAsReceivedCommandHandler(AppDbContext context, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
         {
-            _contextAccessor = contextAccessor;
             _context = context;
+            _contextAccessor = contextAccessor;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IAppResponseDto> Handle(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(MarkAllNewMessagesAsReceivedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
 
@@ -33,16 +34,18 @@ namespace ConversationService.Application.Commands
                 .Include(x => x.Messages.Where(
                     x =>
                         x.MessageState.Status == MessageState.Created.Status &&
-                        x.SenderId != loginUserId
+                        x.SenderId != loginUserId &&
+                        x.CreatedDate < request.TimeStamp
                 ))
                 .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
                 .ToListAsync(cancellationToken);
 
-            foreach ( var conversation in conversations )
+            foreach (var conversation in conversations)
                 conversation.MarkMessagesAsReceived(loginUserId, request.ReceivedDate);
 
             await _unitOfWork.CommitAsync(cancellationToken);
             return new AppSuccessResponseDto();
+
         }
     }
 }
