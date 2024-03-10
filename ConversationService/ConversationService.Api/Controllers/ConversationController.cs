@@ -1,6 +1,7 @@
 ﻿using ConversationService.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.Dtos;
 
@@ -10,48 +11,20 @@ namespace ConversationService.Api.Controllers
     [ApiController]
     public class ConversationController : ControllerBase
     {
-        private readonly ISender _sender;
-        public ConversationController(ISender sender)
+        private readonly IMediator _mediator;
+
+        public ConversationController(IMediator mediator)
         {
-            _sender = sender;
+            _mediator = mediator;
         }
 
         [Authorize(Roles = "user")]
         [HttpGet]
-        public async Task<IAppResponseDto> GetConversationsWithNewMessages(CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> GetConversations(CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetConversationsWithNewMessagesDto(Request.Query), cancellationToken);
+            return await _mediator.Send(new GetConversationsDto(Request.Query), cancellationToken);
         }
 
-        [Authorize(Roles = "user")]
-        [HttpGet("{userId}")]
-        public async Task<IAppResponseDto> GetMessages(Guid userId,CancellationToken cancellationToken)
-        {
-            return await _sender.Send(
-                new GetMessagesDto(HttpContext.Request.Query){ UserId = userId},
-                cancellationToken
-            );
-        }
 
-        [Authorize(Roles = "user")]
-        [HttpPut]
-        public async Task<IAppResponseDto> MarkMessagesAsReceived(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
-        {
-            return await _sender.Send(request, cancellationToken);
-        }
-
-        [Authorize(Roles = "user")]
-        [HttpPut]
-        public async Task<IAppResponseDto> MarkAllNewMessagesAsReceived(MarkAllNewMessagesAsReceivedDto request, CancellationToken cancellationToken)
-        {
-            return await _sender.Send(request, cancellationToken);
-        }
-
-        [Authorize(Roles = "user")]
-        [HttpPut]
-        public async Task<IAppResponseDto> MarkMessagesAsViewed(MarkMessagesAsViewedDto request, CancellationToken cancellationToken)
-        {
-            return await _sender.Send(request, cancellationToken);
-        }
     }
 }

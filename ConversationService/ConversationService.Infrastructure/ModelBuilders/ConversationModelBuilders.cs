@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ConversationService.Infrastructure.ModelBuilders
 {
-    public class ConversationModelBuilder : IEntityTypeConfiguration<Conversation>
+    public class ConversationModelBuilders : IEntityTypeConfiguration<Conversation>
     {
         public void Configure(EntityTypeBuilder<Conversation> builder)
         {
-            builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
+            builder.HasKey(x => new {x.UserId1,x.UserId2});
         }
     }
 }

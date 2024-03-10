@@ -7,8 +7,8 @@ import { LoginState } from './account/state/reducer';
 import { selectAccessToken, selectIsLogin } from './account/state/selectors';
 import { loginByLocalStorageAction } from './account/state/actions';
 import { ChatHubService } from './services/chat-hub.service';
-import { Chat } from './chat/state/reducer';
-import { loadConversationsWithNewMessagesAction } from './chat/state/actions';
+import { ChatState } from './chat/state/reducer';
+import { loadNewMessagesAction } from './chat/state/actions';
 
 register();
 
@@ -24,7 +24,7 @@ export class AppComponent {
 
   constructor(
     private loginStore : Store<LoginState>,
-    private chatStore : Store<Chat>,
+    private chatStore : Store<ChatState>,
     private readonly chatHub : ChatHubService,
     private readonly router : Router,
   ) {}
@@ -38,6 +38,7 @@ export class AppComponent {
         if(token){
           this.router.navigateByUrl("/chat/home")
           this.chatHub.start(token);
+          this.chatStore.dispatch(loadNewMessagesAction())
         }
         else
           this.router.navigateByUrl("/account/login")

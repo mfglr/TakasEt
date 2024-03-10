@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
-import { GetConversationsWithNewMessages } from "../pages/chat-home/models/requests/get-conversations";
 import { Observable } from "rxjs";
 import { AppResponse, BaseAppresponse } from "src/app/models/responses/app-response";
 import { UrlHelper } from "src/app/helpers/url-helper";
@@ -10,20 +9,21 @@ import { MessageResponse } from "src/app/chat/models/responses/message-response"
 import { MarkMessagesAsViewed } from "../models/request/mark-messages-as-viewed";
 import { MarkMessagesAsReceived } from "../models/request/mark-messages-as-received";
 import { MarkAllNewMessagesAsReceived } from "../models/request/mark-all-new-messages-as-received";
+import { GetNewMessages } from "../models/request/get-new-messages";
 
 @Injectable({ providedIn : 'root' })
-export class ConversationService{
+export class MessageService{
 
 
-  private readonly baseUrl : string = "https://localhost:7200/api/conversation";
+  private readonly baseUrl : string = "https://localhost:7200/api/message";
 
   constructor(
     private readonly httpClient : NativeHttpClientService
   ) {}
 
-  getConversationsWithNewMessages(request : GetConversationsWithNewMessages) : Observable<AppResponse<ConversationResponse[]>>{
+  getNewMessages(request : GetNewMessages) : Observable<AppResponse<ConversationResponse[]>>{
     return this.httpClient.get<ConversationResponse[]>(
-      `${this.baseUrl}/GetConversationsWithNewMessages?timeStamp=${request.timeStamp.toJSON()}`
+      `${this.baseUrl}/GetConversationsWithNewMessages`
     )
   }
 
@@ -42,7 +42,7 @@ export class ConversationService{
   }
 
   markAllNewMessagesAsReceived(request : MarkAllNewMessagesAsReceived) : Observable<BaseAppresponse>{
-    return this.httpClient.put(`${this.baseUrl}/MarkAllNewMessagesAsReceived`);
+    return this.httpClient.put(`${this.baseUrl}/MarkAllNewMessagesAsReceived`,request);
   }
 
 

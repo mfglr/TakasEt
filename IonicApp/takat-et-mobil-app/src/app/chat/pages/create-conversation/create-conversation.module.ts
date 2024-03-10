@@ -8,10 +8,6 @@ import { CreateConversationPage } from './create-conversation.page';
 import { UserItemComponent } from './components/user-item/user-item.component';
 import { UserItemListComponent } from './components/user-item-list/user-item-list.component';
 import { ProfileImageModule } from 'src/app/shareds/profile-image/profile-image.module';
-import { StoreModule } from '@ngrx/store';
-import { createConversationPageReducer } from './state/reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { CreateConversationPageEffect } from './state/effect';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
@@ -19,11 +15,8 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     CommonModule,
     IonicModule,
     CreateConversationPageRoutingModule,
-    StoreModule.forFeature("CreateConversationPageStore",createConversationPageReducer),
-    EffectsModule.forFeature([CreateConversationPageEffect]),
     ProfileImageModule,
     PipesModule,
-
   ],
   declarations: [
     CreateConversationPage,

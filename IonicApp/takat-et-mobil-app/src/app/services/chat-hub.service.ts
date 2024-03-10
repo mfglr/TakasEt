@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Store } from '@ngrx/store';
-import { Chat } from '../chat/state/reducer';
 import { MessageResponse } from '../chat/models/responses/message-response';
 import {
-  connectionFailedAction, connectionSuccessAction, loadConversationsWithNewMessagesAction, markMessageAsCreatedAction,markMessageAsReceivedAction,
+  connectionFailedAction, connectionSuccessAction, markMessageAsCreatedAction,markMessageAsReceivedAction,
   markMessageAsViewedAction, markMessagesAsViewedAction,receiveMessageAction
 } from '../chat/state/actions';
 import { Subject } from 'rxjs';
-import { selectIsConnected } from '../chat/state/selectors';
+import { ChatState } from '../chat/state/reducer';
 
 @Injectable({ providedIn : "root" })
 export class ChatHubService {
@@ -20,11 +19,12 @@ export class ChatHubService {
   public receivedMessages = this.receivedMessagesSubject.asObservable();
 
   constructor(
-    private readonly chatStore : Store<Chat>
+    private readonly chatStore : Store<ChatState>
   ) {
   }
 
   start(token : string){
+
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this.baseUrl}`,{ accessTokenFactory : () => token })
       .build()
@@ -65,7 +65,6 @@ export class ChatHubService {
       this.chatStore.dispatch(markMessagesAsViewedAction(data));
     })
 
-    this.chatStore.dispatch(loadConversationsWithNewMessagesAction({timeStamp : new Date()}))
   }
 
 

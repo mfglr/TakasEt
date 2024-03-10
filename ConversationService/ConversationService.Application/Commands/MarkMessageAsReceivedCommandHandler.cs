@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using ConversationService.Application.Dtos;
+﻿using ConversationService.Application.Dtos;
 using ConversationService.Infrastructure;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
 using SharedLibrary.UnitOfWork;
@@ -15,40 +13,26 @@ namespace ConversationService.Application.Commands
 
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public MarkMessageAsReceivedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
+        public MarkMessageAsReceivedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task<IAppResponseDto> Handle(MarkMessageAsReceivedDto request, CancellationToken cancellationToken)
         {
-            var conversation = await _context
-                .Conversations
-                .Include(x => x.Messages.Where(x => x.Id == request.MessageId))
-                .FirstOrDefaultAsync(
-                    x => 
-                        x.UserId1 == request.SenderId && x.UserId2 == request.ReceiverId ||
-                        x.UserId1 == request.ReceiverId && x.UserId2 == request.SenderId,
-                    cancellationToken
-                );
+            var message = await _context
+                .Messages
+                .FindAsync(request.MessageId,cancellationToken);
             
-            if (conversation == null) 
-                throw new AppException("The conversation was not found!", HttpStatusCode.NotFound);
+            if (message == null) 
+                throw new AppException("The message was not found!", HttpStatusCode.NotFound);
 
-            var message = conversation.MarkMessageAsReceived(
-                request.MessageId,
-                request.ReceiverId,
-                request.ReceivedDate
-            );
+            message.MarkAsReceived(new Guid(),request.ReceivedDate);
             await _unitOfWork.CommitAsync(cancellationToken);
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(
-                _mapper.Map<MessageResponseDto>(message)
-            );
-
+            
+            return new AppSuccessResponseDto();
         }
     }
 }

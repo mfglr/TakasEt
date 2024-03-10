@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UserState } from 'src/app/chat/state/reducer';
 import { UserResponse } from 'src/app/models/responses/user-response';
 
 @Component({
@@ -8,7 +9,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 })
 export class UserItemListComponent  implements OnInit {
 
-  @Input() users? : UserResponse[] | null;
+  @Input() users? : UserState[] | null;
   constructor() { }
   ngOnInit() {}
 

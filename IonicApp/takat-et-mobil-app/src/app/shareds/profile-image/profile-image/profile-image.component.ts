@@ -6,6 +6,7 @@ import { UserImageEntityState } from 'src/app/shareds/profile-image/state/reduce
 import { selectState, selectUrl } from 'src/app/shareds/profile-image/state/selectors';
 import { loadUserImageAction } from '../state/actions';
 import { UserResponse } from 'src/app/models/responses/user-response';
+import { UserState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-profile-image',
@@ -14,7 +15,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 })
 export class ProfileImageComponent {
 
-  @Input() user? : UserResponse | null
+  @Input() user? : UserState | null
   @Input() diameter : number = 2;
 
   style : string = `width:${this.diameter}rem;height:${this.diameter}rem;`;

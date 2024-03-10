@@ -1,6 +1,6 @@
 ﻿using SharedLibrary.Entities;
 
-namespace ConversationService.Domain.ConversationAggregate
+namespace ConversationService.Domain.MessageAggregate
 {
     public class MessageUserLiking : Entity<Guid>
     {

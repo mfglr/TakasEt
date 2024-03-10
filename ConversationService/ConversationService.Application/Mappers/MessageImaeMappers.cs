@@ -4,13 +4,10 @@ using ConversationService.Domain.MessageAggregate;
 
 namespace ConversationService.Application.Mappers
 {
-    public class MessageMappers : Profile
+    public class MessageImaeMappers : Profile
     {
-        public MessageMappers()
+        public MessageImaeMappers()
         {
-            CreateMap<Message, MessageResponseDto>()
-                .ForMember(x => x.Status,x => x.MapFrom(x => x.MessageState.Status));
-
             CreateMap<MessageImage, MessageImageResponseDto>()
                 .ForMember(x => x.ContainerName, x => x.MapFrom(x => x.ContainerName.Value))
                 .ForMember(x => x.AspectRatio, x => x.MapFrom(x => x.Dimension.AspectRatio))

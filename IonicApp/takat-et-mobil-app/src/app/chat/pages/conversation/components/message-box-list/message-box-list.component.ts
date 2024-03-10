@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MessageResponse } from 'src/app/chat/models/responses/message-response';
+import { MessageState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-message-box-list',
@@ -7,5 +8,5 @@ import { MessageResponse } from 'src/app/chat/models/responses/message-response'
   styleUrls: ['./message-box-list.component.scss'],
 })
 export class MessageBoxListComponent{
-  @Input() messages? : MessageResponse[] | null;
+  @Input() messages? : MessageState[] | null;
 }

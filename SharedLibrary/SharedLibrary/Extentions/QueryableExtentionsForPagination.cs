@@ -12,7 +12,7 @@ namespace SharedLibrary.Extentions
             Expression<Func<TEntity, TProperty>> propertyForPagination,
             IPage<TProperty> page
 		)
-            where TEntity : IEntity
+            where TEntity : class
             where TProperty : IComparable<TProperty>
         {
 

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateConversationPageState } from './state/reducer';
 import { Store } from '@ngrx/store';
 import { Observable, first } from 'rxjs';
-import { UserResponse } from 'src/app/models/responses/user-response';
-import { selectUserResponses } from './state/selectors';
-import { nextPageUsersAction } from './state/actions';
+import { selectUserResponses } from '../../state/selectors';
+import { nextPageUsersAction } from '../../state/actions';
+import { ChatState, UserState } from '../../state/reducer';
 
 @Component({
   selector: 'app-create-conversation',
@@ -13,15 +12,15 @@ import { nextPageUsersAction } from './state/actions';
 })
 export class CreateConversationPage implements OnInit {
 
-  constructor(private readonly store : Store<CreateConversationPageState> ) { }
+  constructor(private readonly chatStore : Store<ChatState> ) { }
 
-  users$ : Observable<UserResponse[]> = this.store.select(selectUserResponses)
+  users$ : Observable<UserState[]> = this.chatStore.select(selectUserResponses)
 
   ngOnInit() {
 
     this.users$.pipe(first()).subscribe(x => {
       if(x.length == 0)
-        this.store.dispatch(nextPageUsersAction())
+        this.chatStore.dispatch(nextPageUsersAction())
     })
   }
 

@@ -3,6 +3,7 @@ using ConversationService.Application.Dtos;
 using ConversationService.Domain.UserConnectionAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
 using SharedLibrary.UnitOfWork;
 
@@ -13,6 +14,7 @@ namespace ConversationService.Application.Commands
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
 
         public ConnectCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {

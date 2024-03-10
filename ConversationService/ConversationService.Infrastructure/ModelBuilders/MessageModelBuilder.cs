@@ -1,4 +1,4 @@
-﻿using ConversationService.Domain.ConversationAggregate;
+﻿using ConversationService.Domain.MessageAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,8 +9,6 @@ namespace ConversationService.Infrastructure.ModelBuilders
 
         public void Configure(EntityTypeBuilder<Message> builder)
         {
-            builder.HasIndex(x => x.CreatedDate).HasDatabaseName("CreatedDateIndexer");
-
             builder.OwnsOne(message => message.MessageState);
         }
     }

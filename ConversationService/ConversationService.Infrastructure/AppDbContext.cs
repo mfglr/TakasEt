@@ -1,4 +1,5 @@
 ﻿using ConversationService.Domain.ConversationAggregate;
+using ConversationService.Domain.MessageAggregate;
 using ConversationService.Domain.UserConnectionAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -9,8 +10,8 @@ namespace ConversationService.Infrastructure
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<UserConnection> UserConnections { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
         public DbSet<Message> Messages { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

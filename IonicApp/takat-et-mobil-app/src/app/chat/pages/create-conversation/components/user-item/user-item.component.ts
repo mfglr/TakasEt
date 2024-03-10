@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UserState } from 'src/app/chat/state/reducer';
 import { UserImageResponse } from 'src/app/models/responses/user-image-response';
 import { UserResponse } from 'src/app/models/responses/user-response';
 
@@ -9,7 +10,7 @@ import { UserResponse } from 'src/app/models/responses/user-response';
 })
 export class UserItemComponent  implements OnInit {
 
-  @Input() user? : UserResponse;
+  @Input() user? : UserState;
   constructor() { }
 
   ngOnInit() {}

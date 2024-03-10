@@ -4,6 +4,7 @@ using ConversationService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConversationService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240309183439_remeveConversationTable")]
+    partial class remeveConversationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,32 +25,7 @@ namespace ConversationService.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Conversation", b =>
-                {
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId2")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("RemovedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UserId1", "UserId2");
-
-                    b.ToTable("Conversations");
-                });
-
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.Message", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -55,12 +33,6 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ConversationUserId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ConversationUserId2")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -100,12 +72,10 @@ namespace ConversationService.Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.HasIndex("ConversationUserId1", "ConversationUserId2");
-
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.MessageImage", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,7 +111,7 @@ namespace ConversationService.Infrastructure.Migrations
                     b.ToTable("MessageImage");
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.MessageUserLiking", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageUserLiking", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -201,7 +171,7 @@ namespace ConversationService.Infrastructure.Migrations
                     b.ToTable("UserConnections");
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.Message", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
                     b.HasOne("ConversationService.Domain.UserConnectionAggregate.UserConnection", "Sender")
                         .WithMany("MessagesReceived")
@@ -209,11 +179,7 @@ namespace ConversationService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ConversationService.Domain.ConversationAggregate.Conversation", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationUserId1", "ConversationUserId2");
-
-                    b.OwnsOne("ConversationService.Domain.MessageAggregate.MessageState", "MessageState", b1 =>
+                    b.OwnsOne("ConversationService.Domain.ConversationAggregate.MessageState", "MessageState", b1 =>
                         {
                             b1.Property<string>("MessageId")
                                 .HasColumnType("nvarchar(450)");
@@ -235,9 +201,9 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.MessageImage", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageImage", b =>
                 {
-                    b.HasOne("ConversationService.Domain.MessageAggregate.Message", null)
+                    b.HasOne("ConversationService.Domain.ConversationAggregate.Message", null)
                         .WithMany("Images")
                         .HasForeignKey("MessageId");
 
@@ -287,19 +253,14 @@ namespace ConversationService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.MessageUserLiking", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.MessageUserLiking", b =>
                 {
-                    b.HasOne("ConversationService.Domain.MessageAggregate.Message", null)
+                    b.HasOne("ConversationService.Domain.ConversationAggregate.Message", null)
                         .WithMany("UsersWhoLikedTheEntity")
                         .HasForeignKey("MessageId");
                 });
 
-            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Conversation", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("ConversationService.Domain.MessageAggregate.Message", b =>
+            modelBuilder.Entity("ConversationService.Domain.ConversationAggregate.Message", b =>
                 {
                     b.Navigation("Images");
 

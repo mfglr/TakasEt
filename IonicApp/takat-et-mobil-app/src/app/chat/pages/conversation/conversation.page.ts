@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MessageResponse } from 'src/app/chat/models/responses/message-response';
 import { Observable, Subscription, first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ConversationResponse } from '../../models/responses/conversation-response';
-import { Chat, takeValueOfMessage } from '../../state/reducer';
+import { ChatState, MessageState, takeValueOfMessage } from '../../state/reducer';
 import { markMessageAsViewedAction, markNewMessagesAsViewedAction, nextPageMessagesAction } from '../../state/actions';
-import { selectMessageResponses } from '../../state/selectors';
+import { selectMessageStates } from '../../state/selectors';
 
 @Component({
   selector: 'app-conversation',
@@ -17,12 +16,12 @@ import { selectMessageResponses } from '../../state/selectors';
 export class ConversationPage implements OnInit,OnDestroy {
   conversation : ConversationResponse | null;
   receivedMessagesSubscription? : Subscription;
-  messages$? : Observable<MessageResponse[]>;
+  messages$? : Observable<MessageState[]>;
 
   constructor(
     private readonly router : Router,
     private readonly chatHub : ChatHubService,
-    private readonly chatStore : Store<Chat>
+    private readonly chatStore : Store<ChatState>
   ) {
     this.conversation = this.router.getCurrentNavigation()?.extras.state as (ConversationResponse | null)
   }
@@ -30,11 +29,11 @@ export class ConversationPage implements OnInit,OnDestroy {
   ngOnInit() {
 
     if(this.conversation){
-      this.messages$ = this.chatStore.select(selectMessageResponses({receiverId : this.conversation.receiverId}));
+      this.messages$ = this.chatStore.select(selectMessageStates({userId : this.conversation.userId}));
       this.messages$.pipe(first()).subscribe(
         x => {
           if(x.length < takeValueOfMessage)
-            this.chatStore.dispatch(nextPageMessagesAction({receiverId : this.conversation!.receiverId}))
+            this.chatStore.dispatch(nextPageMessagesAction({userId : this.conversation!.userId}))
         }
       )
 
@@ -44,12 +43,12 @@ export class ConversationPage implements OnInit,OnDestroy {
           messageId : message.id,receiverId : message.senderId,viewedDate : viewedDate
         }))
 
-        if(message.senderId == this.conversation!.receiverId)
+        if(message.senderId == this.conversation!.userId)
           this.chatHub.hubConnection!.invoke( "SendMessageViewedNotification", message.id,message.senderId,viewedDate)
       })
 
       this.chatStore.dispatch(markNewMessagesAsViewedAction({
-        receiverId : this.conversation.receiverId,
+        receiverId : this.conversation.userId,
         viewedDate : new Date()
       }));
 

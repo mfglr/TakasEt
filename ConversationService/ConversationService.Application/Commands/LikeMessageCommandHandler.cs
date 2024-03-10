@@ -34,25 +34,22 @@ namespace ConversationService.Application.Commands
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
 
-            var conversation = await _context
-                .Conversations
-                .Include(x => x.Messages.Where(x => x.Id == request.MessageId))
-                .FirstOrDefaultAsync(x => x.Id == request.ConversationId, cancellationToken);
-            
-            if (conversation == null)
-                throw new AppException("The conversation was not found!", HttpStatusCode.NotFound);
+            var message = await _context
+                .Messages
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
 
-            if(loginUserId == conversation.UserId1)
-                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.UserId2.ToString());
+            if (message == null)
+                throw new AppException("Message was not found!", HttpStatusCode.NotFound);
+
+            if(loginUserId == message.SenderId)
+                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(message.ReceiverId.ToString());
             else
-                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(conversation.UserId1.ToString());
-            
-            var message = conversation.LikeMessage(loginUserId,request.MessageId);
+                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(message.SenderId.ToString());
+
+            message.Like(loginUserId);
             await _unitOfWork.CommitAsync(cancellationToken);
 
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(
-                _mapper.Map<MessageResponseDto>(message)
-            );
+            return new AppSuccessResponseDto();
         }
     }
 }

@@ -4,6 +4,7 @@ import { map } from 'rxjs';
 import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
 import { MessageResponse } from 'src/app/chat/models/responses/message-response';
+import { MessageState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-message-box',
@@ -12,7 +13,7 @@ import { MessageResponse } from 'src/app/chat/models/responses/message-response'
 })
 export class MessageBoxComponent{
 
-  @Input() message? : MessageResponse;
+  @Input() message? : MessageState;
 
   isMyMessage$ = this.loginStore.select(selectUserId).pipe(
     map(userId => this.message != undefined && this.message.senderId == userId)

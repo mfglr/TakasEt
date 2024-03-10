@@ -82,37 +82,38 @@ namespace ConversationService.Application.Hubs
                     .Clients(receiver.ConnectionId!)
                     .SendAsync("receiveMessage",response);
         }
-        public async Task SendMessageReceivedNotification(string messageId,Guid senderId,DateTime receivedDate)
+        public async Task SendMessageReceivedNotification(MarkMessageAsReceivedDto request)
         {
             Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
             IAppResponseDto response;
             try
             {
-                var request = new MarkMessageAsReceivedDto()
-                {
-                    MessageId = messageId,
-                    SenderId = senderId,
-                    ReceiverId = loginUserId,
-                    ReceivedDate = receivedDate
-                };
                 response = await _sender.Send(request);
             }
             catch (Exception)
             {
                 return;
             }
-            var sender = await _context
-                .UserConnections
-                .FirstOrDefaultAsync(x => x.Id == senderId);
+
+            var sender = (await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId))?
+                .Sender;
 
             if (sender != null && sender.IsConnected && sender.ConnectionId != null)
                 await Clients
                     .Clients(sender.ConnectionId)
                     .SendAsync(
                         "messageReceivedNotification", 
-                        new { MessageId = messageId, ReceiverId = loginUserId, ReceivedDate = receivedDate }
+                        new {
+                            MessageId = request.MessageId,
+                            ReceiverId = loginUserId, 
+                            ReceivedDate = request.ReceivedDate
+                        }
                     );
         }
+
         public async Task SendMessageViewedNotification(string messageId, Guid senderId,DateTime viewedDate)
         {
             Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);

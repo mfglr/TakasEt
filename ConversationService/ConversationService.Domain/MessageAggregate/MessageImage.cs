@@ -1,7 +1,7 @@
 ﻿using SharedLibrary.Entities;
 using SharedLibrary.ValueObjects;
 
-namespace ConversationService.Domain.ConversationAggregate
+namespace ConversationService.Domain.MessageAggregate
 {
     public class MessageImage : Image<Guid>
     {

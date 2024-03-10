@@ -2,12 +2,10 @@
 
 namespace ConversationService.Application.Dtos
 {
-    public class ConversationResponseDto : BaseResponseDto<Guid>
+    public class ConversationResponseDto
     {
-        public Guid ReceiverId { get; set; }
-        public UserResponseDto? Receiver {  get; set; }
-        public DateTime DateTimeOfLastMessage { get; set; }
-        public MessageResponseDto? LastMessage { get; set; }
-        public List<MessageResponseDto> NewMessages { get; set; }
+        public Guid UserId { get; set; }
+        public UserResponseDto? User { get; set; }
+        public IEnumerable<MessageResponseDto> Messages { get; set; }
     }
 }

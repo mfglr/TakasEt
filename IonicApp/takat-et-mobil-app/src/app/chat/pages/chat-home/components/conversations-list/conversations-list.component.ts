@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ConversationResponse } from '../../../../models/responses/conversation-response';
+import { ConversationState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-conversations-list',
@@ -7,5 +7,5 @@ import { ConversationResponse } from '../../../../models/responses/conversation-
   styleUrls: ['./conversations-list.component.scss'],
 })
 export class ConversationsListComponent{
-  @Input() conversations? : ConversationResponse[] | null
+  @Input() conversations? : ConversationState[] | null
 }

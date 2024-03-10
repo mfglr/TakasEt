@@ -1,4 +1,4 @@
 export interface MarkAllNewMessagesAsReceived{
-  receivedDate : Date;
-  timeStamp : Date;
+  receivedDate : number;
+  ids : string[]
 }

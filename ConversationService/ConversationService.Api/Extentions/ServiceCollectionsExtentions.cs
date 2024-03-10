@@ -43,6 +43,17 @@ namespace ConversationService.Api.Extentions
                     JwtBearerDefaults.AuthenticationScheme,
                     opt =>
                     {
+                        opt.Events = new JwtBearerEvents
+                        {
+                            OnMessageReceived = (context) => {
+                                
+                                //var _contextAccessor = services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>();
+                                //_contextAccessor.HttpContext = context.HttpContext;
+
+                                return Task.CompletedTask;
+                            }
+                        };
+
                         opt.TokenValidationParameters = new()
                         {
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey)),

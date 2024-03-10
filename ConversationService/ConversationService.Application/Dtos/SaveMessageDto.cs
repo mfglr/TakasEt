@@ -9,6 +9,6 @@ namespace ConversationService.SignalR.Dtos
         public Guid SenderId { get; set; }
         public Guid ReceiverId { get; set; }
         public string Content { get; set; }
-        public DateTime SendDate { get; set; }
+        public long SendDate { get; set; }
     }
 }

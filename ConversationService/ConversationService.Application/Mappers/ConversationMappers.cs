@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ConversationService.Application.Dtos;
 using ConversationService.Domain.ConversationAggregate;
 
 namespace ConversationService.Application.Mappers
@@ -7,7 +8,7 @@ namespace ConversationService.Application.Mappers
     {
         public ConversationMappers()
         {
-            CreateMap<Conversation, Conversation>();
+            CreateMap<Conversation, ConversationResponseDto>();
         }
     }
 }

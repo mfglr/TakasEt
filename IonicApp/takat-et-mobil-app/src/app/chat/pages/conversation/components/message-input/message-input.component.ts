@@ -5,8 +5,9 @@ import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
 import { first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
-import { Chat } from 'src/app/chat/state/reducer';
+import { ChatState } from 'src/app/chat/state/reducer';
 import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/state/actions';
+import { SendMessage } from 'src/app/chat/models/request/send-message';
 
 @Component({
   selector: 'app-message-input',
@@ -15,14 +16,14 @@ import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/
 })
 export class MessageInputComponent  implements OnInit {
 
-  @Input() receiverId? : string;
+  @Input() userId? : string;
   messageInput = new FormControl<string>("");
   userId$ = this.loginStore.select(selectUserId);
 
   constructor(
     private readonly loginStore : Store<LoginState>,
     private readonly chatHub : ChatHubService,
-    private readonly chatStore : Store<Chat>
+    private readonly chatStore : Store<ChatState>
   ) { }
 
   ngOnInit() {}
@@ -31,14 +32,14 @@ export class MessageInputComponent  implements OnInit {
 
     this.userId$.pipe(first()).subscribe(userId => {
 
-      if(this.messageInput.value && this.receiverId){
+      if(this.messageInput.value && this.userId){
 
-        var request = {
+        var request : SendMessage = {
           id : crypto.randomUUID(),
           senderId : userId!,
           content : this.messageInput.value,
-          receiverId : this.receiverId,
-          sendDate : new Date()
+          receiverId : this.userId,
+          sendDate : new Date().getTime()
         }
 
         this.chatHub.hubConnection!

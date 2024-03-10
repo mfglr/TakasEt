@@ -1,5 +1,5 @@
 ﻿using ConversationService.Application.Dtos;
-using ConversationService.Domain.ConversationAggregate;
+using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -28,18 +28,13 @@ namespace ConversationService.Application.Commands
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
 
-            var conversations = await _context
-                .Conversations
-                .Include(x => x.Messages.Where(
-                    x =>
-                        x.MessageState.Status == MessageState.Created.Status &&
-                        x.SenderId != loginUserId
-                ))
-                .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
+            var messages = await _context
+                .Messages
+                .Where(x => request.Ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
-            foreach ( var conversation in conversations )
-                conversation.MarkMessagesAsReceived(loginUserId, request.ReceivedDate);
+            foreach(var message in messages)
+                message.MarkAsReceived(loginUserId, request.ReceivedDate);
 
             await _unitOfWork.CommitAsync(cancellationToken);
             return new AppSuccessResponseDto();

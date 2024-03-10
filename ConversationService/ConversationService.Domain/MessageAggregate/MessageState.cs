@@ -1,6 +1,6 @@
 ﻿using SharedLibrary.ValueObjects;
 
-namespace ConversationService.Domain.ConversationAggregate
+namespace ConversationService.Domain.MessageAggregate
 {
     public class MessageState : ValueObject
     {

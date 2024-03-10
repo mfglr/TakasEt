@@ -2,10 +2,10 @@
   <div class="root-wrapper" routerLink="/chat/conversation" [state]="conversation">
 
     <div class="right">
-      <app-profile-image [diameter]="3" [user]="conversation.receiver"></app-profile-image>
-      <ng-container *ngIf="conversation.receiver">
+      <app-profile-image [diameter]="3" [user]="conversation.user"></app-profile-image>
+      <ng-container *ngIf="conversation.user">
         <div class="content">
-          <span class="user-name">{{conversation.receiver.userName | toShortText:15}}</span>
+          <span class="user-name">{{conversation.user.userName | toShortText:15}}</span>
 
           <ng-container *ngIf="lastMessage$ | async let lastMessage">
             <div class="message">

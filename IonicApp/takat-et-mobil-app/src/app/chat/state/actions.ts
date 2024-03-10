@@ -3,17 +3,16 @@ import { ConversationResponse } from "../models/responses/conversation-response"
 import { MessageResponse } from "../models/responses/message-response";
 import { SendMessage } from "../models/request/send-message";
 import { MarkAllNewMessagesAsReceived } from "../models/request/mark-all-new-messages-as-received";
+import { UserResponse } from "src/app/models/responses/user-response";
+import { BaseAppresponse } from "src/app/models/responses/app-response";
 
 export const connectionFailedAction = createAction("[Chat Module State] connection failed");
 export const connectionSuccessAction = createAction("[Chat Module State] connectin success");
 
-export const loadConversationsWithNewMessagesAction = createAction(
-  "[Chat Module State] load conversations with new messages",
-  props<{timeStamp : Date}>()
-)
-export const loadConversationsWithNewMessagesSuccessAction = createAction(
+export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
+export const loadNewMessagesSuccessAction = createAction(
   "[Chat Module State] load conversations with new messages success",
-  props<{payload : ConversationResponse[]}>()
+  props<{payload : ConversationResponse[],receivedDate : Date}>()
 )
 
 export const markAllNewMessagesAsReceivedAction = createAction(
@@ -32,11 +31,25 @@ export const nextPageConversationsSuccessAction = createAction(
   "[Chat Module State] next page conversations success",
   props<{payload : ConversationResponse[]}>()
 )
+export const nextPageConversationsFailedAction = createAction(
+  "[Chat Module State] next page conversations failed",
+  props<{payload : BaseAppresponse}>()
+)
 
-export const nextPageMessagesAction = createAction("[Chat Module State] next page message",props<{receiverId : string}>())
-export const loadMessagesSuccessAction = createAction(
-  "[Chat Module State] load new messages success",
-  props<{receiverId : string, payload : MessageResponse[]}>()
+export const nextPageUsersAction = createAction("[Chat Module State] next page users")
+export const nextPageUsersSuccessAction = createAction(
+"[Chat Module State] next page users success",
+  props<{payload : UserResponse[]}>()
+)
+export const nextPageUsersFailedAction = createAction(
+  "[Chat Module State] next page users failed",
+  props<{payload : BaseAppresponse}>()
+)
+
+export const nextPageMessagesAction = createAction("[Chat Module State] next page message",props<{userId : string}>())
+export const nextPageMessagesSuccessAction = createAction(
+  "[Chat Module State] next page messages success",
+  props<{userId : string, payload : MessageResponse[]}>()
 )
 
 export const sendMessageSuccessAction = createAction(
