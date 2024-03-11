@@ -1,18 +1,17 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
-  nextPageMessagesSuccessAction, markMessageAsCreatedAction,
-  markMessageAsCreatedSuccessAction, markMessageAsReceivedAction, markMessageAsReceivedSuccessAction,
-  markMessageAsViewedAction, markMessageAsViewedSuccessAction, markMessagesAsViewedAction,
-  markMessagesAsViewedSuccessAction, markNewMessagesAsViewedAction, nextPageMessagesAction,
-  loadNewMessagesSuccessAction,loadNewMessagesAction, markAllNewMessagesAsReceivedAction,
-  markAllNewMessagesAsReceivedSuccessAction, markAllNewMessagesAsReceivedFailedAction, nextPageUsersAction,
-  nextPageUsersSuccessAction, nextPageConversationsAction, nextPageConversationsSuccessAction,
-  nextPageUsersFailedAction,nextPageConversationsFailedAction
+  nextPageMessagesSuccessAction, markMessageAsCreatedAction, markMessageAsCreatedSuccessAction,
+  markMessageAsReceivedAction, markMessageAsReceivedSuccessAction, markMessageAsViewedAction,
+  markMessageAsViewedSuccessAction, markMessagesAsViewedAction, markMessagesAsViewedSuccessAction,
+  markNewMessagesAsViewedAction, nextPageMessagesAction, loadNewMessagesSuccessAction,
+  loadNewMessagesAction, nextPageUsersAction, nextPageUsersSuccessAction, nextPageConversationsAction,
+  nextPageConversationsSuccessAction, nextPageUsersFailedAction, nextPageConversationsFailedAction,
+  markMessagesAsReceivedSuccessAction, markMessagesAsReceivedFailedAction, markMessagesAsReceivedAction
 } from "./actions";
 import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectConversationPage, selectUserPage, selectIdsOfUnViewedMessages } from "./selectors";
+import { selectConversationPage, selectUserPage, selectIdsOfUnViewedMessages, selectMessagePage } from "./selectors";
 import { MessageService } from "../services/message.service";
 import { UserService } from "src/app/services/user.service";
 import { ChatState } from "./reducer";
@@ -29,7 +28,7 @@ export class ChatEffect{
     private readonly conversationService : ConversationService
   ) {}
 
-  loadConversationsWithNewMessages$ = createEffect(
+  loadNewMessages$ = createEffect(
     () => {
       return this.actions.pipe(
         ofType(loadNewMessagesAction),
@@ -39,9 +38,8 @@ export class ChatEffect{
               var receivedDate = new Date();
               return of(
                 loadNewMessagesSuccessAction({payload : response.data!,receivedDate : receivedDate}),
-                markAllNewMessagesAsReceivedAction({
+                markMessagesAsReceivedAction({
                   request : {ids : response.data!.map(x => x.id),
-                  receivedDate : receivedDate.getTime()
                 }})
               )
             }
@@ -68,15 +66,15 @@ export class ChatEffect{
     }
   )
 
-  markAllNewMessagesAsReceived$ = createEffect(
+  markMessagesAsReceived$ = createEffect(
     () => this.actions.pipe(
-      ofType(markAllNewMessagesAsReceivedAction),
+      ofType(markMessagesAsReceivedAction),
       mergeMap(
-        action => this.messageService.markAllNewMessagesAsReceived(action.request).pipe(
+        action => this.messageService.markMessagesAsReceived(action.request).pipe(
           mergeMap(response => {
             if(!response.isError)
-              return of(markAllNewMessagesAsReceivedSuccessAction())
-            return of(markAllNewMessagesAsReceivedFailedAction());
+              return of(markMessagesAsReceivedSuccessAction())
+            return of(markMessagesAsReceivedFailedAction());
           })
         )
       )
@@ -97,26 +95,23 @@ export class ChatEffect{
     )
   )
 
-  // nextPageMessages$ = createEffect(
-  //   () => {
-  //     return this.actions.pipe(
-  //       ofType(nextPageMessagesAction),
-  //       mergeMap(
-  //         action => this.chatStore.select(selectMessage({receiverId : action.userId})).pipe(
-  //           filter(state => state != undefined),
-  //           first(),
-  //           filter(state => !(state!.isLast)),
-  //           mergeMap(state => this.messageService.getMessages({...state!.page,receiverId : action.receiverId})),
-  //           mergeMap(response => {
-  //             if(!response.isError)
-  //               return of(nextPageMessagesSuccessAction({receiverId : action.receiverId,payload : response.data!}))
-  //             return of()
-  //           })
-  //         )
-  //       )
-  //     )
-  //   }
-  // )
+  nextPageMessages$ = createEffect(
+    () => this.actions.pipe(
+      ofType(nextPageMessagesAction),
+      mergeMap(
+        action => this.chatStore.select(selectMessagePage({userId : action.userId})).pipe(
+          first(),
+          filter(state => !state.isLast),
+          mergeMap(state => this.messageService.getMessages({...state,userId : action.userId})),
+          mergeMap(response => {
+            if(!response.isError)
+              return of(nextPageMessagesSuccessAction({userId : action.userId,payload : response.data!}))
+            return of()
+          })
+        )
+      )
+    )
+  )
 
   // markMessageAsCreated$ = createEffect(
   //   () => this.actions.pipe(

@@ -1,15 +1,18 @@
-<ion-card class="root-wrapper" routerLink="/chat/conversation" [state]="user">
-  <div class="profile">
+<ng-container *ngIf="user">
+  <ion-card class="root-wrapper" routerLink="/chat/conversation" [state]="{userId : user.id}">
+    <div class="profile">
 
-    <app-profile-image [diameter]="3" [user]="user"></app-profile-image>
+      <app-profile-image [diameter]="3" [user]="user"></app-profile-image>
 
-    <div class="names">
-      <span class="user-name">{{user?.userName | toShortText:10}}</span>
-      <span class="name" *ngIf="user?.name || user?.lastName">
-        {{user?.name + ' ' + user?.lastName | toUpperFirstLetterOfAllWords | toShortText : 15}}
-      </span>
+      <div class="names">
+        <span class="user-name">{{user.userName | toShortText:10}}</span>
+        <span class="name" *ngIf="user.fullName">
+          {{user.fullName | toUpperFirstLetterOfAllWords | toShortText : 15}}
+        </span>
+      </div>
+
     </div>
+  </ion-card>
+</ng-container>
 
-  </div>
-</ion-card>
 

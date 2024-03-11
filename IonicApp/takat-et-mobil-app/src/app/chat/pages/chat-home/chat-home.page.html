@@ -6,11 +6,12 @@
 
 <ion-content [fullscreen]="true">
 
-  <app-conversations-list [conversations]="conversations$ | async"></app-conversations-list>
+  <app-conversations-list [conversationList]="conversationsList$ | async"></app-conversations-list>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button routerLink="/chat/create-conversation">
       <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

@@ -1,12 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
-import { ConversationResponse } from '../../models/responses/conversation-response';
-import { ChatState, MessageState, takeValueOfMessage } from '../../state/reducer';
+import { ChatState, MessageState, UserState, takeValueOfMessage } from '../../state/reducer';
 import { markMessageAsViewedAction, markNewMessagesAsViewedAction, nextPageMessagesAction } from '../../state/actions';
-import { selectMessageStates } from '../../state/selectors';
+import { selectForConversationPage } from '../../state/selectors';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-conversation',
@@ -14,26 +13,31 @@ import { selectMessageStates } from '../../state/selectors';
   styleUrls: ['./conversation.page.scss'],
 })
 export class ConversationPage implements OnInit,OnDestroy {
-  conversation : ConversationResponse | null;
+
+  userId : string | null = null;
   receivedMessagesSubscription? : Subscription;
-  messages$? : Observable<MessageState[]>;
+  conversation$? : Observable<{ userState? : UserState; messages: MessageState[];} | undefined>
 
   constructor(
-    private readonly router : Router,
     private readonly chatHub : ChatHubService,
-    private readonly chatStore : Store<ChatState>
+    private readonly chatStore : Store<ChatState>,
+    private readonly router : Router
   ) {
-    this.conversation = this.router.getCurrentNavigation()?.extras.state as (ConversationResponse | null)
+    var state = this.router.getCurrentNavigation()?.extras.state;
+    if(state)
+      this.userId = state["userId"] as (string | null)
   }
 
   ngOnInit() {
 
-    if(this.conversation){
-      this.messages$ = this.chatStore.select(selectMessageStates({userId : this.conversation.userId}));
-      this.messages$.pipe(first()).subscribe(
+    if(this.userId)
+    {
+      this.conversation$ = this.chatStore.select(selectForConversationPage({userId : this.userId}));
+
+      this.conversation$.pipe(first()).subscribe(
         x => {
-          if(x.length < takeValueOfMessage)
-            this.chatStore.dispatch(nextPageMessagesAction({userId : this.conversation!.userId}))
+          if(!x || x.messages.length < takeValueOfMessage)
+            this.chatStore.dispatch(nextPageMessagesAction({userId : this.userId!}))
         }
       )
 
@@ -43,12 +47,12 @@ export class ConversationPage implements OnInit,OnDestroy {
           messageId : message.id,receiverId : message.senderId,viewedDate : viewedDate
         }))
 
-        if(message.senderId == this.conversation!.userId)
+        if(message.senderId == this.userId)
           this.chatHub.hubConnection!.invoke( "SendMessageViewedNotification", message.id,message.senderId,viewedDate)
       })
 
       this.chatStore.dispatch(markNewMessagesAsViewedAction({
-        receiverId : this.conversation.userId,
+        receiverId : this.userId,
         viewedDate : new Date()
       }));
 

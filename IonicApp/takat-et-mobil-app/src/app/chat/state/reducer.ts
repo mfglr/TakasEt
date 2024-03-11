@@ -1,6 +1,5 @@
-import { EntityState, Update, createEntityAdapter } from "@ngrx/entity";
-import { MessageResponse, MessageStatus } from "../models/responses/message-response";
-import { ConversationResponse } from "../models/responses/conversation-response";
+import { EntityState, createEntityAdapter } from "@ngrx/entity";
+import { MessageStatus } from "../models/responses/message-response";
 import { createReducer, on } from "@ngrx/store";
 import {
   markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,
@@ -43,9 +42,7 @@ export const userAdapter = createEntityAdapter<UserState>({
   sortComparer : (x,y) => x.userName.localeCompare(y.userName)
 })
 
-
 export interface MessageState{
-  dateToDisplay : Date;
   sendDate : Date;
   createdDate? : Date;
   receivedDate? : Date;
@@ -65,12 +62,13 @@ interface MessageEntityState{
 }
 export const messageAdapter = createEntityAdapter<MessageState>({
   selectId : state => state.id,
-  sortComparer : (x,y) => x.dateToDisplay < y.dateToDisplay ? 1 : -1
+  sortComparer : (x,y) => x.sendDate < y.sendDate ? 1 : -1
 })
+export const selectAllMessageStates = messageAdapter.getSelectors().selectAll;
 
 export interface ConversationState{
   userId : string;
-  user? : UserResponse;
+  userState? : UserState;
   messageEntityState : MessageEntityState;
 }
 interface ConversationEntityState{
@@ -79,13 +77,12 @@ interface ConversationEntityState{
   isDescending : boolean;
   conversationStates : EntityState<ConversationState>
 }
-export const selectAllMessageStates = messageAdapter.getSelectors().selectAll;
 export const sortcomparer = (x : ConversationState,y : ConversationState) => {
   var xr = selectAllMessageStates(x.messageEntityState.messageStates);
   var yr = selectAllMessageStates(y.messageEntityState.messageStates);
 
-  var xlast = xr.length > 0 ? xr[0].dateToDisplay : new Date(1900)
-  var ylast = yr.length > 0 ? yr[0].dateToDisplay : new Date(1900)
+  var xlast = xr.length > 0 ? xr[0].sendDate : new Date(1900)
+  var ylast = yr.length > 0 ? yr[0].sendDate : new Date(1900)
 
   return xlast > ylast ? 1 : -1;
 }
@@ -98,7 +95,9 @@ export interface ChatState{
   isConnected : boolean;
   conversationEntityState : ConversationEntityState;
   userEntityState : UserEntityState;
+  userConversations : EntityState<UserState>;
 }
+export const userConversationAdapter = createEntityAdapter<UserState>({selectId : state => state.id});
 
 const initialState : ChatState = {
   isConnected : false,
@@ -109,20 +108,19 @@ const initialState : ChatState = {
     take : takeValueOfUser,
     users : userAdapter.getInitialState()
   },
-
   conversationEntityState : {
     isLast : false,
     isDescending : true,
     take : takeValueOfConversation,
     conversationStates : conversationAdapter.getInitialState()
-  }
+  },
+  userConversations : userConversationAdapter.getInitialState()
 }
 
 export const chatReducer = createReducer(
   initialState,
   on( connectionFailedAction, state => ({...state,isConnected : false}) ),
   on( connectionSuccessAction, state => ({...state,isConnected : true}) ),
-
   on(
     nextPageUsersSuccessAction,
     (state,action) => ({
@@ -152,7 +150,6 @@ export const chatReducer = createReducer(
       }
     })
   ),
-
   on(
     loadNewMessagesSuccessAction,
     (state,action) => ({
@@ -160,43 +157,40 @@ export const chatReducer = createReducer(
       conversationEntityState : {
         ...state.conversationEntityState,
         conversations : conversationAdapter.setMany(
-          action.payload.map((c) : ConversationState => {
+          action.payload.map((m) : ConversationState => {
 
-            var conversationState = state.conversationEntityState.conversationStates.entities[c.userId];
+            var conversationState = state.conversationEntityState.conversationStates.entities[m.senderId];
             let messageState;
+
             if(conversationState)
               messageState = conversationState.messageEntityState.messageStates;
             else
               messageState = messageAdapter.getInitialState();
 
             return {
-              userId : c.userId,
-              user : c.user,
+              userId : m.senderId,
               messageEntityState : {
                 isLast : false,
                 isDescending : true,
                 take : takeValueOfMessage,
-                messageStates : messageAdapter.addMany(c.messages.map((m) : MessageState => ({
+                messageStates : messageAdapter.addOne({
                   id : m.id,
                   receiverId : m.receiverId,
                   senderId : m.senderId,
                   content : m.content,
-                  dateToDisplay : m.sendDate,
                   status : MessageStatus.Received,
                   images : m.images,
                   sendDate : m.sendDate,
                   createdDate : m.createdDate,
                   receivedDate : action.receivedDate
-                })),messageState)
+                },messageState)
               }
             }
-
           }
         ),state.conversationEntityState.conversationStates)
       }
     })
   ),
-
   on(
     nextPageConversationsSuccessAction,
     (state,action) => ({
@@ -211,7 +205,6 @@ export const chatReducer = createReducer(
 
         return {
           userId : c.userId,
-          user : c.user,
           messageEntityState : {
             isLast : false,
             isDescending : true,
@@ -221,7 +214,6 @@ export const chatReducer = createReducer(
               receiverId : m.receiverId,
               senderId : m.senderId,
               content : m.content,
-              dateToDisplay : m.sendDate,
               status : m.status,
               images : m.images,
               sendDate : m.sendDate,
@@ -234,6 +226,53 @@ export const chatReducer = createReducer(
       }),state.conversationEntityState.conversationStates)
     })
   ),
+
+  on(
+    sendMessageSuccessAction,
+    (state,action) => {
+
+      var messageState : MessageState = {
+        content : action.request.content,
+        id : action.request.id,
+        receiverId : action.request.receiverId,
+        sendDate : new Date(action.request.sendDate),
+        senderId : action.request.senderId,
+        status : MessageStatus.NotCreated,
+      }
+
+      var conversationStates : EntityState<ConversationState>;
+      var conversationState = state.conversationEntityState.conversationStates.entities[action.request.receiverId]
+      if(conversationState)
+        conversationStates = conversationAdapter.updateOne({
+          id : action.request.senderId,
+          changes : {
+            messageEntityState : {
+              ...conversationState.messageEntityState,
+              messageStates : messageAdapter.addOne(messageState,conversationState.messageEntityState.messageStates)
+            }
+          }
+        },state.conversationEntityState.conversationStates)
+      else
+        conversationStates = conversationAdapter.setOne({
+          userId : action.request.senderId,
+          messageEntityState : {
+            isDescending : true,
+            isLast : false,
+            take : takeValueOfMessage,
+            messageStates : messageAdapter.addOne(messageState,messageAdapter.getInitialState())
+          }
+        },state.conversationEntityState.conversationStates)
+
+      return {
+        ...state,
+        conversationEntityState : {
+          ...state.conversationEntityState,
+          conversationStates : conversationStates
+        }
+      }
+    }
+  ),
+
 
   // on(
   //   nextPageMessagesSuccessAction,
@@ -259,26 +298,7 @@ export const chatReducer = createReducer(
   //     },state.conversations)
   //   })
   // ),
-  // on(
-  //   sendMessageSuccessAction,
-  //   (state,action) => ({
-  //     ...state,
-  //     conversations : conversationAdapter.updateOne({
-  //       id : action.request.receiverId,
-  //       changes : {
-  //         messages : messageAdapter.addOne({
-  //           id : action.request.id,
-  //           createdDate : new Date(),
-  //           receiverId : action.request.receiverId,
-  //           senderId : action.request.senderId,
-  //           sendDate : new Date(action.request.sendDate),
-  //           content : action.request.content,
-  //           status : MessageStatus.NotCreated,
-  //         },state.conversations.entities[action.request.receiverId]!.messages)
-  //       }
-  //     },state.conversations)
-  //   })
-  // ),
+
   // on(
   //   markMessageAsCreatedSuccessAction,
   //   (state,action) => {

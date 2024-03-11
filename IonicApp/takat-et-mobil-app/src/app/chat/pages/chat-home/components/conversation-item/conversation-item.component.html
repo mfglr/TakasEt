@@ -1,16 +1,16 @@
-<ng-container *ngIf="conversation">
-  <div class="root-wrapper" routerLink="/chat/conversation" [state]="conversation">
+<ng-container *ngIf="conversationItem">
+  <div class="root-wrapper" routerLink="/chat/conversation" [state]="{userId : conversationItem.userState?.id}">
 
     <div class="right">
-      <app-profile-image [diameter]="3" [user]="conversation.user"></app-profile-image>
-      <ng-container *ngIf="conversation.user">
+      <app-profile-image [diameter]="3" [user]="conversationItem.userState"></app-profile-image>
+      <ng-container *ngIf="conversationItem.userState let user">
         <div class="content">
-          <span class="user-name">{{conversation.user.userName | toShortText:15}}</span>
+          <span class="user-name">{{user.userName | toShortText:15}}</span>
 
-          <ng-container *ngIf="lastMessage$ | async let lastMessage">
+          <ng-container *ngIf="conversationItem.lastMessage let lastMessage">
             <div class="message">
 
-              <ng-container *ngIf="((loginUserId | async) == lastMessage.senderId) else noLastMessageState;">
+              <ng-container *ngIf="((loginUserId$ | async) == lastMessage.senderId) else noLastMessageState;">
                 <app-message-state [messageState]="lastMessage.status"></app-message-state>
                 <span class="last-message" style="margin-left:0.25rem;">
                   {{lastMessage.content | toShortText : 25}}
@@ -30,11 +30,9 @@
       </ng-container>
     </div>
 
-    <ng-container *ngIf="countOfNewMessages$ | async let countOfNewMessages">
-      <div class="left">
-        <span class="unviewed-messages-count">{{countOfNewMessages}}</span>
-      </div>
-    </ng-container>
+    <div class="left">
+      <span class="unviewed-messages-count">{{conversationItem.countOfUnviewedMessages}}</span>
+    </div>
 
   </div>
 </ng-container>

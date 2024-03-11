@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ConversationState } from 'src/app/chat/state/reducer';
+import { MessageState, UserState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-conversations-list',
@@ -7,5 +7,9 @@ import { ConversationState } from 'src/app/chat/state/reducer';
   styleUrls: ['./conversations-list.component.scss'],
 })
 export class ConversationsListComponent{
-  @Input() conversations? : ConversationState[] | null
+  @Input() conversationList? : {
+    userState? : UserState,
+    countOfUnviewedMessages : number,
+    lastMessage : MessageState
+  }[] | null
 }

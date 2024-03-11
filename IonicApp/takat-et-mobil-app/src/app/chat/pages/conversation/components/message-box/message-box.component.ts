@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
-import { MessageResponse } from 'src/app/chat/models/responses/message-response';
 import { MessageState } from 'src/app/chat/state/reducer';
 
 @Component({

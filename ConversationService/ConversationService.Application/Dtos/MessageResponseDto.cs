@@ -5,6 +5,7 @@ namespace ConversationService.Application.Dtos
     public class MessageResponseDto : BaseResponseDto<string>
     {
         public Guid SenderId { get; set; }
+        public UserResponseDto Sender { get; set; }
         public Guid ReceiverId { get; set; }
         public string Content { get; set; }
         public int Status { get; set; }

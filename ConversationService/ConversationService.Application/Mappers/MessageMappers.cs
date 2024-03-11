@@ -9,7 +9,8 @@ namespace ConversationService.Application.Mappers
         public MessageMappers()
         {
             CreateMap<Message, MessageResponseDto>()
-                .ForMember(x => x.Status,x => x.MapFrom(x => x.MessageState.Status));
+                .ForMember(x => x.Status,x => x.MapFrom(x => x.MessageState.Status))
+                .ForMember(x => x.Sender,x => x.Ignore());
 
             CreateMap<MessageImage, MessageImageResponseDto>()
                 .ForMember(x => x.ContainerName, x => x.MapFrom(x => x.ContainerName.Value))

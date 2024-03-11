@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
-using SharedLibrary.Services;
 
 namespace ConversationService.Application.Queries
 {
@@ -17,14 +16,12 @@ namespace ConversationService.Application.Queries
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IMapper _mapper;
-        private readonly UserService _userService;
 
-        public GetConversationsQueryHandler(AppDbContext context, IHttpContextAccessor contextAccessor, IMapper mapper, UserService userService)
+        public GetConversationsQueryHandler(AppDbContext context, IHttpContextAccessor contextAccessor, IMapper mapper)
         {
             _context = context;
             _contextAccessor = contextAccessor;
             _mapper = mapper;
-            _userService = userService;
         }
 
         public async Task<IAppResponseDto> Handle(GetConversationsDto request, CancellationToken cancellationToken)
@@ -38,21 +35,13 @@ namespace ConversationService.Application.Queries
                 .ToListAsync(cancellationToken);
 
             var dtos = _mapper.Map<List<Conversation>, List<ConversationResponseDto>>(
-                    conversations,
-                    x => x.AfterMap((src, dest) =>
-                    {
-                        for (int i = 0; i < src.Count; i++)
-                            dest[i].UserId = src[i].UserId1 == loginUserId ? src[i].UserId2 : src[i].UserId1;
-                    })
-                );
-
-            if (dtos.Any())
-            {
-                var ids = dtos.Select(x => x.UserId).ToList();
-                var users = await _userService.GetUsersByIds(ids, cancellationToken);
-                foreach (var dto in dtos)
-                    dto.User = users.FirstOrDefault(x => x.Id == dto.UserId);
-            }
+                conversations,
+                x => x.AfterMap((src, dest) =>
+                {
+                    for (int i = 0; i < src.Count; i++)
+                        dest[i].UserId = src[i].UserId1 == loginUserId ? src[i].UserId2 : src[i].UserId1;
+                })
+            );
 
             return new AppGenericSuccessResponseDto<List<ConversationResponseDto>>(dtos);
         }

@@ -24,7 +24,6 @@ export class ChatHubService {
   }
 
   start(token : string){
-
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this.baseUrl}`,{ accessTokenFactory : () => token })
       .build()

@@ -14,11 +14,11 @@ import { SendMessage } from 'src/app/chat/models/request/send-message';
   templateUrl: './message-input.component.html',
   styleUrls: ['./message-input.component.scss'],
 })
-export class MessageInputComponent  implements OnInit {
+export class MessageInputComponent implements OnInit {
 
   @Input() userId? : string;
   messageInput = new FormControl<string>("");
-  userId$ = this.loginStore.select(selectUserId);
+  loginUserId$ = this.loginStore.select(selectUserId);
 
   constructor(
     private readonly loginStore : Store<LoginState>,
@@ -30,13 +30,13 @@ export class MessageInputComponent  implements OnInit {
 
   sendMessage(){
 
-    this.userId$.pipe(first()).subscribe(userId => {
+    this.loginUserId$.pipe(first()).subscribe(loginUserId => {
 
       if(this.messageInput.value && this.userId){
 
         var request : SendMessage = {
           id : crypto.randomUUID(),
-          senderId : userId!,
+          senderId : loginUserId!,
           content : this.messageInput.value,
           receiverId : this.userId,
           sendDate : new Date().getTime()
