@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { first } from 'rxjs';
 import { ChatState } from '../../state/reducer';
 import { nextPageConversationsAction } from '../../state/actions';
-import { selectConversationList } from '../../state/selectors';
+import { selectForChatHomePage } from '../../state/selectors';
 
 @Component({
   selector: 'app-chat-home',
@@ -13,7 +13,7 @@ import { selectConversationList } from '../../state/selectors';
 export class ChatHomePage implements OnInit {
 
   constructor(private readonly chatStore : Store<ChatState>) { }
-  conversationsList$ = this.chatStore.select(selectConversationList);
+  conversationsList$ = this.chatStore.select(selectForChatHomePage);
 
   ngOnInit() {
     this.conversationsList$.pipe(first()).subscribe(x => {

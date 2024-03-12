@@ -1,5 +1,5 @@
 <ng-container *ngIf="user">
-  <ion-card class="root-wrapper" routerLink="/chat/conversation" [state]="{userId : user.id}">
+  <ion-card class="root-wrapper" routerLink="/chat/conversation" [state]="user">
     <div class="profile">
 
       <app-profile-image [diameter]="3" [user]="user"></app-profile-image>

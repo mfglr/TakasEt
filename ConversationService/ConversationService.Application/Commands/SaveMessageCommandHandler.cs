@@ -35,10 +35,10 @@ namespace ConversationService.Application.Commands
                 request.SendDate.ToDateTime()
             );
 
-            var conversationKey = new List<Guid>() { request.SenderId, request.ReceiverId }.OrderBy(x => x);
+            var conversationKey = new List<Guid>() { request.SenderId, request.ReceiverId }.OrderBy(x => x).ToList();
             var conversation = await _context
                 .Conversations
-                .FindAsync(conversationKey, cancellationToken);
+                .FindAsync(conversationKey[0],conversationKey[1], cancellationToken);
             
             if(conversation == null)
             {
@@ -48,8 +48,14 @@ namespace ConversationService.Application.Commands
             }
             else
                 conversation.AddMessage(message);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            try
+            {
+                await _unitOfWork.CommitAsync(cancellationToken);
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
             return _mapper.Map<MessageResponseDto>(message);
         }
     }

@@ -24,8 +24,9 @@ namespace ConversationService.Domain.ConversationAggregate
             }
         }
         private readonly List<Message> _messages = new();
-        public IReadOnlyCollection<Message> Messages { get; }
+        public IReadOnlyCollection<Message> Messages => _messages;
         public void AddMessage(Message message) {
+            message.MarkAsCreated();
             _messages.Add(message);
         }
 

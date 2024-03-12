@@ -4,5 +4,6 @@ import { UserResponse } from "src/app/models/responses/user-response";
 
 export interface ConversationResponse extends BaseResponse{
   userId : string;
+  user? : UserResponse;
   messages : MessageResponse[];
 }

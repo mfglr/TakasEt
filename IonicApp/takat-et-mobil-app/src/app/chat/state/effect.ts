@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
-  nextPageMessagesSuccessAction, markMessageAsCreatedAction, markMessageAsCreatedSuccessAction,
+  nextPageMessagesSuccessAction, markMessageAsCreatedSuccessAction,
   markMessageAsReceivedAction, markMessageAsReceivedSuccessAction, markMessageAsViewedAction,
   markMessageAsViewedSuccessAction, markMessagesAsViewedAction, markMessagesAsViewedSuccessAction,
   markNewMessagesAsViewedAction, nextPageMessagesAction, loadNewMessagesSuccessAction,
@@ -11,21 +11,25 @@ import {
 } from "./actions";
 import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectConversationPage, selectUserPage, selectIdsOfUnViewedMessages, selectMessagePage } from "./selectors";
 import { MessageService } from "../services/message.service";
 import { UserService } from "src/app/services/user.service";
-import { ChatState } from "./reducer";
+import { ChatState, ConversationState } from "./reducer";
 import { ConversationService } from "../services/conversation-service";
+import { selectConversationPagination, selectMessage, selectMessagePagination, selectUserPagination } from "./selectors";
+import { LoginState } from "src/app/account/state/reducer";
+import { selectUserId } from "src/app/account/state/selectors";
+import { ConversationResponse } from "../models/responses/conversation-response";
 
 @Injectable()
 export class ChatEffect{
 
   constructor(
     private readonly actions : Actions,
+    private readonly loginStore : Store<LoginState>,
     private readonly chatStore : Store<ChatState>,
     private readonly messageService : MessageService,
     private readonly userService : UserService,
-    private readonly conversationService : ConversationService
+    private readonly conversationService : ConversationService,
   ) {}
 
   loadNewMessages$ = createEffect(
@@ -35,12 +39,9 @@ export class ChatEffect{
         mergeMap(action => this.messageService.getNewMessages({}).pipe(
           mergeMap(response =>{
             if(!response.isError){
-              var receivedDate = new Date();
               return of(
-                loadNewMessagesSuccessAction({payload : response.data!,receivedDate : receivedDate}),
-                markMessagesAsReceivedAction({
-                  request : {ids : response.data!.map(x => x.id),
-                }})
+                loadNewMessagesSuccessAction({payload : response.data!}),
+                markMessagesAsReceivedAction({request : {ids : response.data!.map(x => x.id)}})
               )
             }
             return of()
@@ -49,23 +50,37 @@ export class ChatEffect{
       )
     }
   )
-
   nextPageConversations$ = createEffect(
     () => {
       return this.actions.pipe(
         ofType(nextPageConversationsAction),
-        withLatestFrom(this.chatStore.select(selectConversationPage)),
-        filter(([action,state]) => !state.isLast),
-        mergeMap(([action,state]) => this.conversationService.getConversations({...state})),
-        mergeMap(response =>{
-          if(!response.isError)
-            return of(nextPageConversationsSuccessAction({payload : response.data!}))
-          return of(nextPageConversationsFailedAction({payload : response}))
-        })
+        withLatestFrom(
+          this.chatStore.select(selectConversationPagination),
+          this.loginStore.select(selectUserId)
+        ),
+        filter(([action,state,loginUserId]) => !state.isLast),
+        mergeMap(
+          ([action,state,loginUserId]) => this.conversationService.getConversations({...state}).pipe(
+            mergeMap(c =>{
+              if(!c.isError)
+                return this.userService.getUsersByIds({ids : c.data!.map(x => x.userId)}).pipe(
+                  mergeMap(u => {
+                    if(!u.isError){
+                      let r : ConversationResponse[] = [];
+                      for(let i = 0; i < c.data!.length; i++)
+                        r[i] = {...c.data![i], user : u.data!.find(x => x.id == c.data![i].userId)}
+                      return of(nextPageConversationsSuccessAction({payload : r,loginUserId : loginUserId!}))
+                    }
+                    return of(nextPageConversationsFailedAction({payload : u}))
+                  })
+                )
+              return of(nextPageConversationsFailedAction({payload : c}))
+            })
+          )
+        ),
       )
     }
   )
-
   markMessagesAsReceived$ = createEffect(
     () => this.actions.pipe(
       ofType(markMessagesAsReceivedAction),
@@ -84,7 +99,7 @@ export class ChatEffect{
   nextPageUsers = createEffect(
     () => this.actions.pipe(
       ofType(nextPageUsersAction),
-      withLatestFrom(this.chatStore.select(selectUserPage)),
+      withLatestFrom(this.chatStore.select(selectUserPagination)),
       filter(([action,state]) => !state.isLast),
       mergeMap(([action,state]) => this.userService.getFollowersOrFollowings({...state})),
       mergeMap(response => {
@@ -98,33 +113,23 @@ export class ChatEffect{
   nextPageMessages$ = createEffect(
     () => this.actions.pipe(
       ofType(nextPageMessagesAction),
+      withLatestFrom(this.loginStore.select(selectUserId)),
       mergeMap(
-        action => this.chatStore.select(selectMessagePage({userId : action.userId})).pipe(
+        ([action,loginUserId]) => this.chatStore.select(selectMessagePagination({userId : action.userId,})).pipe(
           first(),
           filter(state => !state.isLast),
           mergeMap(state => this.messageService.getMessages({...state,userId : action.userId})),
           mergeMap(response => {
             if(!response.isError)
-              return of(nextPageMessagesSuccessAction({userId : action.userId,payload : response.data!}))
+              return of(nextPageMessagesSuccessAction({
+                userId : action.userId,payload : response.data!,loginUserId : loginUserId!
+              }))
             return of()
           })
         )
       )
     )
   )
-
-  // markMessageAsCreated$ = createEffect(
-  //   () => this.actions.pipe(
-  //     ofType(markMessageAsCreatedAction),
-  //     mergeMap(
-  //       action => this.chatStore.select(selectConversation({receiverId : action.receiverId})).pipe(
-  //         filter(state => state != undefined && state.messages.entities[action.messageId] != undefined),
-  //         first(),
-  //         mergeMap(() => of(markMessageAsCreatedSuccessAction(action)))
-  //       )
-  //     ),
-  //   )
-  // )
 
   // markMessageAsReceived$ = createEffect(
   //   () => this.actions.pipe(
@@ -198,32 +203,5 @@ export class ChatEffect{
   //   )
   // )
 
-  markNewMessagesAsReceived$ = createEffect(
-    () => this.actions.pipe(
-      ofType(markNewMessagesAsViewedAction),
-      mergeMap(
-        action => this.chatStore.select(selectIdsOfUnViewedMessages({userId : action.receiverId})).pipe(
-          filter(ids => ids.length > 0),
-          first(),
-          mergeMap(
-            ids => this.messageService.markMessagesAsViewed({
-              userId : action.receiverId,
-              viewedDate : action.viewedDate
-            }).pipe(
-              mergeMap(response =>{
-                if(!response.isError)
-                  return of(markMessagesAsViewedAction({
-                    receiverId : action.receiverId,
-                    ids : ids,
-                    viewedDate : action.viewedDate
-                  }))
-                return of()
-              })
-            )
-          )
-        )
-      )
-    )
-  )
 
 }

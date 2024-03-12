@@ -23,7 +23,7 @@ export class UserService{
   }
 
   getUsersByIds(request : GetUsersByIds) : Observable<AppResponse<UserResponse[]>>{
-    return this.httpClient.get<UserResponse[]>(`${this.baseUrl}/user/getusersbyids`)
+    return this.httpClient.get<UserResponse[]>(`${this.baseUrl}/user/getusersbyids?ids=${request.ids.join(',')}`)
   }
 
 }

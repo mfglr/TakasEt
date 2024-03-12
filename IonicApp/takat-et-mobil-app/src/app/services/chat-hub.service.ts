@@ -3,7 +3,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Store } from '@ngrx/store';
 import { MessageResponse } from '../chat/models/responses/message-response';
 import {
-  connectionFailedAction, connectionSuccessAction, markMessageAsCreatedAction,markMessageAsReceivedAction,
+  connectionFailedAction, connectionSuccessAction, markMessageAsCreatedSuccessAction, markMessageAsReceivedAction,
   markMessageAsViewedAction, markMessagesAsViewedAction,receiveMessageAction
 } from '../chat/state/actions';
 import { Subject } from 'rxjs';
@@ -37,7 +37,7 @@ export class ChatHubService {
     });
 
     this.hubConnection.on("messageSaveCompletedNotification",(message : MessageResponse) => {
-      this.chatStore.dispatch(markMessageAsCreatedAction({messageId : message.id,receiverId : message.receiverId}))
+      this.chatStore.dispatch(markMessageAsCreatedSuccessAction({message : message}))
     })
 
     this.hubConnection.on("receiveMessage",(message : MessageResponse) => {

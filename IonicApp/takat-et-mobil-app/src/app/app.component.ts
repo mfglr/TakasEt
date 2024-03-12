@@ -38,7 +38,7 @@ export class AppComponent {
         if(token){
           this.router.navigateByUrl("/chat/home")
           this.chatHub.start(token);
-          this.chatStore.dispatch(loadNewMessagesAction())
+          // this.chatStore.dispatch(loadNewMessagesAction())
         }
         else
           this.router.navigateByUrl("/account/login")

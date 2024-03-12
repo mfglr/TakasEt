@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { AppResponse } from "src/app/models/responses/app-response";
 import { ConversationResponse } from "../models/responses/conversation-response";
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
-import { UrlHelper } from "src/app/helpers/url-helper";
 
 @Injectable({ "providedIn" : "root"})
 export class ConversationService{
@@ -14,9 +13,7 @@ export class ConversationService{
   constructor(private readonly httpClient : NativeHttpClientService) {}
 
   getConversations(request : GetConversations) : Observable<AppResponse<ConversationResponse[]>>{
-    return this.httpClient.get<ConversationResponse[]>(
-      `${this.baseUrl}/GetConversations?${UrlHelper.createPaginationQueryString(request)}`
-    )
+    return this.httpClient.get<ConversationResponse[]>(`${this.baseUrl}/GetConversations`)
   }
 
 }

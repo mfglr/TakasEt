@@ -12,7 +12,7 @@ export const connectionSuccessAction = createAction("[Chat Module State] connect
 export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
 export const loadNewMessagesSuccessAction = createAction(
   "[Chat Module State] load conversations with new messages success",
-  props<{payload : MessageResponse[],receivedDate : Date}>()
+  props<{payload : MessageResponse[]}>()
 )
 
 export const markMessagesAsReceivedAction = createAction(
@@ -29,7 +29,7 @@ export const markMessagesAsReceivedFailedAction = createAction(
 export const nextPageConversationsAction = createAction("[Chat Module State] next page conversation")
 export const nextPageConversationsSuccessAction = createAction(
   "[Chat Module State] next page conversations success",
-  props<{payload : ConversationResponse[]}>()
+  props<{payload : ConversationResponse[],loginUserId : string}>()
 )
 export const nextPageConversationsFailedAction = createAction(
   "[Chat Module State] next page conversations failed",
@@ -57,7 +57,7 @@ export const loadUserOfConversatinsSuccessAction = createAction(
 export const nextPageMessagesAction = createAction("[Chat Module State] next page message",props<{userId : string}>())
 export const nextPageMessagesSuccessAction = createAction(
   "[Chat Module State] next page messages success",
-  props<{userId : string, payload : MessageResponse[]}>()
+  props<{userId : string, payload : MessageResponse[],loginUserId : string}>()
 )
 
 export const sendMessageSuccessAction = createAction(
@@ -68,13 +68,9 @@ export const sendMessageFailedAction = createAction(
   "[Chat Module State] send message failed"
 )
 
-export const markMessageAsCreatedAction = createAction(
-  "[Chat Module State] mark message as created",
-  props<{messageId : string,receiverId : string}>()
-)
 export const markMessageAsCreatedSuccessAction = createAction(
   "[Chat Module State] mark message as created success",
-  props<{messageId : string,receiverId : string}>()
+  props<{message : MessageResponse}>()
 )
 
 export const receiveMessageAction = createAction(

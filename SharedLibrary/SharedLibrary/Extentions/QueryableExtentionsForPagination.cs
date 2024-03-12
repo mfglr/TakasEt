@@ -1,5 +1,4 @@
 ﻿using SharedLibrary.Dtos;
-using SharedLibrary.Entities;
 using System.Linq.Expressions;
 
 namespace SharedLibrary.Extentions

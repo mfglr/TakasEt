@@ -1,5 +1,5 @@
 <ng-container *ngIf="conversationItem">
-  <div class="root-wrapper" routerLink="/chat/conversation" [state]="{userId : conversationItem.userState?.id}">
+  <div class="root-wrapper" routerLink="/chat/conversation" [state]="conversationItem.userState">
 
     <div class="right">
       <app-profile-image [diameter]="3" [user]="conversationItem.userState"></app-profile-image>
@@ -7,19 +7,19 @@
         <div class="content">
           <span class="user-name">{{user.userName | toShortText:15}}</span>
 
-          <ng-container *ngIf="conversationItem.lastMessage let lastMessage">
+          <ng-container *ngIf="conversationItem.lastMessage">
             <div class="message">
 
-              <ng-container *ngIf="((loginUserId$ | async) == lastMessage.senderId) else noLastMessageState;">
-                <app-message-state [messageState]="lastMessage.status"></app-message-state>
+              <ng-container *ngIf="((loginUserId$ | async) == conversationItem.lastMessage.senderId) else noLastMessageState;">
+                <app-message-state [messageState]="conversationItem.lastMessage.status"></app-message-state>
                 <span class="last-message" style="margin-left:0.25rem;">
-                  {{lastMessage.content | toShortText : 25}}
+                  {{conversationItem.lastMessage.content | toShortText : 25}}
                 </span>
               </ng-container>
 
               <ng-template #noLastMessageState>
                 <span class="last-message">
-                  {{lastMessage.content | toShortText : 25}}
+                  {{conversationItem.lastMessage.content | toShortText : 25}}
                 </span>
               </ng-template>
 
@@ -30,9 +30,12 @@
       </ng-container>
     </div>
 
-    <div class="left">
-      <span class="unviewed-messages-count">{{conversationItem.countOfUnviewedMessages}}</span>
-    </div>
+    <ng-container *ngIf="conversationItem.countOfUnviewedMessages > 0">
+      <div class="left">
+        <span class="unviewed-messages-count">{{conversationItem.countOfUnviewedMessages}}</span>
+      </div>
+    </ng-container>
+
 
   </div>
 </ng-container>

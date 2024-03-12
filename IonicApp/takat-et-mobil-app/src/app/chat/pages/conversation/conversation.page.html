@@ -8,14 +8,12 @@
 
     <div class="profile">
 
-      <app-profile-image [diameter]="3" [user]="userState$ | async"></app-profile-image>
+      <app-profile-image [diameter]="3" [user]="userState"></app-profile-image>
 
-      <ng-container *ngIf="userState$ | async let userState">
-        <div class="names">
-          <span class="user-name">{{userState.userName | toShortText : 15}}</span>
-          <span class="name">{{userState.fullName | toShortText : 20 | toUpperFirstLetterOfAllWords}}</span>
-        </div>
-      </ng-container>
+      <div class="names">
+        <span class="user-name">{{userState?.userName | toShortText : 15}}</span>
+        <span class="name">{{userState?.fullName | toShortText : 20 | toUpperFirstLetterOfAllWords}}</span>
+      </div>
 
     </div>
 
@@ -28,5 +26,5 @@
 </ion-content>
 
 <ion-footer style="padding: 0.5rem;">
-  <app-message-input [userId]="this.userId"></app-message-input>
+  <app-message-input [userId]="this.userState?.id"></app-message-input>
 </ion-footer>
