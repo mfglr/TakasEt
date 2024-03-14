@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ConversationService.Application.Dtos;
 using ConversationService.Domain.ConversationAggregate;
+using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,11 +28,28 @@ namespace ConversationService.Application.Queries
         public async Task<IAppResponseDto> Handle(GetConversationsDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            
+
             var conversations = await _context.Conversations
                 .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
-                .Include(x => x.Messages.OrderByDescending(x => x.SendDate).Take(20))
-                .ToPage(x => x.Messages.OrderByDescending(x => x.SendDate).First().SendDate,request)
+                .Include(
+                    x => x.Messages
+                        .OrderByDescending(
+                            x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!
+                        )
+                        .Take(20)
+                )
+                .ToPage(
+                    x => x.Messages
+                        .OrderByDescending(
+                            x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!
+                        )
+                        .Select(x => new { 
+                            lastDate = loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!
+                        })
+                        .First()
+                        .lastDate,
+                    request
+                )
                 .ToListAsync(cancellationToken);
 
             var dtos = _mapper.Map<List<Conversation>, List<ConversationResponseDto>>(

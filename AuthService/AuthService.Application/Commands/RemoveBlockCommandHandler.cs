@@ -51,7 +51,7 @@ namespace AuthService.Application.Commands
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var refreshToken = await _tokenService.CreateRefreshTokenAsync(loginUserId);
-            var accessToken = await _tokenService.CreateAccessTokenAsync(loginUserId);
+            var accessToken = await _tokenService.CreateAccessTokenAsync(loginUserId,request.TimeZone, request.Offset);
             var response = new LoginResponseDto()
             {
                 UserId = loginUserId,

@@ -7,6 +7,6 @@ namespace AuthService.Core.Abstracts
     {
         Task<Token> CreateRefreshTokenAsync(string userId);
         Task<bool> VerifyRefreshTokenAsync(UserAccount user, string token);
-        Task<Token> CreateAccessTokenAsync(string userId);
+        Task<Token> CreateAccessTokenAsync(string userId,string timeZone,int offset);
     }
 }

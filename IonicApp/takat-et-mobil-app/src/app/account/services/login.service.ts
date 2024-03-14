@@ -16,13 +16,25 @@ export class LoginService {
   ) {}
 
   login(email : string,password : string): Observable<AppResponse<LoginResponse>>{
-    return this.httpClient.post<LoginResponse>(`${this.baseUrl}/login/loginbyemail`,{email : email,password : password});
+    return this.httpClient.post<LoginResponse>(
+      `${this.baseUrl}/login/loginbyemail`,
+      {
+        email : email,
+        password : password,
+        timeZone : Intl.DateTimeFormat().resolvedOptions().timeZone,
+        offset : new Date().getTimezoneOffset()
+      });
   }
 
   loginByRefreshToken(userId : string,token : string): Observable<AppResponse<LoginResponse>>{
     return this.httpClient.post<LoginResponse>(
       `${this.baseUrl}/login/LoginByRefreshToken`,
-      {userId : userId, token : token}
+      {
+        userId : userId,
+        token : token,
+        timeZone : Intl.DateTimeFormat().resolvedOptions().timeZone,
+        offset : new Date().getTimezoneOffset()
+      }
     );
   }
 

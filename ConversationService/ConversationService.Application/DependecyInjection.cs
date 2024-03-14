@@ -16,7 +16,9 @@ namespace ConversationService.Application
                 .AddValidatorsFromAssembly(assembly)
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly))
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
-                .AddTransient(typeof(IPipelineBehavior<,>), typeof(EventsPublishPipelineBehavior<,>));
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(EventsPublishPipelineBehavior<,>))
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(DateTimePipelineBehavior<,>));
+            ;
         }
 
     }

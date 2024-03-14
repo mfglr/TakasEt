@@ -19,12 +19,17 @@ namespace SharedLibrary.Extentions
             var right = Expression.Constant(0);
             var left = Expression.Call(propertyForPagination.Body, method,Expression.Constant(page.LastValue));
 
-            BinaryExpression b;
-            if (page.IsDescending) b = Expression.LessThan(left, right);
-            else b = Expression.GreaterThan(left, right);
-            
+            BinaryExpression body;
+            if (page.IsDescending) body = Expression.LessThan(left, right);
+            else body = Expression.GreaterThan(left, right);
+
+            body = Expression.Or(
+                    Expression.Equal(Expression.Constant(page.LastValue),Expression.Constant(default(TProperty))),
+                    body
+                );
+                
             return queryable
-                .Where(Expression.Lambda<Func<TEntity, bool>>(b, propertyForPagination.Parameters))
+                .Where(Expression.Lambda<Func<TEntity, bool>>(body, propertyForPagination.Parameters))
                 .OrderByDescending(propertyForPagination)
                 .Take(page.Take);
         }

@@ -8,6 +8,7 @@ import { MessageResponse } from "src/app/chat/models/responses/message-response"
 import { MarkMessagesAsViewed } from "../models/request/mark-messages-as-viewed";
 import { MarkMessagesAsReceived } from "../models/request/mark-messages-as-received";
 import { GetNewMessages } from "../models/request/get-new-messages";
+import { mapDateTimesOfMessages } from "src/app/customOperators/mapping-datetime-operators";
 
 @Injectable({ providedIn : 'root' })
 export class MessageService{
@@ -20,15 +21,15 @@ export class MessageService{
   ) {}
 
   getNewMessages(request : GetNewMessages) : Observable<AppResponse<MessageResponse[]>>{
-    return this.httpClient.get<MessageResponse[]>(
-      `${this.baseUrl}/GetNewMessages`
+    return this.httpClient.get<MessageResponse[]>(`${this.baseUrl}/GetNewMessages`).pipe(
+      mapDateTimesOfMessages()
     )
   }
 
   getMessages(request : GetMessages) : Observable<AppResponse<MessageResponse[]>>{
     return this.httpClient.get<MessageResponse[]>(
       `${this.baseUrl}/getmessages/${request.userId}?${UrlHelper.createPaginationQueryString(request)}`
-    )
+    ).pipe(mapDateTimesOfMessages())
   }
 
   markMessagesAsReceived(reqeust : MarkMessagesAsReceived) : Observable<BaseAppresponse>{

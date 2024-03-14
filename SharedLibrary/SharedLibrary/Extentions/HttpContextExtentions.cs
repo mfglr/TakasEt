@@ -84,6 +84,19 @@ namespace SharedLibrary.Extentions
 
             return context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         }
+        public static string? GetTimeZone(this HttpContext? context)
+        {
+            if (context == null)
+                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+
+            return context.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.TimeZone.Value)?.Value;
+        }
+        public static int? GetOffset(this HttpContext context)
+        {
+            if(context == null)
+                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            return GetInt(context,CustomClaimTypes.Offset.Value);
+        }
         public static List<string> GetListString(this HttpContext? context,string claimType)
         {
 

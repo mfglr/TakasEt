@@ -36,25 +36,25 @@ export class ConversationPage implements OnInit,OnDestroy {
 
       this.messages$.pipe(first()).subscribe(
         x => {
-          if(!x || x.length < takeValueOfMessage)
+          if(x.length < takeValueOfMessage)
             this.chatStore.dispatch(nextPageMessagesAction({userId : this.userState!.id}))
         }
       )
 
-      this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
-        var viewedDate = new Date();
-        this.chatStore.dispatch(markMessageAsViewedAction({
-          messageId : message.id,receiverId : message.senderId,viewedDate : viewedDate
-        }))
+      // this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
+      //   var viewedDate = new Date();
+      //   this.chatStore.dispatch(markMessageAsViewedAction({
+      //     messageId : message.id,receiverId : message.senderId,viewedDate : viewedDate
+      //   }))
 
-        if(message.senderId == this.userState!.id)
-          this.chatHub.hubConnection!.invoke( "SendMessageViewedNotification", message.id,message.senderId,viewedDate)
-      })
+      //   if(message.senderId == this.userState!.id)
+      //     this.chatHub.hubConnection!.invoke( "SendMessageViewedNotification", message.id,message.senderId,viewedDate)
+      // })
 
-      this.chatStore.dispatch(markNewMessagesAsViewedAction({
-        receiverId : this.userState!.id,
-        viewedDate : new Date()
-      }));
+      // this.chatStore.dispatch(markNewMessagesAsViewedAction({
+      //   receiverId : this.userState!.id,
+      //   viewedDate : new Date()
+      // }));
 
     }
   }

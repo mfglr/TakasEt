@@ -1,5 +1,6 @@
 import { MessageImageResponse } from "src/app/chat/models/responses/message-image-response";
 import { BaseResponse } from "../../../models/responses/base-response";
+import { UserResponse } from "src/app/models/responses/user-response";
 
 export enum MessageStatus { NotCreated = -1, Created = 0, Received = 1, Viewed = 2 }
 

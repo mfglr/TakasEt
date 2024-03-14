@@ -27,7 +27,6 @@ namespace ConversationService.Application.Queries
         {
 
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-
             var messages = await _context
                 .Messages
                 .Where(
@@ -35,7 +34,10 @@ namespace ConversationService.Application.Queries
                         x.SenderId == loginUserId && x.ReceiverId == request.UserId ||
                         x.SenderId == request.UserId && x.ReceiverId == loginUserId
                 )
-                .ToPage(x => x.SendDate, request)
+                .ToPage(
+                    x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!, 
+                    request
+                )
                 .ToListAsync(cancellationToken);
 
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(

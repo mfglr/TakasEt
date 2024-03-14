@@ -1,5 +1,4 @@
 ﻿using ConversationService.Application.Dtos;
-using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,14 +26,18 @@ namespace ConversationService.Application.Commands
         public async Task<IAppResponseDto> Handle(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
+            var ids = request.MessageItems.Select(x => x.Id).ToList();
 
             var messages = await _context
                 .Messages
-                .Where(x => request.Ids.Contains(x.Id))
+                .Where(x => ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
             foreach(var message in messages)
-                message.MarkAsReceived(loginUserId, request.ReceivedDate);
+                message.MarkAsReceived(
+                    loginUserId, 
+                    request.MessageItems.First(x => x.Id == message.Id).ReceivedDate.ToDateTime()
+                );
 
             await _unitOfWork.CommitAsync(cancellationToken);
             return new AppSuccessResponseDto();

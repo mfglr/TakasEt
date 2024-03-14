@@ -31,7 +31,7 @@ namespace AuthService.Infrastructure.Services
             _userManager = userManager;
         }
 
-        private IEnumerable<Claim> GetClaims(UserAccount user,List<string> roles)
+        private IEnumerable<Claim> GetClaims(UserAccount user,List<string> roles,string timeZone,int offset)
         {
 
             var countOfBlocking = user.UsersWhoBlockedTheEntity.Count() + user.UsersTheEntiyBlocked.Count();
@@ -44,6 +44,8 @@ namespace AuthService.Infrastructure.Services
                 new Claim(ClaimTypes.Email,user.Email!),
                 new Claim(CustomClaimTypes.ProfileVisibility.Value,(!user.IsPrivateAccount).ToString()),
                 new Claim(CustomClaimTypes.CountOfBlocking.Value,countOfBlocking.ToString()),
+                new Claim(CustomClaimTypes.TimeZone.Value,timeZone),
+                new Claim(CustomClaimTypes.Offset.Value,offset.ToString())
             };
 
             foreach(var role in roles)
@@ -107,7 +109,7 @@ namespace AuthService.Infrastructure.Services
                 );
         }
 
-        public async Task<Token> CreateAccessTokenAsync(string userId)
+        public async Task<Token> CreateAccessTokenAsync(string userId, string timeZone, int offset)
         {
             var expirationDate = DateTime.Now.AddMinutes(_tokenConfiguration.AccessTokenExpiration);
             var user = await _userManager
@@ -123,7 +125,7 @@ namespace AuthService.Infrastructure.Services
                 issuer : _tokenConfiguration.Issuer,
                 expires : expirationDate,
                 notBefore : DateTime.Now,
-                claims : GetClaims(user,roles),
+                claims : GetClaims(user,roles,timeZone,offset),
                 signingCredentials : _signingCredentials
             );
             string token;

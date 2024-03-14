@@ -9,16 +9,18 @@ import {
   nextPageConversationsSuccessAction, nextPageUsersFailedAction, nextPageConversationsFailedAction,
   markMessagesAsReceivedSuccessAction, markMessagesAsReceivedFailedAction, markMessagesAsReceivedAction
 } from "./actions";
-import { filter, first, mergeMap, of, withLatestFrom } from "rxjs";
+import { filter, first, from, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { MessageService } from "../services/message.service";
 import { UserService } from "src/app/services/user.service";
-import { ChatState, ConversationState } from "./reducer";
+import { ChatState } from "./reducer";
 import { ConversationService } from "../services/conversation-service";
-import { selectConversationPagination, selectMessage, selectMessagePagination, selectUserPagination } from "./selectors";
+import { selectConversationPagination, selectMessagePagination, selectUserPagination } from "./selectors";
 import { LoginState } from "src/app/account/state/reducer";
 import { selectUserId } from "src/app/account/state/selectors";
 import { ConversationResponse } from "../models/responses/conversation-response";
+import { MessageResponse, MessageStatus } from "../models/responses/message-response";
+import { UserResponse } from "src/app/models/responses/user-response";
 
 @Injectable()
 export class ChatEffect{
@@ -32,21 +34,51 @@ export class ChatEffect{
     private readonly conversationService : ConversationService,
   ) {}
 
+  private markMessagesAsReceived(messages : MessageResponse[]) : { id : string, receivedDate : number}[]{
+    var r : {id : string ,receivedDate : number}[] = [];
+    for(let i = 0; i < messages.length;i++){
+      if(!messages[i].receivedDate){
+        var receivedDate = new Date();
+        messages[i].receivedDate = receivedDate;
+        messages[i].status = MessageStatus.Received
+        r.push({id : messages[i].id,receivedDate : receivedDate.getTime()})
+      }
+    }
+    return r;
+  }
+
+  private combineMessagesAndUsers(messages : MessageResponse[],users : UserResponse[]) :
+  {message : MessageResponse,user? : UserResponse}[]{
+    let r : {message : MessageResponse,user? : UserResponse}[] = [];
+    for(let i = 0; i < messages.length;i++)
+      r[i] = {message : messages[i], user : users.find(x => x.id == messages[i].senderId)}
+    return r;
+  }
+
+
   loadNewMessages$ = createEffect(
     () => {
       return this.actions.pipe(
         ofType(loadNewMessagesAction),
-        mergeMap(action => this.messageService.getNewMessages({}).pipe(
-          mergeMap(response =>{
-            if(!response.isError){
-              return of(
-                loadNewMessagesSuccessAction({payload : response.data!}),
-                markMessagesAsReceivedAction({request : {ids : response.data!.map(x => x.id)}})
+        mergeMap((action) => this.messageService.getNewMessages({}).pipe(
+          mergeMap(messages =>{
+            if(!messages.isError){
+              let unreceivedMessages = this.markMessagesAsReceived(messages.data!);
+              return this.userService.getUsersByIds({ids : Array.from(new Set(messages.data!.map(x => x.senderId)))}).pipe(
+                mergeMap(users => {
+                  if(!users.isError){
+                    return of(
+                      loadNewMessagesSuccessAction({payload : this.combineMessagesAndUsers(messages.data!,users.data!)}),
+                      markMessagesAsReceivedAction({request : {messageItems : unreceivedMessages}})
+                    )
+                  }
+                  return of()
+                })
               )
             }
             return of()
-          })
-        )),
+          }))
+        ),
       )
     }
   )
@@ -115,7 +147,7 @@ export class ChatEffect{
       ofType(nextPageMessagesAction),
       withLatestFrom(this.loginStore.select(selectUserId)),
       mergeMap(
-        ([action,loginUserId]) => this.chatStore.select(selectMessagePagination({userId : action.userId,})).pipe(
+        ([action,loginUserId]) => this.chatStore.select(selectMessagePagination({userId : action.userId})).pipe(
           first(),
           filter(state => !state.isLast),
           mergeMap(state => this.messageService.getMessages({...state,userId : action.userId})),

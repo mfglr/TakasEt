@@ -49,9 +49,10 @@ namespace ConversationService.Application.Hubs
         }
         public async Task SendMessage(SaveMessageDto request)
         {
-            MessageResponseDto response;
+            IAppResponseDto response;
             try
             {
+                var a = Context;
                 var contex = Context.GetHttpContext().Request.Body;
                 request.SenderId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
                 await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(Context.GetHttpContext()!, request.ReceiverId.ToString());

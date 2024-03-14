@@ -7,5 +7,8 @@ namespace AuthService.Application.Dtos
     {
         public string UserId { get; set; }
         public string Token { get; set; }
+        public string TimeZone { get; set; }
+        public int Offset { get; set; }
     }
 }
+    

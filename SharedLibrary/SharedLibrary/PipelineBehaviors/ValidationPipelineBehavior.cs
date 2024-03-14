@@ -9,7 +9,6 @@ namespace SharedLibrary.PipelineBehaviors
     where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
-
         public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;

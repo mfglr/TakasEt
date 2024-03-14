@@ -35,7 +35,9 @@ namespace ConversationService.Application.Queries
                         x.ReceiverId == loginUserId && 
                         x.MessageState.Status != MessageState.Viewed.Status
                 )
+                .OrderBy(x => x.SendDate)
                 .ToListAsync(cancellationToken);
+
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
                     _mapper.Map<List<MessageResponseDto>>(messages)
                 );

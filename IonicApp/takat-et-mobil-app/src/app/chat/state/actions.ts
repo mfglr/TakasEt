@@ -12,7 +12,7 @@ export const connectionSuccessAction = createAction("[Chat Module State] connect
 export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
 export const loadNewMessagesSuccessAction = createAction(
   "[Chat Module State] load conversations with new messages success",
-  props<{payload : MessageResponse[]}>()
+  props<{payload : {message : MessageResponse,user? : UserResponse}[]}>()
 )
 
 export const markMessagesAsReceivedAction = createAction(

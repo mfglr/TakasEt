@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { MessageResponse } from '../chat/models/responses/message-response';
 import {
   connectionFailedAction, connectionSuccessAction, markMessageAsCreatedSuccessAction, markMessageAsReceivedAction,
-  markMessageAsViewedAction, markMessagesAsViewedAction,receiveMessageAction
+  markMessageAsViewedAction, markMessagesAsViewedAction,loadNewMessagesAction,receiveMessageAction
 } from '../chat/state/actions';
 import { Subject } from 'rxjs';
 import { ChatState } from '../chat/state/reducer';
@@ -30,7 +30,16 @@ export class ChatHubService {
 
     this.hubConnection
       .start()
+      .then( () => this.chatStore.dispatch(loadNewMessagesAction()) )
       .catch((e) => this.chatStore.dispatch(connectionFailedAction()));
+
+    this.hubConnection.onclose(() => {
+      this.chatStore.dispatch(connectionFailedAction())
+    })
+
+    this.hubConnection.onreconnected(() => {
+
+    })
 
     this.hubConnection.on("connectionCompletedNotification",() => {
       this.chatStore.dispatch(connectionSuccessAction())

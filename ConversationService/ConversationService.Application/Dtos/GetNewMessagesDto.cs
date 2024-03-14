@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
 
 namespace ConversationService.Application.Dtos

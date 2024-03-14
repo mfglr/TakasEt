@@ -1,5 +1,5 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
-import { MessageStatus } from "../models/responses/message-response";
+import { MessageResponse, MessageStatus } from "../models/responses/message-response";
 import { createReducer, on } from "@ngrx/store";
 import {
   markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,
@@ -15,6 +15,7 @@ export const takeValueOfMessage = 50;
 export const takeValueOfConversation = 20;
 export const takeValueOfUser = 20;
 
+
 export interface Pagination{
   isDescending : boolean;
   take : number;
@@ -24,6 +25,11 @@ export interface Pagination{
 export interface MessagePagination extends Pagination{
   userId : string;
 }
+export const messagePaginationAdapter = createEntityAdapter<MessagePagination>({
+  selectId : state => state.userId
+});
+
+
 
 export interface UserState{
   id : string;
@@ -47,6 +53,7 @@ export const userAdapter = createEntityAdapter<UserState>({
 })
 export const selectUserStates = userAdapter.getSelectors().selectAll;
 
+
 export interface MessageState{
   timeStamp : number;
   sendDate : Date;
@@ -66,22 +73,42 @@ export const messageAdapter = createEntityAdapter<MessageState>({
 })
 export const selectMessageStates = messageAdapter.getSelectors().selectAll;
 
+
+
+export interface DateOfMessageState{
+  messageId : string,
+  timeStamp : number;
+}
+export const dateOfMessageStateAdapter = createEntityAdapter<DateOfMessageState>({
+  selectId : state => state.messageId,
+  sortComparer : (x,y) => x.timeStamp < y.timeStamp ? 1 : -1
+});
+export const selectDateOfMessageStates = dateOfMessageStateAdapter.getSelectors().selectAll;
+
+
+
 export interface ConversationState{
   userId : string;
   userState? : UserState;
-  dateOfLastMessage : Date;
+  dateOfMessageEntityState : EntityState<DateOfMessageState>
 }
 export const conversationAdapter = createEntityAdapter<ConversationState>({
   selectId : state => state.userId,
-  sortComparer : (x,y) => x.dateOfLastMessage > y.dateOfLastMessage ? 1 : -1
+  sortComparer : (x,y) =>{
+    let xdates = selectDateOfMessageStates(x.dateOfMessageEntityState)
+    let xdate = xdates.length > 0 ? xdates[0].timeStamp : new Date(1900).getTime();
+
+    let ydates = selectDateOfMessageStates(y.dateOfMessageEntityState)
+    let ydate = ydates.length > 0 ? xdates[0].timeStamp : new Date(1900).getTime();
+
+    return xdate > ydate ? 1 : -1
+  }
 })
 export const selectConversationStates = conversationAdapter.getSelectors().selectAll
 
-export const messagePaginationAdapter = createEntityAdapter<MessagePagination>({
-  selectId : state => state.userId
-});
 
 export interface ChatState{
+  synchronized : boolean;
   isConnected : boolean;
   userEntityState : EntityState<UserState>;
   messageEntityState : EntityState<MessageState>;
@@ -92,6 +119,7 @@ export interface ChatState{
 }
 
 const initialState : ChatState = {
+  synchronized : false,
   isConnected : false,
   conversationPagination : {isDescending : true,isLast : false,take : takeValueOfConversation},
   userPagination : {isDescending : false,isLast : false,take : takeValueOfUser},
@@ -105,64 +133,46 @@ export const chatReducer = createReducer(
   initialState,
   on( connectionFailedAction, state => ({...state,isConnected : false}) ),
   on( connectionSuccessAction, state => ({...state,isConnected : true}) ),
-  on(nextPageUsersSuccessAction, (state,action) => ({
-    ...state,
 
-    userPagination : {...state.userPagination,isLast : action.payload.length < takeValueOfUser},
-
-    userEntityState : userAdapter.addMany(
-      action.payload.map((user) : UserState => ({...user})),
-      state.userEntityState
-    ),
-
-    messagePaginationEntityState : messagePaginationAdapter.addMany(
-      action.payload.map((m) : MessagePagination =>({
-        userId : m.id,
-        isDescending : true,
-        isLast : false,
-        take : takevalueOfMessage,
-      })),
-      state.messagePaginationEntityState
-    )
-
-  })),
   on(
     loadNewMessagesSuccessAction,
     (state,action) => ({
       ...state,
 
+      synchronized : true,
+
       conversationEntityState : conversationAdapter.setMany(
-        action.payload.map((m) : ConversationState => {
-          var conversationState = state.conversationEntityState.entities[m.senderId];
+        action.payload.map((mu) : ConversationState => {
+          let dateOfMessageState = {
+            messageId : mu.message.id,
+            timeStamp : mu.message.receivedDate!.getTime()
+          }
+          let conversationState = state.conversationEntityState.entities[mu.message.senderId];
           if(conversationState)
             return {
               ...conversationState,
-              dateOfLastMessage :
-                m.sendDate > conversationState.dateOfLastMessage ?
-                  m.sendDate :
-                  conversationState.dateOfLastMessage,
+              dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
+                dateOfMessageState,conversationState.dateOfMessageEntityState
+              )
             }
           return {
-            userId : m.senderId,
-            dateOfLastMessage : m.sendDate,
+            userId : mu.message.senderId,
+            userState : mu.user ? {...mu.user} : undefined,
+            dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
+              dateOfMessageState,dateOfMessageStateAdapter.getInitialState()
+            )
           }
         }),
         state.conversationEntityState
       ),
 
-      messageEntityState : messageAdapter.addMany(action.payload.map((x) : MessageState => {
-        let receivedDate = x.receivedDate ? x.receivedDate : new Date();
-        return {
-          ...x,
-          receivedDate : receivedDate,
-          timeStamp : receivedDate.getTime(),
-          status : MessageStatus.Received,
-        }
-      }),state.messageEntityState),
+      messageEntityState : messageAdapter.addMany(action.payload.map((mu) : MessageState => ({
+        ...mu.message,timeStamp : mu.message.receivedDate!.getTime(),
+      })),state.messageEntityState),
 
       messagePaginationEntityState : messagePaginationAdapter.addMany(
         action.payload.map((m) : MessagePagination => ({
-          userId : m.senderId,
+          userId : m.message.senderId,
           isDescending : true,
           isLast : false,
           take : takeValueOfMessage,
@@ -172,6 +182,27 @@ export const chatReducer = createReducer(
 
     })
   ),
+
+
+  on(nextPageUsersSuccessAction, (state,action) => ({
+    ...state,
+    userPagination : {...state.userPagination,isLast : action.payload.length < takeValueOfUser},
+    userEntityState : userAdapter.addMany(
+      action.payload.map((user) : UserState => ({...user})),
+      state.userEntityState
+    ),
+    messagePaginationEntityState : messagePaginationAdapter.addMany(
+      action.payload.map((x) : MessagePagination =>({
+        userId : x.id,
+        isDescending : true,
+        isLast : false,
+        take : takevalueOfMessage,
+      })),
+      state.messagePaginationEntityState
+    )
+  })),
+
+
   on(
     nextPageConversationsSuccessAction,
     (state,action) => ({
@@ -179,26 +210,44 @@ export const chatReducer = createReducer(
       conversationEntityState : conversationAdapter.setMany(
         action.payload.map((x) : ConversationState =>{
 
-          var lastMessageDate =
-            x.messages.length > 0 ?
-              x.messages[0].senderId == x.userId ?
-                x.messages[0].receivedDate! :
-                x.messages[0].sendDate :
-              new Date(1900);
-
           var conversationState = state.conversationEntityState.entities[x.userId]
+
           if(conversationState)
             return {
-              ...conversationState,
-              dateOfLastMessage :
-                lastMessageDate > conversationState.dateOfLastMessage ?
-                  lastMessageDate :
-                  conversationState.dateOfLastMessage
+              userId : x.userId,
+              dateOfMessageEntityState : dateOfMessageStateAdapter.addMany(
+                x.messages.map(m => {
+                  let timeStamp =
+                    action.loginUserId == m.senderId ?
+                      m.sendDate :
+                      m.receivedDate ? m.receivedDate : new Date()
+                  return {
+                    messageId : m.id,
+                    timeStamp : timeStamp.getTime()
+                  }
+                }),
+                conversationState.dateOfMessageEntityState
+              )
             }
+
           return {
             userId : x.userId,
             userState : x.user ? {...x.user} : undefined,
-            dateOfLastMessage : lastMessageDate }
+            dateOfMessageEntityState : dateOfMessageStateAdapter.addMany(
+              x.messages.map(m => {
+                let timeStamp =
+                  action.loginUserId == m.senderId ?
+                    m.sendDate :
+                    m.receivedDate ? m.receivedDate : new Date()
+                return {
+                  messageId : m.id,
+                  timeStamp : timeStamp.getTime()
+                }
+              }),
+              dateOfMessageStateAdapter.getInitialState()
+            )
+          }
+
         }),
         state.conversationEntityState
       ),
@@ -230,6 +279,19 @@ export const chatReducer = createReducer(
     nextPageMessagesSuccessAction,
     (state,action) => ({
       ...state,
+
+      conversationEntityState : conversationAdapter.updateOne({
+        id : action.userId,
+        changes : {
+          ...state.conversationEntityState.entities[action.userId]!,
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addMany(
+            action.payload.map(x => ({
+              messageId : x.id,
+              timeStamp : x.senderId == action.userId ? x.receivedDate!.getTime() : x.sendDate.getTime()
+            })),
+            state.conversationEntityState.entities[action.userId]!.dateOfMessageEntityState)
+        }
+      },state.conversationEntityState),
 
       messageEntityState : messageAdapter.addMany(
         action.payload.map((x) : MessageState => ({
@@ -278,19 +340,23 @@ export const chatReducer = createReducer(
       let conversationEntityState;
       let sendDate = new Date(action.request.sendDate)
       let conversationState = state.conversationEntityState.entities[action.request.receiverId]
-      if(!conversationState)
+      if(conversationState)
         conversationEntityState = conversationAdapter.addOne({
-          userId : action.request.receiverId,
-          dateOfLastMessage : sendDate,
+          ...conversationState,
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+            messageId : action.request.id,
+            timeStamp : action.request.sendDate
+          },conversationState.dateOfMessageEntityState)
         },state.conversationEntityState)
       else
         conversationEntityState = conversationAdapter.addOne({
-          ...conversationState,
-          dateOfLastMessage :
-            sendDate > conversationState.dateOfLastMessage ?
-              sendDate :
-              conversationState.dateOfLastMessage,
+          userId : action.request.receiverId,
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+            messageId : action.request.id,
+            timeStamp : action.request.sendDate
+          },dateOfMessageStateAdapter.getInitialState())
         },state.conversationEntityState)
+
 
       return {
         ...state,
@@ -301,66 +367,66 @@ export const chatReducer = createReducer(
 
     }
   ),
-  on(
-    markMessageAsCreatedSuccessAction,
-    (state,action) => {
+  // on(
+  //   markMessageAsCreatedSuccessAction,
+  //   (state,action) => {
 
-      let messageEntityState;
-      let messageState = state.messageEntityState.entities[action.message.id];
-      if(messageState)
-        messageEntityState = messageAdapter.updateOne({
-          id : action.message.id,
-          changes : {
-            ...messageState,
-            sendDate : action.message.sendDate,
-            createdDate : action.message.createdDate,
-            receivedDate : action.message.receivedDate,
-            viewedDate : action.message.viewedDate,
-            status : action.message.status
-          }
-        },state.messageEntityState)
-      else
-        messageEntityState = messageAdapter.addOne({
-          ...action.message,
-          timeStamp : action.message.sendDate.getTime()
-        },state.messageEntityState)
+  //     let messageEntityState;
+  //     let messageState = state.messageEntityState.entities[action.message.id];
+  //     if(messageState)
+  //       messageEntityState = messageAdapter.updateOne({
+  //         id : action.message.id,
+  //         changes : {
+  //           ...messageState,
+  //           sendDate : action.message.sendDate,
+  //           createdDate : action.message.createdDate,
+  //           receivedDate : action.message.receivedDate,
+  //           viewedDate : action.message.viewedDate,
+  //           status : action.message.status
+  //         }
+  //       },state.messageEntityState)
+  //     else
+  //       messageEntityState = messageAdapter.addOne({
+  //         ...action.message,
+  //         timeStamp : action.message.sendDate.getTime()
+  //       },state.messageEntityState)
 
-      let messagePaginationEntityState = state.messagePaginationEntityState;
-      let messagePagination = state.messagePaginationEntityState.entities[action.message.receiverId]
-      if(!messagePagination)
-        messagePaginationEntityState = messagePaginationAdapter.addOne({
-          userId : action.message.receiverId,
-          isDescending : true,
-          isLast : false,
-          take : takeValueOfMessage,
-        },messagePaginationEntityState)
+  //     let messagePaginationEntityState = state.messagePaginationEntityState;
+  //     let messagePagination = state.messagePaginationEntityState.entities[action.message.receiverId]
+  //     if(!messagePagination)
+  //       messagePaginationEntityState = messagePaginationAdapter.addOne({
+  //         userId : action.message.receiverId,
+  //         isDescending : true,
+  //         isLast : false,
+  //         take : takeValueOfMessage,
+  //       },messagePaginationEntityState)
 
-      let conversationEntityState;
-      let conversationState = state.conversationEntityState.entities[action.message.receiverId];
-      if(conversationState)
-        conversationEntityState = conversationAdapter.updateOne({
-          id : action.message.id,
-          changes : {
-            dateOfLastMessage :
-              action.message.sendDate > conversationState.dateOfLastMessage ?
-                action.message.sendDate :
-                conversationState.dateOfLastMessage
-          }
-        },state.conversationEntityState)
-      else
-        conversationEntityState = conversationAdapter.addOne({
-          userId : action.message.receiverId,
-          dateOfLastMessage : action.message.sendDate
-        },state.conversationEntityState)
+  //     let conversationEntityState;
+  //     let conversationState = state.conversationEntityState.entities[action.message.receiverId];
+  //     if(conversationState)
+  //       conversationEntityState = conversationAdapter.updateOne({
+  //         id : action.message.id,
+  //         changes : {
+  //           dateOfLastMessage :
+  //             action.message.sendDate > conversationState.dateOfLastMessage ?
+  //               action.message.sendDate :
+  //               conversationState.dateOfLastMessage
+  //         }
+  //       },state.conversationEntityState)
+  //     else
+  //       conversationEntityState = conversationAdapter.addOne({
+  //         userId : action.message.receiverId,
+  //         dateOfLastMessage : action.message.sendDate
+  //       },state.conversationEntityState)
 
-      return {
-        ...state,
-        conversationEntityState : conversationEntityState,
-        messageEntityState : messageEntityState,
-        messagePaginationEntityState : messagePaginationEntityState
-      }
-    }
-  ),
+  //     return {
+  //       ...state,
+  //       conversationEntityState : conversationEntityState,
+  //       messageEntityState : messageEntityState,
+  //       messagePaginationEntityState : messagePaginationEntityState
+  //     }
+  //   }
+  // ),
   // on(
   //   receiveMessageAction,
   //   (state,action) => {
@@ -459,3 +525,5 @@ export const chatReducer = createReducer(
   // ),
 
 )
+
+

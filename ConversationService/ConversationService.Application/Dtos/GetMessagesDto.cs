@@ -15,8 +15,9 @@ namespace ConversationService.Application.Dtos
 
         public GetMessagesDto(IQueryCollection collection)
         {
+            var lastValue = collection.ReadLong("lastValue");
             Take = collection.ReadInt("take") ?? 20;
-            LastValue = collection.ReadDateTime("lastValue") ?? DateTime.Now;
+            LastValue = lastValue != null ? ((long)lastValue).ToDateTime() : default;
             IsDescending = collection.ReadBoolean("isDescending") ?? true;
         }
 

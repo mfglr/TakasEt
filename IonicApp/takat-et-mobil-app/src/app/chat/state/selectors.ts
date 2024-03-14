@@ -43,7 +43,17 @@ export const selectMessagePagination = (props:{userId : string}) => createSelect
   state => {
     var pagination = state.messagePaginationEntityState.entities[props.userId]
     var messages = selectMessageStates(state.messageEntityState)
-    var lastValue = messages.length > 0 ? messages[messages.length - 1].sendDate : undefined;
+
+    let lastValue
+    if(messages.length > 0){
+      let lastMessage = messages[messages.length - 1];
+      lastValue = props.userId == lastMessage.senderId ?
+        lastMessage.receivedDate!.getTime() :
+        lastMessage.sendDate.getTime()
+    }
+    else
+      lastValue = undefined;
+
     if(pagination)
       return { ...pagination, lastValue : lastValue }
     return {
@@ -59,7 +69,6 @@ export const selectMessage = (props : {messageId : string}) => createSelector(
   selectStore,
   state => state.messageEntityState.entities[props.messageId]
 )
-
 export const selectUsers = createSelector(
   selectStore,
   state => selectUserStates(state.userEntityState)

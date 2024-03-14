@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { MessageResponse } from 'src/app/chat/models/responses/message-response';
 import { MessageState } from 'src/app/chat/state/reducer';
 
 @Component({
