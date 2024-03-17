@@ -40,6 +40,11 @@ export const selectMessageStatesOfConversatinPage = (props : {userId : string}) 
   state => selectMessageStates(state.messageEntityState)
     .filter(x => x.senderId == props.userId || x.receiverId == props.userId)
 )
+export const selectUnviewedMessages = (props : {userId : string}) => createSelector(
+  selectStore,
+  state => selectMessageStates(state.messageEntityState)
+    .filter(x => x.senderId == props.userId && x.status != MessageStatus.Viewed)
+)
 export const selectUserPagination = createSelector(
   selectStore,
   state => {

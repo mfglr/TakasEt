@@ -52,8 +52,6 @@ namespace ConversationService.Application.Commands
             }
             catch (DbUpdateConcurrencyException)
             {
-                foreach (var message in messages)
-                    message.ClearAllDomainEvents();
                 return await MarkMessagesAsViewedAsync(request, userId, cancellationToken);
             }
 

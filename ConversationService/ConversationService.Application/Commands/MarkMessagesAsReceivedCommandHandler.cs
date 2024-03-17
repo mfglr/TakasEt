@@ -20,16 +20,14 @@ namespace ConversationService.Application.Commands
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IHubContext<MessageHub> _messageHub;
 
 
-        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHubContext<MessageHub> messageHub)
+        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _contextAccessor = contextAccessor;
             _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _messageHub = messageHub;
         }
 
         public async Task<IAppResponseDto> Handle(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
@@ -44,7 +42,9 @@ namespace ConversationService.Application.Commands
         {
             List<Message> messages;
             _context.ChangeTracker.Clear();
-            messages = await _context.Messages
+            messages = await _context
+                .Messages
+                .Include(x => x.Sender)
                 .Where(x => request.Ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
@@ -57,14 +57,14 @@ namespace ConversationService.Application.Commands
             }
             catch (DbUpdateConcurrencyException)
             {
-                foreach (var message in messages)
-                    message.ClearAllDomainEvents();
                 return await MarkMessagesAsReceivedAsync(request, userId, cancellationToken);
             }
 
+
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
-                _mapper.Map<List<MessageResponseDto>>(messages)
+               _mapper.Map<List<MessageResponseDto>>(messages)
                 );
+
         }
     }
 }

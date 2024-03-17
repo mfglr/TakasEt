@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
   nextPageMessagesSuccessAction, markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction,
-  markMessageAsViewedAction, markMessageAsViewedSuccessAction, markMessagesAsViewedAction,
+  markMessageAsViewedAction, markMessageAsViewedSuccessAction,
   markMessagesAsViewedSuccessAction, nextPageMessagesAction,
   loadNewMessagesSuccessAction, loadNewMessagesAction, nextPageUsersAction, nextPageUsersSuccessAction,
   nextPageConversationsAction, nextPageConversationsSuccessAction, nextPageUsersFailedAction,
@@ -38,18 +38,6 @@ export class ChatEffect{
     private readonly conversationService : ConversationService,
   ) {}
 
-  private getMessageNotReceived(messages : MessageResponse[]){
-    return messages.filter(x => x.status != MessageStatus.Received).map(x => x.id);
-  }
-
-  private combineMessagesAndUsers(messages : MessageResponse[],users : UserResponse[]) :
-  {message : MessageResponse,user? : UserResponse}[]{
-    let r : {message : MessageResponse,user? : UserResponse}[] = [];
-    for(let i = 0; i < messages.length;i++)
-      r[i] = {message : messages[i], user : users.find(x => x.id == messages[i].senderId)}
-    return r;
-  }
-
   nextPageUsers$ = createEffect(
     () => this.actions.pipe(
       ofType(nextPageUsersAction),
@@ -73,63 +61,6 @@ export class ChatEffect{
           return of(loadConversationUserSuccessAction({payload : response.data!}))
         return of()
       })
-    )
-  )
-
-  connectionSuccess$ = createEffect(
-    () => this.actions.pipe(
-      ofType(connectionSuccessAction),
-      mergeMap(() => of(loadNewMessagesAction()))
-    )
-  )
-
-  loadNewMessages$ = createEffect(
-    () => {
-      return this.actions.pipe(
-        ofType(loadNewMessagesAction),
-        mergeMap((action) => this.messageService.getNewMessages({}).pipe(
-          mergeMap(messages =>{
-            if(!messages.isError){
-              return this.userService.getUsersByIds({ids : Array.from(new Set(messages.data!.map(x => x.senderId)))}).pipe(
-                mergeMap(users => {
-                  if(!users.isError){
-                    var date = new Date();
-                    return of(
-                      loadNewMessagesSuccessAction({
-                        payload : this.combineMessagesAndUsers(messages.data!,users.data!),
-                        receivedDate : date
-                      }),
-                      markMessagesAsReceivedAction({
-                        request : {
-                          ids : this.getMessageNotReceived(messages.data!),
-                          receivedDate : date.getTime()
-                        }
-                      })
-                    )
-                  }
-                  return of()
-                })
-              )
-            }
-            return of()
-          }))
-        ),
-      )
-    }
-  )
-
-  markMessagesAsReceived$ = createEffect(
-    () => this.actions.pipe(
-      ofType(markMessagesAsReceivedAction),
-      mergeMap(
-        action => this.messageService.markMessagesAsReceived(action.request).pipe(
-          mergeMap(response => {
-            if(!response.isError)
-              return of(synchronizedSuccessAction())
-            return of(synchronizedFailedAction());
-          })
-        )
-      )
     )
   )
 

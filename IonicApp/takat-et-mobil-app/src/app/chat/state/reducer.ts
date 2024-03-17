@@ -151,12 +151,12 @@ export const chatReducer = createReducer(
   on(loadNewMessagesSuccessAction,(state,action) => ({
     ...state,
     conversationEntityState : conversationAdapter.setMany(
-      action.payload.map((mu) : ConversationState => {
+      action.payload.map((m) : ConversationState => {
         let dateOfMessageState = {
-          messageId : mu.message.id,
-          timeStamp : mu.message.receivedDate ? mu.message.receivedDate.getTime() : action.receivedDate.getTime()
+          messageId : m.id,
+          timeStamp : m.receivedDate ? m.receivedDate.getTime() : action.receivedDate.getTime()
         }
-        let conversationState = state.conversationEntityState.entities[mu.message.senderId];
+        let conversationState = state.conversationEntityState.entities[m.senderId];
         if(conversationState)
           return {
             ...conversationState,
@@ -165,8 +165,7 @@ export const chatReducer = createReducer(
             )
           }
         return {
-          userId : mu.message.senderId,
-          userState : mu.user ? {...mu.user} : undefined,
+          userId : m.senderId,
           dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
             dateOfMessageState,dateOfMessageStateAdapter.getInitialState()
           )
@@ -175,16 +174,16 @@ export const chatReducer = createReducer(
       state.conversationEntityState
     ),
 
-    messageEntityState : messageAdapter.addMany(action.payload.map((mu) : MessageState => ({
-      ...mu.message,
-      receivedDate : mu.message.receivedDate ?? action.receivedDate,
+    messageEntityState : messageAdapter.addMany(action.payload.map((m) : MessageState => ({
+      ...m,
+      receivedDate : m.receivedDate ?? action.receivedDate,
       status : MessageStatus.Received,
-      timeStamp : mu.message.receivedDate?.getTime() ?? action.receivedDate.getTime(),
+      timeStamp : m.receivedDate?.getTime() ?? action.receivedDate.getTime(),
     })),state.messageEntityState),
 
     messagePaginationEntityState : messagePaginationAdapter.addMany(
       action.payload.map((m) : MessagePagination => ({
-        userId : m.message.senderId,
+        userId : m.senderId,
         isDescending : true,
         isLast : false,
         take : takeValueOfMessage,
@@ -504,11 +503,13 @@ export const chatReducer = createReducer(
           }
         },state.messageEntityState)
     }
-    else
+    else{
       messageEntityState = messageAdapter.addOne({
         ...action.payload,
         timeStamp : action.payload.sendDate.getTime()
       },state.messageEntityState)
+    }
+
 
     let messagePaginationEntityState = state.messagePaginationEntityState;
     let messagePagination = state.messagePaginationEntityState.entities[action.payload.receiverId]

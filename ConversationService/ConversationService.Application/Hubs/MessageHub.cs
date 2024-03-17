@@ -32,8 +32,10 @@ namespace ConversationService.Application.Hubs
             {
                 return;
             }
+            await Clients
+                .Caller
+                .SendAsync("connectionCompletedNotification");
         }
-        
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             await _sender.Send(new DisconnectDto());
@@ -50,7 +52,7 @@ namespace ConversationService.Application.Hubs
             {
                 await Clients
                     .Caller
-                    .SendAsync("messageSaveFailed",new AppFailResponseDto(ex.Message));
+                    .SendAsync("messageSaveFailedNotification",new AppFailResponseDto(ex.Message));
                 return;
             }
 
@@ -69,6 +71,51 @@ namespace ConversationService.Application.Hubs
                 await Clients
                     .Clients(receiver.ConnectionId!)
                     .SendAsync("receiveMessage",response);
+        }
+
+        public async Task GetNewMessages()
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(new GetNewMessagesDto());
+            }
+            catch(Exception)
+            {
+                await Clients.Caller.SendAsync("synchronizedFailedNotification");
+                return;
+            }
+
+            await Clients.Caller.SendAsync("receiveNewMessages", response);
+        }
+
+        public async Task MarkMessagesAsReceived(MarkMessagesAsReceivedDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(request);
+            }catch(Exception)
+            {
+                await Clients.Caller.SendAsync("synchronizedFailedNotification");
+                return;
+            }
+
+            await Clients.Caller.SendAsync("synchronizedSuccessNotification");
+
+            var messages = (response as AppGenericSuccessResponseDto<List<MessageResponseDto>>)!.Data;
+            foreach(var message in messages)
+            {
+                if (message.Sender != null && message.Sender.IsConnected)
+                {
+                    await Clients
+                        .Client(message.Sender.ConnectionId)
+                        .SendAsync(
+                            "messageReceivedNotification",
+                            new AppGenericSuccessResponseDto<MessageResponseDto>(message)
+                        );
+                }
+            }
         }
 
         public async Task SendMessageReceivedNotification(MarkMessageAsReceivedDto request)

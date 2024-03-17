@@ -1,5 +1,4 @@
-﻿using ConversationService.Domain.DomainEvents;
-using ConversationService.Domain.UserConnectionAggregate;
+﻿using ConversationService.Domain.UserConnectionAggregate;
 using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
@@ -65,9 +64,6 @@ namespace ConversationService.Domain.MessageAggregate
 
             MessageState = MessageState.CreateMessageState(MessageState.Received);
             ReceivedDate = receivedDate;
-            
-            AddDomainEvent(new MessageMarkedAsReceivedDomainEvent() { Message = this });
-
         }
         public void MarkAsViewed(Guid receiverId, DateTime viewedDate)
         {
@@ -79,9 +75,6 @@ namespace ConversationService.Domain.MessageAggregate
 
             MessageState = MessageState.CreateMessageState(MessageState.Viewed);
             ViewedDate = viewedDate;
-            
-            AddDomainEvent(new MessageMarkedAsViewedDomainEvent() { Message = this });
-
         }
 
         //ILikeableByUsers

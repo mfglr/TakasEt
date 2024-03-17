@@ -1,5 +1,4 @@
-﻿using ConversationService.Domain.DomainEvents;
-using ConversationService.Domain.MessageAggregate;
+﻿using ConversationService.Domain.MessageAggregate;
 using SharedLibrary.Entities;
 
 namespace ConversationService.Domain.UserConnectionAggregate
@@ -13,7 +12,6 @@ namespace ConversationService.Domain.UserConnectionAggregate
         {
             IsConnected = true;
             ConnectionId = connectionId;
-            AddDomainEvent(new ConnectionCreatedDomainEvent() { UserConnection = this });
         }
         public void Disconnect()
         {

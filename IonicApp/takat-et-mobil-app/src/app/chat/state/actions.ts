@@ -13,7 +13,7 @@ export const connectionSuccessAction = createAction("[Chat Module State] connect
 export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
 export const loadNewMessagesSuccessAction = createAction(
   "[Chat Module State] load conversations with new messages success",
-  props<{payload : {message : MessageResponse,user? : UserResponse}[],receivedDate : Date}>()
+  props<{payload : MessageResponse[],receivedDate : Date}>()
 )
 
 export const synchronizedSuccessAction = createAction("[Chat Module State] synchronized success")
@@ -98,12 +98,9 @@ export const markMessageAsViewedSuccessAction = createAction(
   "[Chat Module State] mark message as viewed success",
   props<{payload : MessageResponse}>()
 )
-export const markMessagesAsViewedAction = createAction(
-  "[Chat Module State] mark messages as viewed",
-  props<{receiverId : string,ids : string[], viewedDate : Date}>()
-)
 export const markMessagesAsViewedSuccessAction = createAction(
   "[Chat Module State] mark messages as viewed success",
   props<{payload : MessageResponse[]}>()
 )
+// export const markNewMessagesAsViewedSuccessAction = createAction()
 

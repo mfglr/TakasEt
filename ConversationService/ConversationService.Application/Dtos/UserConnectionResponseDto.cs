@@ -4,7 +4,7 @@ namespace ConversationService.Application.Dtos
 {
     public class UserConnectionResponseDto : BaseResponseDto<Guid>
     {
-        public bool IsPrivateConnection { get; set; }
+        public bool IsConnected { get; set; }
         public string ConnectionId { get; set; }
     }
 }

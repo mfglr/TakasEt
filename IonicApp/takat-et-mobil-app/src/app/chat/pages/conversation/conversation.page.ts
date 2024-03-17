@@ -3,9 +3,11 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription, first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, MessageState, UserState, takeValueOfMessage } from '../../state/reducer';
-import { markMessageAsViewedAction, nextPageMessagesAction } from '../../state/actions';
-import { selectMessageStatesOfConversatinPage } from '../../state/selectors';
+import { markMessageAsViewedSuccessAction, nextPageMessagesAction } from '../../state/actions';
+import { selectMessageStatesOfConversatinPage, selectUnviewedMessages } from '../../state/selectors';
 import { Router } from '@angular/router';
+import { mapDateTimesOfMessageResponse } from 'src/app/helpers/mapping-datetime';
+import { MessageResponse } from '../../models/responses/message-response';
 
 @Component({
   selector: 'app-conversation',
@@ -30,8 +32,7 @@ export class ConversationPage implements OnInit,OnDestroy {
 
   ngOnInit() {
 
-    if(this.userState)
-    {
+    if(this.userState){
       this.messages$ = this.chatStore.select(selectMessageStatesOfConversatinPage({userId : this.userState.id}));
 
       this.messages$.pipe(first()).subscribe(
@@ -41,17 +42,24 @@ export class ConversationPage implements OnInit,OnDestroy {
         }
       )
 
+      this.chatStore.select(selectUnviewedMessages({userId : this.userState.id})).pipe(first()).subscribe(
+        messages => {
+          if(messages.length > 0){
+            // this.chatStore.dispatch(markMessageAsViewedSuccessAction({payload : }))
+          }
+        }
+      )
 
+      this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
+        var viewedDate = new Date();
+        var message : MessageResponse = {...mapDateTimesOfMessageResponse(message),viewedDate : viewedDate};
+        this.chatStore.dispatch(markMessageAsViewedSuccessAction({payload : message}))
 
-      // this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
-      //   var viewedDate = new Date();
-      //   this.chatStore.dispatch(markMessageAsViewedAction({
-      //     messageId : message.id,receiverId : message.senderId,viewedDate : viewedDate
-      //   }))
-
-      //   if(message.senderId == this.userState!.id)
-      //     this.chatHub.hubConnection!.invoke( "SendMessageViewedNotification", message.id,message.senderId,viewedDate)
-      // })
+        this.chatHub.hubConnection!.invoke(
+          "SendMessageViewedNotification",
+          {messageId : message.id,viewedDate : viewedDate}
+        )
+      })
 
       // this.chatStore.dispatch(markNewMessagesAsViewedAction({
       //   receiverId : this.userState!.id,

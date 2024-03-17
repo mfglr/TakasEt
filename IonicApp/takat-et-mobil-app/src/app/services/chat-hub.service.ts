@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Store } from '@ngrx/store';
-import { MessageResponse } from '../chat/models/responses/message-response';
+import { MessageResponse, MessageStatus } from '../chat/models/responses/message-response';
 import {
-  connectionFailedAction, connectionSuccessAction, markMessageAsCreatedSuccessAction, markMessageAsViewedAction,
-  markMessagesAsViewedAction,loadNewMessagesAction,receiveMessageSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction, markMessagesAsReceivedAction, markMessagesAsReceivedSuccessAction, markMessagesAsViewedSuccessAction, loadNewMessagesSuccessAction
+  connectionFailedAction, connectionSuccessAction, markMessageAsCreatedSuccessAction,
+  receiveMessageSuccessAction,
+  markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,markMessagesAsViewedSuccessAction,
+  loadNewMessagesSuccessAction, synchronizedFailedAction, synchronizedSuccessAction
 } from '../chat/state/actions';
 import { Subject } from 'rxjs';
 import { ChatState } from '../chat/state/reducer';
@@ -39,16 +41,34 @@ export class ChatHubService {
       this.chatStore.dispatch(connectionFailedAction())
     })
 
-    this.hubConnection.onreconnected(() => {
-
-    })
+    this.hubConnection.onreconnected(() => {})
 
     this.hubConnection.on("connectionCompletedNotification",() => {
       this.chatStore.dispatch(connectionSuccessAction())
+      this.hubConnection!.invoke("GetNewMessages");
     });
 
-    this.hubConnection.on("messageSaveCompletedNotification",(message : AppResponse<MessageResponse>) => {
-      this.chatStore.dispatch(markMessageAsCreatedSuccessAction({message : mapDateTimesOfMessageResponse(message.data!)}))
+    this.hubConnection.on("synchronizedFailedNotification",() => {
+      this.chatStore.dispatch(synchronizedFailedAction());
+    })
+
+    this.hubConnection.on("synchronizedSuccessNotification",() => {
+      this.chatStore.dispatch(synchronizedSuccessAction());
+    })
+
+    this.hubConnection.on("receiveNewMessages",(response : AppResponse<MessageResponse[]>) => {
+
+      var messages = response.data!.map(x => mapDateTimesOfMessageResponse(x));
+      var receivedDate = new Date();
+      var ids = Array.from(new Set(messages.filter(x => x.status != MessageStatus.Received).map(x => x.id)))
+
+      this.chatStore.dispatch(loadNewMessagesSuccessAction({payload : messages,receivedDate : receivedDate}))
+      this.hubConnection!.invoke("MarkMessagesAsReceived",{ids : ids,receivedDate : receivedDate.getTime()})
+    });
+
+
+    this.hubConnection.on("messageSaveCompletedNotification",(response : AppResponse<MessageResponse>) => {
+      this.chatStore.dispatch(markMessageAsCreatedSuccessAction({message : mapDateTimesOfMessageResponse(response.data!)}))
     })
 
     this.hubConnection.on("receiveMessage",(response : AppResponse<MessageResponse>) => {
@@ -64,7 +84,9 @@ export class ChatHubService {
     })
 
     this.hubConnection.on("messageReceivedNotification",(response : AppResponse<MessageResponse>) => {
-      this.chatStore.dispatch(markMessageAsReceivedSuccessAction({payload : mapDateTimesOfMessageResponse(response.data!)}))
+      this.chatStore.dispatch(markMessageAsReceivedSuccessAction({
+        payload : mapDateTimesOfMessageResponse(response.data!)
+      }))
     })
 
     this.hubConnection.on("messageViewedNotification",(response : AppResponse<MessageResponse>) => {
