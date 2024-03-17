@@ -1,4 +1,5 @@
-﻿using ConversationService.Domain.UserConnectionAggregate;
+﻿using ConversationService.Domain.DomainEvents;
+using ConversationService.Domain.UserConnectionAggregate;
 using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
@@ -15,6 +16,7 @@ namespace ConversationService.Domain.MessageAggregate
         public Guid SenderId { get; private set; }
         public UserConnection Sender { get; }
         public Guid ReceiverId { get; private set; }
+        public byte[] RowVersion { get; private set; }
 
         public Message(string id,Guid senderId,Guid receiverId, string content,DateTime sendDate)
         {
@@ -50,25 +52,36 @@ namespace ConversationService.Domain.MessageAggregate
         {
             if (receiverId != ReceiverId)
                 throw new AppException("No Access!", HttpStatusCode.Forbidden);
+            
             if (MessageState == MessageState.Received)
                 return;
+            
             if (MessageState == MessageState.Viewed)
             {
-                ReceivedDate = receivedDate;
+                if(ReceivedDate == null)
+                    ReceivedDate = receivedDate;
                 return;
             }
+
             MessageState = MessageState.CreateMessageState(MessageState.Received);
             ReceivedDate = receivedDate;
+            
+            AddDomainEvent(new MessageMarkedAsReceivedDomainEvent() { Message = this });
 
         }
         public void MarkAsViewed(Guid receiverId, DateTime viewedDate)
         {
             if (receiverId != ReceiverId)
                 throw new AppException("No Access!", HttpStatusCode.Forbidden);
+            
             if (MessageState == MessageState.Viewed)
                 return;
+
             MessageState = MessageState.CreateMessageState(MessageState.Viewed);
             ViewedDate = viewedDate;
+            
+            AddDomainEvent(new MessageMarkedAsViewedDomainEvent() { Message = this });
+
         }
 
         //ILikeableByUsers
@@ -82,7 +95,6 @@ namespace ConversationService.Domain.MessageAggregate
             if (_usersWhoLikedTheEntity.Any(x => x.UserId == userId))
                 throw new AppException("You already liked the message!", HttpStatusCode.BadRequest);
             _usersWhoLikedTheEntity.Add(new MessageUserLiking(userId));
-
         }
         public void Dislike(Guid userId)
         {

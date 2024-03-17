@@ -5,7 +5,7 @@ import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
 import { first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
-import { ChatState } from 'src/app/chat/state/reducer';
+import { ChatState, UserState } from 'src/app/chat/state/reducer';
 import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/state/actions';
 import { SendMessage } from 'src/app/chat/models/request/send-message';
 
@@ -16,7 +16,7 @@ import { SendMessage } from 'src/app/chat/models/request/send-message';
 })
 export class MessageInputComponent implements OnInit {
 
-  @Input() userId? : string;
+  @Input() userState? : UserState | null;
   messageInput = new FormControl<string>("");
   loginUserId$ = this.loginStore.select(selectUserId);
 
@@ -32,20 +32,22 @@ export class MessageInputComponent implements OnInit {
 
     this.loginUserId$.pipe(first()).subscribe(loginUserId => {
 
-      if(this.messageInput.value && this.userId){
+      if(this.messageInput.value && this.userState){
 
         var request : SendMessage = {
           id : crypto.randomUUID(),
           senderId : loginUserId!,
           content : this.messageInput.value,
-          receiverId : this.userId,
+          receiverId : this.userState.id,
           sendDate : new Date().getTime()
         }
 
         this.chatHub.hubConnection!
           .invoke("SendMessage",request)
           .then(() => {
-            this.chatStore.dispatch(sendMessageSuccessAction({request : request}))
+            this.chatStore.dispatch(sendMessageSuccessAction({
+              request : request,userState : {...this.userState!}
+            }))
           })
           .catch(() => this.chatStore.dispatch(sendMessageFailedAction()))
         this.messageInput.setValue('');

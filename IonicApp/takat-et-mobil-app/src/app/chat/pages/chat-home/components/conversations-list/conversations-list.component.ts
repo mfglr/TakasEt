@@ -8,8 +8,9 @@ import { MessageState, UserState } from 'src/app/chat/state/reducer';
 })
 export class ConversationsListComponent{
   @Input() conversationList? : {
+    userId : string,
     userState? : UserState,
     countOfUnviewedMessages : number,
-    lastMessage : MessageState
+    lastMessage : MessageState | undefined
   }[] | null
 }

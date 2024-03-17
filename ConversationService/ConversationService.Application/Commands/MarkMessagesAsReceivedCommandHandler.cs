@@ -1,7 +1,11 @@
-﻿using ConversationService.Application.Dtos;
+﻿using AutoMapper;
+using ConversationService.Application.Dtos;
+using ConversationService.Application.Hubs;
+using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
@@ -15,32 +19,52 @@ namespace ConversationService.Application.Commands
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IHubContext<MessageHub> _messageHub;
 
-        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork)
+
+        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHubContext<MessageHub> messageHub)
         {
             _contextAccessor = contextAccessor;
             _context = context;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _messageHub = messageHub;
         }
 
         public async Task<IAppResponseDto> Handle(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            var ids = request.MessageItems.Select(x => x.Id).ToList();
+            return await MarkMessagesAsReceivedAsync(request, loginUserId, cancellationToken);
+        }
 
-            var messages = await _context
-                .Messages
-                .Where(x => ids.Contains(x.Id))
+        private async Task<AppGenericSuccessResponseDto<List<MessageResponseDto>>> MarkMessagesAsReceivedAsync(
+            MarkMessagesAsReceivedDto request, Guid userId, CancellationToken cancellationToken
+            )
+        {
+            List<Message> messages;
+            _context.ChangeTracker.Clear();
+            messages = await _context.Messages
+                .Where(x => request.Ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
-            foreach(var message in messages)
-                message.MarkAsReceived(
-                    loginUserId, 
-                    request.MessageItems.First(x => x.Id == message.Id).ReceivedDate.ToDateTime()
-                );
+            foreach (var message in messages)
+                message.MarkAsReceived(userId, request.ReceivedDate.ToDateTime());
 
-            await _unitOfWork.CommitAsync(cancellationToken);
-            return new AppSuccessResponseDto();
+            try
+            {
+                await _unitOfWork.CommitAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                foreach (var message in messages)
+                    message.ClearAllDomainEvents();
+                return await MarkMessagesAsReceivedAsync(request, userId, cancellationToken);
+            }
+
+            return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
+                _mapper.Map<List<MessageResponseDto>>(messages)
+                );
         }
     }
 }

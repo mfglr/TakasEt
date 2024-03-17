@@ -3,8 +3,8 @@ using MediatR;
 
 namespace ConversationService.Domain.DomainEvents
 {
-    public class MessagesMarkedAsViewedDomainEvent : INotification
+    public class MessageMarkedAsReceivedDomainEvent : INotification
     {
-        public List<Message> Messages { get; set; }
+        public Message Message { get; set; }
     }
 }

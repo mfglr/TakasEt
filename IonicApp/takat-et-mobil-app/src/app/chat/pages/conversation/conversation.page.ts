@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription, first } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, MessageState, UserState, takeValueOfMessage } from '../../state/reducer';
-import { markMessageAsViewedAction, markNewMessagesAsViewedAction, nextPageMessagesAction } from '../../state/actions';
+import { markMessageAsViewedAction, nextPageMessagesAction } from '../../state/actions';
 import { selectMessageStatesOfConversatinPage } from '../../state/selectors';
 import { Router } from '@angular/router';
 
@@ -37,9 +37,11 @@ export class ConversationPage implements OnInit,OnDestroy {
       this.messages$.pipe(first()).subscribe(
         x => {
           if(x.length < takeValueOfMessage)
-            this.chatStore.dispatch(nextPageMessagesAction({userId : this.userState!.id}))
+            this.chatStore.dispatch(nextPageMessagesAction({user : this.userState!}))
         }
       )
+
+
 
       // this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
       //   var viewedDate = new Date();

@@ -22,5 +22,5 @@ app.UseCors("local");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<ConversationHub>("conversation");
+app.MapHub<MessageHub>("message");
 app.Run();

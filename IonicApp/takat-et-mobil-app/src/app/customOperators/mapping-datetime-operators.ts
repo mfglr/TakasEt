@@ -24,6 +24,7 @@ export function mapDateTimesOfMessages(){
     })
   )
 }
+
 export function mapDateTimesOfConversations(){
   return (source : Observable<AppResponse<ConversationResponse[]>>) => source.pipe(
     map(response => {

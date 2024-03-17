@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
 using System.Collections;
+using System.Reflection;
 
 namespace SharedLibrary.PipelineBehaviors
 {
@@ -25,52 +26,46 @@ namespace SharedLibrary.PipelineBehaviors
             if(response.IsError || response is AppSuccessResponseDto)
                 return response;
 
+            var data = response.GetType().GetProperty("Data")!.GetValue(response)!;
             var offset = _contextAccessor.HttpContext.GetOffset() ?? 0;
+            
+            ConvertDateTimes(data, offset);
+            
+            return response;
+        }
 
-            var responseType = response.GetType();
-            var dataType = responseType.GetGenericArguments()[0];
-            var dataProperty = responseType.GetProperty("Data")!;
-            var data = dataProperty.GetValue(response)!;
 
-            if (typeof(IEnumerable).IsAssignableFrom(dataType))
+
+        private void ConvertDateTimes(object? instance, int offset)
+        {
+            if (instance == null)
+                return;
+            var type = instance.GetType();
+            if (typeof(IEnumerable).IsAssignableFrom(type))
             {
-                var list = (IEnumerable)data;
-                var itemType = dataType.GetGenericArguments().First();
-                var properties = itemType
-                    .GetProperties()
-                    .Where(x => x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?))
-                    .ToList();
-
-                foreach(var item in list)
-                {
-                    foreach(var property in properties)
-                    {
-                        var date = property.GetValue(item);
-                        if(date != null)
-                            property.SetValue(item, ((DateTime)date).AddMinutes(-1 * offset), null);
-                    }
-                }
+                var items = (IEnumerable)instance;
+                foreach (var item in items)
+                    ConvertDateTimes(item, offset);
             }
             else
             {
-                var properties = dataType.GetProperties();
-                foreach(var property in properties)
+                PropertyInfo[] properties = type.GetProperties();
+                foreach (var property in properties)
                 {
-                    var date = property.GetValue(data);
-                    if(date != null)
-                        property.SetValue(data, ((DateTime)date).AddMinutes(-1 * offset), null);
-                }
+                    var pType = property.PropertyType;
+                    var pInstance = property.GetValue(instance);
+                    if ((pType == typeof(DateTime) || pType == typeof(DateTime?)) && pInstance != null)
+                    {
+                        var value = (DateTime)pInstance!;
+                        property.SetValue(instance, value.AddMinutes(-1 * offset));
+                        continue;
+                    }
+                    if (pType.IsValueType || pType == typeof(string))
+                        continue;
+                    ConvertDateTimes(pInstance, offset);
+                };
             }
-
-            return response;
-
         }
 
-        private DateTime ConvertDate(DateTime date,string timeZone)
-        {
-            var localDate = date.ToLocalTime();
-            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-            return TimeZoneInfo.ConvertTime(localDate, timeZoneInfo);
-        }
     }
 }

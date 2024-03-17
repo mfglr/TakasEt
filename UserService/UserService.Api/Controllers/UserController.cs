@@ -21,7 +21,7 @@ namespace UserService.Api.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
-        public async Task<IAppResponseDto> Follow(FollowDto request,CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Follow(FollowDto request, CancellationToken cancellationToken)
         {
             return await _sender.Send(request, cancellationToken);
         }
@@ -38,7 +38,7 @@ namespace UserService.Api.Controllers
         public async Task<IAppResponseDto> GetFollowersAndFollowings(CancellationToken cancellationToken)
         {
 
-            return await _sender.Send(new GetFollowersOrFollowingsDto(HttpContext.Request.Query),cancellationToken);
+            return await _sender.Send(new GetFollowersOrFollowingsDto(HttpContext.Request.Query), cancellationToken);
         }
 
         [Authorize(Roles = "user")]
@@ -61,5 +61,13 @@ namespace UserService.Api.Controllers
         {
             return await _sender.Send(new GetUsersByIdsDto(Request.Query), cancellationToken);
         }
+
+        [Authorize(Roles = "user")]
+        [HttpGet("{userId}")]
+        public async Task<IAppResponseDto> GetUserById(Guid userId,CancellationToken cancellationToken)
+        {
+            return await _sender.Send(new GetUserByIdDto() { UserId = userId}, cancellationToken);
+        }
+
     }
 }

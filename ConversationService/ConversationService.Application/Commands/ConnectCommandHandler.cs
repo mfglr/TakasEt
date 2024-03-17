@@ -5,6 +5,7 @@ using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
+using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
@@ -14,21 +15,24 @@ namespace ConversationService.Application.Commands
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-
-        public ConnectCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
+        public ConnectCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<IAppResponseDto> Handle(ConnectDto request, CancellationToken cancellationToken)
         {
-            var connection = await _context.UserConnections.FindAsync(request.LoginUserId,cancellationToken);
+            var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
+
+            var connection = await _context.UserConnections.FindAsync(loginUserId, cancellationToken);
             if (connection == null)
             {
-                connection = new UserConnection(request.LoginUserId);
+                connection = new UserConnection(loginUserId);
                 connection.Connect(request.ConnectionId);
                 await _context.UserConnections.AddAsync(connection,cancellationToken);
             }

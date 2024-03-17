@@ -1,3 +1,4 @@
 export interface MarkMessagesAsReceived{
-  messageItems : { id : string, receivedDate : number}[]
+  ids : string[],
+  receivedDate : number
 }

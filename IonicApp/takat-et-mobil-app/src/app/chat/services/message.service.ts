@@ -32,7 +32,7 @@ export class MessageService{
     ).pipe(mapDateTimesOfMessages())
   }
 
-  markMessagesAsReceived(reqeust : MarkMessagesAsReceived) : Observable<BaseAppresponse>{
+  markMessagesAsReceived(reqeust : MarkMessagesAsReceived) : Observable<AppResponse<MessageResponse[]>>{
     return this.httpClient.put(`${this.baseUrl}/MarkMessagesAsReceived`,reqeust);
   }
 

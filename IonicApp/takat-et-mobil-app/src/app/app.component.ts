@@ -9,6 +9,7 @@ import { loginByLocalStorageAction } from './account/state/actions';
 import { ChatHubService } from './services/chat-hub.service';
 import { ChatState } from './chat/state/reducer';
 import { loadNewMessagesAction } from './chat/state/actions';
+import { selectIsConnected } from './chat/state/selectors';
 
 register();
 
@@ -43,10 +44,12 @@ export class AppComponent {
           this.router.navigateByUrl("/account/login")
       }
     )
+
   }
 
   ngOnDestroy(){
     this.chatHub.hubConnection?.stop();
   }
+
 
 }

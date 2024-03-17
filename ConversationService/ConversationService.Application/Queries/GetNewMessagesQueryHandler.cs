@@ -30,11 +30,7 @@ namespace ConversationService.Application.Queries
 
             var messages = await _context
                 .Messages
-                .Where(
-                    x =>
-                        x.ReceiverId == loginUserId && 
-                        x.MessageState.Status != MessageState.Viewed.Status
-                )
+                .Where(x => x.ReceiverId == loginUserId && x.MessageState.Status != MessageState.Viewed.Status)
                 .OrderBy(x => x.SendDate)
                 .ToListAsync(cancellationToken);
 

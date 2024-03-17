@@ -36,6 +36,7 @@ namespace ConversationService.Application.Queries
                 )
                 .ToPage(
                     x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!, 
+                    x => x.SendDate,
                     request
                 )
                 .ToListAsync(cancellationToken);

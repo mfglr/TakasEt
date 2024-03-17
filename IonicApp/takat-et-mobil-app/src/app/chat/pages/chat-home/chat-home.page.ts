@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { first } from 'rxjs';
 import { ChatState } from '../../state/reducer';
 import { nextPageConversationsAction } from '../../state/actions';
-import { selectForChatHomePage } from '../../state/selectors';
+import { selectForChatHomePage, selectIsSynchronized } from '../../state/selectors';
 
 @Component({
   selector: 'app-chat-home',

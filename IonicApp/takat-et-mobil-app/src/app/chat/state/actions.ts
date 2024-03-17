@@ -5,6 +5,7 @@ import { SendMessage } from "../models/request/send-message";
 import { UserResponse } from "src/app/models/responses/user-response";
 import { BaseAppresponse } from "src/app/models/responses/app-response";
 import { MarkMessagesAsReceived } from "../models/request/mark-messages-as-received";
+import { UserState } from "./reducer";
 
 export const connectionFailedAction = createAction("[Chat Module State] connection failed");
 export const connectionSuccessAction = createAction("[Chat Module State] connectin success");
@@ -12,24 +13,25 @@ export const connectionSuccessAction = createAction("[Chat Module State] connect
 export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
 export const loadNewMessagesSuccessAction = createAction(
   "[Chat Module State] load conversations with new messages success",
-  props<{payload : {message : MessageResponse,user? : UserResponse}[]}>()
+  props<{payload : {message : MessageResponse,user? : UserResponse}[],receivedDate : Date}>()
 )
 
-export const markMessagesAsReceivedAction = createAction(
-  "[Chat Module State] mark messages as received",
-  props<{request: MarkMessagesAsReceived}>()
+export const synchronizedSuccessAction = createAction("[Chat Module State] synchronized success")
+export const synchronizedFailedAction = createAction("[Chat Module State] synchronized failed")
+
+export const loadConversationUserAction = createAction(
+  '[Chat Module State] load conversation user',
+  props<{userId : string}>()
 )
-export const markMessagesAsReceivedSuccessAction = createAction(
-  "[Chat Module State] mark messages as received success"
-)
-export const markMessagesAsReceivedFailedAction = createAction(
-  "[Chat Module State] mark messages as received failed"
+export const loadConversationUserSuccessAction = createAction(
+  "load conversation user success action",
+  props<{payload : UserResponse}>()
 )
 
 export const nextPageConversationsAction = createAction("[Chat Module State] next page conversation")
 export const nextPageConversationsSuccessAction = createAction(
   "[Chat Module State] next page conversations success",
-  props<{payload : ConversationResponse[],loginUserId : string}>()
+  props<{payload : ConversationResponse[],receivedDate : Date}>()
 )
 export const nextPageConversationsFailedAction = createAction(
   "[Chat Module State] next page conversations failed",
@@ -46,23 +48,18 @@ export const nextPageUsersFailedAction = createAction(
   props<{payload : BaseAppresponse}>()
 )
 
-export const loadUserOfConversations = createAction(
-  "[Chat Module State] load user of conversations",
-  props<{userIds : string[]}>()
+export const nextPageMessagesAction = createAction(
+  "[Chat Module State] next page message",
+  props<{user : UserState}>()
 )
-export const loadUserOfConversatinsSuccessAction = createAction(
-  "["
-)
-
-export const nextPageMessagesAction = createAction("[Chat Module State] next page message",props<{userId : string}>())
 export const nextPageMessagesSuccessAction = createAction(
   "[Chat Module State] next page messages success",
-  props<{userId : string, payload : MessageResponse[],loginUserId : string}>()
+  props<{user : UserState, payload : MessageResponse[]}>()
 )
 
 export const sendMessageSuccessAction = createAction(
   "[Chat Module State] send message success",
-  props<{request : SendMessage}>()
+  props<{request : SendMessage,userState : UserState}>()
 )
 export const sendMessageFailedAction = createAction(
   "[Chat Module State] send message failed"
@@ -73,18 +70,24 @@ export const markMessageAsCreatedSuccessAction = createAction(
   props<{message : MessageResponse}>()
 )
 
-export const receiveMessageAction = createAction(
+export const receiveMessageSuccessAction = createAction(
   "[Chat Module State] receive message",
   props<{payload : MessageResponse}>()
 )
-
-export const markMessageAsReceivedAction = createAction(
-  "[Chat Module State] mark message as received",
-  props<{messageId : string, receiverId : string, receivedDate : Date}>()
+export const markMessagesAsReceivedAction = createAction(
+  "[Chat Module State] mark messages as received",
+  props<{request: MarkMessagesAsReceived}>()
 )
 export const markMessageAsReceivedSuccessAction = createAction(
   "[Chat Module State] mark message as received success",
-  props<{messageId : string, receiverId : string, receivedDate : Date}>()
+  props<{payload : MessageResponse}>()
+)
+export const markMessagesAsReceivedSuccessAction = createAction(
+  "[Chat Module State] mark messages as received success",
+  props<{payload : MessageResponse[]}>()
+)
+export const markMessagesAsReceivedFailedAction = createAction(
+  "[Chat Module State] mark messages as received failed"
 )
 
 export const markMessageAsViewedAction = createAction(
@@ -93,12 +96,7 @@ export const markMessageAsViewedAction = createAction(
 )
 export const markMessageAsViewedSuccessAction = createAction(
   "[Chat Module State] mark message as viewed success",
-  props<{messageId : string,receiverId : string, viewedDate : Date}>()
-)
-
-export const markNewMessagesAsViewedAction = createAction(
-  "[Chat Module State] mark new messages as viewed",
-  props<{receiverId : string, viewedDate : Date}>()
+  props<{payload : MessageResponse}>()
 )
 export const markMessagesAsViewedAction = createAction(
   "[Chat Module State] mark messages as viewed",
@@ -106,6 +104,6 @@ export const markMessagesAsViewedAction = createAction(
 )
 export const markMessagesAsViewedSuccessAction = createAction(
   "[Chat Module State] mark messages as viewed success",
-  props<{receiverId : string,ids : string[], viewedDate : Date}>()
+  props<{payload : MessageResponse[]}>()
 )
 

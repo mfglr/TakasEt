@@ -7,56 +7,43 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
-using SharedLibrary.Services;
 
 namespace ConversationService.Application.Hubs
 {
     [Authorize(Roles = "user")]
-    public class ConversationHub : Hub
+    public class MessageHub : Hub
     {
         private readonly ISender _sender;
         private readonly AppDbContext _context;
-        private readonly BlockingService _blockingChecker;
 
-        public ConversationHub(ISender sender, AppDbContext context, BlockingService blockingChecker)
+        public MessageHub(ISender sender, AppDbContext context)
         {
             _sender = sender;
             _context = context;
-            _blockingChecker = blockingChecker;
         }
 
         public override async Task OnConnectedAsync()
         {
             try
             {
-                var loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
-                await _sender.Send(
-                    new ConnectDto() {
-                        ConnectionId = Context.ConnectionId,
-                        LoginUserId = loginUserId
-                    }
-                );
+                await _sender.Send(new ConnectDto() {ConnectionId = Context.ConnectionId});
             }
             catch (Exception)
             {
                 return;
             }
-            await Clients.Caller.SendAsync("connectionCompletedNotification");
         }
+        
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             await _sender.Send(new DisconnectDto());
         }
+
         public async Task SendMessage(SaveMessageDto request)
         {
             IAppResponseDto response;
             try
             {
-                var a = Context;
-                var contex = Context.GetHttpContext().Request.Body;
-                request.SenderId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
-                await _blockingChecker.ThrowExceptionIfBlockerOfBlockedAsync(Context.GetHttpContext()!, request.ReceiverId.ToString());
-
                 response = await _sender.Send(request);
             }
             catch(Exception ex)
@@ -83,9 +70,10 @@ namespace ConversationService.Application.Hubs
                     .Clients(receiver.ConnectionId!)
                     .SendAsync("receiveMessage",response);
         }
+
         public async Task SendMessageReceivedNotification(MarkMessageAsReceivedDto request)
         {
-            Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
+            
             IAppResponseDto response;
             try
             {
@@ -105,47 +93,32 @@ namespace ConversationService.Application.Hubs
             if (sender != null && sender.IsConnected && sender.ConnectionId != null)
                 await Clients
                     .Clients(sender.ConnectionId)
-                    .SendAsync(
-                        "messageReceivedNotification", 
-                        new {
-                            MessageId = request.MessageId,
-                            ReceiverId = loginUserId, 
-                            ReceivedDate = request.ReceivedDate
-                        }
-                    );
+                    .SendAsync("messageReceivedNotification",response);
         }
 
-        public async Task SendMessageViewedNotification(string messageId, Guid senderId,DateTime viewedDate)
+        public async Task SendMessageViewedNotification(MarkMessageAsViewedDto request)
         {
             Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
             IAppResponseDto response;
             try
             {
-                var request = new MarkMessageAsViewedDto()
-                {
-                    MessageId = messageId,
-                    SenderId = senderId,
-                    ReceiverId = loginUserId,
-                    ViewedDate = viewedDate
-                };
                 response = await _sender.Send(request);
             }
             catch (Exception)
             {
                 return;
             }
+
+            var senderId = (response as AppGenericSuccessResponseDto<MessageResponseDto>)!.Data.SenderId;
             var sender = await _context
                 .UserConnections
                 .FirstOrDefaultAsync(x => x.Id == senderId);
-
             if (sender != null && sender.IsConnected && sender.ConnectionId != null)
                 await Clients
                     .Clients(sender.ConnectionId)
-                    .SendAsync(
-                        "messageViewedNotification",
-                        new { MessageId = messageId, ReceiverId = loginUserId, ViewedDate = viewedDate }
-                    );
+                    .SendAsync("messageViewedNotification",response);
         }
+
         public async Task LikeMessage(LikeMessageDto request)
         {
             IAppResponseDto response;

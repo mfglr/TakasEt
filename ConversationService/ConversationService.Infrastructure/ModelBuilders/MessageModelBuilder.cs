@@ -10,6 +10,7 @@ namespace ConversationService.Infrastructure.ModelBuilders
         public void Configure(EntityTypeBuilder<Message> builder)
         {
             builder.OwnsOne(message => message.MessageState);
+            builder.Property(x => x.RowVersion).IsRowVersion();
         }
     }
 }

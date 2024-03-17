@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { GetConversations } from "../models/request/get-conversations";
-import { Observable } from "rxjs";
+import { Observable, filter } from "rxjs";
 import { AppResponse } from "src/app/models/responses/app-response";
 import { ConversationResponse } from "../models/responses/conversation-response";
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
@@ -17,7 +17,9 @@ export class ConversationService{
   getConversations(request : GetConversations) : Observable<AppResponse<ConversationResponse[]>>{
     return this.httpClient.get<ConversationResponse[]>(
       `${this.baseUrl}/GetConversations?${UrlHelper.createPaginationQueryString(request)}`
-    ).pipe(mapDateTimesOfConversations())
+    ).pipe(
+      mapDateTimesOfConversations(),
+    )
   }
 
 }
