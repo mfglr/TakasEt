@@ -36,6 +36,7 @@ namespace ConversationService.Application.Hubs
                 .Caller
                 .SendAsync("connectionCompletedNotification");
         }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             await _sender.Send(new DisconnectDto());
@@ -116,6 +117,35 @@ namespace ConversationService.Application.Hubs
                         );
                 }
             }
+        }
+
+        public async Task MarkMessagesAsViewed(MarkMessagesAsViewedDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                response = await _sender.Send(request);
+            }catch(Exception ex)
+            {
+                return;
+            }
+
+            var messages = (response as AppGenericSuccessResponseDto<List<MessageResponseDto>>)!.Data;
+
+            if (messages.Count > 0)
+            {
+                var senderId = messages.First().SenderId;
+                var sender = await _context.UserConnections.FirstOrDefaultAsync(x => x.Id == senderId);
+                if(sender != null && sender.IsConnected)
+                {
+                    await Clients
+                        .Client(sender.ConnectionId)
+                        .SendAsync("messagesViewedNotification", response);
+                }
+
+            }
+
+
         }
 
         public async Task SendMessageReceivedNotification(MarkMessageAsReceivedDto request)

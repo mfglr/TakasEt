@@ -2,11 +2,12 @@ import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { MessageStatus } from "../models/responses/message-response";
 import { createReducer, on } from "@ngrx/store";
 import {
-  markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,
-  markMessagesAsViewedSuccessAction, receiveMessageSuccessAction, sendMessageSuccessAction,
+  markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction, markMessageSentAsViewedAction,
+  markMessagesSentAsViewedAction, receiveMessageSuccessAction, sendMessageSuccessAction,
   nextPageMessagesSuccessAction, nextPageConversationsSuccessAction, connectionFailedAction,
   connectionSuccessAction, nextPageUsersSuccessAction, loadNewMessagesSuccessAction,
-  markMessagesAsReceivedSuccessAction, loadConversationUserSuccessAction, synchronizedSuccessAction, synchronizedFailedAction,
+  markMessagesAsReceivedSuccessAction, loadConversationUserSuccessAction, synchronizedSuccessAction,
+  synchronizedFailedAction, markMessagesReceivedAsViewedAction, markMessageReceivedAsViewedAction,
 } from "./actions";
 import { MessageImageResponse } from "../models/responses/message-image-response";
 import { UserImageResponse } from "src/app/models/responses/user-image-response";
@@ -50,7 +51,6 @@ export const userAdapter = createEntityAdapter<UserState>({
   sortComparer : (x,y) => x.userName.localeCompare(y.userName)
 })
 export const selectUserStates = userAdapter.getSelectors().selectAll;
-
 
 export interface MessageState{
   timeStamp : number;
@@ -126,8 +126,11 @@ const initialState : ChatState = {
 export const chatReducer = createReducer(
   initialState,
   on( connectionFailedAction, state => ({...state, isConnected : false,isSynchronized : false}) ),
+
   on( connectionSuccessAction, state => ({...state, isConnected : true}) ),
+
   on( synchronizedSuccessAction,state => ({...state, isSynchronized : true})),
+
   on( synchronizedFailedAction ,state => ({...state, isSynchronized : false})),
 
   on(nextPageUsersSuccessAction, (state,action) => ({
@@ -154,7 +157,7 @@ export const chatReducer = createReducer(
       action.payload.map((m) : ConversationState => {
         let dateOfMessageState = {
           messageId : m.id,
-          timeStamp : m.receivedDate ? m.receivedDate.getTime() : action.receivedDate.getTime()
+          timeStamp : m.receivedDate?.getTime() ?? action.receivedDate.getTime()
         }
         let conversationState = state.conversationEntityState.entities[m.senderId];
         if(conversationState)
@@ -498,7 +501,8 @@ export const chatReducer = createReducer(
         messageEntityState = messageAdapter.updateOne({
           id : action.payload.id,
           changes : {
-            receivedDate : messageState.receivedDate ?? action.payload.receivedDate!,
+            updatedDate : action.payload.updatedDate,
+            receivedDate : action.payload.receivedDate,
             status : MessageStatus.Received
           }
         },state.messageEntityState)
@@ -510,66 +514,6 @@ export const chatReducer = createReducer(
       },state.messageEntityState)
     }
 
-
-    let messagePaginationEntityState = state.messagePaginationEntityState;
-    let messagePagination = state.messagePaginationEntityState.entities[action.payload.receiverId]
-    if(!messagePagination)
-      messagePaginationEntityState = messagePaginationAdapter.addOne({
-        userId : action.payload.receiverId,
-        isDescending : true,
-        isLast : false,
-        take : takeValueOfMessage,
-      },messagePaginationEntityState)
-
-    let conversationEntityState;
-    let conversationState = state.conversationEntityState.entities[action.payload.receiverId];
-    if(conversationState)
-      conversationEntityState = conversationAdapter.updateOne({
-        id : action.payload.receiverId,
-        changes :{
-          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
-            messageId : action.payload.id,
-            timeStamp : action.payload.sendDate.getTime()
-          },conversationState.dateOfMessageEntityState)
-        }
-      },state.conversationEntityState)
-    else
-      conversationEntityState = conversationAdapter.addOne({
-        userId : action.payload.receiverId,
-        dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
-          messageId : action.payload.id,
-          timeStamp : action.payload.sendDate.getTime()
-        },dateOfMessageStateAdapter.getInitialState())
-      },state.conversationEntityState)
-
-    return {
-      ...state,
-      conversationEntityState : conversationEntityState,
-      messageEntityState : messageEntityState,
-      messagePaginationEntityState : messagePaginationEntityState
-    }
-  }),
-
-  on(markMessageAsViewedSuccessAction,(state,action) => {
-    let messageEntityState;
-    let messageState = state.messageEntityState.entities[action.payload.id];
-    if(messageState){
-      if(messageState.status == MessageStatus.Viewed)
-        messageEntityState = state.messageEntityState
-      else
-        messageEntityState = messageAdapter.updateOne({
-          id : action.payload.id,
-          changes : {
-            viewedDate : messageState.viewedDate ?? action.payload.viewedDate!,
-            status : MessageStatus.Viewed
-          }
-        },state.messageEntityState)
-    }
-    else
-      messageEntityState = messageAdapter.addOne({
-        ...action.payload,
-        timeStamp : action.payload.sendDate.getTime()
-      },state.messageEntityState)
 
     let messagePaginationEntityState = state.messagePaginationEntityState;
     let messagePagination = state.messagePaginationEntityState.entities[action.payload.receiverId]
@@ -645,13 +589,14 @@ export const chatReducer = createReducer(
         else if(messageState.status == MessageStatus.Viewed)
           messageEntityState = messageAdapter.updateOne({
             id : message.id,
-            changes : { receivedDate : messageState.receivedDate ?? message.receivedDate! }
+            changes : { receivedDate : messageState.receivedDate ?? message.receivedDate }
           },state.messageEntityState)
         else
           messageEntityState = messageAdapter.updateOne({
             id : message.id,
             changes : {
-              receivedDate : messageState.receivedDate ?? message.receivedDate!,
+              updatedDate : message.updatedDate,
+              receivedDate : message.receivedDate,
               status : MessageStatus.Received
             }
           },state.messageEntityState)
@@ -679,12 +624,133 @@ export const chatReducer = createReducer(
     }
   }),
 
-  on(markMessagesAsViewedSuccessAction,(state,action) => {
+  on(markMessageSentAsViewedAction,(state,action) => {
+    let messageEntityState;
+    let messageState = state.messageEntityState.entities[action.payload.id];
+    if(messageState){
+      if(messageState.status == MessageStatus.Viewed)
+        messageEntityState = state.messageEntityState
+      else
+        messageEntityState = messageAdapter.updateOne({
+          id : action.payload.id,
+          changes : {
+            viewedDate : messageState.viewedDate ?? action.payload.viewedDate!,
+            status : MessageStatus.Viewed
+          }
+        },state.messageEntityState)
+    }
+    else
+      messageEntityState = messageAdapter.addOne({
+        ...action.payload,
+        timeStamp : action.payload.sendDate.getTime()
+      },state.messageEntityState)
+
+    let messagePaginationEntityState = state.messagePaginationEntityState;
+    let messagePagination = state.messagePaginationEntityState.entities[action.payload.receiverId]
+    if(!messagePagination)
+      messagePaginationEntityState = messagePaginationAdapter.addOne({
+        userId : action.payload.receiverId,
+        isDescending : true,
+        isLast : false,
+        take : takeValueOfMessage,
+      },messagePaginationEntityState)
+
+    let conversationEntityState;
+    let conversationState = state.conversationEntityState.entities[action.payload.receiverId];
+    if(conversationState)
+      conversationEntityState = conversationAdapter.updateOne({
+        id : action.payload.receiverId,
+        changes :{
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+            messageId : action.payload.id,
+            timeStamp : action.payload.sendDate.getTime()
+          },conversationState.dateOfMessageEntityState)
+        }
+      },state.conversationEntityState)
+    else
+      conversationEntityState = conversationAdapter.addOne({
+        userId : action.payload.receiverId,
+        dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+          messageId : action.payload.id,
+          timeStamp : action.payload.sendDate.getTime()
+        },dateOfMessageStateAdapter.getInitialState())
+      },state.conversationEntityState)
+
+    return {
+      ...state,
+      conversationEntityState : conversationEntityState,
+      messageEntityState : messageEntityState,
+      messagePaginationEntityState : messagePaginationEntityState
+    }
+  }),
+
+  on(markMessageReceivedAsViewedAction,(state,action) => {
+    let messageEntityState;
+    let messageState = state.messageEntityState.entities[action.payload.id];
+    if(messageState){
+      if(messageState.status == MessageStatus.Viewed)
+        messageEntityState = state.messageEntityState
+      else{
+        messageEntityState = messageAdapter.updateOne({
+          id : action.payload.id,
+          changes : {
+            viewedDate : messageState.viewedDate ?? action.payload.viewedDate!,
+            status : MessageStatus.Viewed
+          }
+        },state.messageEntityState)
+      }
+    }
+    else{
+      messageEntityState = messageAdapter.addOne({
+        ...action.payload,
+        status : MessageStatus.Viewed,
+        timeStamp : action.payload.sendDate.getTime()
+      },state.messageEntityState)
+    }
+    let messagePaginationEntityState = state.messagePaginationEntityState;
+    let messagePagination = state.messagePaginationEntityState.entities[action.payload.senderId]
+    if(!messagePagination)
+      messagePaginationEntityState = messagePaginationAdapter.addOne({
+        userId : action.payload.senderId,
+        isDescending : true,
+        isLast : false,
+        take : takeValueOfMessage,
+      },messagePaginationEntityState)
+
+    let conversationEntityState;
+    let conversationState = state.conversationEntityState.entities[action.payload.senderId];
+    if(conversationState)
+      conversationEntityState = conversationAdapter.updateOne({
+        id : action.payload.senderId,
+        changes :{
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+            messageId : action.payload.id,
+            timeStamp : action.payload.sendDate.getTime()
+          },conversationState.dateOfMessageEntityState)
+        }
+      },state.conversationEntityState)
+    else
+      conversationEntityState = conversationAdapter.addOne({
+        userId : action.payload.senderId,
+        dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+          messageId : action.payload.id,
+          timeStamp : action.payload.sendDate.getTime()
+        },dateOfMessageStateAdapter.getInitialState())
+      },state.conversationEntityState)
+
+    return {
+      ...state,
+      conversationEntityState : conversationEntityState,
+      messageEntityState : messageEntityState,
+      messagePaginationEntityState : messagePaginationEntityState
+    }
+  }),
+
+  on(markMessagesSentAsViewedAction,(state,action) => {
 
     let conversationEntityState = state.conversationEntityState;
     let messageEntityState = state.messageEntityState;
     let messagePaginationEntityState = state.messagePaginationEntityState;
-
     for(let i = 0; i < action.payload.length;i++){
 
       let message = action.payload[i];
@@ -718,7 +784,71 @@ export const chatReducer = createReducer(
               viewedDate : messageState.viewedDate ?? message.viewedDate!,
               status : MessageStatus.Viewed
           }
-        },state.messageEntityState)
+        },messageEntityState)
+      else
+        messageEntityState = messageAdapter.addOne({
+          ...message,
+          timeStamp : message.sendDate.getTime()
+        },messageEntityState)
+
+      let messagePagination = state.messagePaginationEntityState.entities[message.receiverId]
+      if(!messagePagination)
+        messagePaginationEntityState = messagePaginationAdapter.addOne({
+          userId : message.receiverId,
+          isDescending : true,
+          isLast : false,
+          take : takeValueOfMessage,
+        },messagePaginationEntityState)
+    }
+
+    return {
+      ...state,
+      conversationEntityState : conversationEntityState,
+      messageEntityState : messageEntityState,
+      messagePaginationEntityState : messagePaginationEntityState,
+    }
+  }),
+
+  on(markMessagesReceivedAsViewedAction,(state,action) => {
+
+    let conversationEntityState = state.conversationEntityState;
+    let messageEntityState = state.messageEntityState;
+    let messagePaginationEntityState = state.messagePaginationEntityState;
+
+    for(let i = 0; i < action.payload.length;i++){
+
+      let message = action.payload[i];
+
+      let conversationState = conversationEntityState.entities[message.senderId];
+      if(conversationState)
+        conversationEntityState = conversationAdapter.updateOne({
+          id : message.senderId,
+          changes : {
+            dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+              messageId : message.id,timeStamp : message.sendDate.getTime()
+            },conversationState.dateOfMessageEntityState)
+          }
+        },conversationEntityState)
+      else
+        conversationEntityState = conversationAdapter.addOne({
+          userId : message.senderId,
+          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne({
+            messageId : message.id,timeStamp : message.sendDate.getTime()
+          },dateOfMessageStateAdapter.getInitialState())
+        },conversationEntityState)
+
+      let messageState = messageEntityState.entities[message.id];
+      if(messageState)
+        if(messageState.status == MessageStatus.Viewed)
+          messageEntityState = state.messageEntityState
+        else
+          messageEntityState = messageAdapter.updateOne({
+            id : message.id,
+            changes : {
+              viewedDate : messageState.viewedDate ?? message.viewedDate!,
+              status : MessageStatus.Viewed
+          }
+        },messageEntityState)
       else
         messageEntityState = messageAdapter.addOne({
           ...message,

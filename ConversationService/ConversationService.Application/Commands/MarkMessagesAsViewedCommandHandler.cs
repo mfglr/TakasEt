@@ -39,7 +39,8 @@ namespace ConversationService.Application.Commands
         {
             List<Message> messages;
             _context.ChangeTracker.Clear();
-            messages = await _context.Messages
+            messages = await _context
+                .Messages
                 .Where(x => request.Ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 

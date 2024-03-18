@@ -5,7 +5,7 @@ import { MessageResponse, MessageStatus } from '../chat/models/responses/message
 import {
   connectionFailedAction, connectionSuccessAction, markMessageAsCreatedSuccessAction,
   receiveMessageSuccessAction,
-  markMessageAsReceivedSuccessAction, markMessageAsViewedSuccessAction,markMessagesAsViewedSuccessAction,
+  markMessageAsReceivedSuccessAction, markMessageSentAsViewedAction, markMessagesSentAsViewedAction,
   loadNewMessagesSuccessAction, synchronizedFailedAction, synchronizedSuccessAction
 } from '../chat/state/actions';
 import { Subject } from 'rxjs';
@@ -90,8 +90,14 @@ export class ChatHubService {
     })
 
     this.hubConnection.on("messageViewedNotification",(response : AppResponse<MessageResponse>) => {
-      this.chatStore.dispatch(markMessageAsViewedSuccessAction({payload : mapDateTimesOfMessageResponse(response.data!)}))
+      this.chatStore.dispatch(markMessageSentAsViewedAction({payload : mapDateTimesOfMessageResponse(response.data!)}))
     })
+
+    this.hubConnection.on("messagesViewedNotification",(response : AppResponse<MessageResponse[]>) => {
+      this.chatStore.dispatch(markMessagesSentAsViewedAction({
+        payload : response.data!.map(x => mapDateTimesOfMessageResponse(x))
+      }))
+    });
 
   }
 

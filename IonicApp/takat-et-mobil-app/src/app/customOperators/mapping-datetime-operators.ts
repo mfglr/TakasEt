@@ -13,7 +13,7 @@ export function mapDateTimesOfMessages(){
             (message) : MessageResponse => ({
               ...message,
               createdDate : new Date(message.createdDate),
-              updateDate : message.updateDate ? new Date(message.updateDate) : message.updateDate,
+              updatedDate : message.updatedDate ? new Date(message.updatedDate) : message.updatedDate,
               sendDate : new Date(message.sendDate),
               receivedDate : message.receivedDate ? new Date(message.receivedDate) : message.receivedDate,
               viewedDate : message.viewedDate ? new Date(message.viewedDate) : message.viewedDate,
@@ -34,11 +34,11 @@ export function mapDateTimesOfConversations(){
           data : response.data!.map((c) : ConversationResponse => ({
             ...c,
             createdDate : new Date(c.createdDate),
-            updateDate : c.updateDate ? new Date(c.updateDate) : c.updateDate,
+            updatedDate : c.updatedDate ? new Date(c.updatedDate) : c.updatedDate,
             messages : c.messages.map((m) : MessageResponse => ({
               ...m,
               createdDate : new Date(m.createdDate),
-              updateDate : m.updateDate ? new Date(m.updateDate): m.updateDate,
+              updatedDate : m.updatedDate ? new Date(m.updatedDate): m.updatedDate,
               sendDate : new Date(m.sendDate),
               receivedDate : m.receivedDate ? new Date(m.receivedDate) : m.receivedDate,
               viewedDate : m.viewedDate ? new Date(m.viewedDate) : m.viewedDate

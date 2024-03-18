@@ -1,37 +1,28 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
-  nextPageMessagesSuccessAction, markMessageAsCreatedSuccessAction, markMessageAsReceivedSuccessAction,
-  markMessageAsViewedAction, markMessageAsViewedSuccessAction,
-  markMessagesAsViewedSuccessAction, nextPageMessagesAction,
-  loadNewMessagesSuccessAction, loadNewMessagesAction, nextPageUsersAction, nextPageUsersSuccessAction,
-  nextPageConversationsAction, nextPageConversationsSuccessAction, nextPageUsersFailedAction,
-  nextPageConversationsFailedAction, markMessagesAsReceivedSuccessAction, markMessagesAsReceivedFailedAction,
-  markMessagesAsReceivedAction,
-  connectionSuccessAction,
-  loadConversationUserAction,
-  loadConversationUserSuccessAction,
-  synchronizedSuccessAction,
-  synchronizedFailedAction,
+  nextPageMessagesSuccessAction, nextPageMessagesAction, nextPageUsersAction,
+  nextPageUsersSuccessAction, nextPageConversationsAction, nextPageConversationsSuccessAction,
+  nextPageUsersFailedAction, nextPageConversationsFailedAction, loadConversationUserAction,
+  loadConversationUserSuccessAction
 } from "./actions";
 import { filter, first, from, merge, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { MessageService } from "../services/message.service";
 import { UserService } from "src/app/services/user.service";
-import { ChatState, selectConversationStates } from "./reducer";
+import { ChatState } from "./reducer";
 import { ConversationService } from "../services/conversation-service";
-import { selectConversationPagination, selectConversationState, selectIsSynchronized, selectMessagePagination, selectUserPagination } from "./selectors";
-import { LoginState } from "src/app/account/state/reducer";
+import {
+  selectConversationPagination, selectIsSynchronized, selectMessagePagination,
+  selectUserPagination
+} from "./selectors";
 import { ConversationResponse } from "../models/responses/conversation-response";
-import { MessageResponse, MessageStatus } from "../models/responses/message-response";
-import { UserResponse } from "src/app/models/responses/user-response";
 
 @Injectable()
 export class ChatEffect{
 
   constructor(
     private readonly actions : Actions,
-    private readonly loginStore : Store<LoginState>,
     private readonly chatStore : Store<ChatState>,
     private readonly messageService : MessageService,
     private readonly userService : UserService,
