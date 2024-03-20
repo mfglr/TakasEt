@@ -3,13 +3,14 @@ import { Observable } from 'rxjs';
 import { NativeHttpClientService } from 'src/app/services/native-http-client.service';
 import { LoginResponse } from '../models/login-response';
 import { AppResponse } from 'src/app/models/responses/app-response';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  private readonly baseUrl = "https://localhost:7166/api"
+  private readonly baseUrl = environment.authService;
 
   constructor(
     private httpClient : NativeHttpClientService

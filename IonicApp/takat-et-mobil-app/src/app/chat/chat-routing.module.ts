@@ -15,7 +15,12 @@ const routes: Routes = [
   {
     path: 'create-conversation',
     loadChildren: () => import('./pages/create-conversation/create-conversation.module').then( m => m.CreateConversationPageModule)
+  },
+  {
+    path: 'add-photos',
+    loadChildren: () => import('./pages/add-photos/add-photos.module').then( m => m.AddPhotosPageModule)
   }
+
 
 ];
 

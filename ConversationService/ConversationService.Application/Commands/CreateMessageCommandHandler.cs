@@ -1,37 +1,32 @@
-﻿using AutoMapper;
-using ConversationService.Application.Dtos;
-using ConversationService.Domain.ConversationAggregate;
+﻿using ConversationService.Domain.ConversationAggregate;
 using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
 using SharedLibrary.Services;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class SaveMessageCommandHandler : IRequestHandler<SaveMessageDto, IAppResponseDto>
+    public class CreateMessageCommandHandler : IRequestHandler<CreateMessageDto>
     {
 
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly BlockingService _blockingService;
 
-        public SaveMessageCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor, BlockingService blockingService)
+        public CreateMessageCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, BlockingService blockingService)
         {
             _context = context;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _contextAccessor = contextAccessor;
             _blockingService = blockingService;
         }
 
-        public async Task<IAppResponseDto> Handle(SaveMessageDto request, CancellationToken cancellationToken)
+        public async Task Handle(CreateMessageDto request, CancellationToken cancellationToken)
         {
 
             var senderId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
@@ -59,11 +54,8 @@ namespace ConversationService.Application.Commands
             }
             else
                 conversation.AddMessage(message);
-            
+
             await _unitOfWork.CommitAsync(cancellationToken);
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(
-                _mapper.Map<MessageResponseDto>(message)
-                );
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using ConversationService.Application.Dtos;
+﻿using ConversationService.Application.Dtos;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Dtos;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
@@ -12,36 +10,36 @@ using System.Net;
 
 namespace ConversationService.Application.Commands
 {
-    public class MarkMessageAsViewedCommandHandler : IRequestHandler<MarkMessageAsViewedDto, IAppResponseDto>
+    public class MarkMessageAsViewedCommandHandler : IRequestHandler<MarkMessageAsViewedDto>
     {
 
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly IMapper _mapper;
 
-        public MarkMessageAsViewedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, IMapper mapper)
+        public MarkMessageAsViewedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
-            _mapper = mapper;
         }
 
-        public async Task<IAppResponseDto> Handle(MarkMessageAsViewedDto request, CancellationToken cancellationToken)
+        public async Task Handle(MarkMessageAsViewedDto request, CancellationToken cancellationToken)
         {
 
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            return await MessageViewedAsync(request, loginUserId, cancellationToken);
+            await MessageViewedAsync(request, loginUserId, cancellationToken);
         }
 
 
-        private async Task<AppGenericSuccessResponseDto<MessageResponseDto>> MessageViewedAsync(
+        private async Task MessageViewedAsync(
             MarkMessageAsViewedDto request, Guid loginUserId, CancellationToken cancellationToken
             )
         {
-            _context.ChangeTracker.Clear();
-            var message = await _context.Messages.FindAsync(request.MessageId, cancellationToken);
+            var message = await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
             if (message == null)
                 throw new AppException("The message was not found!", HttpStatusCode.NotFound);
             message.MarkAsViewed(loginUserId, request.ViewedDate);
@@ -52,12 +50,10 @@ namespace ConversationService.Application.Commands
             }
             catch (DbUpdateConcurrencyException)
             {
-                return await MessageViewedAsync(request, loginUserId, cancellationToken);
+                _context.ChangeTracker.Clear();
+                message.ClearAllDomainEvents();
+                await MessageViewedAsync(request, loginUserId, cancellationToken);
             }
-
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(
-                _mapper.Map<MessageResponseDto>(message)
-            );
         }
     } 
 }

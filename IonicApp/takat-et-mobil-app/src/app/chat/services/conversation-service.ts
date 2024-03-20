@@ -6,11 +6,13 @@ import { ConversationResponse } from "../models/responses/conversation-response"
 import { NativeHttpClientService } from "src/app/services/native-http-client.service";
 import { mapDateTimesOfConversations } from "src/app/customOperators/mapping-datetime-operators";
 import { UrlHelper } from "src/app/helpers/url-helper";
+import { environment } from "src/environments/environment";
 
 @Injectable({ "providedIn" : "root"})
 export class ConversationService{
 
-  private readonly baseUrl : string = "https://localhost:7200/api/conversation";
+  private readonly baseUrl = environment.authService;
+
 
   constructor(private readonly httpClient : NativeHttpClientService) {}
 

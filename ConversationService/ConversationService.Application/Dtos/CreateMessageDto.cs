@@ -4,7 +4,7 @@ using SharedLibrary.Dtos;
 
 namespace ConversationService.SignalR.Dtos
 {
-    public class SaveMessageDto : IRequest<IAppResponseDto>
+    public class CreateMessageDto : IRequest
     {
         public string Id { get; set; }
         public Guid ReceiverId { get; set; }

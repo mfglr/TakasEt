@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ConversationService.Application.Dtos;
+﻿using ConversationService.Application.Dtos;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -12,51 +11,51 @@ using System.Net;
 
 namespace ConversationService.Application.Commands
 {
-    public class MarkMessageAsReceivedCommandHandler : IRequestHandler<MarkMessageAsReceivedDto, IAppResponseDto>
+    public class MarkMessageAsReceivedCommandHandler : IRequestHandler<MarkMessageAsReceivedDto>
     {
 
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly IMapper _mapper;
 
 
-        public MarkMessageAsReceivedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor, IMapper mapper)
+        public MarkMessageAsReceivedCommandHandler(AppDbContext context, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
-            _mapper = mapper;
         }
 
-        public async Task<IAppResponseDto> Handle(MarkMessageAsReceivedDto request, CancellationToken cancellationToken)
+        public async Task Handle(MarkMessageAsReceivedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
-            return await MessageAsReceivedAsync(request, loginUserId, cancellationToken);
+            await MessageAsReceivedAsync(request, loginUserId, cancellationToken);
         }
 
-        private async Task<AppGenericSuccessResponseDto<MessageResponseDto>> MessageAsReceivedAsync(
+        private async Task MessageAsReceivedAsync(
             MarkMessageAsReceivedDto request, Guid loginUserId, CancellationToken cancellationToken
             )
         {
-            _context.ChangeTracker.Clear();
-            var message = await _context.Messages.FindAsync(request.MessageId, cancellationToken);
+            var message = await _context
+                .Messages
+                .Include(x => x.Sender)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
+
             if (message == null)
                 throw new AppException("The message was not found!", HttpStatusCode.NotFound);
+            
             message.MarkAsReceived(loginUserId, request.ReceivedDate);
-
+            
             try
             {
                 await _unitOfWork.CommitAsync(cancellationToken);
             }
             catch(DbUpdateConcurrencyException)
             {
-                return await MessageAsReceivedAsync(request, loginUserId, cancellationToken);
+                _context.ChangeTracker.Clear();
+                message.ClearAllDomainEvents();
+                await MessageAsReceivedAsync(request, loginUserId, cancellationToken);
             }
-
-            return new AppGenericSuccessResponseDto<MessageResponseDto>(
-                _mapper.Map<MessageResponseDto>(message)
-            );
         }
 
     }

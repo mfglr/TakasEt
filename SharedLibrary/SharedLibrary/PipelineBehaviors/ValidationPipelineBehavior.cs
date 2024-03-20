@@ -6,7 +6,7 @@ using System.Net;
 namespace SharedLibrary.PipelineBehaviors
 {
     public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest,TResponse>
-    where TRequest : IRequest<TResponse>
+        where TRequest : notnull
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
         public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)

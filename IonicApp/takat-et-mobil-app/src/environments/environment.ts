@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  authService : "https://localhost:7166",
+  conversationService : "https://localhost:7200",
+  userService : "https://localhost:7267",
+  messageHub : "https://localhost:7200/message"
 };
 
 /*

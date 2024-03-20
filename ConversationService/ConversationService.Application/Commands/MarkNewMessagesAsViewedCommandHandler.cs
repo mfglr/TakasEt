@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ConversationService.Application.Dtos;
+﻿using ConversationService.Application.Dtos;
 using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
@@ -11,36 +10,33 @@ using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class MarkMessagesAsViewedCommandHandler : IRequestHandler<MarkMessagesAsViewedDto, IAppResponseDto>
+    public class MarkNewMessagesAsViewedCommandHandler : IRequestHandler<MarkNewMessagesAsViewedDto, IAppResponseDto>
     {
-
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public MarkMessagesAsViewedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
+        public MarkNewMessagesAsViewedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork)
         {
             _contextAccessor = contextAccessor;
             _context = context;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
-        public async Task<IAppResponseDto> Handle(MarkMessagesAsViewedDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(MarkNewMessagesAsViewedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             return await MarkMessagesAsViewedAsync(request, loginUserId, cancellationToken);
         }
 
-        private async Task<AppGenericSuccessResponseDto<List<MessageResponseDto>>> MarkMessagesAsViewedAsync(
-            MarkMessagesAsViewedDto request,Guid userId, CancellationToken cancellationToken
+        private async Task<AppSuccessResponseDto> MarkMessagesAsViewedAsync(
+            MarkNewMessagesAsViewedDto request,Guid userId, CancellationToken cancellationToken
             )
         {
             List<Message> messages;
-            _context.ChangeTracker.Clear();
             messages = await _context
                 .Messages
+                .Include(x => x.Sender)
                 .Where(x => request.Ids.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
@@ -53,12 +49,12 @@ namespace ConversationService.Application.Commands
             }
             catch (DbUpdateConcurrencyException)
             {
+                foreach (var message in messages)
+                    message.ClearAllDomainEvents();
+                _context.ChangeTracker.Clear();
                 return await MarkMessagesAsViewedAsync(request, userId, cancellationToken);
             }
-
-            return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
-                _mapper.Map<List<MessageResponseDto>>(messages)
-                );
+            return new AppSuccessResponseDto();
         }
 
     }

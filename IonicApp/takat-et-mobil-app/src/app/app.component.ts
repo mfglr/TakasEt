@@ -10,6 +10,7 @@ import { ChatHubService } from './services/chat-hub.service';
 import { ChatState } from './chat/state/reducer';
 import { loadNewMessagesAction } from './chat/state/actions';
 import { selectIsConnected, selectMessageStatesOfConversatinPage } from './chat/state/selectors';
+import { environment } from 'src/environments/environment';
 
 register();
 
@@ -31,6 +32,8 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
+    console.log(environment.production)
+
     this.loginStore.dispatch(loginByLocalStorageAction())
 
     this.accessToken$.subscribe(

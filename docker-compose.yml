@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.8.14-management
+    container_name: rabbitmq_container
+  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_container
+  
+  authservice.web:
+    image: auth_service_image
+    container_name: auth_service_container
+    build:
+      context: .
+      dockerfile: AuthService/AuthService.Web/Dockerfile
+  conversationservice.api:
+    image: conversation_service_image
+    container_name: conversation_service_container
+    build:
+      context: .
+      dockerfile: ConversationService/ConversationService.Api/Dockerfile
+  userservice.api:
+    image: user_service_image
+    container_name: user_service_container
+    build:
+      context: .
+      dockerfile: UserService/UserService.Api/Dockerfile
+  
+  onuseraccountcreated_createuser.workerservice:
+    image: onuseraccountcreated_createuser_image
+    container_name: onuseraccountcreated_createuser_container
+    build:
+      context: .
+      dockerfile: UserService/OnUserAccountCreated_CreateUser.WorkerService/Dockerfile
+
+volumes:
+    sqlserver_volume:
+
+

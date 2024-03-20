@@ -32,168 +32,87 @@ namespace ConversationService.Application.Hubs
             {
                 return;
             }
-            await Clients
-                .Caller
-                .SendAsync("connectionCompletedNotification");
         }
-
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            await _sender.Send(new DisconnectDto());
-        }
-
-        public async Task SendMessage(SaveMessageDto request)
-        {
-            IAppResponseDto response;
             try
             {
-                response = await _sender.Send(request);
+                await _sender.Send(new DisconnectDto());
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        public async Task CreateMessage(CreateMessageDto request)
+        {
+            try
+            {
+                await _sender.Send(request);
             }
             catch(Exception ex)
             {
                 await Clients
                     .Caller
-                    .SendAsync("messageSaveFailedNotification",new AppFailResponseDto(ex.Message));
+                    .SendAsync("messageCreationFailedNotification",new AppFailResponseDto(ex.Message));
                 return;
             }
-
-            await Clients.Caller.SendAsync("messageSaveCompletedNotification",response);
-
-            var receiver = await _context.UserConnections.FirstOrDefaultAsync(x => x.Id == request.ReceiverId);
-
-            if (receiver == null) {
-                await Clients
-                    .Caller
-                    .SendAsync("messageSendFailedNotification", new AppFailResponseDto("User was not found!"));
-                return;
-            }
-
-            if (receiver.IsConnected)
-                await Clients
-                    .Clients(receiver.ConnectionId!)
-                    .SendAsync("receiveMessage",response);
         }
 
-        public async Task GetNewMessages()
+        public async Task MarkNewMessagesAsReceived(MarkNewMessagesAsReceivedDto request)
         {
-            IAppResponseDto response;
             try
             {
-                response = await _sender.Send(new GetNewMessagesDto());
-            }
-            catch(Exception)
-            {
-                await Clients.Caller.SendAsync("synchronizedFailedNotification");
-                return;
-            }
-
-            await Clients.Caller.SendAsync("receiveNewMessages", response);
-        }
-
-        public async Task MarkMessagesAsReceived(MarkMessagesAsReceivedDto request)
-        {
-            IAppResponseDto response;
-            try
-            {
-                response = await _sender.Send(request);
+                await _sender.Send(request);
             }catch(Exception)
             {
-                await Clients.Caller.SendAsync("synchronizedFailedNotification");
                 return;
             }
-
-            await Clients.Caller.SendAsync("synchronizedSuccessNotification");
-
-            var messages = (response as AppGenericSuccessResponseDto<List<MessageResponseDto>>)!.Data;
-            foreach(var message in messages)
-            {
-                if (message.Sender != null && message.Sender.IsConnected)
-                {
-                    await Clients
-                        .Client(message.Sender.ConnectionId)
-                        .SendAsync(
-                            "messageReceivedNotification",
-                            new AppGenericSuccessResponseDto<MessageResponseDto>(message)
-                        );
-                }
-            }
-        }
-
-        public async Task MarkMessagesAsViewed(MarkMessagesAsViewedDto request)
-        {
-            IAppResponseDto response;
-            try
-            {
-                response = await _sender.Send(request);
-            }catch(Exception ex)
-            {
-                return;
-            }
-
-            var messages = (response as AppGenericSuccessResponseDto<List<MessageResponseDto>>)!.Data;
-
-            if (messages.Count > 0)
-            {
-                var senderId = messages.First().SenderId;
-                var sender = await _context.UserConnections.FirstOrDefaultAsync(x => x.Id == senderId);
-                if(sender != null && sender.IsConnected)
-                {
-                    await Clients
-                        .Client(sender.ConnectionId)
-                        .SendAsync("messagesViewedNotification", response);
-                }
-
-            }
-
-
-        }
-
-        public async Task SendMessageReceivedNotification(MarkMessageAsReceivedDto request)
-        {
             
-            IAppResponseDto response;
+        }
+        public async Task MarkNewMessagesAsViewed(MarkNewMessagesAsViewedDto request)
+        {
             try
             {
-                response = await _sender.Send(request);
-            }
-            catch (Exception)
+                await _sender.Send(request);
+            }catch(Exception)
             {
                 return;
             }
-
-            var sender = (await _context
-                .Messages
-                .Include(x => x.Sender)
-                .FirstOrDefaultAsync(x => x.Id == request.MessageId))?
-                .Sender;
-
-            if (sender != null && sender.IsConnected && sender.ConnectionId != null)
-                await Clients
-                    .Clients(sender.ConnectionId)
-                    .SendAsync("messageReceivedNotification",response);
         }
 
-        public async Task SendMessageViewedNotification(MarkMessageAsViewedDto request)
+        public async Task MarkMessageAsReceived(MarkMessageAsReceivedDto request)
         {
-            Guid loginUserId = Guid.Parse(Context.GetHttpContext()!.GetLoginUserId()!);
-            IAppResponseDto response;
             try
             {
-                response = await _sender.Send(request);
+                await _sender.Send(request);
             }
             catch (Exception)
             {
                 return;
             }
-
-            var senderId = (response as AppGenericSuccessResponseDto<MessageResponseDto>)!.Data.SenderId;
-            var sender = await _context
-                .UserConnections
-                .FirstOrDefaultAsync(x => x.Id == senderId);
-            if (sender != null && sender.IsConnected && sender.ConnectionId != null)
-                await Clients
-                    .Clients(sender.ConnectionId)
-                    .SendAsync("messageViewedNotification",response);
+        }
+        public async Task MarkMessageAsViewed(MarkMessageAsViewedDto request)
+        {
+            IAppResponseDto response;
+            try
+            {
+                await _sender.Send(request);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+          
+        }
+        
+        public async Task SendUserWrittingNotification(Guid userId)
+        {
+            var connection = await _context.UserConnections.FindAsync(userId);
+            if(connection != null && connection.IsConnected) {
+                await Clients.Client(connection.ConnectionId).SendAsync("userWritting");
+            }
         }
 
         public async Task LikeMessage(LikeMessageDto request)

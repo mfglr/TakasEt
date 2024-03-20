@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace ConversationService.Application.Validators
 {
-    public class SaveMessageCommandValidator : AbstractValidator<SaveMessageDto>
+    public class SaveMessageCommandValidator : AbstractValidator<CreateMessageDto>
     {
         public SaveMessageCommandValidator()
         {

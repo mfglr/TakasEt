@@ -48,7 +48,7 @@ export class ConversationPage implements OnInit,OnDestroy {
             var viewedDate = new Date()
             this.chatStore.dispatch(markMessagesReceivedAsViewedAction({payload : messages,viewedDate : viewedDate}))
             this.chatHub.hubConnection!.invoke(
-              "MarkMessagesAsViewed",{ids : messages.map(x => x.id),viewedDate : viewedDate.getTime()}
+              "MarkNewMessagesAsViewed",{ids : messages.map(x => x.id),viewedDate : viewedDate.getTime()}
             )
           }
         }
@@ -58,7 +58,7 @@ export class ConversationPage implements OnInit,OnDestroy {
         var viewedDate = new Date();
         var message : MessageResponse = {...mapDateTimesOfMessageResponse(message),viewedDate : viewedDate};
         this.chatStore.dispatch(markMessageReceivedAsViewedAction({payload : message}))
-        this.chatHub.hubConnection!.invoke("SendMessageViewedNotification",{messageId : message.id,viewedDate : viewedDate})
+        this.chatHub.hubConnection!.invoke("MarkMessageAsViewed",{messageId : message.id,viewedDate : viewedDate})
       })
 
     }

@@ -78,9 +78,9 @@ namespace ConversationService.Api.Extentions
                 .AddHttpContextAccessor()
                 .AddSingleton<IRabbitMQOptions>(options)
                 .AddSingleton<IntegrationEventPublisher>()
+                .AddScoped<DateTimeService>()
                 .AddScoped<AccountService>()
-                .AddScoped<BlockingService>()
-                .AddScoped<UserService>();
+                .AddScoped<BlockingService>();
         }
     }
 }

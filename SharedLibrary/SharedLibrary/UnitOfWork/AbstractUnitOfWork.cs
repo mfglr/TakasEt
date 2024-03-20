@@ -67,6 +67,7 @@ namespace SharedLibrary.UnitOfWork
             foreach (var entity in entities)
             {
                 await entity.PublishAllDomainEventsAsync(_publisher, cancellationToken);
+                entity.ClearAllDomainEvents();
             }
             
         }

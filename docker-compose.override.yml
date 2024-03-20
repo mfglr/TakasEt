@@ -1,0 +1,68 @@
+version: '3.4'
+
+services:
+
+  sqlserver:
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Pasword123*
+      - MSSQL_PID=Evaluation
+    volumes:
+      - sqlserver_volume:/var/opt/mssql
+    ports:
+      - "1433:1433"
+  
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest  
+
+  authservice.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      # - https://+:443;
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=verySecretKey
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/Certificates/aspnetapp.pfx
+    ports:
+      - "6000:80"
+      # - "5000:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  
+  conversationservice.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=verySecretKey
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/Certificates/aspnetapp.pfx
+    ports:
+      - "6001:80"
+      # - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  
+  userservice.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=verySecretKey
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/Certificates/aspnetapp.pfx
+    ports:
+      - "6002:80"
+      # - "5002:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  onuseraccountcreated_createuser.workerservice:
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+

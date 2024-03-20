@@ -3,7 +3,7 @@ using SharedLibrary.Dtos;
 
 namespace ConversationService.Application.Dtos
 {
-    public class ConnectDto : IRequest<IAppResponseDto>
+    public class ConnectDto : IRequest
     {
         public string ConnectionId { get; set; }
     }

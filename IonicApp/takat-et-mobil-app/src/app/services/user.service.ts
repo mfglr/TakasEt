@@ -7,13 +7,14 @@ import { UrlHelper } from "../helpers/url-helper";
 import { GetUsersByIds } from "../models/requests/get-users-by-ids";
 import { GetUserById } from "../models/requests/get-user-by-id";
 import { Page } from "../state/app-entity-state/app-entity-state";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn : "root"
 })
 export class UserService{
 
-  private readonly baseUrl : string = "https://localhost:7267/api";
+  private readonly baseUrl : string = environment.userService;
 
   constructor(private readonly httpClient : NativeHttpClientService) {}
 

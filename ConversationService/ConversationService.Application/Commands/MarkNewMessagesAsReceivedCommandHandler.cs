@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using ConversationService.Application.Dtos;
-using ConversationService.Application.Hubs;
 using ConversationService.Domain.MessageAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
@@ -13,7 +11,7 @@ using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class MarkMessagesAsReceivedCommandHandler : IRequestHandler<MarkMessagesAsReceivedDto, IAppResponseDto>
+    public class MarkNewMessagesAsReceivedCommandHandler : IRequestHandler<MarkNewMessagesAsReceivedDto, IAppResponseDto>
     {
 
         private readonly IHttpContextAccessor _contextAccessor;
@@ -22,7 +20,7 @@ namespace ConversationService.Application.Commands
         private readonly IMapper _mapper;
 
 
-        public MarkMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
+        public MarkNewMessagesAsReceivedCommandHandler(IHttpContextAccessor contextAccessor, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _contextAccessor = contextAccessor;
             _context = context;
@@ -30,18 +28,17 @@ namespace ConversationService.Application.Commands
             _mapper = mapper;
         }
 
-        public async Task<IAppResponseDto> Handle(MarkMessagesAsReceivedDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(MarkNewMessagesAsReceivedDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             return await MarkMessagesAsReceivedAsync(request, loginUserId, cancellationToken);
         }
 
-        private async Task<AppGenericSuccessResponseDto<List<MessageResponseDto>>> MarkMessagesAsReceivedAsync(
-            MarkMessagesAsReceivedDto request, Guid userId, CancellationToken cancellationToken
+        private async Task<AppSuccessResponseDto> MarkMessagesAsReceivedAsync(
+            MarkNewMessagesAsReceivedDto request, Guid userId, CancellationToken cancellationToken
             )
         {
             List<Message> messages;
-            _context.ChangeTracker.Clear();
             messages = await _context
                 .Messages
                 .Include(x => x.Sender)
@@ -57,13 +54,13 @@ namespace ConversationService.Application.Commands
             }
             catch (DbUpdateConcurrencyException)
             {
+                foreach (var message in messages)
+                    message.ClearAllDomainEvents();
+                _context.ChangeTracker.Clear();
                 return await MarkMessagesAsReceivedAsync(request, userId, cancellationToken);
             }
 
-
-            return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
-               _mapper.Map<List<MessageResponseDto>>(messages)
-                );
+            return new AppSuccessResponseDto();
 
         }
     }

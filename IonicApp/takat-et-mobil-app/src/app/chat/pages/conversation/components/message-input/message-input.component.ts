@@ -8,6 +8,7 @@ import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, UserState } from 'src/app/chat/state/reducer';
 import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/state/actions';
 import { SendMessage } from 'src/app/chat/models/request/send-message';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-message-input',
@@ -20,10 +21,13 @@ export class MessageInputComponent implements OnInit {
   messageInput = new FormControl<string>("");
   loginUserId$ = this.loginStore.select(selectUserId);
 
+  photo? : string;
+
+
   constructor(
     private readonly loginStore : Store<LoginState>,
     private readonly chatHub : ChatHubService,
-    private readonly chatStore : Store<ChatState>
+    private readonly chatStore : Store<ChatState>,
   ) { }
 
   ngOnInit() {}
@@ -43,7 +47,7 @@ export class MessageInputComponent implements OnInit {
         }
 
         this.chatHub.hubConnection!
-          .invoke("SendMessage",request)
+          .invoke("CreateMessage",request)
           .then(() => {
             this.chatStore.dispatch(sendMessageSuccessAction({
               request : request,userState : {...this.userState!}
@@ -56,6 +60,5 @@ export class MessageInputComponent implements OnInit {
     });
 
   }
-
 
 }

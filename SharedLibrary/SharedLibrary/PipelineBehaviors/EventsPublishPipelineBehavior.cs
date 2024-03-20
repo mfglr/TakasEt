@@ -4,7 +4,7 @@ using SharedLibrary.UnitOfWork;
 namespace SharedLibrary.PipelineBehaviors
 {
     public class EventsPublishPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+     where TRequest : notnull
     {
         private readonly IUnitOfWork _unitOfWork;
 

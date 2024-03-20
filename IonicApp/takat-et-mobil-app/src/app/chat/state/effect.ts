@@ -4,7 +4,13 @@ import {
   nextPageMessagesSuccessAction, nextPageMessagesAction, nextPageUsersAction,
   nextPageUsersSuccessAction, nextPageConversationsAction, nextPageConversationsSuccessAction,
   nextPageUsersFailedAction, nextPageConversationsFailedAction, loadConversationUserAction,
-  loadConversationUserSuccessAction
+  loadConversationUserSuccessAction,
+  loadNewMessagesAction,
+  loadNewMessagesSuccessAction,
+  synchronizedFailedAction,
+  markNewMessagesAsReceivedAction,
+  synchronizedSuccessAction,
+  connectionSuccessAction
 } from "./actions";
 import { filter, first, from, merge, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -17,6 +23,7 @@ import {
   selectUserPagination
 } from "./selectors";
 import { ConversationResponse } from "../models/responses/conversation-response";
+import { MessageStatus } from "../models/responses/message-response";
 
 @Injectable()
 export class ChatEffect{
@@ -28,6 +35,49 @@ export class ChatEffect{
     private readonly userService : UserService,
     private readonly conversationService : ConversationService,
   ) {}
+
+  connectionSuccess$ = createEffect(
+    () => this.actions.pipe(
+      ofType(connectionSuccessAction),
+      mergeMap(() => of(loadNewMessagesAction()))
+    )
+  )
+
+  loadNewMessages$ = createEffect(
+    () => this.actions.pipe(
+      ofType(loadNewMessagesAction),
+      mergeMap(action => this.messageService.getNewMessages({})),
+      mergeMap(
+        response => {
+          if(!response.isError){
+            var receivedDate = new Date();
+            return of(
+              loadNewMessagesSuccessAction({payload :  response.data!,receivedDate : receivedDate}),
+              markNewMessagesAsReceivedAction({
+                request : {
+                  ids :  Array.from(new Set(response.data!.filter(x => x.status != MessageStatus.Received).map(x => x.id))),
+                  receivedDate : receivedDate.getTime()
+                }
+              })
+            )
+          }
+          return of(synchronizedFailedAction())
+        }
+      )
+    )
+  )
+
+  markNewMessagesAsReceived$ = createEffect(
+    () => this.actions.pipe(
+      ofType(markNewMessagesAsReceivedAction),
+      mergeMap(action => this.messageService.markNewMessagesAsReceived(action.request)),
+      mergeMap(response => {
+        if(!response.isError)
+          return of(synchronizedSuccessAction())
+        return of(synchronizedFailedAction())
+      })
+    )
+  )
 
   nextPageUsers$ = createEffect(
     () => this.actions.pipe(
