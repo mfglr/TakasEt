@@ -28,7 +28,6 @@ namespace ConversationService.Application.Commands
 
         public async Task Handle(CreateMessageDto request, CancellationToken cancellationToken)
         {
-
             var senderId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
 
             await _blockingService.ThrowExceptionIfBlockerOfBlockedAsync(request.ReceiverId.ToString());

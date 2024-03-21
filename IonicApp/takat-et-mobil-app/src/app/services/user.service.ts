@@ -14,22 +14,22 @@ import { environment } from "src/environments/environment";
 })
 export class UserService{
 
-  private readonly baseUrl : string = environment.userService;
+  private readonly baseUrl : string = `${environment.userService}/user`;
 
   constructor(private readonly httpClient : NativeHttpClientService) {}
 
   getFollowersOrFollowings(page : Page) : Observable<AppResponse<UserResponse[]>>{
     return this.httpClient.get<UserResponse[]>(
-      `${this.baseUrl}/user/GetFollowersAndFollowings?${UrlHelper.createPaginationQueryString(page)}`
+      `${this.baseUrl}/GetFollowersAndFollowings?${UrlHelper.createPaginationQueryString(page)}`
     )
   }
 
   getUsersByIds(request : GetUsersByIds) : Observable<AppResponse<UserResponse[]>>{
-    return this.httpClient.get<UserResponse[]>(`${this.baseUrl}/user/getusersbyids?ids=${request.ids.join(',')}`)
+    return this.httpClient.get<UserResponse[]>(`${this.baseUrl}/getusersbyids?ids=${request.ids.join(',')}`)
   }
 
   getUserById(request : GetUserById) : Observable<AppResponse<UserResponse>>{
-    return this.httpClient.get<UserResponse>(`${this.baseUrl}/user/getuserbyid/${request.userId}`)
+    return this.httpClient.get<UserResponse>(`${this.baseUrl}/getuserbyid/${request.userId}`)
   }
 
 }

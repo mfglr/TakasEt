@@ -168,5 +168,13 @@ namespace AuthService.Web.Extentions
                     }
                 );
         }
+
+        public static void InitializeDb(this IServiceCollection services)
+        {
+            var context = services.BuildServiceProvider().GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
+        }
+
+
     }
 }

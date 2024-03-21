@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Middlewares;
 using UserService.Api.Extentions;
+using UserService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,14 @@ builder.Services.AddCustomCors();
 builder.Services.AddServices();
 
 var app = builder.Build();
+
+//migration
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<CustomExceptionHandlerMiddleware>();

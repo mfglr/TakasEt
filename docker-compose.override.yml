@@ -24,10 +24,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      # - https://+:443;
       # - ASPNETCORE_Kestrel__Certificates__Default__Password=verySecretKey
       # - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/Certificates/aspnetapp.pfx
     ports:
+      # https://+:443;
       - "6000:80"
       # - "5000:443"
     volumes:

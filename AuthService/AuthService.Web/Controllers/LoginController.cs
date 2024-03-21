@@ -1,5 +1,4 @@
 ﻿using AuthService.Application.Dtos;
-using AuthService.Core.Abstracts;
 using AuthService.Core.Entities;
 using AuthService.Infrastructure.Extentions;
 using MediatR;

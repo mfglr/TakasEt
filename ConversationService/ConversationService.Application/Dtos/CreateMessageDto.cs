@@ -1,6 +1,4 @@
-﻿using ConversationService.Application.Dtos;
-using MediatR;
-using SharedLibrary.Dtos;
+﻿using MediatR;
 
 namespace ConversationService.SignalR.Dtos
 {

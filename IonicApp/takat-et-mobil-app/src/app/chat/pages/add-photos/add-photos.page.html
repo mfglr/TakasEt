@@ -1,23 +1,19 @@
-<ion-header [translucent]="true">
-  <ion-buttons slot="start">
+<ion-header class="header">
+  <ion-buttons>
     <ion-back-button defaultHref="/chat/conversation">
     </ion-back-button>
   </ion-buttons>
-
-  <ion-title>add-photos</ion-title>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="content">
 
-
-
-  <swiper-container #swiper [pagination]="true">
+  <swiper-container #swiper [pagination]="true" class="swiper">
   </swiper-container>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="center">
-    <ion-fab-button (click)="takeAPhoto()">
-      <ion-icon name="camera-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
 </ion-content>
+
+<ion-footer class="footer">
+  <ion-fab-button (click)="takeAPhoto()">
+    <ion-icon name="camera-outline"></ion-icon>
+  </ion-fab-button>
+</ion-footer>

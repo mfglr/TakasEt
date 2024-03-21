@@ -26,7 +26,6 @@ namespace ConversationService.Api.Extentions
         }
         public static IServiceCollection AddJWT(this IServiceCollection services)
         {
-
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             var tokenOptions = configuration.GetSection("TokenOptions").Get<CustomTokenOptions>()!;
             
@@ -47,7 +46,19 @@ namespace ConversationService.Api.Extentions
                         {
                             OnMessageReceived = context =>
                             {
-                                var accessToken = context.Request.Query["access_token"];
+                                string? accessToken = context.Request.Query["access_token"];
+                                if (string.IsNullOrEmpty(accessToken))
+                                {
+                                    var pair = context
+                                        .Request
+                                        .Headers
+                                        .FirstOrDefault(x => x.Key == "Authorization")
+                                        .Value
+                                        .ToString()
+                                        .Split(' ');
+                                    accessToken = pair.Length > 1 ? pair[1] : null;
+                                }
+                                    
                                 var path = context.HttpContext.Request.Path;
                                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/message"))
                                     context.Token = accessToken;

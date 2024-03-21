@@ -9,7 +9,7 @@ import { environment } from "src/environments/environment";
 })
 export class SignUpService{
 
-  private readonly baseUrl = environment.authService;
+  private readonly baseUrl = `${environment.authService}/signup`;
 
   constructor(private readonly httpClient : NativeHttpClientService) {}
 

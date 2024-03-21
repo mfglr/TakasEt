@@ -16,8 +16,10 @@ export class AddPhotosPage implements OnInit {
 
   slideItem = (index : number) : string =>
   `
-    <swiper-slide>
-      <ion-img src='${this.photos[index].dataUrl}'></ion-img>
+    <swiper-slide class='slide'>
+      <div class='img-wrapper'>
+        <img class='img' src='${this.photos[index].dataUrl}'/>
+      </div>
     </swiper-slide>
   `;
 
@@ -31,16 +33,14 @@ export class AddPhotosPage implements OnInit {
 
     this.photoService.takeAPhoto()
       .then(photo => {
-        console.log(photo);
-        // this.photos = [...this.photos,photo]
-
-        // let swiperContainer = this.swiper?.nativeElement.swiper;
-        // if(swiperContainer){
-        //   let index = this.photos.length-1;
-        //   swiperContainer.addSlide(index,this.slideItem(index));
-        //   swiperContainer.update();
-        // }
-
+        let swiper = this.swiper?.nativeElement.swiper
+        if(swiper){
+          this.photos = [...this.photos,photo]
+          let index = this.photos.length - 1;
+          swiper.addSlide(index,this.slideItem(index));
+          swiper.activeIndex = index;
+          swiper.update();
+        }
       })
       .catch(() => console.log("error"));
 

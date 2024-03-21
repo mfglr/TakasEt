@@ -16,7 +16,9 @@ namespace SharedLibrary.Services
         {
             _connectionFactory = new ConnectionFactory() {
                 HostName = options.Host,
-                Port = options.Port
+                Port = options.Port,
+                UserName = "guest",
+                Password = "guest"
             };
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();

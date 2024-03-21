@@ -32,8 +32,6 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
-    console.log(environment.production)
-
     this.loginStore.dispatch(loginByLocalStorageAction())
 
     this.accessToken$.subscribe(

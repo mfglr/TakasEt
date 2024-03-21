@@ -13,7 +13,7 @@ import { environment } from "src/environments/environment";
 @Injectable({ providedIn : 'root' })
 export class MessageService{
 
-  private readonly baseUrl = environment.authService;
+  private readonly baseUrl = `${environment.conversationService}/message`;
 
   constructor(
     private readonly httpClient : NativeHttpClientService

@@ -11,8 +11,7 @@ import { environment } from "src/environments/environment";
 @Injectable({ "providedIn" : "root"})
 export class ConversationService{
 
-  private readonly baseUrl = environment.authService;
-
+  private readonly baseUrl = `${environment.conversationService}/conversation`;
 
   constructor(private readonly httpClient : NativeHttpClientService) {}
 

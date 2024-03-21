@@ -15,12 +15,10 @@ export class PhotoService{
   }
 
   public getPhotos() {
-    Camera.pickImages({
+    return Camera.pickImages({
       presentationStyle : "fullscreen",
       quality : 100,
       limit : 5
-    }).then(a => {
-      a.photos[0].path
     })
   }
 

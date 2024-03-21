@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  authService : "https://localhost:7166",
-  conversationService : "https://localhost:7200",
-  userService : "https://localhost:7267",
+  authService : "https://localhost:7166/api",
+  conversationService : "https://localhost:7200/api",
+  userService : "https://localhost:7267/api",
   messageHub : "https://localhost:7200/message"
 };
 

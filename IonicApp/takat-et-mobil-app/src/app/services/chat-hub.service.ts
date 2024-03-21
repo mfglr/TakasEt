@@ -36,7 +36,7 @@ export class ChatHubService {
 
     this.hubConnection
       .start()
-      .then()
+      .then(() => {})
       .catch((e) => this.chatStore.dispatch(connectionFailedAction()));
 
     this.hubConnection.onclose(() => {

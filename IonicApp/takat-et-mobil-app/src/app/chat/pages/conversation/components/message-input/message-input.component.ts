@@ -8,7 +8,6 @@ import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, UserState } from 'src/app/chat/state/reducer';
 import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/state/actions';
 import { SendMessage } from 'src/app/chat/models/request/send-message';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-message-input',
@@ -33,9 +32,7 @@ export class MessageInputComponent implements OnInit {
   ngOnInit() {}
 
   sendMessage(){
-
     this.loginUserId$.pipe(first()).subscribe(loginUserId => {
-
       if(this.messageInput.value && this.userState){
 
         var request : SendMessage = {
@@ -53,7 +50,9 @@ export class MessageInputComponent implements OnInit {
               request : request,userState : {...this.userState!}
             }))
           })
-          .catch(() => this.chatStore.dispatch(sendMessageFailedAction()))
+          .catch((e) => {
+            this.chatStore.dispatch(sendMessageFailedAction())
+          })
         this.messageInput.setValue('');
       }
 

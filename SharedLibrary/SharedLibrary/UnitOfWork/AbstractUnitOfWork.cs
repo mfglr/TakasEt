@@ -33,7 +33,8 @@ namespace SharedLibrary.UnitOfWork
                 .ChangeTracker
                 .Entries<IEntity>()
                 .Where(x => x.State == EntityState.Added)
-                .Select(x => x.Entity);
+                .Select(x => x.Entity)
+                .ToList();
 
             foreach (var item in createdEntities)
                 item.SetCreatedDate();
@@ -43,7 +44,8 @@ namespace SharedLibrary.UnitOfWork
                 .ChangeTracker
                 .Entries<IEntity>()
                 .Where(x => x.State == EntityState.Modified)
-                .Select(x => x.Entity);
+                .Select(x => x.Entity)
+                .ToList();
 
             foreach (var item in updatedEntities)
                 item.SetUpdatedDate();
@@ -62,7 +64,8 @@ namespace SharedLibrary.UnitOfWork
                 .ChangeTracker
                 .Entries<IEntity>()
                 .Where(x => x.Entity.AnyDomainEvents())
-                .Select(x => x.Entity);
+                .Select(x => x.Entity)
+                .ToList();
 
             foreach (var entity in entities)
             {
@@ -78,7 +81,8 @@ namespace SharedLibrary.UnitOfWork
                 .ChangeTracker
                 .Entries<IEntity>()
                 .Where(x => x.Entity.AnyEvent())
-                .Select(x => x.Entity);
+                .Select(x => x.Entity)
+                .ToList();
 
             foreach (var entity in entities)
             {
