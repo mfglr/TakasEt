@@ -1,6 +1,3 @@
-.header{
-
-}
 .content{
   .swiper{
     width: 100%;
@@ -11,10 +8,18 @@
       .img-wrapper{
         width: 100%;
         height: 100%;
+        position:relative;
         .img{
           width: 100%;
           height: 100%;
           object-fit: contain;
+        }
+        .remove-icon{
+          position:absolute;
+          right:1rem;
+          top:1rem;
+          font-size:2rem;
+          z-index:2px
         }
       }
 
@@ -23,10 +28,10 @@
 
 }
 .footer{
-  display: flex;
-  justify-content: center;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 

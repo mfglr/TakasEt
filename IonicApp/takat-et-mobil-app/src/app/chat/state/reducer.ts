@@ -120,7 +120,7 @@ const initialState : ChatState = {
   messagePaginationEntityState : messagePaginationAdapter.getInitialState(),
   userEntityState : userAdapter.getInitialState(),
   conversationEntityState : conversationAdapter.getInitialState(),
-  messageEntityState : messageAdapter.getInitialState()
+  messageEntityState : messageAdapter.getInitialState(),
 }
 
 export const chatReducer = createReducer(

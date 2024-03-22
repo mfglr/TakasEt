@@ -59,16 +59,20 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
 
 		private async Task<ImageResponDto> SaveImageAsync(IFormFile file, string containerName, CancellationToken cancellationToken)
 		{
-            using var stream = file.OpenReadStream();
-            if (stream == null || stream.Length == 0) throw new AppException("A stream is required", HttpStatusCode.BadRequest);
 
-			var extention = Path.GetExtension(file.FileName);
-			if(extention == null || extention == "")
-				throw new AppException("The extention of file undefined",HttpStatusCode.BadRequest);
+            var extention = Path.GetExtension(file.FileName);
+            if (string.IsNullOrEmpty(extention.Trim()))
+                throw new AppException(
+					$"The extention of the file undefined : {file.FileName}", 
+					HttpStatusCode.BadRequest
+				);
+
+            using var stream = file.OpenReadStream();
+            if (stream == null || stream.Length == 0)
+				throw new AppException("A stream is required", HttpStatusCode.BadRequest);
 
             var blobName = CreateUniqFileNameHelper.Run(extention);
             string path = GetPath(containerName, blobName);
-
 
 			Dimension dimension;
             try
@@ -81,7 +85,7 @@ namespace PhotoStockMicroservice.Api.Services.Concreate
             catch (Exception ex)
 			{
                 Delete(containerName, blobName);
-                throw new AppException($"{ex.Message}.\nUpload failed!", HttpStatusCode.BadRequest);
+                throw new AppException($"{ex.Message}.\nUpload failed!", HttpStatusCode.InternalServerError);
             }
 
 			return new ImageResponDto(){

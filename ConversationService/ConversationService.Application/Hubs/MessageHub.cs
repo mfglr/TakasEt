@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
+using System.Net;
 
 namespace ConversationService.Application.Hubs
 {
@@ -58,10 +59,13 @@ namespace ConversationService.Application.Hubs
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
                 await Clients
                     .Caller
-                    .SendAsync("messageCreationFailedNotification",new AppFailResponseDto(ex.Message));
+                    .SendAsync(
+                        "messageCreationFailedNotification",
+                        new AppFailResponseDto(ex.Message,HttpStatusCode.InternalServerError
+                        )
+                    );
                 return;
             }
         }
@@ -136,7 +140,7 @@ namespace ConversationService.Application.Hubs
             {
                 await Clients
                     .Caller
-                    .SendAsync("LikeMessageFailed", new AppFailResponseDto(ex.Message));
+                    .SendAsync("LikeMessageFailed", new AppFailResponseDto(ex.Message,HttpStatusCode.InternalServerError));
                 return;
             }
             var message = await _context

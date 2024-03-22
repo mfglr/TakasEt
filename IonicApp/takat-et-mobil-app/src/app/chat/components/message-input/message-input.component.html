@@ -1,0 +1,21 @@
+<div class="root-wrapper">
+
+  <textarea [formControl]="messageInput"></textarea>
+
+  <ng-container *ngIf="cameraIcon else template">
+    <button class="camera-button" routerLink="/chat/add-photos">
+      <ion-icon name="camera-outline" class="camera-icon"></ion-icon>
+    </button>
+  </ng-container>
+  <ng-template #template>
+    <button class="camera-button" (click)="takeAPhoto()">
+      <ion-icon name="images-outline" class="camera-icon"></ion-icon>
+    </button>
+  </ng-template>
+
+
+  <button class="plane-button" (click)="sendMessage()">
+    <ion-icon name="paper-plane-outline" class="plane-icon"></ion-icon>
+  </button>
+
+</div>

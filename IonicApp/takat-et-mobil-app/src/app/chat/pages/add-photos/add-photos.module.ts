@@ -7,15 +7,20 @@ import { IonicModule } from '@ionic/angular';
 import { AddPhotosPageRoutingModule } from './add-photos-routing.module';
 
 import { AddPhotosPage } from './add-photos.page';
+import { ChatComponentsModule } from '../../components/chat-components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AddPhotosPageRoutingModule
+    AddPhotosPageRoutingModule,
+    ChatComponentsModule
+
   ],
-  declarations: [AddPhotosPage],
+  declarations: [
+    AddPhotosPage,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AddPhotosPageModule {}

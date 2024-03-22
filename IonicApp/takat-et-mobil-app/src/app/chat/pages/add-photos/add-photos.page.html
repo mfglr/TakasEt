@@ -8,12 +8,24 @@
 <ion-content class="content">
 
   <swiper-container #swiper [pagination]="true" class="swiper">
+    <swiper-slide class='slide' *ngFor="let photo of photos;let i = index;" >
+
+      <div class='img-wrapper'>
+
+        <ng-container *ngIf='photos.length > 1'>
+          <ion-icon (click)='removePhoto(i)' name="close-outline" class="remove-icon">
+          </ion-icon>
+        </ng-container>
+
+        <img class='img' [src]='photo.dataUrl'/>
+
+      </div>
+
+    </swiper-slide>
   </swiper-container>
 
 </ion-content>
 
 <ion-footer class="footer">
-  <ion-fab-button (click)="takeAPhoto()">
-    <ion-icon name="camera-outline"></ion-icon>
-  </ion-fab-button>
+  <app-message-input [userState]="useState" [cameraIcon]="false" (photoEvent)="addPhoto($event)"></app-message-input>
 </ion-footer>

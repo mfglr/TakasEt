@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { LoginState } from 'src/app/account/state/reducer';
@@ -8,6 +8,8 @@ import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, UserState } from 'src/app/chat/state/reducer';
 import { sendMessageFailedAction, sendMessageSuccessAction } from 'src/app/chat/state/actions';
 import { SendMessage } from 'src/app/chat/models/request/send-message';
+import { PhotoService } from 'src/app/services/photo-service';
+import { Photo } from '@capacitor/camera';
 
 @Component({
   selector: 'app-message-input',
@@ -15,18 +17,17 @@ import { SendMessage } from 'src/app/chat/models/request/send-message';
   styleUrls: ['./message-input.component.scss'],
 })
 export class MessageInputComponent implements OnInit {
-
+  @Input() cameraIcon : boolean = true;
   @Input() userState? : UserState | null;
+  @Output() photoEvent = new EventEmitter<Photo>();
   messageInput = new FormControl<string>("");
   loginUserId$ = this.loginStore.select(selectUserId);
-
-  photo? : string;
-
 
   constructor(
     private readonly loginStore : Store<LoginState>,
     private readonly chatHub : ChatHubService,
     private readonly chatStore : Store<ChatState>,
+    private readonly photoService : PhotoService,
   ) { }
 
   ngOnInit() {}
@@ -60,4 +61,9 @@ export class MessageInputComponent implements OnInit {
 
   }
 
+  takeAPhoto(){
+    this.photoService.takeAPhoto()
+    .then(photo => this.photoEvent.emit(photo))
+    .catch(e => console.log(e));
+  }
 }

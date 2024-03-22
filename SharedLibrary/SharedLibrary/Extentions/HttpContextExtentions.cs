@@ -11,36 +11,45 @@ namespace SharedLibrary.Extentions
 {
     public static class HttpContextExtentions
     {
-        public static async Task WriteAppExceptionAsync(this HttpContext? context, AppException ex)
+
+        private static void ThrowExceptionIfContextIsNull(HttpContext? context)
         {
             if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+                throw new AppException("Context was not found!", HttpStatusCode.Unauthorized);
+        }
+
+
+        public static async Task WriteAppExceptionAsync(this HttpContext? context, AppException ex)
+        {
+            ThrowExceptionIfContextIsNull(context);
 
             var body = Encoding.ASCII.GetBytes(
-                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message))
+                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message,ex.StatusCode))
             );
-            context.Response.StatusCode = (int)ex.StatusCode;
+
+            context!.Response.StatusCode = (int)ex.StatusCode;
+            
             await context.Response.Body.WriteAsync(body, 0, body.Length);
         }
 
         public static async Task WriteExceptionAsync(this HttpContext? context, Exception ex)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
             var body = Encoding.ASCII.GetBytes(
-                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message))
+                JsonConvert.SerializeObject(new AppFailResponseDto(ex.Message,HttpStatusCode.InternalServerError))
             );
+
+            context!.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.Body.WriteAsync(body, 0, body.Length);
         }
 
 
         public static int? GetInt(this HttpContext? context,string type)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            var claim = context.User.Claims.FirstOrDefault(x => x.Type == type);
+            var claim = context!.User.Claims.FirstOrDefault(x => x.Type == type);
             if(claim == null) return null;
             int value;
             try
@@ -54,10 +63,9 @@ namespace SharedLibrary.Extentions
 
         public static bool IsVisibleAccout(this HttpContext? context)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            string? value = context.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.ProfileVisibility.Value)?.Value;
+            string? value = context!.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.ProfileVisibility.Value)?.Value;
             bool r;
             try { r = bool.Parse(value); } catch (Exception) { return false; }
             return r;
@@ -65,45 +73,38 @@ namespace SharedLibrary.Extentions
         
         public static string? GetLoginUserId(this HttpContext? context)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            return context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            return context!.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
         }
         public static string? GetUserName(this  HttpContext? context)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            return context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            return context!.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         }
         public static string? GetEmail(this HttpContext? context)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            return context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            return context!.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         }
         public static string? GetTimeZone(this HttpContext? context)
         {
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            return context.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.TimeZone.Value)?.Value;
+            return context!.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.TimeZone.Value)?.Value;
         }
         public static int? GetOffset(this HttpContext context)
         {
-            if(context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
             return GetInt(context,CustomClaimTypes.Offset.Value);
         }
         public static List<string> GetListString(this HttpContext? context,string claimType)
         {
 
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            var values = context
+            var values = context!
                 .User
                 .Claims
                 .Where(x => x.Type == claimType)
@@ -114,20 +115,18 @@ namespace SharedLibrary.Extentions
 
         public static string? GetAccessToken(this HttpContext? context)
         {
-            if(context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized); 
+            ThrowExceptionIfContextIsNull(context);
 
-            var pair = context.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
+            var pair = context!.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
             return pair.Value;
         }
 
-        public static List<Guid> GetBlockers(this HttpContext context)
+        public static List<Guid> GetBlockers(this HttpContext? context)
         {
 
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
+            ThrowExceptionIfContextIsNull(context);
 
-            return context
+            return context!
                 .User
                 .Claims
                 .Where(x => x.Type == CustomClaimTypes.BlockerUser.Value)
@@ -135,13 +134,11 @@ namespace SharedLibrary.Extentions
                 .ToList();
         }
 
-        public static List<Guid> GetUsersBlocked(this HttpContext context)
+        public static List<Guid> GetUsersBlocked(this HttpContext? context)
         {
+            ThrowExceptionIfContextIsNull(context);
 
-            if (context == null)
-                throw new AppException("Cotenxt was not found!", HttpStatusCode.Unauthorized);
-
-            return context
+            return context!
                 .User
                 .Claims
                 .Where(x => x.Type == CustomClaimTypes.BlockedUser.Value)

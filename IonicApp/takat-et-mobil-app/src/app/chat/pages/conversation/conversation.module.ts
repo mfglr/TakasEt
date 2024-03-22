@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ConversationPageRoutingModule } from './conversation-routing.module';
 
 import { ConversationPage } from './conversation.page';
-import { MessageInputComponent } from './components/message-input/message-input.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ProfileImageModule } from 'src/app/shareds/profile-image/profile-image.module';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
@@ -27,7 +26,6 @@ import { ChatComponentsModule } from '../../components/chat-components.module';
   ],
   declarations: [
     ConversationPage,
-    MessageInputComponent,
     MessageBoxComponent,
     MessageBoxListComponent
   ]

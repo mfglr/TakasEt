@@ -25,7 +25,7 @@ export class NativeHttpClientService {
   private getHttpHeadersFormData$ : Observable<any> = this.loginStore.select(selectAccessToken).pipe(
     first(),
     map(accessToken => {
-      if(accessToken) return { "Authorization" : `Bearer ${accessToken}`, 'Content-Type': 'application/json' }
+      if(accessToken) return { "Authorization" : `Bearer ${accessToken}`, 'Content-Type': 'multipart/form-data' }
       return {'Content-Type' : 'multipart/form-data'};
     })
   );
