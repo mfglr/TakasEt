@@ -29,6 +29,7 @@ namespace ConversationService.Application.Queries
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             var messages = await _context
                 .Messages
+                .Include(x => x.Images)
                 .Where(
                     x => 
                         x.SenderId == loginUserId && x.ReceiverId == request.UserId ||

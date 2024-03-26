@@ -4,5 +4,6 @@ export const environment = {
   conversationService : "http://192.168.8.108:6001/api",
   userService : "http://192.168.8.108:6002/api",
   messageHub : "http://192.168.8.108:6001/message",
-  photoStockService : "http://localhost:6003"
+  fileStockWriterService : "https://localhost:7107",
+  fileStockReaderService : "https://localhost:7014"
 };

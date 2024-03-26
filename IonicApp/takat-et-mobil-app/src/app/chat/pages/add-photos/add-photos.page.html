@@ -17,7 +17,7 @@
           </ion-icon>
         </ng-container>
 
-        <img class='img' [src]='photo.dataUrl'/>
+        <img class='img' [src]='photo.webPath'/>
 
       </div>
 
@@ -27,5 +27,19 @@
 </ion-content>
 
 <ion-footer class="footer">
-  <app-message-input [userState]="useState" [cameraIcon]="false" (photoEvent)="addPhoto($event)"></app-message-input>
+  <div class="message-input-wrapper">
+
+    <textarea [formControl]="messageInput"></textarea>
+
+    <button class="camera-button" (click)="takePhoto()">
+      <ion-icon name="images-outline" class="camera-icon"></ion-icon>
+    </button>
+
+
+    <button class="plane-button" (click)="sendMessage()">
+      <ion-icon name="paper-plane-outline" class="plane-icon"></ion-icon>
+    </button>
+
+  </div>
+
 </ion-footer>

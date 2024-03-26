@@ -7,7 +7,7 @@ namespace ConversationService.Domain.MessageAggregate
     {
         public MessageImage() { }
 
-        public MessageImage(string blobName, string extention, Dimension dimension) : base(ContainerName.MessageImages, blobName, extention, dimension)
+        public MessageImage(string blobName, string extention, int height, int width) : base(ContainerName.CreateContainerName(ContainerName.MessageImages), blobName, extention, height, width)
         {
         }
     }

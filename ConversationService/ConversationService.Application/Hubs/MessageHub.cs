@@ -3,7 +3,6 @@ using ConversationService.Infrastructure;
 using ConversationService.SignalR.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
@@ -16,113 +15,40 @@ namespace ConversationService.Application.Hubs
     {
         private readonly ISender _sender;
         private readonly AppDbContext _context;
-        private readonly IHttpContextAccessor _contextAccessor;
 
-        public MessageHub(ISender sender, AppDbContext context, IHttpContextAccessor contextAccessor)
+        public MessageHub(ISender sender, AppDbContext context)
         {
             _sender = sender;
             _context = context;
-            _contextAccessor = contextAccessor;
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(new ConnectDto() {ConnectionId = Context.ConnectionId});
-            }
-            catch (Exception)
-            {
-                return;
-            }
-        }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(new DisconnectDto());
-            }
-            catch (Exception)
-            {
-                return;
-            }
+            await _sender.Send(new DisconnectDto());
         }
-
-        public async Task CreateMessage(CreateMessageDto request)
+        public async Task<IAppResponseDto> Connect()
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(request);
-            }
-            catch(Exception ex)
-            {
-                await Clients
-                    .Caller
-                    .SendAsync(
-                        "messageCreationFailedNotification",
-                        new AppFailResponseDto(ex.Message,HttpStatusCode.InternalServerError
-                        )
-                    );
-                return;
-            }
+            return await _sender.Send(new ConnectDto() { ConnectionId = Context.ConnectionId });
         }
-
-        public async Task MarkNewMessagesAsReceived(MarkNewMessagesAsReceivedDto request)
+        public async Task<IAppResponseDto> GetNewMessages(GetNewMessagesDto request)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(request);
-            }catch(Exception)
-            {
-                return;
-            }
-            
+            return await _sender.Send(request);
         }
-        public async Task MarkNewMessagesAsViewed(MarkNewMessagesAsViewedDto request)
+        public async Task<IAppResponseDto> CreateMessage(CreateMessageDto request)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(request);
-            }catch(Exception)
-            {
-                return;
-            }
+            return await _sender.Send(request);
         }
-
-        public async Task MarkMessageAsReceived(MarkMessageAsReceivedDto request)
+        public async Task<IAppResponseDto> MarkMessageAsReceived(MarkMessageAsReceivedDto request)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(request);
-            }
-            catch (Exception)
-            {
-                return;
-            }
+            return await _sender.Send(request);
         }
         public async Task MarkMessageAsViewed(MarkMessageAsViewedDto request)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
-            try
-            {
-                await _sender.Send(request);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-          
+            await _sender.Send(request);
         }
         
         public async Task SendUserWrittingNotification(Guid userId)
         {
-            _contextAccessor.HttpContext = Context.GetHttpContext();
             var connection = await _context.UserConnections.FindAsync(userId);
             if(connection != null && connection.IsConnected) {
                 await Clients.Client(connection.ConnectionId).SendAsync("userWritting");

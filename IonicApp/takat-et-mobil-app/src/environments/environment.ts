@@ -8,7 +8,8 @@ export const environment = {
   conversationService : "https://localhost:7200/api",
   userService : "https://localhost:7267/api",
   messageHub : "https://localhost:7200/message",
-  photoStockService : "https://localhost:7187"
+  fileStockReaderService : "https://localhost:7014/api",
+  fileStockWriterService : "https://localhost:7107/api"
 };
 
 /*

@@ -1,14 +1,19 @@
-using ConversationService.Application;
-using ConversationService.Infrastructure;
 using ConversationService.Api.Extentions;
-using SharedLibrary.Middlewares;
+using ConversationService.Api.HubFilters;
+using ConversationService.Application;
 using ConversationService.Application.Hubs;
+using ConversationService.Infrastructure;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(opt => {
+    opt.AddFilter<ExceptionHubFilter>();
+    opt.AddFilter<SetHttpContextHubFilter>();
+});
 builder.Services.AddCustomCors();
 builder.Services.AddServices();
 builder.Services.AddJWT();

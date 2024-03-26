@@ -6,7 +6,7 @@ namespace SharedLibrary.Helpers
     {
         public static string Run(string path)
         {
-            return $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{path}";
+            return $"{Assembly.GetExecutingAssembly().Location}/{path}";
         }
     }
 }

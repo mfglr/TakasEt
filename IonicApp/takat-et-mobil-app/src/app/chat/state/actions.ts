@@ -1,27 +1,65 @@
 import { createAction, props } from "@ngrx/store";
 import { ConversationResponse } from "../models/responses/conversation-response";
 import { MessageResponse } from "../models/responses/message-response";
-import { SendMessage } from "../models/request/send-message";
 import { UserResponse } from "src/app/models/responses/user-response";
 import { BaseAppresponse } from "src/app/models/responses/app-response";
-import { MarkNewMessagesAsReceived } from "../models/request/mark-messages-as-received";
-import { MessageState, UserState } from "./reducer";
+import { UserState } from "./reducer";
+import { HubConnectionState } from "@microsoft/signalr";
 
-export const connectionFailedAction = createAction("[Chat Module State] connection failed");
-export const connectionSuccessAction = createAction("[Chat Module State] connectin success");
 
-export const loadNewMessagesAction = createAction("[Chat Module State] load new messages")
-export const loadNewMessagesSuccessAction = createAction(
+export const loadNewMessagesAction = createAction(
   "[Chat Module State] load conversations with new messages success",
   props<{payload : MessageResponse[],receivedDate : Date}>()
 )
-export const markNewMessagesAsReceivedAction = createAction(
-  "[Chat Module State] mark new messages as received",
-  props<{request: MarkNewMessagesAsReceived}>()
+export const markNewMessagesAsReceivedAction = createAction("[Chat Module State] mark new messages as received")
+export const markNewMessageAsReceivedSuccessAction = createAction(
+  "[Chat Module State] mark new message as received success",
+  props<{messageId : string}>()
 )
 
-export const synchronizedSuccessAction = createAction("[Chat Module State] synchronized success")
-export const synchronizedFailedAction = createAction("[Chat Module State] synchronized failed")
+export const createMessageAction = createAction(
+  "[Chat Module State] create message",
+  props<{
+    paths : {webPath : string,format : string}[],
+    message : {id : string, receiverId : string, content? : string, sendDate : number},
+    senderId : string,
+    userState : UserState
+  }>()
+)
+export const createMessageSuccessAction = createAction(
+  "[Chat Module State] create message success",
+  props<{payload : MessageResponse,userState : UserState}>()
+)
+export const createMessageFailedAction = createAction(
+  "[Chat Module State] create message failed",
+  props<{id : string}>()
+)
+
+export const receiveMessageAction = createAction(
+  "[Chat Module State] receive message",
+  props<{payload : MessageResponse,receivedDate : Date}>()
+)
+export const receiveMessageSuccessAction = createAction(
+  "[Chat Module State] receive message success"
+)
+
+export const markMessageSentAsReceivedAction = createAction(
+  "[Chat Module State] the message sent has been received by receiver",
+  props<{messageId : string,receivedDate : Date}>()
+)
+export const markMessageSentAsViewedAction = createAction(
+  "[Chat Module State] the message sent has been viewed by receiver",
+  props<{messageId : string,viewedDate : Date}>()
+)
+
+export const changeHubConnectionStateAction = createAction(
+  "[Chat Module State] change hub connection state",
+  props<{payload : HubConnectionState}>()
+)
+export const loadLoginUserIdAction = createAction(
+  "[Chat Module State] load login user id",
+  props<{userId : string}>()
+)
 
 export const loadConversationUserAction = createAction(
   '[Chat Module State] load conversation user',
@@ -35,7 +73,7 @@ export const loadConversationUserSuccessAction = createAction(
 export const nextPageConversationsAction = createAction("[Chat Module State] next page conversation")
 export const nextPageConversationsSuccessAction = createAction(
   "[Chat Module State] next page conversations success",
-  props<{payload : ConversationResponse[],receivedDate : Date}>()
+  props<{payload : ConversationResponse[]}>()
 )
 export const nextPageConversationsFailedAction = createAction(
   "[Chat Module State] next page conversations failed",
@@ -61,49 +99,11 @@ export const nextPageMessagesSuccessAction = createAction(
   props<{user : UserState, payload : MessageResponse[]}>()
 )
 
-export const sendMessageSuccessAction = createAction(
-  "[Chat Module State] send message success",
-  props<{request : SendMessage,userState : UserState}>()
+export const loadMessageImageAction = createAction(
+  "[Chat Module State] load message image",
+  props<{id : string,imageIndex : number,blobName : string,extention : string}>()
 )
-export const sendMessageFailedAction = createAction(
-  "[Chat Module State] send message failed"
-)
-export const markMessageAsCreatedSuccessAction = createAction(
-  "[Chat Module State] mark message as created success",
-  props<{message : MessageResponse}>()
-)
-
-export const receiveMessageSuccessAction = createAction(
-  "[Chat Module State] receive message",
-  props<{payload : MessageResponse}>()
-)
-
-export const markMessageAsReceivedSuccessAction = createAction(
-  "[Chat Module State] mark message as received success",
-  props<{payload : MessageResponse}>()
-)
-export const markMessageSentAsViewedAction = createAction(
-  "[Chat Module State] mark message sent as viewed",
-  props<{payload : MessageResponse}>()
-)
-export const markMessageReceivedAsViewedAction = createAction(
-  "[Chat Module State] mark message received as viewed",
-  props<{payload : MessageResponse}>()
-)
-
-
-export const markMessagesAsReceivedSuccessAction = createAction(
-  "[Chat Module State] mark messages as received success",
-  props<{payload : MessageResponse[]}>()
-)
-export const markMessagesAsReceivedFailedAction = createAction(
-  "[Chat Module State] mark messages as received failed"
-)
-export const markMessagesSentAsViewedAction = createAction(
-  "[Chat Module State] mark messages sent as viewed",
-  props<{payload : MessageResponse[]}>()
-)
-export const markMessagesReceivedAsViewedAction = createAction(
-  "[Chat Module State] mark messages received as viewed",
-  props<{payload : MessageState[],viewedDate : Date}>()
+export const loadMessageImageSuccessAction = createAction(
+  "[Chat Module State] load message image success",
+  props<{id : string,imageIndex : number,url : string}>()
 )

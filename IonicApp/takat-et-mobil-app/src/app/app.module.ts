@@ -10,6 +10,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AccountModule } from './account/account.module';
 import { ChatModule } from './chat/chat.module';
+import { testReducer } from './state/test/reducer';
+import { TestEffect } from './state/test/effect';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { ChatModule } from './chat/chat.module';
     AppRoutingModule,
     StoreModule.forRoot(),
     EffectsModule.forRoot(),
+    StoreModule.forFeature("TestStore",testReducer),
+    EffectsModule.forFeature([TestEffect]),
     ChatModule,
     AccountModule,
   ],

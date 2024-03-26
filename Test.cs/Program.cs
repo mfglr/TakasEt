@@ -1,127 +1,42 @@
-﻿
-using System.Collections;
-using System.Reflection;
+﻿using AutoMapper;
 
-Level0 data = new Level0()
+
+
+var s = new Source()
 {
-    DateTime = DateTime.UtcNow,
-    Level1 = new Level1()
-    {
-        DateTime = DateTime.UtcNow,
-        Level2 = new Level2()
-        {
-            DateTime = DateTime.UtcNow
-        }
-    }
+    Total = 5
 };
 
-var list = CreateList();
 
-ConvertDateTimes(list, -180);
+var configuration = new MapperConfiguration(cfg =>
+   cfg.CreateMap<Source, Destination>()
+     .ForMember(dest => dest.ContainerName, opt => opt.MapFrom<CustomResolver>()));
+configuration.AssertConfigurationIsValid();
 
+var mapper = new Mapper(configuration);
+
+var d = mapper.Map<Destination>(s);
 
 Console.WriteLine();
-
-List<Level0> CreateList()
+public class ContainerName
 {
-    return new List<Level0>()
-    {
-        new Level0()
-        {
-            DateTime = DateTime.UtcNow,
-            Level1 = new Level1()
-            {
-                DateTime = DateTime.UtcNow,
-                Level2 = new Level2()
-                {
-                    DateTime = DateTime.UtcNow
-                }
-            }
-        },
-        new Level0()
-        {
-            DateTime = DateTime.UtcNow,
-            Level1 = new Level1()
-            {
-                DateTime = DateTime.UtcNow,
-                Level2 = new Level2()
-                {
-                    DateTime = DateTime.UtcNow
-                }
-            }
-        }
-    };
+    public string Value { get;  set; }
 }
 
-void ConvertDateTimes(object? instance, int offset)
+public class Destination
 {
-    if (instance == null)
-        return;
-    var type = instance.GetType();
-
-    if (typeof(IEnumerable).IsAssignableFrom(type))
-    {
-        Type? itemType = type.GetElementType();
-        if (itemType == null)
-            itemType = type.GetGenericArguments()[0];
-
-        var items = (IEnumerable)instance;
-        foreach (var item in items)
-            ConvertDateTimesOfObjectRecursively(item, offset);
-    }
-    else
-        ConvertDateTimesOfObjectRecursively(instance, offset);
-
-
+    public ContainerName ContainerName { get; set; }
 }
 
-void ConvertDateTimesOfObjectRecursively(object? instance,int offset)
+public class Source
 {
-    if (instance == null)
-        return;
-    var type = instance.GetType();
-    PropertyInfo[] properties = type.GetProperties();
-    foreach (var property in properties)
+    public int Total { get; set; }
+}
+
+public class CustomResolver : IValueResolver<Source, Destination, ContainerName>
+{
+    public ContainerName Resolve(Source source, Destination destination, ContainerName member, ResolutionContext context)
     {
-        var pType = property.PropertyType;
-        var pInstance = property.GetValue(instance);
-        if ((pType == typeof(DateTime) || pType == typeof(DateTime?)) && pInstance != null)
-        {
-            var value = (DateTime)pInstance!;
-            property.SetValue(instance, value.AddMinutes(-1 * offset));
-            continue;
-        }
-        if (pType.IsValueType || pType == typeof(string))
-            continue;
-        ConvertDateTimesOfObjectRecursively(pInstance, offset);
+        return new ContainerName() { Value = "deneme"};
     }
 }
-
-
-
-
-
-class Level0
-{
-    public Level1 Level1 { get; set; }
-    public DateTime DateTime { get; set; }
-}
-
-class Level1
-{
-    public Level2 Level2 { get; set; }
-    public DateTime DateTime { get; set; }
-
-}
-
-class Level2
-{
-    public DateTime DateTime { get; set; }
-}
-
-
-//Expression.Lambda(ex,)
-
-
-//Expression.Condition(test,)
-//Console.WriteLine(f.Body);

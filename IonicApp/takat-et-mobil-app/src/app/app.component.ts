@@ -7,10 +7,8 @@ import { LoginState } from './account/state/reducer';
 import { selectAccessToken, selectIsLogin } from './account/state/selectors';
 import { loginByLocalStorageAction } from './account/state/actions';
 import { ChatHubService } from './services/chat-hub.service';
-import { ChatState } from './chat/state/reducer';
-import { loadNewMessagesAction } from './chat/state/actions';
-import { selectIsConnected, selectMessageStatesOfConversatinPage } from './chat/state/selectors';
-import { environment } from 'src/environments/environment';
+import { TestState } from './state/test/reducer';
+import { PhotoService } from './services/photo-service';
 
 register();
 
@@ -26,12 +24,24 @@ export class AppComponent {
 
   constructor(
     private loginStore : Store<LoginState>,
-    private chatStore : Store<ChatState>,
     private readonly chatHub : ChatHubService,
     private readonly router : Router,
+    private readonly testStore: Store<TestState>,
+    private readonly photoService : PhotoService
   ) {}
 
+  private base64ToUrl(base64String : string, contentType = '') {
+    const byteCharacters = atob(base64String);
+    var array = new Uint8Array(byteCharacters.length)
+    for (let i = 0; i < byteCharacters.length; i++)
+      array[i] = byteCharacters.charCodeAt(i);
+    return URL.createObjectURL(new Blob([array], { type: contentType }));
+  }
+
+  url? : string;
+
   ngOnInit() {
+
     this.loginStore.dispatch(loginByLocalStorageAction())
 
     this.accessToken$.subscribe(
@@ -50,6 +60,5 @@ export class AppComponent {
   ngOnDestroy(){
     this.chatHub.hubConnection?.stop();
   }
-
 
 }

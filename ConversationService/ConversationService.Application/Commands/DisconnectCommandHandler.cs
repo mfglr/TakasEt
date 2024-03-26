@@ -3,10 +3,8 @@ using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SharedLibrary.Dtos;
-using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
-using System.Net;
 
 namespace ConversationService.Application.Commands
 {
@@ -30,12 +28,11 @@ namespace ConversationService.Application.Commands
             Guid logginUserid = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
 
             var connection = await _context.UserConnections.FindAsync(logginUserid, cancellationToken);
-            if (connection == null)
-                throw new AppException("Connection was not found!", HttpStatusCode.NotFound);
-            
-            connection.Disconnect();
-            await _unitOfWork.CommitAsync(cancellationToken);
-
+            if (connection != null)
+            {
+                connection.Disconnect();
+                await _unitOfWork.CommitAsync(cancellationToken);
+            }
             return new AppSuccessResponseDto();
         }
     }

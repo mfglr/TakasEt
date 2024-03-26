@@ -3,12 +3,13 @@ using ConversationService.Domain.UserConnectionAggregate;
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class ConnectCommandHandler : IRequestHandler<ConnectDto>
+    public class ConnectCommandHandler : IRequestHandler<ConnectDto,IAppResponseDto>
     {
         private readonly AppDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,7 +22,7 @@ namespace ConversationService.Application.Commands
             _contextAccessor = contextAccessor;
         }
 
-        public async Task Handle(ConnectDto request, CancellationToken cancellationToken)
+        public async Task<IAppResponseDto> Handle(ConnectDto request, CancellationToken cancellationToken)
         {
             var loginUserId = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
             var connection = await _context.UserConnections.FindAsync(loginUserId, cancellationToken);
@@ -35,6 +36,9 @@ namespace ConversationService.Application.Commands
             else
                 connection.Connect(request.ConnectionId);
             await _unitOfWork.CommitAsync(cancellationToken);
+
+            return new AppSuccessResponseDto();
+
         }
     }
 }

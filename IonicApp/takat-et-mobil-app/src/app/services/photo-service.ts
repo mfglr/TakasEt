@@ -22,11 +22,10 @@ export class PhotoService{
     reader.readAsDataURL(blob);
   });
 
-
   private async savePicture(photo: Photo) {
     const base64Data = await this.readAsBase64(photo);
 
-    const fileName = Date.now() + '.jpeg';
+    const fileName = Date.now() + `.${photo.format}`;
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
@@ -42,15 +41,11 @@ export class PhotoService{
 
   public takeAPhoto() {
     return Camera.getPhoto({
-      resultType: CameraResultType.DataUrl,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       quality: 100
     })
   }
-
-
-
-
 
   public getPhotos() {
     return Camera.pickImages({

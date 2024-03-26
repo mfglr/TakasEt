@@ -11,12 +11,12 @@ namespace SharedLibrary.Entities
 
 		public Image() { }
 
-		public Image(ContainerName containerName, string blobName, string extention, Dimension dimension)
+		public Image(ContainerName containerName, string blobName, string extention, int height, int width)
 		{
 			ContainerName = containerName;
 			BlobName = blobName;
 			Extention = extention;
-			Dimension = dimension;
+			Dimension = new Dimension(height, width);
 		}
 	}
 
@@ -24,8 +24,8 @@ namespace SharedLibrary.Entities
 
         public Image() { }
 
-        public Image(ContainerName containerName, string blobName, string extention, Dimension dimension)
-        : base(containerName, blobName, extention, dimension)
+        public Image(ContainerName containerName, string blobName, string extention, int height,int width)
+        : base(containerName, blobName, extention, height,width)
 		{
 
 		}

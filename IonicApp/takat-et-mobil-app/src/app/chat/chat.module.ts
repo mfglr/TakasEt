@@ -16,7 +16,7 @@ import { ChatEffect } from './state/effect';
     ChatRoutingModule,
     IonicModule,
     StoreModule.forFeature("ChatStore",chatReducer),
-    EffectsModule.forFeature([ChatEffect])
+    EffectsModule.forFeature([ChatEffect]),
   ],
 })
 export class ChatModule { }

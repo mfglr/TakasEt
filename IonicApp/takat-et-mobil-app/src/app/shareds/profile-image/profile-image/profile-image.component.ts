@@ -29,7 +29,8 @@ export class ProfileImageComponent {
       this.userImageStore.dispatch(loadUserImageAction({
         id : this.user.images[0].id,
         containerName : this.user.images[0].containerName,
-        blobName : this.user.images[0].blobName
+        blobName : this.user.images[0].blobName,
+        extention : this.user.images[0].extention
       }));
 
       this.url$ = this.userImageStore.select(selectUrl({id : this.user.images[0].id}))

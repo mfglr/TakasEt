@@ -3,27 +3,28 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
   nextPageMessagesSuccessAction, nextPageMessagesAction, nextPageUsersAction,
   nextPageUsersSuccessAction, nextPageConversationsAction, nextPageConversationsSuccessAction,
-  nextPageUsersFailedAction, nextPageConversationsFailedAction, loadConversationUserAction,
-  loadConversationUserSuccessAction,
-  loadNewMessagesAction,
-  loadNewMessagesSuccessAction,
-  synchronizedFailedAction,
-  markNewMessagesAsReceivedAction,
-  synchronizedSuccessAction,
-  connectionSuccessAction
+  nextPageUsersFailedAction, loadConversationUserAction, loadConversationUserSuccessAction,
+  createMessageAction, createMessageFailedAction, createMessageSuccessAction,
+  markNewMessagesAsReceivedAction, markNewMessageAsReceivedSuccessAction, loadMessageImageAction, loadMessageImageSuccessAction
 } from "./actions";
-import { filter, first, from, merge, mergeMap, of, withLatestFrom } from "rxjs";
+import { filter, first, from, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { MessageService } from "../services/message.service";
 import { UserService } from "src/app/services/user.service";
 import { ChatState } from "./reducer";
 import { ConversationService } from "../services/conversation-service";
 import {
-  selectConversationPagination, selectIsSynchronized, selectMessagePagination,
-  selectUserPagination
+  selectConversationPagination, selectHubConnectionState, selectImageLoadStatus, selectMessagePagination,
+  selectNewMessages, selectUserPagination
 } from "./selectors";
-import { ConversationResponse } from "../models/responses/conversation-response";
-import { MessageStatus } from "../models/responses/message-response";
+import { FileService } from "src/app/services/file.service";
+import { ChatHubService } from "src/app/services/chat-hub.service";
+import { ContainerName } from "src/app/models/enums/containerNames";
+import { AppResponse } from "src/app/models/responses/app-response";
+import { MessageResponse } from "../models/responses/message-response";
+import { mapDateTimeOfConversationResponses, mapDateTimesOfMessageResponse } from "src/app/helpers/mapping-datetime";
+import { HubConnectionState } from "@microsoft/signalr";
+import { ImageLoadingState } from "src/app/models/enums/image-loading-state";
 
 @Injectable()
 export class ChatEffect{
@@ -34,48 +35,82 @@ export class ChatEffect{
     private readonly messageService : MessageService,
     private readonly userService : UserService,
     private readonly conversationService : ConversationService,
+    private readonly fileService : FileService,
+    private readonly chatHub : ChatHubService
   ) {}
-
-  connectionSuccess$ = createEffect(
-    () => this.actions.pipe(
-      ofType(connectionSuccessAction),
-      mergeMap(() => of(loadNewMessagesAction()))
-    )
-  )
-
-  loadNewMessages$ = createEffect(
-    () => this.actions.pipe(
-      ofType(loadNewMessagesAction),
-      mergeMap(action => this.messageService.getNewMessages({})),
-      mergeMap(
-        response => {
-          if(!response.isError){
-            var receivedDate = new Date();
-            return of(
-              loadNewMessagesSuccessAction({payload :  response.data!,receivedDate : receivedDate}),
-              markNewMessagesAsReceivedAction({
-                request : {
-                  ids :  Array.from(new Set(response.data!.filter(x => x.status != MessageStatus.Received).map(x => x.id))),
-                  receivedDate : receivedDate.getTime()
-                }
-              })
-            )
-          }
-          return of(synchronizedFailedAction())
-        }
-      )
-    )
-  )
 
   markNewMessagesAsReceived$ = createEffect(
     () => this.actions.pipe(
       ofType(markNewMessagesAsReceivedAction),
-      mergeMap(action => this.messageService.markNewMessagesAsReceived(action.request)),
-      mergeMap(response => {
-        if(!response.isError)
-          return of(synchronizedSuccessAction())
-        return of(synchronizedFailedAction())
-      })
+      mergeMap(
+        () => this.chatStore.select(selectNewMessages).pipe(
+          filter(messages => messages.length > 0),
+          mergeMap(
+            messages => this.chatStore.select(selectHubConnectionState).pipe(
+              filter(state => state == HubConnectionState.Connected),
+              first(),
+              mergeMap(
+                () => this.chatHub.hubConnection!.invoke(
+                  "markMessageAsReceived",
+                  {
+                    senderId : messages[0].senderId,
+                    messageId : messages[0].id,
+                    receivedDate : messages[0].receivedDate!
+                  }
+                )
+              ),
+              mergeMap(() => of(markNewMessageAsReceivedSuccessAction({messageId : messages[0].id})))
+            )
+          )
+        )
+      )
+    )
+  )
+
+  createMessage$ = createEffect(
+    () => this.actions.pipe(
+      ofType(createMessageAction),
+      mergeMap(
+        action => this.chatStore.select(selectHubConnectionState).pipe(
+          filter(hubConnectionState => hubConnectionState == HubConnectionState.Connected),
+          first(),
+          mergeMap(
+            () => {
+              if(action.paths.length > 0)
+                return this.fileService.uploadImageFiles(action.paths,ContainerName.messageImages).pipe(
+                  mergeMap(response => {
+                    if(response.isError)
+                      return of(createMessageFailedAction({id : action.message.id}))
+                    return from(this.chatHub.hubConnection!.invoke("CreateMessage",{
+                      ...action.message,
+                      images : response.data!
+                    }))
+                    .pipe(
+                      mergeMap((message : AppResponse<MessageResponse>) => {
+                        if(message.isError)
+                          return of(createMessageFailedAction({id : action.message.id}))
+                        return of(createMessageSuccessAction({
+                          payload : mapDateTimesOfMessageResponse(message.data!),
+                          userState : action.userState
+                        }))
+                      })
+                    )
+                  })
+                )
+              return from(this.chatHub.hubConnection!.invoke("CreateMessage",{...action.message})).pipe(
+                mergeMap((message : AppResponse<MessageResponse>) => {
+                  if(message.isError)
+                    return of(createMessageFailedAction({id : action.message.id}))
+                  return of(createMessageSuccessAction({
+                    payload : mapDateTimesOfMessageResponse(message.data!),
+                    userState : action.userState
+                  }))
+                })
+              )
+            }
+          )
+        )
+      )
     )
   )
 
@@ -109,32 +144,12 @@ export class ChatEffect{
     () => {
       return this.actions.pipe(
         ofType(nextPageConversationsAction),
-        mergeMap(() => this.chatStore.select(selectIsSynchronized).pipe(
-          filter(isSynchronized => isSynchronized),
-          first()
-        )),
         withLatestFrom(this.chatStore.select(selectConversationPagination)),
-        filter(([isSynchronized,state]) => !state.isLast),
-        mergeMap(
-          ([isSynchronized,state]) => this.conversationService.getConversations({...state}).pipe(
-            mergeMap(c =>{
-              if(!c.isError)
-                return this.userService.getUsersByIds({ids : c.data!.map(x => x.userId)}).pipe(
-                  mergeMap(u => {
-                    if(!u.isError){
-                      let r : ConversationResponse[] = [];
-                      for(let i = 0; i < c.data!.length; i++)
-                        r[i] = {...c.data![i], user : u.data!.find(x => x.id == c.data![i].userId)}
-                      return of(nextPageConversationsSuccessAction({payload : r,receivedDate : new Date()}))
-                    }
-                    return of(nextPageConversationsFailedAction({payload : u}))
-                  })
-                )
-              return of(nextPageConversationsFailedAction({payload : c}))
-            })
-          )
-        ),
-
+        filter(([action,state]) => !state.isLast),
+        mergeMap(([action,state]) => this.conversationService.getConversations({...state})),
+        mergeMap(response => of(nextPageConversationsSuccessAction({
+          payload : mapDateTimeOfConversationResponses(response.data!)
+        })))
       )
     }
   )
@@ -157,4 +172,19 @@ export class ChatEffect{
     )
   )
 
+  loadMessageImage$ = createEffect(
+    () => this.actions.pipe(
+      ofType(loadMessageImageAction),
+      mergeMap(
+        action => this.chatStore.select(selectImageLoadStatus({index : action.imageIndex,messageId : action.id})).pipe(
+          filter(status => status != ImageLoadingState.loaded),
+          mergeMap(
+            () => this.fileService.downloadFile(ContainerName.messageImages,action.blobName,action.extention).pipe(
+              mergeMap(response => of(loadMessageImageSuccessAction({id : action.id,imageIndex : action.imageIndex,url : response})))
+            )
+          )
+        )
+      )
+    )
+  )
 }

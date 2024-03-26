@@ -38,21 +38,21 @@ export class NativeHttpClientService {
     )
   }
 
-  getBlob(url : string) : Observable<string>{
+  getBlob(url : string,format : string) : Observable<string>{
     return this.getHttpHeadersJson$.pipe(
       mergeMap( (headers) => from(CapacitorHttp.get({ url : url, headers : headers, responseType : "blob" }))),
-      map(response=> `data:image/jpeg;base64,${response.data}`)
+      map(response => response.data as string)
     )
   }
 
-  postFormData(url : string, data : FormData) : Observable<BaseAppresponse>{
+  postFormData<T>(url : string, data : FormData) : Observable<AppResponse<T>>{
     return this.getHttpHeadersFormData$.pipe(
       mergeMap(
         (headers) => from(
           CapacitorHttp.post({url : url, headers : headers,data : data})
         )
       ),
-      map(response => response.data as BaseAppresponse)
+      map(response => response.data as AppResponse<T>)
     )
   }
 

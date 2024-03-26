@@ -69,9 +69,9 @@ namespace UserService.Domain.UserAggregate
         //user images
         private readonly List<UserImage> _images = new ();
         public IReadOnlyCollection<UserImage> Images => _images;
-        public void AddImage(string blobName,string extention,Dimension dimension)
+        public void AddImage(string blobName,string extention,int height,int width)
         {
-            _images.Add(new UserImage(blobName, extention, dimension));
+            _images.Add(new UserImage(blobName, extention, height,width));
         }
         public void RemoveImage(Guid imageId)
         {

@@ -3,37 +3,42 @@ using ConversationService.Domain.UserConnectionAggregate;
 using SharedLibrary.Entities;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extentions;
-using SharedLibrary.ValueObjects;
 using System.Net;
 
 namespace ConversationService.Domain.MessageAggregate
 {
-    public class Message : Entity<string>, IAggregateRoot, ILikeableByUsers<MessageUserLiking, Guid>
+    public class Message : 
+        Entity<string>,
+        IAggregateRoot,
+        ILikeableByUsers<MessageUserLiking, Guid>
     {
-        public string Content { get; private set; }
-        public string NormalizeContent { get; private set; }
+        public string? Content { get; private set; }
+        public string? NormalizeContent { get; private set; }
         public int NumberOfImages { get; private set; }
         public Guid SenderId { get; private set; }
-        public UserConnection Sender { get; }
+        public UserConnection? Sender { get; }
         public Guid ReceiverId { get; private set; }
         public byte[] RowVersion { get; private set; }
 
-        public Message(string id,Guid senderId,Guid receiverId, string content,DateTime sendDate)
+        public Message(string id,Guid senderId,Guid receiverId, string? content,DateTime sendDate)
         {
+            var trimmedContent = content?.Trim();
+            var formattedContent = trimmedContent == string.Empty ? null : trimmedContent;
+
             Id = id; 
             SenderId = senderId;
             ReceiverId = receiverId;
-            Content = content;
+            Content = formattedContent == string.Empty ? null : formattedContent;
             SendDate = sendDate;
-            NormalizeContent = content.CustomNormalize();
+            NormalizeContent = formattedContent?.CustomNormalize();
         }
 
         //message images;
         private readonly List<MessageImage> _images = new();
         public IReadOnlyCollection<MessageImage> Images => _images;
-        public void AddImage(string blobName, string extention, Dimension dimension)
+        public void AddImage(string blobName, string extention,int height,int width)
         {
-            _images.Add(new MessageImage(blobName, extention, dimension));
+            _images.Add(new MessageImage(blobName, extention, height,width));
             NumberOfImages++;
         }
 
@@ -44,8 +49,12 @@ namespace ConversationService.Domain.MessageAggregate
         public DateTime? ViewedDate { get; private set; }
         public void MarkAsCreated()
         {
+            if (Content == null && NumberOfImages == 0)
+                throw new AppException("There is no Content!", HttpStatusCode.BadRequest);
+
             if (MessageState == MessageState.Created || MessageState == MessageState.Received || MessageState == MessageState.Viewed)
                 return;
+
             MessageState = MessageState.CreateMessageState(MessageState.Created);
             AddDomainEvent(new MessageCreatedDomainEvent() { Message = this });
         }
@@ -59,9 +68,11 @@ namespace ConversationService.Domain.MessageAggregate
             
             if (MessageState == MessageState.Viewed)
             {
-                if(ReceivedDate == null)
+                if (ReceivedDate == null)
+                {
                     ReceivedDate = receivedDate;
-                AddDomainEvent(new MessageMarkedAsReceivedDomainEvent() { Message = this });
+                    AddDomainEvent(new MessageMarkedAsReceivedDomainEvent() { Message = this });
+                }
                 return;
             }
 

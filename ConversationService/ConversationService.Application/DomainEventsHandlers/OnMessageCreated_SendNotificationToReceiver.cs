@@ -6,7 +6,6 @@ using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using SharedLibrary.Services;
-using System.Reflection;
 
 namespace ConversationService.Application.DomainEventsHandlers
 {

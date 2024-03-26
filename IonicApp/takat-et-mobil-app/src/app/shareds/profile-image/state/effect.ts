@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ImageService } from "src/app/services/image.service";
+import { FileService } from "src/app/services/file.service";
 import { loadUserImageAction, loadUserImageSuccessAction } from "./actions";
 import { filter, first, mergeMap, of } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -12,7 +12,7 @@ export class UserImageEffect{
 
   constructor(
     private readonly actions : Actions,
-    private readonly imageService : ImageService,
+    private readonly imageService : FileService,
     private readonly userImageStore : Store<UserImageEntityState>) {
   }
 
@@ -24,7 +24,7 @@ export class UserImageEffect{
           action => this.userImageStore.select(selectState({id : action.id})).pipe(
             first(),
             filter(state => state == undefined),
-            mergeMap(() => this.imageService.downloadImage(action.containerName,action.blobName)),
+            mergeMap(() => this.imageService.downloadFile(action.containerName,action.blobName,action.extention)),
             mergeMap( response => of(loadUserImageSuccessAction({ id : action.id,url : response })))
           )
         )

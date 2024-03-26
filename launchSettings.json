@@ -8,7 +8,9 @@
         "conversationservice.api": "StartDebugging",
         "userservice.api": "StartDebugging",
         "onuseraccountcreated_createuser.workerservice": "StartDebugging",
-        "photostockmicroservice.api": "StartDebugging"
+        "photostockmicroservice.api": "StartDebugging",
+        "filestockwriter.api": "StartDebugging",
+        "filestockreader.api": "StartDebugging"
       }
     }
   }

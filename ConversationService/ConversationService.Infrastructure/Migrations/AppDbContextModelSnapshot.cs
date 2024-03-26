@@ -33,11 +33,23 @@ namespace ConversationService.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateOfLastDisplayedMessage1")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfLastDisplayedMessage2")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("RemovedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -53,7 +65,6 @@ namespace ConversationService.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ConversationUserId1")
@@ -69,7 +80,6 @@ namespace ConversationService.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("NormalizeContent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfImages")

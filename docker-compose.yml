@@ -36,14 +36,22 @@ services:
       context: .
       dockerfile: UserService/OnUserAccountCreated_CreateUser.WorkerService/Dockerfile
 
-  photostockmicroservice.api:
-    image: ${DOCKER_REGISTRY-}photostockmicroserviceapi
+  filestockwriter.api:
+    image: filestockwriterapi
     build:
       context: .
-      dockerfile: PhotoStockMicroservice/PhotoStockMicroservice.Api/Dockerfile
+      dockerfile: FileStockMicroservices/FileStockWriter.Api/Dockerfile
+
+  filestockreader.api:
+    image: filestockreaderapi
+    build:
+      context: .
+      dockerfile: FileStockMicroservices/FileStockReader.Api/Dockerfile
 
 volumes:
     sqlserver_volume:
+
+
 
 
 

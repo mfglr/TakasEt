@@ -9,7 +9,10 @@ namespace ConversationService.Domain.ConversationAggregate
     {
         public Guid UserId1 { get; private set; }
         public Guid UserId2 { get; private set; }
-        
+        public DateTime DateOfLastDisplayedMessage1 { get; private set; }
+        public DateTime DateOfLastDisplayedMessage2 { get; private set; }
+        public byte[] RowVersion { get; private set; }
+
         public Conversation(Guid userId1,Guid userId2)
         {
             if (userId1 < userId2)
@@ -26,9 +29,29 @@ namespace ConversationService.Domain.ConversationAggregate
         private readonly List<Message> _messages = new();
         public IReadOnlyCollection<Message> Messages => _messages;
         public void AddMessage(Message message) {
-            message.MarkAsCreated();
             _messages.Add(message);
+            if (message.SenderId == UserId1)
+                if(message.SendDate > DateOfLastDisplayedMessage1)
+                    DateOfLastDisplayedMessage1 = message.SendDate;
+            else
+                if(message.SendDate > DateOfLastDisplayedMessage2)
+                    DateOfLastDisplayedMessage2 = message.SendDate;
         }
+        public void MarkMessageAsReceived(Guid receiverId,string messageId,DateTime receivedDate)
+        {
+            var message = _messages.FirstOrDefault(x => x.Id == messageId);
+            if(message != null)
+            {
+                message.MarkAsReceived(receiverId, receivedDate);
+                if (receiverId == UserId1)
+                    if(receivedDate > DateOfLastDisplayedMessage1)
+                        DateOfLastDisplayedMessage1 = receivedDate;
+                else
+                    if(receivedDate > DateOfLastDisplayedMessage2)
+                        DateOfLastDisplayedMessage2 = receivedDate;
+            }
+        }
+
 
         //IEntity
         public DateTime CreatedDate { get; protected set; }

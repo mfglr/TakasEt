@@ -1,6 +1,13 @@
 <ng-container *ngIf="message">
   <div class="root" [style]="rootStyle$ | async">
     <div class="content" [style]="contentStyle$ | async">
+
+      <ng-container *ngIf="message.images && message.images.length > 0">
+        <div *ngFor="let image of message.images" class="content-images">
+          <img [src]="image.url" alt="">
+        </div>
+      </ng-container>
+
       <span class="message-content">{{message.content}}</span>
 
       <ng-container *ngIf="isMyMessage$ | async else template;">

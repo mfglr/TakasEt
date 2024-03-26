@@ -1,10 +1,10 @@
 import { createFeatureSelector, createSelector, select } from "@ngrx/store";
-import { ChatState, selectConversationStates, selectMessageStates, selectUserStates, takeValueOfMessage } from "./reducer";
+import { ChatState, selectConversationStates, selectMessageStates, selectUserStates, numberOfMessagesPerPage } from "./reducer";
 import { MessageStatus } from "../models/responses/message-response";
 
+
 export const selectStore = createFeatureSelector<ChatState>("ChatStore");
-export const selectIsConnected = createSelector(selectStore,state => state.isConnected);
-export const selectIsSynchronized = createSelector(selectStore,state => state.isSynchronized);
+export const selectHubConnectionState = createSelector(selectStore,state => state.hubConnectionState);
 export const selectConversationState = (props : {userId : string}) => createSelector(
   selectStore,
   state => state.conversationEntityState.entities[props.userId]
@@ -18,6 +18,11 @@ export const selectConversationPagination = createSelector(
       lastValue : messages.length > 0 ? messages[messages.length - 1].sendDate.getTime() : undefined
     }
   }
+)
+export const selectNewMessages = createSelector(
+  selectStore,
+  state => selectMessageStates(state.messageEntityState)
+    .filter(x => x.status == MessageStatus.Created && x.senderId == state.loginUserId!)
 )
 export const selectForChatHomePage = createSelector(
   selectStore,
@@ -78,7 +83,7 @@ export const selectMessagePagination = (props:{userId : string}) => createSelect
       isDescending : true,
       isLast : false,
       lastValue : lastValue,
-      take : takeValueOfMessage
+      take : numberOfMessagesPerPage
     }
   }
 )
@@ -89,4 +94,12 @@ export const selectMessage = (props : {messageId : string}) => createSelector(
 export const selectUsers = createSelector(
   selectStore,
   state => selectUserStates(state.userEntityState)
+)
+const selectMessageState = (props : {messageId : string}) => createSelector(
+  selectStore,
+  state => state.messageEntityState.entities[props.messageId]
+)
+export const selectImageLoadStatus = (props : {messageId : string,index : number}) => createSelector(
+  selectMessageState(props),
+  state => state!.images![props.index].status
 )

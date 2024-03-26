@@ -3,7 +3,8 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
-import { MessageState } from 'src/app/chat/state/reducer';
+import { loadMessageImageAction } from 'src/app/chat/state/actions';
+import { ChatState, MessageState } from 'src/app/chat/state/reducer';
 
 @Component({
   selector: 'app-message-box',
@@ -13,6 +14,24 @@ import { MessageState } from 'src/app/chat/state/reducer';
 export class MessageBoxComponent{
 
   @Input() message? : MessageState;
+
+  constructor(
+    private readonly loginStore : Store<LoginState>,
+    private readonly chatStore : Store<ChatState>
+  ) { }
+
+  ngOnInit(){
+    if(this.message && this.message.images){
+      this.message.images.forEach((image,index) => {
+        this.chatStore.dispatch(loadMessageImageAction({
+          id : this.message!.id,
+          imageIndex : index,
+          blobName : image.blobName!,
+          extention : image.extention!
+        }))
+      })
+    }
+  }
 
   isMyMessage$ = this.loginStore.select(selectUserId).pipe(
     map(userId => this.message != undefined && this.message.senderId == userId)
@@ -41,6 +60,6 @@ export class MessageBoxComponent{
     })
   )
 
-  constructor(private readonly loginStore : Store<LoginState>) { }
+
 
 }

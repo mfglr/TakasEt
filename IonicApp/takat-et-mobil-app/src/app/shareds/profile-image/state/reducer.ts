@@ -1,10 +1,15 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import { loadUserImageSuccessAction } from "./actions";
+import { ImageLoadingState } from "src/app/models/enums/image-loading-state";
 
-interface UserImageState{
+
+export interface UserImageState{
   id : string;
+  blobName : string;
+  extention : string,
   url : string;
+  status : ImageLoadingState;
 }
 
 export interface UserImageEntityState extends EntityState<UserImageState>{}
@@ -15,6 +20,13 @@ export const adapter = createEntityAdapter<UserImageState>({
 
 export const userImageReducer = createReducer(
   adapter.getInitialState(),
-  on( loadUserImageSuccessAction,(state,action) => adapter.addOne({id : action.id,url : action.url},state) )
+  on(
+    loadUserImageSuccessAction,
+    (state,action) => adapter.addOne({
+      ...state.entities[action.id]!,
+      id : action.id,
+      url : action.url
+    },state)
+  )
 )
 

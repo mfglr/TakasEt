@@ -26,5 +26,19 @@
 </ion-content>
 
 <ion-footer class="footer">
-  <app-message-input [userState]="this.userState"></app-message-input>
+
+  <div class="message-input-wrapper">
+
+    <textarea [formControl]="messageInput"></textarea>
+
+    <button class="camera-button" routerLink="/chat/add-photos" [state]="userState">
+      <ion-icon name="images-outline" class="camera-icon"></ion-icon>
+    </button>
+
+
+    <button class="plane-button" (click)="sendMessage()">
+      <ion-icon name="paper-plane-outline" class="plane-icon"></ion-icon>
+    </button>
+
+  </div>
 </ion-footer>

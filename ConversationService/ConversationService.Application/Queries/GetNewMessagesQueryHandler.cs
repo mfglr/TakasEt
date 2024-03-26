@@ -30,8 +30,9 @@ namespace ConversationService.Application.Queries
 
             var messages = await _context
                 .Messages
+                .Include(x => x.Images)
                 .Where(x => x.ReceiverId == loginUserId && x.MessageState.Status != MessageState.Viewed.Status)
-                .OrderBy(x => x.SendDate)
+                .ToPage(x => x.SendDate,request)
                 .ToListAsync(cancellationToken);
 
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(
