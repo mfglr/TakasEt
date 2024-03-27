@@ -5,7 +5,7 @@ import {
   nextPageUsersSuccessAction, nextPageConversationsAction, nextPageConversationsSuccessAction,
   nextPageUsersFailedAction, loadConversationUserAction, loadConversationUserSuccessAction,
   createMessageAction, createMessageFailedAction, createMessageSuccessAction,
-  markNewMessagesAsReceivedAction, markNewMessageAsReceivedSuccessAction, loadMessageImageAction, loadMessageImageSuccessAction
+  loadMessageImageAction, loadMessageImageSuccessAction
 } from "./actions";
 import { filter, first, from, mergeMap, of, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -14,8 +14,8 @@ import { UserService } from "src/app/services/user.service";
 import { ChatState } from "./reducer";
 import { ConversationService } from "../services/conversation-service";
 import {
-  selectConversationPagination, selectHubConnectionState, selectImageLoadStatus, selectMessagePagination,
-  selectNewMessages, selectUserPagination
+  selectConversationPagination, selectHubConnectionState, selectImageLoadStatus,
+  selectMessagePagination, selectUserPagination
 } from "./selectors";
 import { FileService } from "src/app/services/file.service";
 import { ChatHubService } from "src/app/services/chat-hub.service";
@@ -38,34 +38,6 @@ export class ChatEffect{
     private readonly fileService : FileService,
     private readonly chatHub : ChatHubService
   ) {}
-
-  markNewMessagesAsReceived$ = createEffect(
-    () => this.actions.pipe(
-      ofType(markNewMessagesAsReceivedAction),
-      mergeMap(
-        () => this.chatStore.select(selectNewMessages).pipe(
-          filter(messages => messages.length > 0),
-          mergeMap(
-            messages => this.chatStore.select(selectHubConnectionState).pipe(
-              filter(state => state == HubConnectionState.Connected),
-              first(),
-              mergeMap(
-                () => this.chatHub.hubConnection!.invoke(
-                  "markMessageAsReceived",
-                  {
-                    senderId : messages[0].senderId,
-                    messageId : messages[0].id,
-                    receivedDate : messages[0].receivedDate!
-                  }
-                )
-              ),
-              mergeMap(() => of(markNewMessageAsReceivedSuccessAction({messageId : messages[0].id})))
-            )
-          )
-        )
-      )
-    )
-  )
 
   createMessage$ = createEffect(
     () => this.actions.pipe(

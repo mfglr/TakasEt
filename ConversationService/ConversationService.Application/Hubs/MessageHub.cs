@@ -22,14 +22,17 @@ namespace ConversationService.Application.Hubs
             _context = context;
         }
 
+
+        public override async Task OnConnectedAsync()
+        {
+            await _sender.Send(new ConnectDto() { ConnectionId = Context.ConnectionId });
+        }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             await _sender.Send(new DisconnectDto());
         }
-        public async Task<IAppResponseDto> Connect()
-        {
-            return await _sender.Send(new ConnectDto() { ConnectionId = Context.ConnectionId });
-        }
+        
         public async Task<IAppResponseDto> GetNewMessages(GetNewMessagesDto request)
         {
             return await _sender.Send(request);

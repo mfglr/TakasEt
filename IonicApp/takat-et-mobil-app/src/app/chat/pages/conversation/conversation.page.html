@@ -20,12 +20,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="content" [scrollEvents]="true">
+<ion-content [fullscreen]="true" class="content" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <app-message-box-list [messages]="messages$ | async"></app-message-box-list>
-  <div id="bottomOfMessages"></div>
+  <div #scrollContainer></div>
 </ion-content>
 
-<ion-footer class="footer">
+<ion-footer class="footer" scroll>
 
   <div class="message-input-wrapper">
 

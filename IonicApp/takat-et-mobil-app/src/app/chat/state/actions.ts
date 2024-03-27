@@ -6,17 +6,6 @@ import { BaseAppresponse } from "src/app/models/responses/app-response";
 import { UserState } from "./reducer";
 import { HubConnectionState } from "@microsoft/signalr";
 
-
-export const loadNewMessagesAction = createAction(
-  "[Chat Module State] load conversations with new messages success",
-  props<{payload : MessageResponse[],receivedDate : Date}>()
-)
-export const markNewMessagesAsReceivedAction = createAction("[Chat Module State] mark new messages as received")
-export const markNewMessageAsReceivedSuccessAction = createAction(
-  "[Chat Module State] mark new message as received success",
-  props<{messageId : string}>()
-)
-
 export const createMessageAction = createAction(
   "[Chat Module State] create message",
   props<{
@@ -39,8 +28,9 @@ export const receiveMessageAction = createAction(
   "[Chat Module State] receive message",
   props<{payload : MessageResponse,receivedDate : Date}>()
 )
-export const receiveMessageSuccessAction = createAction(
-  "[Chat Module State] receive message success"
+export const viewMessageAction = createAction(
+  "[Chat Module State] viewe message",
+  props<{id : string,viewedDate : Date}>()
 )
 
 export const markMessageSentAsReceivedAction = createAction(
@@ -55,10 +45,6 @@ export const markMessageSentAsViewedAction = createAction(
 export const changeHubConnectionStateAction = createAction(
   "[Chat Module State] change hub connection state",
   props<{payload : HubConnectionState}>()
-)
-export const loadLoginUserIdAction = createAction(
-  "[Chat Module State] load login user id",
-  props<{userId : string}>()
 )
 
 export const loadConversationUserAction = createAction(

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, first } from 'rxjs';
 import { nextPageUsersAction } from '../../state/actions';
-import { ChatState, UserState } from '../../state/reducer';
+import { ChatState, UserState, numberOfUserPerPage } from '../../state/reducer';
 import { selectUsers } from '../../state/selectors';
 
 @Component({
@@ -17,9 +17,8 @@ export class CreateConversationPage implements OnInit {
   users$ : Observable<UserState[]> = this.chatStore.select(selectUsers)
 
   ngOnInit() {
-
     this.users$.pipe(first()).subscribe(x => {
-      if(x.length == 0)
+      if(x.length < numberOfUserPerPage)
         this.chatStore.dispatch(nextPageUsersAction())
     })
   }

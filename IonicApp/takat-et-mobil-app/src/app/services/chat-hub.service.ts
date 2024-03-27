@@ -4,12 +4,12 @@ import { Store } from '@ngrx/store';
 import { MessageResponse, MessageStatus } from '../chat/models/responses/message-response';
 import {
   changeHubConnectionStateAction,
-  loadNewMessagesAction,
   receiveMessageAction,
   markMessageSentAsViewedAction,
-  markMessageSentAsReceivedAction
+  markMessageSentAsReceivedAction,
+  viewMessageAction,
 } from '../chat/state/actions';
-import { Subject, filter, mergeMap } from 'rxjs';
+import { Subject, filter, from, mergeMap } from 'rxjs';
 import { ChatState, numberOfMessagesPerPage } from '../chat/state/reducer';
 import { mapDateTimesOfMessageResponse, mapDateTimesOfMessageResponses } from '../helpers/mapping-datetime';
 import { environment } from 'src/environments/environment';
@@ -21,24 +21,27 @@ export class ChatHubService {
   private baseUrl : string = environment.messageHub;
 
   hubConnection? : HubConnection
-  private receivedMessagesSubject = new Subject<MessageResponse>();
+  private newMessagesSubject = new Subject<MessageResponse>();
+  private unviewedMessageSubject = new Subject<MessageResponse>();
+  public viewedMessagesSubject = new Subject<string>();
 
-  public receivedMessages = this.receivedMessagesSubject.asObservable();
+  public newMessages = this.newMessagesSubject.asObservable();
+  public unviewedMessages = this.unviewedMessageSubject.asObservable();
+
+
 
   constructor(private readonly chatStore : Store<ChatState>) {}
 
-  private getNewMessages(lastValue? : Date){
+  private getNewMessages(lastDate? : Date){
     this.hubConnection!.invoke(
       "GetNewMessages",
-      {take : numberOfMessagesPerPage,lastValue : lastValue?.getTime(),isDescending : false}
+      {take : numberOfMessagesPerPage,lastValue : lastDate?.getTime(),isDescending : false}
     ).then(
       (response : AppResponse<MessageResponse[]>) => {
-
         let messages = mapDateTimesOfMessageResponses(response.data!);
-        this.chatStore.dispatch(loadNewMessagesAction({payload : messages,receivedDate : new Date()}))
 
         for(let i = 0; i < messages.length;i++)
-          this.receivedMessagesSubject.next(messages[i])
+          this.newMessagesSubject.next(messages[i])
 
         if(messages.length >= numberOfMessagesPerPage)
           this.getNewMessages(messages[messages.length - 1].sendDate)
@@ -47,18 +50,29 @@ export class ChatHubService {
   }
 
   private markNewMessagesAsReceived(){
-    // this.receivedMessages.pipe(
-    //   filter(message => message.status == MessageStatus.Created),
-    //   mergeMap(
-    //     message => this.hubConnection!.invoke(
-    //       "MarkMessageAsReceived",
-    //       {senderId : message.senderId,messageId : message.id, receivedDate : message.receivedDate!}
-    //     )
-    //   ),
-    //   mergeMap((response : AppResponse<MessageResponse>) => )
-    // )
+    this.newMessages.subscribe(async message => {
+      if(message.status == MessageStatus.Created){
+        var receivedDate = new Date();
+        await this.hubConnection!.invoke<AppResponse<MessageResponse>>(
+          "MarkMessageAsReceived",
+          {senderId : message.senderId,messageId : message.id,receivedDate : receivedDate}
+        )
+        this.chatStore.dispatch(receiveMessageAction({payload : message,receivedDate : receivedDate}))
+      }
+      else
+        this.chatStore.dispatch(receiveMessageAction({payload : message,receivedDate : message.receivedDate!}))
+
+      this.unviewedMessageSubject.next(message);
+    })
   }
 
+  private markNewMessageAsViewed(){
+    this.viewedMessagesSubject.subscribe(async id => {
+      var viewedDate = new Date();
+      await this.hubConnection!.invoke("markMessageAsViewed",{messageId : id,viewedDate : viewedDate.getTime()})
+      this.chatStore.dispatch(viewMessageAction({id : id,viewedDate : viewedDate}));
+    })
+  }
 
   start(token : string){
 
@@ -68,18 +82,15 @@ export class ChatHubService {
 
     this.hubConnection.start()
       .then(() => {
-
         this.chatStore.dispatch(changeHubConnectionStateAction({payload : this.hubConnection!.state}))
-        // this.markNewMessagesAsReceived();
+        this.markNewMessagesAsReceived()
+        this.markNewMessageAsViewed()
         this.getNewMessages();
-
       })
 
-    this.hubConnection.onclose(
-      () => {
-        this.chatStore.dispatch(changeHubConnectionStateAction({payload : this.hubConnection!.state}))
-      }
-    )
+    this.hubConnection.onclose(() => {this.chatStore.dispatch(changeHubConnectionStateAction({
+      payload : this.hubConnection!.state}))
+    })
 
     this.hubConnection.onreconnected(
       () =>{
@@ -88,23 +99,21 @@ export class ChatHubService {
       }
     )
 
-    // this.hubConnection.on("receiveMessage",(response : MessageResponse) => {
-    //   var message : MessageResponse = {...mapDateTimesOfMessageResponse(response),receivedDate : new Date()};
-    //   this.chatStore.dispatch(receiveMessageAction({payload : message,receivedDate : new Date()}))
-    //   this.receivedMessagesSubject.next(message);
-    // })
+    this.hubConnection.on("receiveMessage",(response : MessageResponse) => {
+      this.newMessagesSubject.next(mapDateTimesOfMessageResponse(response));
+    })
 
-    // this.hubConnection.on("messageReceivedNotification",(response : MessageResponse) => {
-    //   this.chatStore.dispatch(markMessageSentAsReceivedAction({
-    //     messageId : response.id ,receivedDate : new Date(response.receivedDate!)
-    //   }))
-    // })
+    this.hubConnection.on("messageReceivedNotification",(response : MessageResponse) => {
+      this.chatStore.dispatch(markMessageSentAsReceivedAction({
+        messageId : response.id ,receivedDate : new Date(response.receivedDate!)
+      }))
+    })
 
-    // this.hubConnection.on("messageViewedNotification",(response : MessageResponse) => {
-    //   this.chatStore.dispatch(markMessageSentAsViewedAction({
-    //     messageId : response.id,viewedDate : new Date(response.viewedDate!)
-    //   }))
-    // })
+    this.hubConnection.on("messageViewedNotification",(response : MessageResponse) => {
+      this.chatStore.dispatch(markMessageSentAsViewedAction({
+        messageId : response.id,viewedDate : new Date(response.viewedDate!)
+      }))
+    })
 
   }
 

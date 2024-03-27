@@ -32,7 +32,14 @@ namespace ConversationService.Application.Queries
                 .Messages
                 .Include(x => x.Images)
                 .Where(x => x.ReceiverId == loginUserId && x.MessageState.Status != MessageState.Viewed.Status)
-                .ToPage(x => x.SendDate,request)
+                .ToPage(
+                    x => x.SendDate,
+                    new Page<DateTime>() {
+                        IsDescending = request.IsDescending,
+                        LastValue = request.LastValue.ToDateTime(),
+                        Take = request.Take
+                    }
+                )
                 .ToListAsync(cancellationToken);
 
             return new AppGenericSuccessResponseDto<List<MessageResponseDto>>(

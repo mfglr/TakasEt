@@ -1,19 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, first } from 'rxjs';
+import { Observable, Subscription, filter, first, from, mergeMap } from 'rxjs';
 import { ChatHubService } from 'src/app/services/chat-hub.service';
 import { ChatState, MessageState, UserState, numberOfMessagesPerPage } from '../../state/reducer';
-import {
-  nextPageMessagesAction, createMessageAction
-} from '../../state/actions';
+import { nextPageMessagesAction, createMessageAction } from '../../state/actions';
 import { selectMessageStatesOfConversatinPage, selectUnviewedMessages } from '../../state/selectors';
 import { Router } from '@angular/router';
-import { mapDateTimesOfMessageResponse } from 'src/app/helpers/mapping-datetime';
-import { MessageResponse } from '../../models/responses/message-response';
 import { LoginState } from 'src/app/account/state/reducer';
 import { selectUserId } from 'src/app/account/state/selectors';
 import { CreateMessage } from '../../models/request/create-message';
 import { FormControl } from '@angular/forms';
+import { IonContent, Platform, ScrollDetail } from '@ionic/angular';
 
 @Component({
   selector: 'app-conversation',
@@ -22,8 +19,14 @@ import { FormControl } from '@angular/forms';
 })
 export class ConversationPage implements OnInit,OnDestroy {
 
+
+  @ViewChild(IonContent) content? : IonContent;
+  @ViewChild("scrollContainer") scrollContainer? : ElementRef;
+  numberOfMessages : number = 0;
+
   userState : UserState | undefined = undefined;
-  receivedMessagesSubscription? : Subscription;
+  subcription? : Subscription;
+  scrollSubscription? : Subscription;
   messages$? : Observable<MessageState[]>
   messageInput = new FormControl<string>("");
 
@@ -31,7 +34,7 @@ export class ConversationPage implements OnInit,OnDestroy {
     private readonly chatHub : ChatHubService,
     private readonly chatStore : Store<ChatState>,
     private readonly loginStore : Store<LoginState>,
-    private readonly router : Router
+    private readonly router : Router,
   ) {
     var state = this.router.getCurrentNavigation()?.extras.state;
     if(state)
@@ -39,41 +42,48 @@ export class ConversationPage implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-
     if(this.userState){
       this.messages$ = this.chatStore.select(selectMessageStatesOfConversatinPage({userId : this.userState.id}));
 
+      this.scrollSubscription = this.messages$.subscribe(() => {
+        setTimeout(() => this.scrollContainer!.nativeElement.scrollIntoView());
+      })
+
       this.messages$.pipe(first()).subscribe(
-        x => {
-          if(x.length < numberOfMessagesPerPage)
+        messages => {
+          if(messages.length < numberOfMessagesPerPage)
             this.chatStore.dispatch(nextPageMessagesAction({user : this.userState!}))
         }
       )
 
-      // this.chatStore.select(selectUnviewedMessages({userId : this.userState.id})).pipe(first()).subscribe(
-      //   messages => {
-      //     if(messages.length > 0){
-      //       var viewedDate = new Date()
-      //       this.chatStore.dispatch(markMessagesReceivedAsViewedAction({payload : messages,viewedDate : viewedDate}))
-      //       this.chatHub.hubConnection!.invoke(
-      //         "MarkNewMessagesAsViewed",{ids : messages.map(x => x.id),viewedDate : viewedDate.getTime()}
-      //       )
-      //     }
-      //   }
-      // )
+      this.subcription = this.chatHub.unviewedMessages.pipe(
+        filter(message => message.senderId == this.userState!.id)
+      )
+      .subscribe(message => this.chatHub.viewedMessagesSubject.next(message.id))
 
-      // this.receivedMessagesSubscription = this.chatHub.receivedMessages.subscribe(message => {
-      //   var viewedDate = new Date();
-      //   var message : MessageResponse = {...mapDateTimesOfMessageResponse(message),viewedDate : viewedDate};
-      //   this.chatStore.dispatch(markMessageReceivedAsViewedAction({payload : message}))
-      //   this.chatHub.hubConnection!.invoke("MarkMessageAsViewed",{messageId : message.id,viewedDate : viewedDate})
-      // })
-
+      this.chatStore.select(selectUnviewedMessages({userId : this.userState.id})).pipe(
+        first(),
+        mergeMap(messages => from(messages))
+      )
+      .subscribe(message => this.chatHub.viewedMessagesSubject.next(message.id))
     }
   }
 
+  scrollBottom(){
+    this.content?.scrollToBottom(500);
+  }
+
+  onScroll(e : CustomEvent<ScrollDetail>){
+    console.log(e.detail.scrollTop);
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => this.scrollContainer!.nativeElement.scrollIntoView());
+  }
+
   ngOnDestroy(){
-    this.receivedMessagesSubscription?.unsubscribe();
+    this.subcription?.unsubscribe();
+    this.scrollSubscription?.unsubscribe();
   }
 
   sendMessage(){
@@ -96,6 +106,9 @@ export class ConversationPage implements OnInit,OnDestroy {
         }))
 
         this.messageInput.setValue('');
+        // setTimeout(() => this.scrollContainer!.nativeElement.scrollIntoView());
+        this.scrollContainer!.nativeElement.scrollIntoView()
+
       }
     });
 

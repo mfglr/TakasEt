@@ -34,9 +34,9 @@ namespace ConversationService.Application.Queries
                 .Where(x => x.UserId1 == loginUserId || x.UserId2 == loginUserId)
                 .Include(
                     x => x.Messages
-                        //.Where(x => x.MessageState.Status == MessageState.Viewed.Status)
-                        .OrderBy(x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!)
-                        .ThenBy(x => x.SendDate)
+                        .Where(x => x.SenderId != loginUserId ? x.MessageState.Status == MessageState.Viewed.Status : true)
+                        .OrderByDescending(x => loginUserId == x.SenderId ? x.SendDate : (DateTime)x.ReceivedDate!)
+                        .ThenByDescending(x => x.SendDate)
                         .Take(20)
                 )
                 .ThenInclude(x => x.Images)

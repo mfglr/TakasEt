@@ -80,10 +80,6 @@ namespace ConversationService.Application.Commands
                 _context.ChangeTracker.Clear();
                 return await CreateMessage(message,conversationKey,cancellationToken);
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine();
-            }
 
             return new AppGenericSuccessResponseDto<MessageResponseDto>(
                 _mapper.Map<MessageResponseDto>(message)

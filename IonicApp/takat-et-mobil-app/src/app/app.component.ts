@@ -30,16 +30,6 @@ export class AppComponent {
     private readonly photoService : PhotoService
   ) {}
 
-  private base64ToUrl(base64String : string, contentType = '') {
-    const byteCharacters = atob(base64String);
-    var array = new Uint8Array(byteCharacters.length)
-    for (let i = 0; i < byteCharacters.length; i++)
-      array[i] = byteCharacters.charCodeAt(i);
-    return URL.createObjectURL(new Blob([array], { type: contentType }));
-  }
-
-  url? : string;
-
   ngOnInit() {
 
     this.loginStore.dispatch(loginByLocalStorageAction())

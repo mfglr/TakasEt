@@ -19,7 +19,12 @@ const routes: Routes = [
   {
     path: 'add-photos',
     loadChildren: () => import('./pages/add-photos/add-photos.module').then( m => m.AddPhotosPageModule)
+  },
+  {
+    path: 'display-message',
+    loadChildren: () => import('./pages/display-message/display-message.module').then( m => m.DisplayMessagePageModule)
   }
+
 
 
 ];

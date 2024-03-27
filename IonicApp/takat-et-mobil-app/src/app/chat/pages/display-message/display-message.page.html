@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+
+  <ion-buttons slot="fixed" vertical="top" horizontal="left">
+    <ion-back-button defaultHref="/chat/chat-home">
+    </ion-back-button>
+  </ion-buttons>
+
+  <swiper-container [pagination]="true" class="container">
+
+    <ng-container *ngIf="message$ | async let message">
+      <swiper-slide class="slide" *ngFor="let image of message.images">
+
+        <ng-container *ngIf="image.status == loaded; else imageLoadingTemplate">
+          <ion-img class="image" [src]="image.url"></ion-img>
+        </ng-container>
+
+        <ng-template #imageLoadingTemplate>
+          <ion-spinner name="circular" color="primary"></ion-spinner>
+        </ng-template>
+
+      </swiper-slide>
+    </ng-container>
+
+  </swiper-container>
+
+</ion-content>

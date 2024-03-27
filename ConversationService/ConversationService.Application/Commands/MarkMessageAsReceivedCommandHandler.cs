@@ -41,6 +41,7 @@ namespace ConversationService.Application.Commands
             var conversation = await _context
                 .Conversations
                 .Include(x => x.Messages.Where(x => x.Id == request.MessageId))
+                .ThenInclude(x => x.Sender)
                 .Where(x => x.UserId1 == conversationKey[0] && x.UserId2 == conversationKey[1])
                 .FirstOrDefaultAsync(cancellationToken);
 

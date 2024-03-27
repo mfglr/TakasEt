@@ -2,11 +2,10 @@ import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { MessageStatus } from "../models/responses/message-response";
 import { createReducer, on } from "@ngrx/store";
 import {
-  receiveMessageAction, createMessageSuccessAction, loadNewMessagesAction,
+  receiveMessageAction, createMessageSuccessAction,loadMessageImageSuccessAction,
   nextPageMessagesSuccessAction, nextPageConversationsSuccessAction, nextPageUsersSuccessAction,
   loadConversationUserSuccessAction, createMessageAction, changeHubConnectionStateAction,
-  markMessageSentAsReceivedAction, markMessageSentAsViewedAction, markNewMessageAsReceivedSuccessAction,
-  loadMessageImageSuccessAction
+  markMessageSentAsReceivedAction, markMessageSentAsViewedAction, viewMessageAction
 } from "./actions";
 import { UserImageResponse } from "src/app/models/responses/user-image-response";
 import { HubConnectionState } from "@microsoft/signalr";
@@ -182,16 +181,15 @@ export const chatReducer = createReducer(
         userId : action.payload.senderId,
         userState : state.conversationEntityState.entities[action.payload.senderId]?.userState,
         dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
-          {
-            messageId : action.payload.id,
-            timeStamp : action.receivedDate.getTime()
-          },
+          {messageId : action.payload.id, timeStamp : action.receivedDate.getTime()},
           state.conversationEntityState.entities[action.payload.senderId]?.dateOfMessageEntityState ??
             dateOfMessageStateAdapter.getInitialState())},
         state.conversationEntityState
       ),
       messageEntityState : messageAdapter.addOne({
         ...action.payload,
+        status : MessageStatus.Received,
+        receivedDate : action.receivedDate,
         timeStamp : action.receivedDate.getTime(),
         images : action.payload.images?.map(image => ({...image,status : ImageLoadingState.notLoaded}))
       },state.messageEntityState),
@@ -203,6 +201,13 @@ export const chatReducer = createReducer(
       },state.messagePaginationEntityState)
     })
   ),
+  on(viewMessageAction, (state,action) => ({
+    ...state,
+    messageEntityState : messageAdapter.updateOne({
+      id : action.id,
+      changes : { viewedDate : action.viewedDate, status : MessageStatus.Viewed }
+    },state.messageEntityState)
+  })),
   on(markMessageSentAsReceivedAction,(state,action) => {
     let messageEntityState;
     let messageState = state.messageEntityState.entities[action.messageId];
@@ -239,6 +244,7 @@ export const chatReducer = createReducer(
       messageEntityState = messageAdapter.updateOne({
         id : action.messageId,
         changes : {
+          status : MessageStatus.Viewed,
           viewedDate : messageState.viewedDate ?? action.viewedDate
         }
       },state.messageEntityState)
@@ -257,57 +263,6 @@ export const chatReducer = createReducer(
       messageEntityState : messageEntityState
     }
   }),
-  on(loadNewMessagesAction,(state,action) => ({
-    ...state,
-    conversationEntityState : conversationAdapter.setMany(
-      action.payload.map((message) : ConversationState => {
-        let dateOfMessageState = {
-          messageId : message.id,
-          timeStamp : message.receivedDate?.getTime() ?? action.receivedDate.getTime()
-        }
-        let conversationState = state.conversationEntityState.entities[message.senderId];
-        if(conversationState)
-          return {
-            ...conversationState,
-            dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
-              dateOfMessageState,conversationState.dateOfMessageEntityState
-            )
-          }
-        return {
-          userId : message.senderId,
-          dateOfMessageEntityState : dateOfMessageStateAdapter.addOne(
-            dateOfMessageState,dateOfMessageStateAdapter.getInitialState()
-          )
-        }
-      }),
-      state.conversationEntityState
-    ),
-
-    messageEntityState : messageAdapter.addMany(action.payload.map((message) : MessageState => ({
-      ...message,
-      receivedDate : message.receivedDate ?? action.receivedDate,
-      timeStamp : message.receivedDate?.getTime() ?? action.receivedDate.getTime(),
-      images : message.images?.map(image => ({...image,status : ImageLoadingState.notLoaded}))
-    })),state.messageEntityState),
-
-    messagePaginationEntityState : messagePaginationAdapter.addMany(
-      action.payload.map((message) : MessagePagination => ({
-        userId : message.senderId,
-        isDescending : true,
-        isLast : false,
-        take : numberOfMessagesPerPage,
-      })),
-      state.messagePaginationEntityState
-    )
-
-  })),
-  on(markNewMessageAsReceivedSuccessAction,(state,action) => ({
-    ...state,
-    messageEntityState : messageAdapter.updateOne({
-      id : action.messageId,
-      changes : { status : MessageStatus.Received }
-    },state.messageEntityState)
-  })),
   on(nextPageUsersSuccessAction, (state,action) => ({
     ...state,
     userPagination : {...state.userPagination,isLast : action.payload.length < numberOfUserPerPage},
@@ -435,6 +390,6 @@ export const chatReducer = createReducer(
       }
     },state.messageEntityState)
 
-  }))
+  })),
 )
 

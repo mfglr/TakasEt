@@ -37,21 +37,19 @@ services:
       dockerfile: UserService/OnUserAccountCreated_CreateUser.WorkerService/Dockerfile
 
   filestockwriter.api:
-    image: filestockwriterapi
+    image: filestockwriter_service_image
+    container_name: filestockwrite_service_container
     build:
       context: .
       dockerfile: FileStockMicroservices/FileStockWriter.Api/Dockerfile
 
   filestockreader.api:
-    image: filestockreaderapi
+    image: filestockreader_service_image
+    container_name: filstockreader_service_container
     build:
       context: .
       dockerfile: FileStockMicroservices/FileStockReader.Api/Dockerfile
 
 volumes:
     sqlserver_volume:
-
-
-
-
-
+    containers:

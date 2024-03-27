@@ -2,13 +2,12 @@
 using ConversationService.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using SharedLibrary.Dtos;
 using SharedLibrary.Extentions;
 using SharedLibrary.UnitOfWork;
 
 namespace ConversationService.Application.Commands
 {
-    public class DisconnectCommandHandler : IRequestHandler<DisconnectDto, IAppResponseDto>
+    public class DisconnectCommandHandler : IRequestHandler<DisconnectDto>
     {
 
         private readonly IHttpContextAccessor _contextAccessor;
@@ -22,7 +21,7 @@ namespace ConversationService.Application.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IAppResponseDto> Handle(DisconnectDto request, CancellationToken cancellationToken)
+        public async Task Handle(DisconnectDto request, CancellationToken cancellationToken)
         {
 
             Guid logginUserid = Guid.Parse(_contextAccessor.HttpContext.GetLoginUserId()!);
@@ -33,7 +32,6 @@ namespace ConversationService.Application.Commands
                 connection.Disconnect();
                 await _unitOfWork.CommitAsync(cancellationToken);
             }
-            return new AppSuccessResponseDto();
         }
     }
 }

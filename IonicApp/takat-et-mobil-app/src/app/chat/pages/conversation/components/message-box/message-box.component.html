@@ -3,8 +3,22 @@
     <div class="content" [style]="contentStyle$ | async">
 
       <ng-container *ngIf="message.images && message.images.length > 0">
-        <div *ngFor="let image of message.images" class="content-images">
-          <img [src]="image.url" alt="">
+        <div class="images-wrapper" routerLink="/chat/display-message" [state]="{messageId : message.id}" >
+
+          <ng-container *ngIf="message.images[0].status == loaded;else imageLodingTemplate">
+            <img [src]="message.images[0].url" alt="" [style]="imageStyle$ | async">
+            <ng-container *ngIf="message.images.length > 1">
+              <div class="surface" [style]="imageStyle$ | async">
+                <span class="number-of-images">{{"+" + (message.images.length - 1)}}</span>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #imageLodingTemplate>
+            <div [style]="imageLodingTemplateStyle" class="image-loading">
+              <ion-spinner name="circular" color="primary"></ion-spinner>
+            </div>
+          </ng-template>
         </div>
       </ng-container>
 
@@ -16,7 +30,6 @@
           <span class="created-date">{{message.sendDate | date : 'HH:mm'}}</span>
         </div>
       </ng-container>
-
       <ng-template #template>
         <div class="footer" [style]="footerStyle$ | async">
           <span class="created-date">{{message.sendDate | date : 'HH:mm'}}</span>

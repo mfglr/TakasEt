@@ -6,6 +6,6 @@ namespace ConversationService.Application.Dtos
     public class MarkMessageAsViewedDto : IRequest
     {
         public string MessageId { get; set; }
-        public DateTime ViewedDate { get; set; }
+        public long ViewedDate { get; set; }
     }
 }

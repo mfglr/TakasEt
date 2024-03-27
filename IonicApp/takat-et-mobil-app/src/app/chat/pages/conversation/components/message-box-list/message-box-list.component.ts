@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, QueryList, ViewChildren } from '@angular/core';
 import { MessageState } from 'src/app/chat/state/reducer';
 
 @Component({

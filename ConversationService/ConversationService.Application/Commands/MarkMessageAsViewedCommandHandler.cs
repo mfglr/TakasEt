@@ -42,7 +42,7 @@ namespace ConversationService.Application.Commands
                 .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
             if (message == null)
                 throw new AppException("The message was not found!", HttpStatusCode.NotFound);
-            message.MarkAsViewed(loginUserId, request.ViewedDate);
+            message.MarkAsViewed(loginUserId, request.ViewedDate.ToDateTime());
 
             try
             {

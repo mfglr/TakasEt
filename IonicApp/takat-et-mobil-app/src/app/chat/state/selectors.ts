@@ -95,7 +95,7 @@ export const selectUsers = createSelector(
   selectStore,
   state => selectUserStates(state.userEntityState)
 )
-const selectMessageState = (props : {messageId : string}) => createSelector(
+export const selectMessageState = (props : {messageId : string}) => createSelector(
   selectStore,
   state => state.messageEntityState.entities[props.messageId]
 )
